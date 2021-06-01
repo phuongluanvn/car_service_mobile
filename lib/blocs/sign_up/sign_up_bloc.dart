@@ -13,19 +13,19 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   @override
   Stream<SignUpState> mapEventToState(SignUpEvent event) async* {
     var pref = await SharedPreferences.getInstance();
-    if (event is StartEvent) {
-      yield LoginInitState();
-    } else if (event is SignUpButtonPressed) {
-      yield LoginLoadingState();
-      var data = await repo.login(event.email, event.password);
-      if (data['type'] == 'manager') {
-        pref.setString("token", data['token']);
-        pref.setInt("type", data['type']);
-        pref.setString("email", data['email']);
-        yield ManagerLoginSuccessState();
-      } else {
-        yield LoginErrorState(message: "Auth Error");
-      }
-    }
+    // if (event is StartEvent) {
+    //   yield LoginInitState();
+    // } else if (event is SignUpButtonPressed) {
+    //   yield LoginLoadingState();
+    //   var data = await repo.login(event.email, event.password);
+    //   if (data['type'] == 'manager') {
+    //     pref.setString("token", data['token']);
+    //     pref.setInt("type", data['type']);
+    //     pref.setString("email", data['email']);
+    //     yield ManagerLoginSuccessState();
+    //   } else {
+    //     yield LoginErrorState(message: "Auth Error");
+    //   }
+    // }
   }
 }

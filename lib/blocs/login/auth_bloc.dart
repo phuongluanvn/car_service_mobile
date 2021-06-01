@@ -16,21 +16,21 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
     } else if (event is LoginButtonPressed) {
       yield LoginLoadingState();
       var data = await repo.login(event.email, event.password);
-      if (data['type'] == 'manager') {
-        pref.setString("token", data['token']);
-        pref.setInt("type", data['type']);
-        pref.setString("email", data['email']);
+      print(data);
+      if (data != null) {
+        // pref.setString("token", data['accessToken']);
+        // pref.setString("email", data['email']);
         yield ManagerLoginSuccessState();
-      } else if (data['type'] == 'staff') {
-        pref.setString("token", data['token']);
-        pref.setInt("type", data['type']);
-        pref.setString("email", data['email']);
-        yield StaffLoginSuccessState();
-      } else if (data['type'] == 'customer') {
-        pref.setString("token", data['token']);
-        pref.setInt("type", data['type']);
-        pref.setString("email", data['email']);
-        yield CustomerLoginSuccessState();
+      // } else if (data['type'] == 'staff') {
+      //   pref.setString("token", data['token']);
+      //   pref.setInt("type", data['type']);
+      //   pref.setString("email", data['email']);
+      //   yield StaffLoginSuccessState();
+      // } else if (data['type'] == 'customer') {
+      //   pref.setString("token", data['token']);
+      //   pref.setInt("type", data['type']);
+      //   pref.setString("email", data['email']);
+      //   yield CustomerLoginSuccessState();
       } else {
         yield LoginErrorState(message: "Auth Error");
       }
