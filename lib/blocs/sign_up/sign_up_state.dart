@@ -1,22 +1,25 @@
+import 'package:car_service/form_submission_status.dart';
 import 'package:equatable/equatable.dart';
 
-class AuthState extends Equatable {
+class SignUpState extends Equatable {
+  final String username;
+  bool get isValidUsername => username.length > 3;
+
+  final String email;
+  bool get isValidEmail => email.contains('@');
+
+  final String password;
+  bool get isValidPassword => password.length > 6;
+
+  final FormSubmissionStatus formStatus;
+
+  SignUpState({
+    this.username = '',
+    this.email = '',
+    this.password = '',
+    this.formStatus = const InitialFormStatus(),
+  });
+
   @override
   List<Object> get props => [];
-
-}
-
-class LoginInitState extends AuthState {}
-
-class LoginLoadingState extends AuthState {}
-
-class CustomerLoginSuccessState extends AuthState {}
-
-class ManagerLoginSuccessState extends AuthState {}
-
-class StaffLoginSuccessState extends AuthState {}
-
-class LoginErrorState extends AuthState {
-  final String message;
-  LoginErrorState({this.message});
 }

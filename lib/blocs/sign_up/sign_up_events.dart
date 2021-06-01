@@ -1,17 +1,31 @@
+import 'package:equatable/equatable.dart';
 
-import 'package:equatable/equatable.dart';
-import 'package:equatable/equatable.dart';
-class AuthEvents extends Equatable {
+abstract class SignUpEvent extends Equatable {
   @override
   List<Object> get props => [];
-
 }
 
-class StartEvent extends AuthEvents {}
+class SignUpUsernameChanged extends SignUpEvent {
+  final String username;
 
-class LoginButtonPressed extends AuthEvents {
+  SignUpUsernameChanged({this.username});
+}
+
+class SignUpEmailChanged extends SignUpEvent {
   final String email;
+
+  SignUpEmailChanged({this.email});
+}
+
+class SignUpPasswordChanged extends SignUpEvent {
   final String password;
-  
-  LoginButtonPressed({this.email, this.password});
+
+  SignUpPasswordChanged({this.password});
+}
+
+class SignUpButtonPressed extends SignUpEvent {
+  // final String email;
+  // final String password;
+
+  // LoginButtonPressed({this.email, this.password});
 }
