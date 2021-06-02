@@ -1,6 +1,6 @@
-import 'package:car_service/blocs/login/auth_bloc.dart';
-import 'package:car_service/blocs/login/auth_events.dart';
-import 'package:car_service/blocs/login/auth_state.dart';
+import 'package:car_service/blocs/sign_up/sign_up_bloc.dart';
+import 'package:car_service/blocs/sign_up/sign_up_events.dart';
+import 'package:car_service/blocs/sign_up/sign_up_state.dart';
 import 'package:car_service/ui/LoginUi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,14 +11,17 @@ class SignUpUi extends StatefulWidget {
 }
 
 class _SignUpUiState extends State<SignUpUi> {
+  TextEditingController username = TextEditingController();
+  TextEditingController fullname = TextEditingController();
   TextEditingController email = TextEditingController();
+  TextEditingController phonenumber = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController confirmpassword = TextEditingController();
-  AuthBloc authBloc;
+  SignUpBloc signUpBloc;
 
   @override
   void initState() {
-    authBloc = BlocProvider.of<AuthBloc>(context);
+    signUpBloc = BlocProvider.of<SignUpBloc>(context);
     super.initState();
   }
 
@@ -28,10 +31,10 @@ class _SignUpUiState extends State<SignUpUi> {
       child: Icon(Icons.supervised_user_circle, size: 150),
     );
 
-    final msg = BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
-      if (state is LoginErrorState) {
+    final msg = BlocBuilder<SignUpBloc, SignUpState>(builder: (context, state) {
+      if (state is SignUpErrorState) {
         return Text(state.message);
-      } else if (state is LoginLoadingState) {
+      } else if (state is SignUpLoadingState) {
         return Center(
           child: CircularProgressIndicator(),
         );
@@ -39,7 +42,36 @@ class _SignUpUiState extends State<SignUpUi> {
         return Container();
       }
     });
-    final username = TextField(
+
+    final user = TextField(
+      controller: username,
+      autofocus: false,
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.email),
+        filled: true,
+        fillColor: Colors.white,
+        hintStyle: TextStyle(color: Colors.black54),
+        hintText: 'Username',
+        contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+
+    final name = TextField(
+      controller: fullname,
+      autofocus: false,
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.email),
+        filled: true,
+        fillColor: Colors.white,
+        hintStyle: TextStyle(color: Colors.black54),
+        hintText: 'Fullname',
+        contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+
+    final emailaddress = TextField(
       controller: email,
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
@@ -49,6 +81,20 @@ class _SignUpUiState extends State<SignUpUi> {
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
         hintText: 'Email',
+        contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+
+    final phone = TextField(
+      controller: phonenumber,
+      autofocus: false,
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.email),
+        filled: true,
+        fillColor: Colors.white,
+        hintStyle: TextStyle(color: Colors.black54),
+        hintText: 'PhoneNumber',
         contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -97,8 +143,12 @@ class _SignUpUiState extends State<SignUpUi> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          authBloc.add(
-              LoginButtonPressed(email: email.text, password: password.text));
+          signUpBloc.add(SignUpButtonPressed(
+              user: username.text,
+              name: fullname.text,
+              email: email.text,
+              phone: phonenumber.text,
+              password: password.text));
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
@@ -120,13 +170,9 @@ class _SignUpUiState extends State<SignUpUi> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: BlocListener<AuthBloc, AuthState>(
+      body: BlocListener<SignUpBloc, SignUpState>(
         listener: (context, state) {
-          if (state is ManagerLoginSuccessState) {
-            Navigator.pushNamed(context, '/manager');
-          } else if (state is StaffLoginSuccessState) {
-            Navigator.pushNamed(context, '/staff');
-          } else if (state is CustomerLoginSuccessState) {
+          if (state is CustomerSignUpSuccessState) {
             Navigator.pushNamed(context, '/customer');
           }
         },
@@ -142,7 +188,19 @@ class _SignUpUiState extends State<SignUpUi> {
             SizedBox(
               height: 40,
             ),
-            username,
+            user,
+            SizedBox(
+              height: 20,
+            ),
+            name,
+            SizedBox(
+              height: 20,
+            ),
+            emailaddress,
+            SizedBox(
+              height: 20,
+            ),
+            phone,
             SizedBox(
               height: 20,
             ),

@@ -1,5 +1,7 @@
 import 'package:car_service/blocs/login/auth_bloc.dart';
 import 'package:car_service/blocs/login/auth_state.dart';
+import 'package:car_service/blocs/sign_up/sign_up_bloc.dart';
+import 'package:car_service/blocs/sign_up/sign_up_state.dart';
 import 'package:car_service/repository/auth_repo.dart';
 import 'package:car_service/ui/Customer/CustomerHome.dart';
 import 'package:car_service/ui/LoginUi.dart';
@@ -16,7 +18,9 @@ class Auth extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) => AuthBloc(LoginInitState(), AuthRepository()))
+            create: (context) => AuthBloc(LoginInitState(), AuthRepository())),
+        BlocProvider(
+            create: (context) => SignUpBloc(SignUpState(), AuthRepository()))
       ],
       child: MaterialApp(
         initialRoute: '/',
