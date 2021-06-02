@@ -1,6 +1,7 @@
 import 'package:car_service/blocs/login/auth_bloc.dart';
 import 'package:car_service/blocs/login/auth_events.dart';
 import 'package:car_service/blocs/login/auth_state.dart';
+import 'package:car_service/ui/SignUpUi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -89,7 +90,10 @@ class _LoginUiState extends State<LoginUi> {
     final signUpLink = SafeArea(
         child: TextButton(
       child: Text('Don\'t have an account? Sign up.'),
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => SignUpUi()));
+      },
     ));
 
     return Scaffold(

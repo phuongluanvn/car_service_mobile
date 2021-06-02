@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:car_service/blocs/login/auth_events.dart';
 import 'package:car_service/blocs/login/auth_state.dart';
 import 'package:car_service/repository/auth_repo.dart';
@@ -16,21 +18,24 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
     } else if (event is LoginButtonPressed) {
       yield LoginLoadingState();
       var data = await repo.login(event.email, event.password);
-      print(data);
-      if (data != null) {
+      String jsonsDataString = data.toString();
+      final jsonData = jsonDecode(jsonsDataString);
+      print(jsonData);
+      // if (data != null) {
+      if (jsonData['maLoaiNguoiDung'] == 'QuanTri') {
         // pref.setString("token", data['accessToken']);
         // pref.setString("email", data['email']);
         yield ManagerLoginSuccessState();
-      // } else if (data['type'] == 'staff') {
-      //   pref.setString("token", data['token']);
-      //   pref.setInt("type", data['type']);
-      //   pref.setString("email", data['email']);
-      //   yield StaffLoginSuccessState();
-      // } else if (data['type'] == 'customer') {
-      //   pref.setString("token", data['token']);
-      //   pref.setInt("type", data['type']);
-      //   pref.setString("email", data['email']);
-      //   yield CustomerLoginSuccessState();
+      } else if (jsonData['maLoaiNguoiDung'] == 'NhanVien') {
+        //   pref.setString("token", data['token']);
+        //   pref.setInt("type", data['type']);
+        //   pref.setString("email", data['email']);
+        yield StaffLoginSuccessState();
+      } else if (jsonData['maLoaiNguoiDung'] == 'KhachHang') {
+        //   pref.setString("token", data['token']);
+        //   pref.setInt("type", data['type']);
+        //   pref.setString("email", data['email']);
+        yield CustomerLoginSuccessState();
       } else {
         yield LoginErrorState(message: "Auth Error");
       }
