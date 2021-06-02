@@ -2,12 +2,12 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AuthRepository {
-  login(String email, String password) async {
-    Map<String, String> headers = {
-      'Content-type': 'application/json',
-      'Accept': 'application/json'
-    };
+  Map<String, String> headers = {
+    'Content-type': 'application/json',
+    'Accept': 'application/json'
+  };
 
+  login(String email, String password) async {
     final body = jsonEncode({"taiKhoan": '${email}', "matKhau": '${password}'});
 
     var res = await http.post(
@@ -39,10 +39,6 @@ class AuthRepository {
 
   signUp(String user, String name, String email, String phone,
       String password) async {
-    Map<String, String> headers = {
-      'Content-type': 'application/json',
-      'Accept': 'application/json'
-    };
 
     final body = jsonEncode({
       "taiKhoan": '${user}',
@@ -50,7 +46,8 @@ class AuthRepository {
       "email": '${email}',
       "soDt": '${phone}',
       "matKhau": '${password}',
-      "maLoaiNguoiDung": 'KhachHang'
+      "maLoaiNguoiDung": 'KhachHang',
+      "maNhom": "GP01",
     });
 
     var res = await http.post(
