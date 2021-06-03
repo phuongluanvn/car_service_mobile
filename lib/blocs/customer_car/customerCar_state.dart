@@ -8,7 +8,7 @@ class CustomerCarState extends Equatable {
 
 }
 
-class InitState extends CustomerCarState{}
+class InitCustomerCarState extends CustomerCarState{}
 
 class LoadingState extends CustomerCarState{}
 

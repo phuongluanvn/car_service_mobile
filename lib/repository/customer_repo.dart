@@ -25,11 +25,11 @@ class CustomerRepository {
 
   Future<List<CarModel>> fetchCarList() async {
     List<CarModel> carsList = [];
-    var response = await http.post(
+    var response = await http.get(
         Uri.parse(
             "https://movie0706.cybersoft.edu.vn/api/QuanLyPhim/LayDanhSachPhim?maNhom=GP01"),
         headers: headers,
-        body: {});
+        );
     final data = (response.body);
     print(data);
     if (response.statusCode == 200) {

@@ -10,7 +10,7 @@ class _NavState extends State<Nav> {
   int _selectedIndex = 1;
   List<Widget> _widgetOptions = <Widget>[
     Text('Messgaes Screen'),
-    Home(),
+    HomeUI(),
     Text('Profile Screen'),
   ];
 

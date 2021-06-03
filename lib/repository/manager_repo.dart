@@ -18,9 +18,11 @@ class ManagerRepository {
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
       if (data != null) {
-        data.map((booking) => bookingList.add(BookingModel.fromJson(booking)));
+        data.map((booking) => bookingList.add(BookingModel.fromJson(booking))).toList();
         print('lala');
+        print(bookingList);
         return bookingList;
+        
       } else {
         print('No data');
       }
