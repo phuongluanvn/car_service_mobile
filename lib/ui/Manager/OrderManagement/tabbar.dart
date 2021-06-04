@@ -1,5 +1,5 @@
-import 'package:car_service/ui/Manager/AssignBookingUi/VerifyBookingUi.dart';
-import 'package:car_service/ui/Manager/AssignBookingUi/ManagerOrder.dart';
+import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingUi.dart';
+import 'package:car_service/ui/Manager/OrderManagement/AssignOrderUi.dart';
 
 import 'package:flutter/material.dart';
 
@@ -12,7 +12,7 @@ class _TabManagerState extends State<TabManager> {
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = <Widget>[
     VerifyBookingUi(),
-    ManagerOrder(),
+    AssignOrderUi(),
   ];
 
   void _onItemTap(int index) {

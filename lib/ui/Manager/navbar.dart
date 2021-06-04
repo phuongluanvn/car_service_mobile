@@ -1,7 +1,7 @@
-import 'package:car_service/ui/Manager/AssignBookingUi/ManagementBookingOrder.dart';
-import 'package:car_service/ui/Manager/AssignBookingUi/VerifyBookingUi.dart';
+import 'package:car_service/ui/Manager/OrderManagement/ManagementBookingOrder.dart';
+import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingUi.dart';
 import 'package:car_service/ui/Manager/ManagerProfile.dart';
-import 'package:car_service/ui/Manager/ManagerStaff.dart';
+import 'package:car_service/ui/Manager/StaffManagement/StaffUi.dart';
 import 'package:flutter/material.dart';
 
 class NavBar extends StatefulWidget {
@@ -12,7 +12,7 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   int _selectedIndex =1;
   List<Widget> _widgetOptions = <Widget>[
-    ManagerStaff(),
+    StaffUi(),
     ManagementBookingOrder(),
     ManagerProfile(),
   ];

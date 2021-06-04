@@ -2,8 +2,12 @@ import 'package:car_service/blocs/customer_car/customerCar_bloc.dart';
 import 'package:car_service/blocs/customer_car/customerCar_state.dart';
 import 'package:car_service/blocs/login/auth_bloc.dart';
 import 'package:car_service/blocs/login/auth_state.dart';
+import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
+import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
 import 'package:car_service/blocs/manager/booking/booking_bloc.dart';
 import 'package:car_service/blocs/manager/booking/booking_state.dart';
+import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
+import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/blocs/sign_up/sign_up_bloc.dart';
 import 'package:car_service/blocs/sign_up/sign_up_state.dart';
 import 'package:car_service/repository/auth_repo.dart';
@@ -32,7 +36,13 @@ class Auth extends StatelessWidget {
                 VerifyBookingInitState(), ManagerRepository())),
         BlocProvider(
             create: (context) =>
-                CustomerCarBloc(InitCustomerCarState(), CustomerRepository()))
+                CustomerCarBloc(InitCustomerCarState(), CustomerRepository())),
+        BlocProvider(
+            create: (context) =>
+                AssignOrderBloc(AssignOrderInitState(), ManagerRepository())),
+        BlocProvider(
+            create: (context) =>
+                StaffBloc(StaffInitState(), ManagerRepository()))
       ],
       child: MaterialApp(
         initialRoute: '/',
