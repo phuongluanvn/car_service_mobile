@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:car_service/blocs/customer_car/customerCar_bloc.dart';
 import 'package:car_service/blocs/customer_car/customerCar_state.dart';
 import 'package:car_service/blocs/login/auth_bloc.dart';
@@ -20,7 +22,10 @@ import 'package:car_service/ui/Staff/StaffHome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() => runApp(Auth());
+void main() {
+  HttpOverrides.global = new MyHttpOverrides();
+  runApp(Auth());
+}
 
 class Auth extends StatelessWidget {
   @override
@@ -54,5 +59,14 @@ class Auth extends StatelessWidget {
         },
       ),
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

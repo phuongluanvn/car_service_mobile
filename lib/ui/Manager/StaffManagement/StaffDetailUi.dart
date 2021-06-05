@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StaffDetailUi extends StatefulWidget {
   final String emailId;
-  StaffDetailUi({this.emailId});
+  StaffDetailUi({@required this.emailId});
 
   @override
   _StaffDetailUiState createState() => _StaffDetailUiState();

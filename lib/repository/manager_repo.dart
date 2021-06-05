@@ -78,7 +78,7 @@ class ManagerRepository {
   Future<StaffModel> getStaffDetail(String email) async {
     var res = await http.get(
       Uri.parse(
-          'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01' +
+          'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=' +
               email),
       headers: headers,
     );

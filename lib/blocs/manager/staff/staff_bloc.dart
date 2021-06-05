@@ -31,6 +31,7 @@ class StaffBloc extends Bloc<StaffEvent, StaffState> {
         var data = await repo.getStaffDetail(event.email);
         if (data != null) {
           yield StaffDetailSucessState(data: data);
+          print(data);
         } else {
           yield StaffLoadingState();
           print('no data detail');

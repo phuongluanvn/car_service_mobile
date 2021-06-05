@@ -17,27 +17,27 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
       yield LoginInitState();
     } else if (event is LoginButtonPressed) {
       yield LoginLoadingState();
-      var data = await repo.login(event.email, event.password);
-      String jsonsDataString = data.toString();
-      final jsonData = jsonDecode(jsonsDataString);
-      print(jsonData);
-      // if (data != null) {
-      if (jsonData['maLoaiNguoiDung'] == 'QuanTri') {
-        // pref.setString("token", data['accessToken']);
-        // pref.setString("email", data['email']);
+      var res = await repo.login(event.email, event.password);
+      var encodeFirst = json.encode(res);
+      var data = json.decode(encodeFirst);
+      print(data);
+      if (data != null) {
+        // if (data['maLoaiNguoiDung'] == 'QuanTri') {
+        //   // pref.setString("token", data['accessToken']);
+        //   // pref.setString("email", data['email']);
         yield ManagerLoginSuccessState();
-      } else if (jsonData['maLoaiNguoiDung'] == 'NhanVien') {
-        //   pref.setString("token", data['token']);
-        //   pref.setInt("type", data['type']);
-        //   pref.setString("email", data['email']);
-        yield StaffLoginSuccessState();
-      } else if (jsonData['maLoaiNguoiDung'] == 'KhachHang') {
-        //   pref.setString("token", data['token']);
-        //   pref.setInt("type", data['type']);
-        //   pref.setString("email", data['email']);
-        yield CustomerLoginSuccessState();
-      } else {
-        yield LoginErrorState(message: "Auth Error");
+        // } else if (data['maLoaiNguoiDung'] == 'NhanVien') {
+        //   //   pref.setString("token", data['token']);
+        //   //   pref.setInt("type", data['type']);
+        //   //   pref.setString("email", data['email']);
+        //   yield StaffLoginSuccessState();
+        // } else if (data['maLoaiNguoiDung'] == 'KhachHang') {
+        //   //   pref.setString("token", data['token']);
+        //   //   pref.setInt("type", data['type']);
+        //   //   pref.setString("email", data['email']);
+        //   yield CustomerLoginSuccessState();
+        // } else {
+        //   yield LoginErrorState(message: "Auth Error");
       }
     }
   }

@@ -8,17 +8,16 @@ class AuthRepository {
   };
 
   login(String email, String password) async {
-    final body = jsonEncode({"taiKhoan": '${email}', "matKhau": '${password}'});
-
     var res = await http.post(
-        Uri.parse(
-            "https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/DangNhap"),
-        headers: headers,
-        body: body);
-    final data = (res.body);
-    print(data);
-    if (data != null) {
-      return data;
+        Uri.parse('https://192.168.10.251:44381/api/Users?username=' +
+            email +
+            '&password=' +
+            password),
+        headers: headers);
+    print(res.body);
+    if (res.body != null) {
+      print(res.body);
+      return res.body;
     } else {
       return null;
     }
@@ -39,7 +38,6 @@ class AuthRepository {
 
   signUp(String user, String name, String email, String phone,
       String password) async {
-
     final body = jsonEncode({
       "taiKhoan": '${user}',
       "hoTen": '${name}',
