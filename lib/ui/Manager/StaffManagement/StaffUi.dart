@@ -1,7 +1,6 @@
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
-import 'package:car_service/model/StaffModel.dart';
 import 'package:car_service/ui/Manager/StaffManagement/StaffDetailUi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,8 +48,9 @@ class _StaffUiState extends State<StaffUi> {
                   return ListTile(
                     title: Text(state.staffList[index].taiKhoan),
                     onTap: () {
-                      navigateToStaffDetailPage(
-                          context, state.staffList[index]);
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => StaffDetailUi(
+                              emailId: state.staffList[index].taiKhoan)));
                     },
                   );
                   // Container(
@@ -124,15 +124,10 @@ class _StaffUiState extends State<StaffUi> {
             } else if (state is StaffListErrorState) {
               return ErrorWidget(state.message.toString());
             }
+            return SizedBox();
           },
         ),
       ),
     );
-  }
-
-  void navigateToStaffDetailPage(BuildContext context, StaffModel staff) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return StaffDetailUi(staffm: staff);
-    }));
   }
 }

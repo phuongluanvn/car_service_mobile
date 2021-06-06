@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:car_service/blocs/manager/staff/staff_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
+import 'package:car_service/model/StaffModel.dart';
 import 'package:car_service/repository/manager_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,7 +29,8 @@ class StaffBloc extends Bloc<StaffEvent, StaffState> {
     } else if (event is DoStaffDetailEvent) {
       yield StaffLoadingState();
       try {
-        var data = await repo.getStaffDetail(event.email);
+        
+        List<StaffModel> data = await repo.getStaffDetail(event.email);
         if (data != null) {
           yield StaffDetailSucessState(data: data);
           print(data);
