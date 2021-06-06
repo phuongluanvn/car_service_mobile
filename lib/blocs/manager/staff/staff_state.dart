@@ -1,4 +1,4 @@
-import 'package:car_service/model/StaffModel.dart';
+import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:equatable/equatable.dart';
 
 class StaffState extends Equatable {

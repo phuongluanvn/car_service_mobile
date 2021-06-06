@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:car_service/blocs/sign_up/sign_up_events.dart';
 import 'package:car_service/blocs/sign_up/sign_up_state.dart';
-import 'package:car_service/repository/auth_repo.dart';
+import 'package:car_service/utils/repository/auth_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -4,7 +4,7 @@ import 'package:car_service/blocs/confirm/confirmation_bloc.dart';
 import 'package:car_service/blocs/confirm/confirmation_events.dart';
 import 'package:car_service/blocs/confirm/confirmation_state.dart';
 import 'package:car_service/form_submission_status.dart';
-import 'package:car_service/repository/auth_repo.dart';
+import 'package:car_service/utils/repository/auth_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
