@@ -37,7 +37,7 @@ class _StaffDetailUiState extends State<StaffDetailUi> {
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
                     children: <Widget>[
-                      Text(state.data[index].email),
+                      Text(state.data[0].email),
                       Container(height: 8),
                       Text(state.data[0].soDt),
                       Container(height: 16),

@@ -76,7 +76,6 @@ class ManagerRepository {
   }
 
   Future<List<StaffModel>> getStaffDetail(String email) async {
-    List<StaffModel> listData = [];
     var res = await http.get(
       Uri.parse(
           'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP03&tuKhoa=' +
@@ -84,21 +83,18 @@ class ManagerRepository {
       headers: headers,
     );
     if (res.statusCode == 200) {
-      // List<dynamic>
-      var data = json.decode(res.body);
+      List<dynamic> data = json.decode(res.body);
 
       try {
         if (data != null) {
-          data
-              .map((staff) => listData.add(StaffModel.fromJson(staff)))
-              .toList();
+          List<StaffModel> listdata = [];
+          data.forEach((element) {
+            Map<String, dynamic> map = element;
+            listdata.add(StaffModel.fromJson(map));
+          });
           print(data);
-          // List<StaffModel> listdata=[];
-          // data.forEach((element) {
-          // Map<String, dynamic> map = element;
-          // listdata.add(StaffModel.fromJson(map));
-// });
-          return listData;
+
+          return listdata;
         } else {
           print('No data');
         }
