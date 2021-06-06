@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:car_service/blocs/manager/booking/booking_events.dart';
 import 'package:car_service/blocs/manager/booking/booking_state.dart';
-import 'package:car_service/repository/manager_repo.dart';
+import 'package:car_service/utils/repository/manager_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

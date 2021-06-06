@@ -1,23 +1,29 @@
-import 'package:car_service/model/CarModel.dart';
+import 'package:car_service/utils/model/CarModel.dart';
 import 'package:equatable/equatable.dart';
 
 class CustomerCarState extends Equatable {
   @override
   // TODO: implement props
-  List<Object> get props => throw UnimplementedError();
+  List<Object> get props => [];
 
 }
 
 class InitCustomerCarState extends CustomerCarState{}
 
-class LoadingState extends CustomerCarState{}
+class LoadingCusCarState extends CustomerCarState{}
 
-class FetchSuccess extends CustomerCarState{
+class FetchCusCarSuccess extends CustomerCarState{
   List<CarModel> cars;
-  FetchSuccess({this.cars});
+  FetchCusCarSuccess({this.cars});
 }
 
-class ErrorState extends CustomerCarState{
+class ErrorCusCarState extends CustomerCarState{
   String mess;
-  ErrorState({this.mess});
+  ErrorCusCarState({this.mess});
 }
+
+class CusCarDetailSuccessState extends CustomerCarState{
+  CarModel data;
+  CusCarDetailSuccessState({this.data});
+}
+

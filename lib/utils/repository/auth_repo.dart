@@ -9,14 +9,16 @@ class AuthRepository {
 
   login(String email, String password) async {
     var res = await http.post(
-        Uri.parse('https://192.168.10.251:44381/api/Users?username=' +
+        Uri.parse('https://192.168.63.104:44381/api/Users?username=' +
             email +
             '&password=' +
             password),
         headers: headers);
-    print(res.body);
+    print(res.statusCode);
     if (res.body != null) {
-      print(res.body);
+      // var data = jsonDecode(res.body);
+      // print(data);
+      print("hihiih");
       return res.body;
     } else {
       return null;

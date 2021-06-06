@@ -1,5 +1,4 @@
-import 'package:car_service/model/AssignOrderModel.dart';
-import 'package:car_service/model/BookingModel.dart';
+import 'package:car_service/utils/model/AssignOrderModel.dart';
 import 'package:equatable/equatable.dart';
 
 class AssignOrderState extends Equatable {

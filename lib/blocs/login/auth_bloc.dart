@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:car_service/blocs/login/auth_events.dart';
 import 'package:car_service/blocs/login/auth_state.dart';
-import 'package:car_service/repository/auth_repo.dart';
+import 'package:car_service/utils/repository/auth_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

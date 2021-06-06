@@ -12,13 +12,13 @@ import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/blocs/sign_up/sign_up_bloc.dart';
 import 'package:car_service/blocs/sign_up/sign_up_state.dart';
-import 'package:car_service/repository/auth_repo.dart';
-import 'package:car_service/repository/customer_repo.dart';
-import 'package:car_service/repository/manager_repo.dart';
 import 'package:car_service/ui/Customer/CustomerHome.dart';
 import 'package:car_service/ui/LoginUi.dart';
 import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Staff/StaffHome.dart';
+import 'package:car_service/utils/repository/auth_repo.dart';
+import 'package:car_service/utils/repository/customer_repo.dart';
+import 'package:car_service/utils/repository/manager_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

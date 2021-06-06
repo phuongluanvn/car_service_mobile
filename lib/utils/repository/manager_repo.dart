@@ -1,6 +1,6 @@
-import 'package:car_service/model/AssignOrderModel.dart';
-import 'package:car_service/model/BookingModel.dart';
-import 'package:car_service/model/StaffModel.dart';
+import 'package:car_service/utils/model/AssignOrderModel.dart';
+import 'package:car_service/utils/model/BookingModel.dart';
+import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -23,8 +23,6 @@ class ManagerRepository {
         data
             .map((booking) => bookingList.add(BookingModel.fromJson(booking)))
             .toList();
-        print('lala');
-        print(bookingList);
         return bookingList;
       } else {
         print('No data');

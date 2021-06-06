@@ -1,4 +1,4 @@
-import 'package:car_service/model/BookingModel.dart';
+import 'package:car_service/utils/model/BookingModel.dart';
 import 'package:equatable/equatable.dart';
 
 class VerifyBookingState extends Equatable {
