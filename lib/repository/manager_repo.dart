@@ -78,17 +78,21 @@ class ManagerRepository {
   Future<StaffModel> getStaffDetail(String email) async {
     var res = await http.get(
       Uri.parse(
-          'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=' +
+          'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP03&tuKhoa=' +
               email),
       headers: headers,
     );
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
-      if (data != null) {
-        print(data);
-        return data;
-      } else {
-        print('No data');
+      try {
+        if (data != null) {
+          print(data);
+          return data;
+        } else {
+          print('No data');
+        }
+      } catch (e) {
+        print(e.toString());
       }
     }
   }
