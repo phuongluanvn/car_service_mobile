@@ -23,9 +23,39 @@ class ManagerRepository {
         data
             .map((booking) => bookingList.add(BookingModel.fromJson(booking)))
             .toList();
+        print(bookingList);
+        print('dudu');
         return bookingList;
       } else {
         print('No data');
+      }
+    }
+  }
+
+  Future<List<BookingModel>> getVerifyBookingDetail(String email) async {
+    var res = await http.get(
+      Uri.parse(
+          'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=' +
+              email),
+      headers: headers,
+    );
+    if (res.statusCode == 200) {
+      List<dynamic> data = json.decode(res.body);
+
+      try {
+        if (data != null) {
+          List<BookingModel> listdata = [];
+          data.forEach((element) {
+            Map<String, dynamic> map = element;
+            listdata.add(BookingModel.fromJson(map));
+          });
+          print(listdata);
+          return listdata;
+        } else {
+          print('No data');
+        }
+      } catch (e) {
+        print(e.toString());
       }
     }
   }
@@ -90,8 +120,7 @@ class ManagerRepository {
             Map<String, dynamic> map = element;
             listdata.add(StaffModel.fromJson(map));
           });
-          print(data);
-
+          print(listdata);
           return listdata;
         } else {
           print('No data');

@@ -1,5 +1,5 @@
-import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingUi.dart';
-import 'package:car_service/ui/Manager/OrderManagement/AssignOrderUi.dart';
+import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingUi.dart';
+import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderUi.dart';
 
 import 'package:flutter/material.dart';
 
@@ -28,6 +28,7 @@ class _TabManagerState extends State<TabManager> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Management'),
+          automaticallyImplyLeading: false,
           bottom: TabBar(
             tabs: <Widget>[
               Tab(

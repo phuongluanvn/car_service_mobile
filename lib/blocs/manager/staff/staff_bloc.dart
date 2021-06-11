@@ -18,10 +18,10 @@ class StaffBloc extends Bloc<StaffEvent, StaffState> {
         var staffList = await repo.getStaffList();
         if (staffList != null) {
           yield StaffListSuccessState(staffList: staffList);
-          print('dada');
+          
         } else {
           yield StaffLoadingState();
-          print('no data');
+          
         }
       } catch (e) {
         yield StaffListErrorState(message: e.toString());
@@ -33,10 +33,10 @@ class StaffBloc extends Bloc<StaffEvent, StaffState> {
         List<StaffModel> data = await repo.getStaffDetail(event.email);
         if (data != null) {
           yield StaffDetailSucessState(data: data);
-          print(data);
+          
         } else {
           yield StaffLoadingState();
-          print('no data detail');
+          
         }
       } catch (e) {
         yield StaffListErrorState(message: e.toString());

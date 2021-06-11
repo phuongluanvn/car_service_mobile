@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 class ManagementBookingOrder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      
-      home: TabManager(),
+    return Scaffold(
+      body: TabManager(),
     );
   }
 }

@@ -6,12 +6,11 @@ abstract class VerifyBookingEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class DoListBookingEvent extends VerifyBookingEvent {}
 
-class DoListBookingEvent extends VerifyBookingEvent{
-  
+class DoVerifyBookingDetailEvent extends VerifyBookingEvent {
+  final String email;
+  DoVerifyBookingDetailEvent({this.email});
 }
 
-class VerifyBookingTabPressed extends VerifyBookingEvent {
-  
-  
-}
+class VerifyBookingTabPressed extends VerifyBookingEvent {}

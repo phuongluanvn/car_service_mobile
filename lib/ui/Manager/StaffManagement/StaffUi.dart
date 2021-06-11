@@ -1,5 +1,4 @@
-import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
-import 'package:car_service/blocs/manager/staff/staff_events.dart';
+import 'package:car_service/blocs/manager/staff/staff_cubit.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/ui/Manager/StaffManagement/StaffDetailUi.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
@@ -12,18 +11,14 @@ class StaffUi extends StatefulWidget {
 }
 
 class _StaffUiState extends State<StaffUi> {
-  StaffBloc staffBloc;
-
   @override
   void initState() {
-    staffBloc = BlocProvider.of<StaffBloc>(context);
-    staffBloc.add(DoListStaffEvent());
     super.initState();
+    context.read<StaffCubit>().getStaffList();
   }
 
   @override
   void dispose() {
-    staffBloc.close();
     super.dispose();
   }
 
@@ -32,10 +27,11 @@ class _StaffUiState extends State<StaffUi> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Staff Management'),
+        automaticallyImplyLeading: false,
       ),
       backgroundColor: Colors.blue[100],
       body: Center(
-        child: BlocBuilder<StaffBloc, StaffState>(
+        child: BlocBuilder<StaffCubit, StaffState>(
           // ignore: missing_return
           builder: (context, state) {
             if (state is StaffInitState) {

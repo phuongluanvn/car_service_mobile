@@ -7,8 +7,10 @@ import 'package:car_service/blocs/login/auth_state.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
 import 'package:car_service/blocs/manager/booking/booking_bloc.dart';
+import 'package:car_service/blocs/manager/booking/booking_cubit.dart';
 import 'package:car_service/blocs/manager/booking/booking_state.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
+import 'package:car_service/blocs/manager/staff/staff_cubit.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/blocs/sign_up/sign_up_bloc.dart';
 import 'package:car_service/blocs/sign_up/sign_up_state.dart';
@@ -37,8 +39,7 @@ class Auth extends StatelessWidget {
         BlocProvider(
             create: (context) => SignUpBloc(SignUpState(), AuthRepository())),
         BlocProvider(
-            create: (context) => VerifyBookingBloc(
-                VerifyBookingInitState(), ManagerRepository())),
+            create: (context) => VerifyBookingBloc(repo: ManagerRepository())),
         BlocProvider(
             create: (context) =>
                 CustomerCarBloc(InitCustomerCarState(), CustomerRepository())),
@@ -47,12 +48,18 @@ class Auth extends StatelessWidget {
                 AssignOrderBloc(AssignOrderInitState(), ManagerRepository())),
         BlocProvider(
             create: (context) =>
-                StaffBloc(StaffInitState(), ManagerRepository()))
+                StaffBloc(StaffInitState(), ManagerRepository())),
+        BlocProvider(
+            create: (context) =>
+                BookingCubit(VerifyBookingInitState(), ManagerRepository())),
+        BlocProvider(
+            create: (context) =>
+                StaffCubit(StaffInitState(), ManagerRepository())),
       ],
       child: MaterialApp(
         initialRoute: '/',
         routes: {
-          '/': (context) => LoginUi(),
+          '/': (context) => ManagerMain(),
           '/manager': (context) => ManagerMain(),
           '/staff': (context) => StaffHome(),
           '/customer': (context) => CustomerHome(),
