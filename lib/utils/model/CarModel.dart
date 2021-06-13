@@ -1,4 +1,6 @@
-class CarModel {
+import 'package:equatable/equatable.dart';
+
+class CarModel extends Equatable {
   int maPhim;
   String tenPhim;
   String biDanh;
@@ -20,29 +22,20 @@ class CarModel {
       this.ngayKhoiChieu,
       this.danhGia});
 
-  CarModel.fromJson(Map<String, dynamic> json) {
-    maPhim = json['maPhim'];
-    tenPhim = json['tenPhim'];
-    biDanh = json['biDanh'];
-    trailer = json['trailer'];
-    hinhAnh = json['hinhAnh'];
-    moTa = json['moTa'];
-    maNhom = json['maNhom'];
-    ngayKhoiChieu = json['ngayKhoiChieu'];
-    danhGia = json['danhGia'];
-  }
+  factory CarModel.fromJson(Map<String, dynamic> json) => CarModel(
+        maPhim: json['maPhim'],
+        tenPhim: json['tenPhim'],
+        biDanh: json['biDanh'],
+        trailer: json['trailer'],
+        hinhAnh: json['hinhAnh'],
+        moTa: json['moTa'],
+        maNhom: json['maNhom'],
+        ngayKhoiChieu: json['ngayKhoiChieu'],
+        danhGia: json['danhGia'],
+      );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['maPhim'] = this.maPhim;
-    data['tenPhim'] = this.tenPhim;
-    data['biDanh'] = this.biDanh;
-    data['trailer'] = this.trailer;
-    data['hinhAnh'] = this.hinhAnh;
-    data['moTa'] = this.moTa;
-    data['maNhom'] = this.maNhom;
-    data['ngayKhoiChieu'] = this.ngayKhoiChieu;
-    data['danhGia'] = this.danhGia;
-    return data;
-  }
+  @override
+  // TODO: implement props
+  List<Object> get props => [maPhim, tenPhim, biDanh, trailer,
+   hinhAnh, moTa, maNhom, ngayKhoiChieu, danhGia];
 }

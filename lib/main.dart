@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:car_service/blocs/customer_car/customerCar_bloc.dart';
-import 'package:car_service/blocs/customer_car/customerCar_state.dart';
+// import 'package:car_service/blocs/customer_car/customerCar_state.dart';
+import 'package:car_service/blocs/customer_car/customer_cubit.dart';
 import 'package:car_service/blocs/login/auth_bloc.dart';
 import 'package:car_service/blocs/login/auth_state.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
@@ -14,7 +15,7 @@ import 'package:car_service/blocs/manager/staff/staff_cubit.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/blocs/sign_up/sign_up_bloc.dart';
 import 'package:car_service/blocs/sign_up/sign_up_state.dart';
-import 'package:car_service/ui/Customer/CustomerHome.dart';
+import 'package:car_service/ui/Customer/CustomerMainUI.dart';
 import 'package:car_service/ui/LoginUi.dart';
 import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Staff/StaffHome.dart';
@@ -23,6 +24,7 @@ import 'package:car_service/utils/repository/customer_repo.dart';
 import 'package:car_service/utils/repository/manager_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 void main() {
   HttpOverrides.global = new MyHttpOverrides();
@@ -40,9 +42,7 @@ class Auth extends StatelessWidget {
             create: (context) => SignUpBloc(SignUpState(), AuthRepository())),
         BlocProvider(
             create: (context) => VerifyBookingBloc(repo: ManagerRepository())),
-        BlocProvider(
-            create: (context) =>
-                CustomerCarBloc(InitCustomerCarState(), CustomerRepository())),
+        BlocProvider(create: (context) => CarCustomerCubit()),
         BlocProvider(
             create: (context) =>
                 AssignOrderBloc(AssignOrderInitState(), ManagerRepository())),
@@ -56,10 +56,10 @@ class Auth extends StatelessWidget {
             create: (context) =>
                 StaffCubit(StaffInitState(), ManagerRepository())),
       ],
-      child: MaterialApp(
+      child: GetMaterialApp(
         initialRoute: '/',
         routes: {
-          '/': (context) => ManagerMain(),
+          '/': (context) => CustomerHome(),
           '/manager': (context) => ManagerMain(),
           '/staff': (context) => StaffHome(),
           '/customer': (context) => CustomerHome(),

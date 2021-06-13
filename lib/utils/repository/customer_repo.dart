@@ -15,12 +15,14 @@ class CustomerRepository {
             "https://movie0706.cybersoft.edu.vn/api/QuanLyPhim/LayDanhSachPhim?maNhom=GP01"),
         headers: headers,
         );
-    final data = (response.body);
-    print(data);
+        print(response);
+    // final data = (response.body);
+    // print(data);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      data.map((car) => carsList.add(CarModel.fromJson(car))).toList();
-      return carsList;
+      carsList = data.map((car) => CarModel.fromJson(car)).toList();
+      print(data);
+      return data;
     } 
   }
 
