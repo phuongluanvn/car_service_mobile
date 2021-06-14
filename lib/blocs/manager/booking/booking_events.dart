@@ -11,6 +11,8 @@ class DoListBookingEvent extends VerifyBookingEvent {}
 class DoVerifyBookingDetailEvent extends VerifyBookingEvent {
   final String email;
   DoVerifyBookingDetailEvent({this.email});
+  @override
+  List<Object> get props => [email];
 }
 
 class VerifyBookingTabPressed extends VerifyBookingEvent {}

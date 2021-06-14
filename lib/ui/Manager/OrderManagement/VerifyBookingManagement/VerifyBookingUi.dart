@@ -4,6 +4,10 @@ import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/V
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../blocs/manager/booking/booking_bloc.dart';
+import '../../../../blocs/manager/booking/booking_bloc.dart';
+import '../../../../blocs/manager/booking/booking_events.dart';
+
 class VerifyBookingUi extends StatefulWidget {
   @override
   _VerifyBookingUiState createState() => _VerifyBookingUiState();
@@ -14,7 +18,7 @@ class _VerifyBookingUiState extends State<VerifyBookingUi> {
   void initState() {
     super.initState();
 
-    context.read<BookingCubit>().getBookingList();
+    context.read<VerifyBookingBloc>().add(DoListBookingEvent());
   }
 
   @override
@@ -27,13 +31,15 @@ class _VerifyBookingUiState extends State<VerifyBookingUi> {
     return Scaffold(
       backgroundColor: Colors.blue[100],
       body: Center(
-        child: BlocBuilder<BookingCubit, VerifyBookingState>(
+        child: BlocBuilder<VerifyBookingBloc, VerifyBookingState>(
+         
           builder: (context, state) {
-            if (state is VerifyBookingInitState) {
+            if (state.status == BookingStatus.init) {
               return CircularProgressIndicator();
-            } else if (state is VerifyBookingLoadingState) {
+            } else if (state.status == BookingStatus.loading) {
               return CircularProgressIndicator();
-            } else if (state is VerifyBookingSuccessState) {
+            } else if (state.status == BookingStatus.bookingSuccess) {
+              if(state.bookingList!= null && state.bookingList.isNotEmpty)
               return ListView.builder(
                 itemCount: state.bookingList.length,
                 shrinkWrap: true,
@@ -106,7 +112,8 @@ class _VerifyBookingUiState extends State<VerifyBookingUi> {
                   // );
                 },
               );
-            } else if (state is VerifyBookingErrorState) {
+              else return Center(child: Text('Empty'),);
+            } else if (state.status == BookingStatus.error) {
               return ErrorWidget(state.message.toString());
             }
           },

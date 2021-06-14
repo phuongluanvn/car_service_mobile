@@ -4,6 +4,12 @@ import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/V
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../blocs/manager/booking/booking_bloc.dart';
+import '../../../../blocs/manager/booking/booking_bloc.dart';
+import '../../../../blocs/manager/booking/booking_events.dart';
+import '../../../../blocs/manager/booking/booking_state.dart';
+import '../../../../blocs/manager/booking/booking_state.dart';
+
 class VerifyBookingDetailUi extends StatefulWidget {
   final String emailId;
   VerifyBookingDetailUi({@required this.emailId});
@@ -16,7 +22,8 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<BookingCubit>(context).getBookingDetail(widget.emailId);
+    BlocProvider.of<VerifyBookingBloc>(context)
+        .add(DoVerifyBookingDetailEvent(email: widget.emailId));
   }
 
   @override
@@ -30,35 +37,38 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
         ),
       ),
       body: Center(
-        child: BlocBuilder<BookingCubit, VerifyBookingState>(
+        child: BlocBuilder<VerifyBookingBloc, VerifyBookingState>(
           builder: (context, state) {
-            if (state is VerifyBookingInitState) {
+            if (state.detailStatus == BookingDetailStatus.init) {
               return CircularProgressIndicator();
-            } else if (state is VerifyBookingLoadingState) {
+            } else if (state.detailStatus == BookingDetailStatus.loading) {
               return CircularProgressIndicator();
-            } else if (state is VerifyBookingDetailSucessState) {
-              return Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  children: <Widget>[
-                    Text(state.data[0].email),
-                    Container(height: 8),
-                    Text(state.data[0].soDt),
-                    Container(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 35,
-                      child: RaisedButton(
-                        child: Text('Submit',
-                            style: TextStyle(color: Colors.white)),
-                        color: Theme.of(context).primaryColor,
-                        onPressed: () {},
-                      ),
-                    )
-                  ],
-                ),
-              );
-            } else if (state is VerifyBookingErrorState) {
+            } else if (state.detailStatus == BookingDetailStatus.success) {
+              if (state.bookingDetail != null && state.bookingDetail.isNotEmpty)
+                return Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    children: <Widget>[
+                      Text(state.bookingDetail[0].email),
+                      Container(height: 8),
+                      Text(state.bookingDetail[0].soDt),
+                      Container(height: 16),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 35,
+                        child: RaisedButton(
+                          child: Text('Submit',
+                              style: TextStyle(color: Colors.white)),
+                          color: Theme.of(context).primaryColor,
+                          onPressed: () {},
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              else
+                return Center(child: Text('Empty'));
+            } else if (state.detailStatus == BookingDetailStatus.error) {
               return ErrorWidget(state.message.toString());
             }
           },

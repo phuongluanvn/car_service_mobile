@@ -11,29 +11,29 @@ class BookingCubit extends Cubit<VerifyBookingState> {
       : super(initialState);
 
   // Get Data movie from json
-  Future<void> getBookingList() async {
-    var bookinglist = await _repro.getBookingList();
-    try {
-      if (bookinglist != null) {
-        emit(VerifyBookingSuccessState(bookingList: bookinglist));
-      } else {
-        emit(VerifyBookingLoadingState());
-      }
-    } catch (e) {
-      emit(VerifyBookingErrorState(message: e.toString()));
-    }
-  }
+  // Future<void> getBookingList() async {
+  //   var bookinglist = await _repro.getBookingList();
+  //   try {
+  //     if (bookinglist != null) {
+  //       emit(VerifyBookingSuccessState(bookingList: bookinglist));
+  //     } else {
+  //       emit(VerifyBookingLoadingState());
+  //     }
+  //   } catch (e) {
+  //     emit(VerifyBookingErrorState(message: e.toString()));
+  //   }
+  // }
 
-  Future<void> getBookingDetail(String email) async {
-    List<BookingModel> data = await _repro.getVerifyBookingDetail(email);
-    try {
-      if (data != null) {
-        emit(VerifyBookingDetailSucessState(data: data));
-      } else {
-        emit(VerifyBookingLoadingState());
-      }
-    } catch (e) {
-      emit(VerifyBookingErrorState(message: e.toString()));
-    }
-  }
+  // Future<void> getBookingDetail(String email) async {
+  //   List<BookingModel> data = await _repro.getVerifyBookingDetail(email);
+  //   try {
+  //     if (data != null) {
+  //       emit(VerifyBookingDetailSucessState(data: data));
+  //     } else {
+  //       emit(VerifyBookingLoadingState());
+  //     }
+  //   } catch (e) {
+  //     emit(VerifyBookingErrorState(message: e.toString()));
+  //   }
+  // }
 }

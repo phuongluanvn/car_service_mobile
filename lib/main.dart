@@ -26,6 +26,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import 'ui/Manager/ManagerMain.dart';
+
 void main() {
   HttpOverrides.global = new MyHttpOverrides();
   runApp(Auth());
@@ -49,9 +51,9 @@ class Auth extends StatelessWidget {
         BlocProvider(
             create: (context) =>
                 StaffBloc(StaffInitState(), ManagerRepository())),
-        BlocProvider(
-            create: (context) =>
-                BookingCubit(VerifyBookingInitState(), ManagerRepository())),
+        // BlocProvider(
+        //     create: (context) =>
+        //         BookingCubit(VerifyBookingInitState(), ManagerRepository())),
         BlocProvider(
             create: (context) =>
                 StaffCubit(StaffInitState(), ManagerRepository())),
@@ -59,7 +61,7 @@ class Auth extends StatelessWidget {
       child: GetMaterialApp(
         initialRoute: '/',
         routes: {
-          '/': (context) => CustomerHome(),
+          '/': (context) => ManagerMain(),
           '/manager': (context) => ManagerMain(),
           '/staff': (context) => StaffHome(),
           '/customer': (context) => CustomerHome(),
