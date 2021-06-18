@@ -39,14 +39,11 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
       body: Center(
         child: BlocBuilder<AssignOrderBloc, AssignOrderState>(
           builder: (context, state) {
-            if (state.detailStatus == AssignDetailStatus.init ||
-                state.staffStatus == AssignStaffStatus.init) {
+            if (state.detailStatus == AssignDetailStatus.init) {
               return CircularProgressIndicator();
-            } else if (state.detailStatus == AssignDetailStatus.loading ||
-                state.staffStatus == AssignStaffStatus.loading) {
+            } else if (state.detailStatus == AssignDetailStatus.loading) {
               return CircularProgressIndicator();
-            } else if (state.detailStatus == AssignDetailStatus.success &&
-                state.staffStatus == AssignStaffStatus.success) {
+            } else if (state.detailStatus == AssignDetailStatus.success) {
               if (state.assignDetail != null && state.assignDetail.isNotEmpty)
                 return Padding(
                   padding: const EdgeInsets.all(12.0),
