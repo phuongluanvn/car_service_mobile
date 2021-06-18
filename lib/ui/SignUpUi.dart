@@ -32,9 +32,9 @@ class _SignUpUiState extends State<SignUpUi> {
     );
 
     final msg = BlocBuilder<SignUpBloc, SignUpState>(builder: (context, state) {
-      if (state is SignUpErrorState) {
-        return Text(state.message);
-      } else if (state is SignUpLoadingState) {
+      if (state.status == SignUpStatus.error) {
+        return Text(state.message.toString());
+      } else if (state.status == SignUpStatus.loading) {
         return Center(
           child: CircularProgressIndicator(),
         );
@@ -172,7 +172,7 @@ class _SignUpUiState extends State<SignUpUi> {
       backgroundColor: Colors.white,
       body: BlocListener<SignUpBloc, SignUpState>(
         listener: (context, state) {
-          if (state is CustomerSignUpSuccessState) {
+          if (state.status == SignUpStatus.signUpSuccess) {
             Navigator.pushNamed(context, '/customer');
           }
         },

@@ -52,64 +52,7 @@ class _VerifyBookingUiState extends State<VerifyBookingUi> {
                               emailId: state.bookingList[index].taiKhoan)));
                     },
                   );
-                  // Container(
-                  //   width: MediaQuery.of(context).size.width,
-                  //   padding:
-                  //       EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                  //   child: Card(
-                  //     elevation: 5.0,
-                  //     shape: RoundedRectangleBorder(
-                  //       borderRadius: BorderRadius.circular(10.0),
-                  //     ),
-                  //     child: Container(
-                  //       width: MediaQuery.of(context).size.width,
-                  //       padding: EdgeInsets.symmetric(
-                  //           horizontal: 10.0, vertical: 10.0),
-                  //       child: Row(
-                  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: <Widget>[
-                  //           Row(
-                  //             crossAxisAlignment: CrossAxisAlignment.start,
-                  //             children: <Widget>[
-                  //               Container(
-                  //                 width: 70.0,
-                  //                 height: 70.0,
-                  //                 decoration: BoxDecoration(
-                  //                     borderRadius: BorderRadius.circular(5.0)),
-                  //                 child: CircleAvatar(
-                  //                   radius: 5.0,
-                  //                   backgroundColor: Colors.blue[300],
-                  //                   foregroundColor: Colors.green[300],
-                  //                 ),
-                  //               ),
-                  //               SizedBox(width: 30.0),
-                  //               Column(
-                  //                 crossAxisAlignment: CrossAxisAlignment.start,
-                  //                 children: <Widget>[
-                  //                   Text(
-                  //                     state.bookingList[index].hoTen,
-                  //                     style: TextStyle(
-                  //                         color: Colors.black,
-                  //                         fontSize: 25.0,
-                  //                         fontWeight: FontWeight.bold),
-                  //                   ),
-                  //                   Text(
-                  //                     state.bookingList[index].email,
-                  //                     style: TextStyle(
-                  //                         color: Colors.black45,
-                  //                         fontSize: 15.0),
-                  //                   ),
-                  //                 ],
-                  //               )
-                  //             ],
-                  //           ),
-                  //           Container(),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ),
-                  // );
+                  
                 },
               );
               else return Center(child: Text('Empty'),);

@@ -6,10 +6,7 @@ import 'package:car_service/blocs/customer_car/customer_cubit.dart';
 import 'package:car_service/blocs/login/auth_bloc.dart';
 import 'package:car_service/blocs/login/auth_state.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
-import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
 import 'package:car_service/blocs/manager/booking/booking_bloc.dart';
-import 'package:car_service/blocs/manager/booking/booking_cubit.dart';
-import 'package:car_service/blocs/manager/booking/booking_state.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_cubit.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
@@ -41,13 +38,12 @@ class Auth extends StatelessWidget {
         BlocProvider(
             create: (context) => AuthBloc(LoginInitState(), AuthRepository())),
         BlocProvider(
-            create: (context) => SignUpBloc(SignUpState(), AuthRepository())),
+            create: (context) => SignUpBloc(repo:AuthRepository())),
         BlocProvider(
             create: (context) => VerifyBookingBloc(repo: ManagerRepository())),
         BlocProvider(create: (context) => CarCustomerCubit()),
         BlocProvider(
-            create: (context) =>
-                AssignOrderBloc(AssignOrderInitState(), ManagerRepository())),
+            create: (context) => AssignOrderBloc(repo: ManagerRepository())),
         BlocProvider(
             create: (context) =>
                 StaffBloc(StaffInitState(), ManagerRepository())),

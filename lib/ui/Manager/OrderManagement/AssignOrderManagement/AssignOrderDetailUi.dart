@@ -1,50 +1,53 @@
-import 'package:car_service/blocs/manager/booking/booking_state.dart';
-import 'package:car_service/blocs/manager/booking/booking_cubit.dart';
-import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingUi.dart';
+import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
+import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
+import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
+import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
+import 'package:car_service/blocs/manager/staff/staff_events.dart';
+import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../blocs/manager/booking/booking_bloc.dart';
-import '../../../../blocs/manager/booking/booking_bloc.dart';
-import '../../../../blocs/manager/booking/booking_events.dart';
-import '../../../../blocs/manager/booking/booking_state.dart';
-import '../../../../blocs/manager/booking/booking_state.dart';
-
-class VerifyBookingDetailUi extends StatefulWidget {
+class AssignOrderDetailUi extends StatefulWidget {
   final String emailId;
-  VerifyBookingDetailUi({@required this.emailId});
+  AssignOrderDetailUi({@required this.emailId});
 
   @override
-  _VerifyBookingDetailUiState createState() => _VerifyBookingDetailUiState();
+  _AssignOrderDetailUiState createState() => _AssignOrderDetailUiState();
 }
 
-class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
+class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
+  bool _visible = false;
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<VerifyBookingBloc>(context)
-        .add(DoVerifyBookingDetailEvent(email: widget.emailId));
+
+    BlocProvider.of<AssignOrderBloc>(context)
+        .add(DoAssignOrderDetailEvent(email: widget.emailId));
+    BlocProvider.of<StaffBloc>(context).add(DoListStaffEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Booking Information'),
+        title: Text('Order Information'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
       ),
       body: Center(
-        child: BlocBuilder<VerifyBookingBloc, VerifyBookingState>(
+        child: BlocBuilder<AssignOrderBloc, AssignOrderState>(
           builder: (context, state) {
-            if (state.detailStatus == BookingDetailStatus.init) {
+            if (state.detailStatus == AssignDetailStatus.init ||
+                state.staffStatus == AssignStaffStatus.init) {
               return CircularProgressIndicator();
-            } else if (state.detailStatus == BookingDetailStatus.loading) {
+            } else if (state.detailStatus == AssignDetailStatus.loading ||
+                state.staffStatus == AssignStaffStatus.loading) {
               return CircularProgressIndicator();
-            } else if (state.detailStatus == BookingDetailStatus.success) {
-              if (state.bookingDetail != null && state.bookingDetail.isNotEmpty)
+            } else if (state.detailStatus == AssignDetailStatus.success &&
+                state.staffStatus == AssignStaffStatus.success) {
+              if (state.assignDetail != null && state.assignDetail.isNotEmpty)
                 return Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
@@ -62,7 +65,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.bookingDetail[0].taiKhoan,
+                              state.assignDetail[0].taiKhoan,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -82,7 +85,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.bookingDetail[0].hoTen,
+                              state.assignDetail[0].hoTen,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -102,7 +105,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.bookingDetail[0].email,
+                              state.assignDetail[0].email,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -122,7 +125,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.bookingDetail[0].soDt,
+                              state.assignDetail[0].soDt,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -130,36 +133,72 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                       ),
                       Container(height: 16),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.45,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   primary: Colors.blue),
-                              child: Text('Accept',
+                              child: Text('Check-in',
                                   style: TextStyle(color: Colors.white)),
-                              onPressed: () {},
-                            ),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.45,
-                            child: ElevatedButton(
-                              style:
-                                  ElevatedButton.styleFrom(primary: Colors.red),
-                              child: Text('Deny',
-                                  style: TextStyle(color: Colors.white)),
-                              onPressed: () {},
+                              onPressed: () {
+                                setState(() {
+                                  _visible = !_visible;
+                                });
+                              },
                             ),
                           ),
                         ],
+                      ),
+                      const Divider(
+                        color: Colors.black87,
+                        height: 20,
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      Visibility(
+                        visible: _visible,
+                        child: Container(
+                          child: BlocBuilder<StaffBloc, StaffState>(
+                              builder: (builder, state) {
+                            if (state is StaffInitState) {
+                              return CircularProgressIndicator();
+                            } else if (state is StaffLoadingState) {
+                              return CircularProgressIndicator();
+                            } else if (state is StaffListSuccessState) {
+                              return Column(
+                                children: [
+                                  DropdownButton<String>(
+                                    // value: state.assignStaff,
+                                    // onChanged: (newValue) {
+                                    //   setState(() {
+                                    //      = newValue;
+                                    //   });
+                                    // },
+                                    items: state.staffList.map((valueItem) {
+                                      return DropdownMenuItem(
+                                        child: Text(valueItem.hoTen),
+                                        value: valueItem.hoTen,
+                                      );
+                                    }).toList(),
+                                  ),
+                                ],
+                              );
+                            } else if (state is StaffListErrorState) {
+                              return ErrorWidget(state.message.toString());
+                            }
+                            ;
+                          }),
+                        ),
                       )
                     ],
                   ),
                 );
               else
                 return Center(child: Text('Empty'));
-            } else if (state.detailStatus == BookingDetailStatus.error) {
+            } else if (state.detailStatus == AssignDetailStatus.error) {
               return ErrorWidget(state.message.toString());
             }
           },

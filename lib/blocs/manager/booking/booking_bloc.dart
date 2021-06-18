@@ -46,6 +46,7 @@ class VerifyBookingBloc extends Bloc<VerifyBookingEvent, VerifyBookingState> {
         List<BookingModel> data =
             await _repo.getVerifyBookingDetail(event.email);
         if (data != null) {
+          print("Not null");
           yield state.copyWith(
             detailStatus: BookingDetailStatus.success,
             bookingDetail: data,

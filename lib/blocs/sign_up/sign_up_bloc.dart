@@ -7,15 +7,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
-  AuthRepository repo;
-  SignUpBloc(SignUpState initialState, this.repo) : super(initialState);
+  AuthRepository _repo;
+
+  SignUpBloc({AuthRepository repo})
+      : _repo = repo,
+        super(SignUpState());
+
 
   @override
   Stream<SignUpState> mapEventToState(SignUpEvent event) async* {
-    var pref = await SharedPreferences.getInstance();
     if (event is SignUpButtonPressed) {
-      yield SignUpLoadingState();
-      var data = await repo.signUp(
+      yield state.copyWith(status: SignUpStatus.loading);
+      try{
+        var data = await _repo.signUp(
           event.user, event.name, event.email, event.phone, event.password);
       String jsonsDataString = data.toString();
       final jsonData = jsonDecode(jsonsDataString);
@@ -30,9 +34,17 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         //   pref.setString("token", data['token']);
         //   pref.setInt("type", data['type']);
         //   pref.setString("email", data['email']);
-        yield CustomerSignUpSuccessState();
+        yield state.copyWith(status: SignUpStatus.signUpSuccess);
       } else {
-        yield SignUpErrorState(message: "SignUp Error");
+        yield state.copyWith(
+          status: SignUpStatus.error,
+          message: 'Error SignUp');
+      }
+      }catch(e){
+        yield state.copyWith(
+          status: SignUpStatus.error,
+          message: e.toString(),
+        );
       }
     }
   }

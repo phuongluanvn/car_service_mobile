@@ -13,10 +13,13 @@ class StaffBloc extends Bloc<StaffEvent, StaffState> {
   @override
   Stream<StaffState> mapEventToState(StaffEvent event) async* {
     if (event is DoListStaffEvent) {
+      print('staff 1');
       yield StaffLoadingState();
       try {
+        print('staff 2');
         var staffList = await repo.getStaffList();
         if (staffList != null) {
+          print('staff 3');
           yield StaffListSuccessState(staffList: staffList);
           
         } else {
@@ -29,14 +32,12 @@ class StaffBloc extends Bloc<StaffEvent, StaffState> {
     } else if (event is DoStaffDetailEvent) {
       yield StaffLoadingState();
       try {
-        
         List<StaffModel> data = await repo.getStaffDetail(event.email);
         if (data != null) {
+          print('staff 2');
           yield StaffDetailSucessState(data: data);
-          
         } else {
           yield StaffLoadingState();
-          
         }
       } catch (e) {
         yield StaffListErrorState(message: e.toString());

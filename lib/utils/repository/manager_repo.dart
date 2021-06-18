@@ -83,6 +83,34 @@ class ManagerRepository {
     }
   }
 
+  Future<List<AssignOrderModel>> getOrderDetail(String email) async {
+    var res = await http.get(
+      Uri.parse(
+          'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP02&tuKhoa=' +
+              email),
+      headers: headers,
+    );
+    if (res.statusCode == 200) {
+      List<dynamic> data = json.decode(res.body);
+
+      try {
+        if (data != null) {
+          List<AssignOrderModel> listdata = [];
+          data.forEach((element) {
+            Map<String, dynamic> map = element;
+            listdata.add(AssignOrderModel.fromJson(map));
+          });
+          print(listdata);
+          return listdata;
+        } else {
+          print('No data');
+        }
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+  }
+
   Future<List<StaffModel>> getStaffList() async {
     List<StaffModel> staffList = [];
     var res = await http.get(
