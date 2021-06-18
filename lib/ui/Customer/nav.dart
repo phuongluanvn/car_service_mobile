@@ -1,4 +1,5 @@
-import 'package:car_service/ui/Customer/HomeUI.dart';
+import 'package:car_service/ui/Customer/CarManagement/CustomerCarUI.dart';
+import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderUI.dart';
 import 'package:flutter/material.dart';
 
 class Nav extends StatefulWidget {
@@ -9,8 +10,8 @@ class Nav extends StatefulWidget {
 class _NavState extends State<Nav> {
   int _selectedIndex = 1;
   List<Widget> _widgetOptions = <Widget>[
-    Text('Messgaes Screen'),
-    HomeUI(),
+    CustomerOrderUi(),
+    CustomerCarUi(),
     Text('Profile Screen'),
   ];
 
@@ -23,9 +24,6 @@ class _NavState extends State<Nav> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Home'),
-      ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),

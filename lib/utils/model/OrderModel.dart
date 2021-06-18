@@ -1,4 +1,4 @@
-class CarModel {
+class OrderModel {
   String taiKhoan;
   String hoTen;
   String email;
@@ -6,7 +6,7 @@ class CarModel {
   String matKhau;
   String maLoaiNguoiDung;
 
-  CarModel(
+  OrderModel(
       {this.taiKhoan,
       this.hoTen,
       this.email,
@@ -14,7 +14,7 @@ class CarModel {
       this.matKhau,
       this.maLoaiNguoiDung});
 
-  CarModel.fromJson(Map<String, dynamic> json) {
+  OrderModel.fromJson(Map<String, dynamic> json) {
     taiKhoan = json['taiKhoan'];
     hoTen = json['hoTen'];
     email = json['email'];

@@ -1,4 +1,5 @@
 import 'package:car_service/utils/model/CarModel.dart';
+import 'package:car_service/utils/model/OrderModel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -8,37 +9,98 @@ class CustomerRepository {
     'Accept': 'application/json'
   };
 
-  Future<List<CarModel>> fetchCarList() async {
-    List<CarModel> carsList = [];
-    var response = await http.get(
-        Uri.parse(
-            "https://movie0706.cybersoft.edu.vn/api/QuanLyPhim/LayDanhSachPhim?maNhom=GP01"),
-        headers: headers,
-        );
-        print(response);
-    // final data = (response.body);
-    // print(data);
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      carsList = data.map((car) => CarModel.fromJson(car)).toList();
-      print(data);
-      return data;
-    } 
-  }
-
-  Future<CarModel> getCarDetail(String name) async {
+  Future<List<CarModel>> getCarList() async {
+    List<CarModel> carLists = [];
     var res = await http.get(
       Uri.parse(
-          'https://movie0706.cybersoft.edu.vn/api/QuanLyPhim/LayDanhSachPhim?maNhom=GP01&tenPhim=' +
-              name),
+          "https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=abc"),
       headers: headers,
     );
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
       if (data != null) {
-        return data;
+        data.map((car) => carLists.add(CarModel.fromJson(car))).toList();
+        print(carLists);
+        print('dudu');
+        return carLists;
       } else {
         print('No data');
+      }
+    }
+  }
+
+  Future<List<CarModel>> getCarDetail(String email) async {
+    var res = await http.get(
+      Uri.parse(
+          'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=' +
+              email),
+      headers: headers,
+    );
+    if (res.statusCode == 200) {
+      List<dynamic> data = json.decode(res.body);
+
+      try {
+        if (data != null) {
+          List<CarModel> listdata = [];
+          data.forEach((element) {
+            Map<String, dynamic> map = element;
+            listdata.add(CarModel.fromJson(map));
+          });
+          print(listdata);
+          return listdata;
+        } else {
+          print('No data');
+        }
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+  }
+
+    Future<List<OrderModel>> getOrderList() async {
+    List<OrderModel> orderLists = [];
+    var res = await http.get(
+      Uri.parse(
+          "https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01"),
+      headers: headers,
+    );
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      if (data != null) {
+        data.map((order) => orderLists.add(OrderModel.fromJson(order))).toList();
+        print(orderLists);
+        print('dudu');
+        return orderLists;
+      } else {
+        print('No data');
+      }
+    }
+  }
+
+  Future<List<OrderModel>> getOrderDetail(String email) async {
+    var res = await http.get(
+      Uri.parse(
+          'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=' +
+              email),
+      headers: headers,
+    );
+    if (res.statusCode == 200) {
+      List<dynamic> data = json.decode(res.body);
+
+      try {
+        if (data != null) {
+          List<OrderModel> listdata = [];
+          data.forEach((element) {
+            Map<String, dynamic> map = element;
+            listdata.add(OrderModel.fromJson(map));
+          });
+          print(listdata);
+          return listdata;
+        } else {
+          print('No data');
+        }
+      } catch (e) {
+        print(e.toString());
       }
     }
   }
