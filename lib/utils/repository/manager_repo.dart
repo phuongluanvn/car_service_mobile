@@ -120,6 +120,8 @@ class ManagerRepository {
     );
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
+      print("object");
+      print(data);
       if (data != null) {
         data.map((staff) => staffList.add(StaffModel.fromJson(staff))).toList();
         print('lala');

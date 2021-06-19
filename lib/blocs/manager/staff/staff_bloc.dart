@@ -18,6 +18,7 @@ class StaffBloc extends Bloc<StaffEvent, StaffState> {
       try {
         print('staff 2');
         var staffList = await repo.getStaffList();
+        print(staffList);
         if (staffList != null) {
           print('staff 3');
           yield StaffListSuccessState(staffList: staffList);

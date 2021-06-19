@@ -17,6 +17,8 @@ class AssignOrderDetailUi extends StatefulWidget {
 
 class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
   bool _visible = false;
+
+  String selectItem;
   @override
   void initState() {
     super.initState();
@@ -38,6 +40,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
       ),
       body: Center(
         child: BlocBuilder<AssignOrderBloc, AssignOrderState>(
+          // ignore: missing_return
           builder: (context, state) {
             if (state.detailStatus == AssignDetailStatus.init) {
               return CircularProgressIndicator();
@@ -159,6 +162,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                         visible: _visible,
                         child: Container(
                           child: BlocBuilder<StaffBloc, StaffState>(
+                              // ignore: missing_return
                               builder: (builder, state) {
                             if (state is StaffInitState) {
                               return CircularProgressIndicator();
@@ -168,18 +172,18 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                               return Column(
                                 children: [
                                   DropdownButton<String>(
-                                    // value: state.assignStaff,
-                                    // onChanged: (newValue) {
-                                    //   setState(() {
-                                    //      = newValue;
-                                    //   });
-                                    // },
                                     items: state.staffList.map((valueItem) {
-                                      return DropdownMenuItem(
+                                      return DropdownMenuItem<String>(
                                         child: Text(valueItem.hoTen),
                                         value: valueItem.hoTen,
                                       );
                                     }).toList(),
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        this.selectItem = newValue;
+                                      });
+                                    },
+                                    value: selectItem,
                                   ),
                                 ],
                               );
