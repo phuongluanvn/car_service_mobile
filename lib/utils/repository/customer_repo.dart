@@ -1,4 +1,5 @@
 import 'package:car_service/utils/model/CarModel.dart';
+import 'package:car_service/utils/model/ManufacturerModel.dart';
 import 'package:car_service/utils/model/OrderModel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -8,6 +9,10 @@ class CustomerRepository {
     'Content-type': 'application/json',
     'Accept': 'application/json'
   };
+
+  createCar(String manufacture, String model, String licensePlateNumber) async{
+    return 'Thanh cong';
+  }
 
   Future<List<CarModel>> getCarList() async {
     List<CarModel> carLists = [];
@@ -20,8 +25,6 @@ class CustomerRepository {
       var data = json.decode(res.body);
       if (data != null) {
         data.map((car) => carLists.add(CarModel.fromJson(car))).toList();
-        print(carLists);
-        print('dudu');
         return carLists;
       } else {
         print('No data');
@@ -46,7 +49,6 @@ class CustomerRepository {
             Map<String, dynamic> map = element;
             listdata.add(CarModel.fromJson(map));
           });
-          print(listdata);
           return listdata;
         } else {
           print('No data');
@@ -68,8 +70,6 @@ class CustomerRepository {
       var data = json.decode(res.body);
       if (data != null) {
         data.map((order) => orderLists.add(OrderModel.fromJson(order))).toList();
-        print(orderLists);
-        print('dudu');
         return orderLists;
       } else {
         print('No data');
@@ -104,4 +104,27 @@ class CustomerRepository {
       }
     }
   }
+
+// Future<List<ManufacturerModel>> getManufacturerList() async {
+//     List<ManufacturerModel> manufacturerLists = [];
+//     var res = await http.get(
+//       Uri.parse(
+//           "https://carservicesystem.azurewebsites.net/api/Manufacturers"),
+//       headers: headers,
+//     );
+//     if (res.statusCode == 200) {
+//       var data = json.decode(res.body);
+//       print('duduasasas');
+//       print(data);
+//       print('dudu');
+//       if (data != null) {
+//         data.map((manufacturer) => manufacturerLists.add(ManufacturerModel.fromJson(manufacturer))).toList();
+//         print(manufacturerLists);
+        
+//         return manufacturerLists;
+//       } else {
+//         print('No data');
+//       }
+//     }
+//   }
 }

@@ -1,7 +1,9 @@
 import 'dart:io';
 
 // import 'package:car_service/blocs/customer_car/customerCar_state.dart';
+import 'package:car_service/blocs/customer/customerCar/CreateCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
+import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
 import 'package:car_service/blocs/login/auth_bloc.dart';
 import 'package:car_service/blocs/login/auth_state.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
@@ -44,6 +46,10 @@ class Auth extends StatelessWidget {
             create: (context) => AssignOrderBloc(repo: ManagerRepository())),
         BlocProvider(
             create: (context) => CustomerCarBloc(repo: CustomerRepository())),
+        BlocProvider(
+            create: (context) => CustomerOrderBloc(repo: CustomerRepository())),
+            BlocProvider(
+            create: (context) => CreateCarBloc(repo: CustomerRepository())),
         BlocProvider(
             create: (context) =>
                 StaffBloc(StaffInitState(), ManagerRepository())),
