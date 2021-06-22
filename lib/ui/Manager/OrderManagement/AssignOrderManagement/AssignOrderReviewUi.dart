@@ -4,19 +4,18 @@ import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
-import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AssignOrderDetailUi extends StatefulWidget {
+class AssignOrderReviewUi extends StatefulWidget {
   final String emailId;
-  AssignOrderDetailUi({@required this.emailId});
+  AssignOrderReviewUi({@required this.emailId});
 
   @override
-  _AssignOrderDetailUiState createState() => _AssignOrderDetailUiState();
+  _AssignOrderReviewUiState createState() => _AssignOrderReviewUiState();
 }
 
-class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
+class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   bool _visible = false;
 
   String selectItem;
@@ -40,7 +39,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order Information'),
+        title: Text('Order Review'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -183,8 +182,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                     hint: Text('Select Staff'),
                                     items: state.staffList.map((valueItem) {
                                       return DropdownMenuItem<String>(
-                                        child: Text(valueItem.taiKhoan),
-                                        value: valueItem.taiKhoan,
+                                        child: Text(valueItem.hoTen),
+                                        value: valueItem.hoTen,
                                       );
                                     }).toList(),
                                     onChanged: (newValue) {
@@ -193,17 +192,6 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                       });
                                     },
                                     value: selectItem,
-                                  ),
-                                  ElevatedButton(
-                                    child: Text('Checking'),
-                                    onPressed: () {
-                                      // getDropDownItem,
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (_) =>
-                                                  AssignOrderReviewUi(
-                                                      emailId: selectItem)));
-                                    },
                                   ),
                                   Container(
                                     child: Text('$holder'),

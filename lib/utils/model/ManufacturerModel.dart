@@ -1,7 +1,7 @@
 import 'dart:ffi';
 
 class ManufacturerModel {
-  Array manufacturer;
+  // Array manufacturer;
 
   
 }
