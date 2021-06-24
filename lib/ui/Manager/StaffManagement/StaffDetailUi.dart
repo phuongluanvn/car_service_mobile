@@ -30,7 +30,7 @@ class _StaffDetailUiState extends State<StaffDetailUi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit note'),
+        title: Text('Staff'),
       ),
       body: Center(
         child: BlocBuilder<StaffBloc, StaffState>(
@@ -49,12 +49,11 @@ class _StaffDetailUiState extends State<StaffDetailUi> {
                     Text(state.data[0].soDt),
                     Container(height: 16),
                     SizedBox(
-                      width: double.infinity,
+                      width: MediaQuery.of(context).size.width * 0.45,
                       height: 35,
-                      child: RaisedButton(
-                        child: Text('Submit',
+                      child: ElevatedButton(
+                        child: Text('Absent',
                             style: TextStyle(color: Colors.white)),
-                        color: Theme.of(context).primaryColor,
                         onPressed: () {},
                       ),
                     )

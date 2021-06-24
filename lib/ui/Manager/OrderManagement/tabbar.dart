@@ -1,3 +1,5 @@
+import 'package:car_service/ui/Manager/ManagerAccountUi.dart';
+import 'package:car_service/ui/Manager/OrderManagement/ProcessOrderManagement/ProcessOrderUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderUi.dart';
 
@@ -13,6 +15,7 @@ class _TabManagerState extends State<TabManager> {
   List<Widget> _widgetOptions = <Widget>[
     VerifyBookingUi(),
     AssignOrderUi(),
+    ProcessOrderUi()
   ];
 
   void _onItemTap(int index) {
@@ -24,11 +27,23 @@ class _TabManagerState extends State<TabManager> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: Text('Management'),
           automaticallyImplyLeading: false,
+          actions: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(right: 20),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => ManagerAccountUi()));
+                },
+                child: Icon(Icons.create),
+              ),
+            )
+          ],
           bottom: TabBar(
             tabs: <Widget>[
               Tab(
@@ -36,6 +51,9 @@ class _TabManagerState extends State<TabManager> {
               ),
               Tab(
                 text: 'Order',
+              ),
+              Tab(
+                text: 'Processing',
               )
             ],
           ),
