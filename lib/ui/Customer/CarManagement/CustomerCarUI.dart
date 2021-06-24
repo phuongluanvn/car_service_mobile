@@ -42,28 +42,13 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
                   itemCount: state.carLists.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
+                    //hiển thị list xe
                     return Card(
                       child: Column(children: [
-                        Stack(children: [
-                          Ink.image(
-                            image: NetworkImage(
-                              'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1327&q=80',
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) => CustomerCarDetailUi(
-                                        emailId:
-                                            state.carLists[index].taiKhoan)));
-                              },
-                            ),
-                            height: 240,
-                            fit: BoxFit.cover,
-                          ),
-                        ]),
                         ListTile(
-                          // leading: FlutterLogo(),
+                          leading: FlutterLogo(),
                           title: Text(state.carLists[index].taiKhoan),
+                          subtitle: Text(state.carLists[index].hoTen),
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (_) => CustomerCarDetailUi(
@@ -76,7 +61,7 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
                 );
               else
                 return Center(
-                  child: Text('Empty'),
+                  child: Text('Không có thông tin xe'),
                 );
             } else if (state.status == CustomerCarStatus.error) {
               return ErrorWidget(state.message.toString());
@@ -84,6 +69,7 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
           },
         ),
       ),
+      //thêm mới xe
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(

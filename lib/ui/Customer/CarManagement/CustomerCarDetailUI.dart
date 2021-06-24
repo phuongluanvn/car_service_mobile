@@ -24,12 +24,24 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit note'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+          title: Text('Thông tin xe'),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context),
+          ),
+          actions: [
+            IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(Icons.edit)),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 16),
+            //   child:
+            IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(Icons.delete_forever_rounded)),
+
+            // ),
+          ]),
       body: Center(
         child: BlocBuilder<CustomerCarBloc, CustomerCarState>(
           // ignore: missing_return
@@ -44,10 +56,47 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
                     children: <Widget>[
-                      Text(state.carDetail[0].taiKhoan),
-                      Container(height: 8),
-                      Text(state.carDetail[0].soDt),
-                      Container(height: 16),
+                      TextFormField(
+                        initialValue: state.carDetail[0].taiKhoan,
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.directions_car),
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintStyle: TextStyle(color: Colors.black54),
+                          // hintText: state.carDetail[0].taiKhoan,
+                          // text
+                          labelText: 'Biển số',
+                          contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                      ),
+                      Container(height: 14),
+                      TextFormField(
+                        initialValue: state.carDetail[0].soDt,
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.phone),
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintStyle: TextStyle(color: Colors.black54),
+                          // hintText: state.carDetail[0].taiKhoan,
+                          // text
+                          labelText: 'Điện thoại',
+                          contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                      ),
+                      Container(height: 14),
+
+                      // Text(state.carDetail[0].taiKhoan),
+                      // Container(height: 8),
+                      // Text(state.carDetail[0].soDt),
+                      // Container(height: 16),
                       SizedBox(
                         width: double.infinity,
                         height: 35,

@@ -14,8 +14,10 @@ class _SignUpUiState extends State<SignUpUi> {
   TextEditingController username = TextEditingController();
   TextEditingController fullname = TextEditingController();
   TextEditingController email = TextEditingController();
-  TextEditingController phonenumber = TextEditingController();
+  TextEditingController phoneNumber = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController address = TextEditingController();
+
   TextEditingController confirmpassword = TextEditingController();
   SignUpBloc signUpBloc;
 
@@ -47,11 +49,11 @@ class _SignUpUiState extends State<SignUpUi> {
       controller: username,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.email),
+        prefixIcon: Icon(Icons.person),
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
-        hintText: 'Username',
+        hintText: 'Tên đăng nhập',
         contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -65,7 +67,7 @@ class _SignUpUiState extends State<SignUpUi> {
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
-        hintText: 'Fullname',
+        hintText: 'Họ tên',
         contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -87,14 +89,14 @@ class _SignUpUiState extends State<SignUpUi> {
     );
 
     final phone = TextField(
-      controller: phonenumber,
+      controller: phoneNumber,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.email),
+        prefixIcon: Icon(Icons.phone),
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
-        hintText: 'PhoneNumber',
+        hintText: 'Số điện thoại',
         contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -109,7 +111,7 @@ class _SignUpUiState extends State<SignUpUi> {
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
-        hintText: 'Password',
+        hintText: 'Mật khẩu',
         contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -124,13 +126,13 @@ class _SignUpUiState extends State<SignUpUi> {
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
-        hintText: 'Re-Enter Password',
+        hintText: 'Xác nhận mật khẩu',
         contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
       validator: (String value) {
         if (password.text != confirmpassword.text) {
-          return "Password does not match";
+          return "Mật khẩu xác nhận không khớp! Vui lòng thử lại";
         }
         return null;
       },
@@ -147,7 +149,7 @@ class _SignUpUiState extends State<SignUpUi> {
               user: username.text,
               name: fullname.text,
               email: email.text,
-              phone: phonenumber.text,
+              phone: phoneNumber.text,
               password: password.text));
         },
         padding: EdgeInsets.all(12),
@@ -192,6 +194,14 @@ class _SignUpUiState extends State<SignUpUi> {
             SizedBox(
               height: 20,
             ),
+            pass,
+            SizedBox(
+              height: 20,
+            ),
+            confirmpass,
+            SizedBox(
+              height: 20,
+            ),
             name,
             SizedBox(
               height: 20,
@@ -201,14 +211,6 @@ class _SignUpUiState extends State<SignUpUi> {
               height: 20,
             ),
             phone,
-            SizedBox(
-              height: 20,
-            ),
-            pass,
-            SizedBox(
-              height: 20,
-            ),
-            confirmpass,
             SizedBox(
               height: 20,
             ),
