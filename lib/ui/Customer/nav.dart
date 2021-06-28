@@ -1,5 +1,7 @@
 import 'package:car_service/ui/Customer/CarManagement/CustomerCarUI.dart';
+import 'package:car_service/ui/Customer/CustomerProfile.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderUI.dart';
+import 'package:car_service/ui/Customer/OrderManagement/ManageOrderTab.dart';
 import 'package:flutter/material.dart';
 
 class Nav extends StatefulWidget {
@@ -10,9 +12,9 @@ class Nav extends StatefulWidget {
 class _NavState extends State<Nav> {
   int _selectedIndex = 1;
   List<Widget> _widgetOptions = <Widget>[
-    CustomerOrderUi(),
+    ManageOrderTab(),
     CustomerCarUi(),
-    Text('Profile Screen'),
+    CustomerProfile(),
   ];
 
   void _onItemTap(int index) {

@@ -46,7 +46,7 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
                     return Card(
                       child: Column(children: [
                         ListTile(
-                          leading: FlutterLogo(),
+                          leading: CircleAvatar(backgroundImage: AssetImage('lib/images/car_default.png'),),
                           title: Text(state.carLists[index].taiKhoan),
                           subtitle: Text(state.carLists[index].hoTen),
                           onTap: () {

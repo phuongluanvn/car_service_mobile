@@ -63,7 +63,7 @@ class CustomerRepository {
     List<OrderModel> orderLists = [];
     var res = await http.get(
       Uri.parse(
-          "https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01"),
+          "https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=abc"),
       headers: headers,
     );
     if (res.statusCode == 200) {

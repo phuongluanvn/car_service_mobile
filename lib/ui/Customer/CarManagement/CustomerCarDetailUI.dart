@@ -30,9 +30,9 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
             onPressed: () => Navigator.pop(context),
           ),
           actions: [
-            IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: Icon(Icons.edit)),
+            // IconButton(
+            //     onPressed: () => Navigator.pop(context),
+            //     icon: Icon(Icons.edit)),
             // Padding(
             //   padding: EdgeInsets.symmetric(horizontal: 16),
             //   child:
@@ -56,6 +56,25 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
                     children: <Widget>[
+                      Container(height: 14),
+                      TextFormField(
+                        initialValue: state.carDetail[0].soDt,
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.phone),
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintStyle: TextStyle(color: Colors.black54),
+                          // hintText: state.carDetail[0].taiKhoan,
+                          // text
+                          labelText: 'Mẫu xe',
+                          contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                      ),
+                      Container(height: 14),
                       TextFormField(
                         initialValue: state.carDetail[0].taiKhoan,
                         keyboardType: TextInputType.text,
@@ -67,7 +86,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                           hintStyle: TextStyle(color: Colors.black54),
                           // hintText: state.carDetail[0].taiKhoan,
                           // text
-                          labelText: 'Biển số',
+                          labelText: 'Hãng xe',
                           contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
@@ -85,7 +104,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                           hintStyle: TextStyle(color: Colors.black54),
                           // hintText: state.carDetail[0].taiKhoan,
                           // text
-                          labelText: 'Điện thoại',
+                          labelText: 'Biển số',
                           contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -7,36 +8,41 @@ class AuthRepository {
     'Accept': 'application/json'
   };
 
-  login(String email, String password) async {
+  login(String username, String password) async {
+    final body = jsonEncode({
+      "username": '${username}',
+      "password": '${password}',
+    });
     var res = await http.post(
-        Uri.parse('https://192.168.10.251:44381/api/Users?username=' +
-            email +
-            '&password=' +
-            password),
-        headers: headers);
+        Uri.parse('https://carservicesystem.azurewebsites.net/api/Users'),
+        headers: headers,
+        body: body);
     print(res.statusCode);
-    if (res.body != null) {
-      // var data = jsonDecode(res.body);
-      // print(data);
-      print("hihiih");
-      return res.body;
+    print('object');
+    if (res.statusCode != null) {
+      if (res.statusCode == 200) {
+        return res.body;
+      } else if (res.statusCode == 404) {
+        return res.body;
+      }
     } else {
       return null;
     }
-    // if (data['message'] == "manager logged in" ||
-    //     data['message' == "customer logged in"] ||
-    //     data['message' == 'staff logged in']) {
-    //   return data;
-    // } else {
-    //   return "auth problem";
-    // }
-
-    // var testt = await http.get(Uri.parse(
-    //     "https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01"),
-    //     headers: {},
-    //     );
-    // print(testt.body);
   }
+
+// {
+//   "username": "chonwang",
+//   "role": "customer",
+//   "deviceToken": "",
+//   "profile": {
+//     "Fullname": "Chon Chin Wang",
+//     "PhoneNumber": "0917381007",
+//     "Address": "Ninh Kieu, Can Tho",
+//     "Email": "chonwang@gmail.com",
+//     "AccumulatedPoint": 0
+//   },
+//   "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNob253YW5nIiwicm9sZSI6ImN1c3RvbWVyIiwibmJmIjoxNjI0ODQ4NDU4LCJleHAiOjE2MjQ4NTIwNTgsImlhdCI6MTYyNDg0ODQ1OH0.eTitfG3IZoOhtUikOUQisY76s5QzpW7G5jVEHu3exFk"
+// }
 
   signUp(String user, String name, String email, String phone,
       String password) async {

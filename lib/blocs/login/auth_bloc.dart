@@ -18,26 +18,27 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
     } else if (event is LoginButtonPressed) {
       yield LoginLoadingState();
       var res = await repo.login(event.email, event.password);
-      var encodeFirst = json.encode(res);
-      var data = json.decode(encodeFirst);
+      var data = json.decode(res);
       print(data);
+      
       if (data != null) {
-        // if (data['maLoaiNguoiDung'] == 'QuanTri') {
-        //   // pref.setString("token", data['accessToken']);
-        //   // pref.setString("email", data['email']);
-        yield ManagerLoginSuccessState();
-        // } else if (data['maLoaiNguoiDung'] == 'NhanVien') {
-        //   //   pref.setString("token", data['token']);
-        //   //   pref.setInt("type", data['type']);
-        //   //   pref.setString("email", data['email']);
-        //   yield StaffLoginSuccessState();
-        // } else if (data['maLoaiNguoiDung'] == 'KhachHang') {
-        //   //   pref.setString("token", data['token']);
-        //   //   pref.setInt("type", data['type']);
-        //   //   pref.setString("email", data['email']);
-        //   yield CustomerLoginSuccessState();
-        // } else {
-        //   yield LoginErrorState(message: "Auth Error");
+        if (data['role'] == 'manager') {
+          // pref.setString("token", data['accessToken']);
+          // pref.setString("email", data['email']);
+          yield ManagerLoginSuccessState();
+        } else if (data['role'] == 'staff') {
+          //   pref.setString("token", data['token']);
+          //   pref.setInt("type", data['type']);
+          //   pref.setString("email", data['email']);
+          yield StaffLoginSuccessState();
+        } else if (data['role'] == 'customer') {
+          //   pref.setString("token", data['token']);
+          //   pref.setInt("type", data['type']);
+          //   pref.setString("email", data['email']);
+          yield CustomerLoginSuccessState();
+        } else {
+          yield LoginErrorState(message: "Auth Error");
+        }
       }
     }
   }

@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:car_service/blocs/customer/customerCar/CreateCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CreateCar_event.dart';
 import 'package:car_service/blocs/customer/customerCar/CreateCar_state.dart';
 import 'package:car_service/utils/repository/customer_repo.dart';
+import 'package:car_service/utils/theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreateCustomerCarUI extends StatefulWidget {
   @override
@@ -14,6 +19,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
   TextEditingController username = TextEditingController();
   TextEditingController fullname = TextEditingController();
   TextEditingController email = TextEditingController();
+  File _pickerImage;
   CreateCarBloc createCarBloc;
 
   @override
@@ -22,12 +28,64 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
     super.initState();
   }
 
+  File _image;
+
+  _imageFromCamera() async {
+    PickedFile image = await ImagePicker()
+        .getImage(source: ImageSource.camera, imageQuality: 50);
+
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+      });
+    }
+  }
+
+  _imageFromGallery() async {
+    PickedFile image = await ImagePicker()
+        .getImage(source: ImageSource.gallery, imageQuality: 50);
+    print('object');
+
+    print(image.path);
+
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+      });
+    }
+  }
+
+//option
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+              child: Wrap(
+            children: [
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Gallery'),
+                onTap: () {
+                  _imageFromGallery();
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.camera_alt),
+                title: Text('Camera'),
+                onTap: () {
+                  _imageFromCamera();
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ));
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // final logo = Center(
-    //   child: Icon(Icons.supervised_user_circle, size: 150),
-    // );
-
     final msg =
         BlocBuilder<CreateCarBloc, CreateCarState>(builder: (context, state) {
       if (state.status == CreateCarStatus.error) {
@@ -138,6 +196,32 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                 emailaddress,
                 SizedBox(
                   height: 20,
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 26),
+                  width: 300,
+                  height: 150,
+                  color: Colors.white24,
+                  child: _image != null
+                      ? Image.file(
+                          _image,
+                          fit: BoxFit.fill,
+                        )
+                      : Icon(Icons.camera_alt),
+                ),
+                Center(
+                  child: GestureDetector(
+                    child: Container(
+                      color: Colors.teal,
+                      height: 30,
+                      width: 100,
+                      child: Text('Select image'),
+                      alignment: Alignment.center,
+                    ),
+                    onTap: () {
+                      _showPicker(context);
+                    },
+                  ),
                 ),
                 createCarButton,
                 SizedBox(

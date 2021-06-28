@@ -2,12 +2,8 @@ import 'dart:convert';
 
 import 'package:car_service/blocs/customer/customerCar/CreateCar_event.dart';
 import 'package:car_service/blocs/customer/customerCar/CreateCar_state.dart';
-import 'package:car_service/blocs/sign_up/sign_up_events.dart';
-import 'package:car_service/blocs/sign_up/sign_up_state.dart';
-import 'package:car_service/utils/repository/auth_repo.dart';
 import 'package:car_service/utils/repository/customer_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateCarBloc extends Bloc<CreateCarEvent, CreateCarState> {
   CustomerRepository _repo;
