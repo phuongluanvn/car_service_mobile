@@ -1,7 +1,31 @@
 import 'package:car_service/ui/Customer/CustomerAccountUI.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class CustomerProfile extends StatelessWidget {
+class CustomerProfile extends StatefulWidget {
+  @override
+  _CustomerProfileState createState() => _CustomerProfileState();
+}
+
+class _CustomerProfileState extends State<CustomerProfile> {
+
+  String _fullName = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _getStringFromSharedPref();
+  }
+
+  _getStringFromSharedPref() async {
+    final prefs = await SharedPreferences.getInstance();
+    final fullname = prefs.getString('Fullname');
+  
+
+    setState(() {
+      _fullName = fullname;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +56,7 @@ class CustomerProfile extends StatelessWidget {
               child: Container(
                 height: 50,
                 child: Text(
-                  'Luan Dang',
+                  _fullName,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomerAccountUi extends StatefulWidget {
   // CustomerAccountUi() : super(key: key);
@@ -8,6 +9,35 @@ class CustomerAccountUi extends StatefulWidget {
 }
 
 class _CustomerAccountUiState extends State<CustomerAccountUi> {
+  String _fullName = '';
+  String _phoneNumber = '';
+  String _address = '';
+  String _email = '';
+  int _accumulatedPoint;
+
+  @override
+  void initState() {
+    super.initState();
+    _getStringFromSharedPref();
+  }
+
+  _getStringFromSharedPref() async {
+    final prefs = await SharedPreferences.getInstance();
+    final fullname = prefs.getString('Fullname');
+    final phoneNumber = prefs.getString('PhoneNumber');
+    final address = prefs.getString('Address');
+    final email = prefs.getString('Email');
+    final accumulatedPoint = prefs.getInt('AccumulatedPoint');
+
+    setState(() {
+      _fullName = fullname;
+      _phoneNumber = phoneNumber;
+      _email = email;
+      _address = address;
+      _accumulatedPoint = accumulatedPoint;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,28 +89,35 @@ class _CustomerAccountUiState extends State<CustomerAccountUi> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('Name:'),
-                        Text('Luan Dang'),
+                        Text(_fullName),
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('Email:'),
-                        Text('abc@213.com'),
+                        Text(_email),
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('Phone Number:'),
-                        Text('123456789'),
+                        Text(_phoneNumber),
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('Address:'),
-                        Text('aabc'),
+                        Text(_address),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Point:'),
+                        Text('$_accumulatedPoint'),
                       ],
                     ),
                   ],

@@ -20,7 +20,7 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
       var res = await repo.login(event.email, event.password);
       var data = json.decode(res);
       print(data);
-      
+
       if (data != null) {
         if (data['role'] == 'manager') {
           // pref.setString("token", data['accessToken']);
@@ -32,9 +32,15 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
           //   pref.setString("email", data['email']);
           yield StaffLoginSuccessState();
         } else if (data['role'] == 'customer') {
-          //   pref.setString("token", data['token']);
-          //   pref.setInt("type", data['type']);
-          //   pref.setString("email", data['email']);
+          var dataProfile = data['profile'];
+          var enc = json.encode(dataProfile);
+          var dec = json.decode(enc);
+          pref.setString("Fullname", dec['Fullname']);
+          pref.setInt("AccumulatedPoint", dec['AccumulatedPoint']);
+          pref.setString("PhoneNumber", dec['PhoneNumber']);
+          pref.setString("Address", dec['Address']);
+          pref.setString("Email", dec['Email']);
+
           yield CustomerLoginSuccessState();
         } else {
           yield LoginErrorState(message: "Auth Error");
