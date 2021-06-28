@@ -66,7 +66,7 @@ class Auth extends StatelessWidget {
       child: GetMaterialApp(
         initialRoute: '/',
         routes: {
-          '/': (context) => LoginUi(),
+          '/': (context) => ManagerMain(),
           '/manager': (context) => ManagerMain(),
           '/staff': (context) => StaffHome(),
           '/customer': (context) => CustomerHome(),

@@ -171,17 +171,18 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                         child: Container(
                           child: BlocBuilder<StaffBloc, StaffState>(
                               // ignore: missing_return
-                              builder: (builder, state) {
-                            if (state is StaffInitState) {
+                              builder: (builder, staffState) {
+                            if (staffState is StaffInitState) {
                               return CircularProgressIndicator();
-                            } else if (state is StaffLoadingState) {
+                            } else if (staffState is StaffLoadingState) {
                               return CircularProgressIndicator();
-                            } else if (state is StaffListSuccessState) {
+                            } else if (staffState is StaffListSuccessState) {
                               return Column(
                                 children: [
                                   DropdownButton<String>(
                                     hint: Text('Select Staff'),
-                                    items: state.staffList.map((valueItem) {
+                                    items:
+                                        staffState.staffList.map((valueItem) {
                                       return DropdownMenuItem<String>(
                                         child: Text(valueItem.taiKhoan),
                                         value: valueItem.taiKhoan,
@@ -202,7 +203,10 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                           MaterialPageRoute(
                                               builder: (_) =>
                                                   AssignOrderReviewUi(
-                                                      emailId: selectItem)));
+                                                      userId: state
+                                                          .assignDetail[0]
+                                                          .taiKhoan,
+                                                      staffId: selectItem)));
                                     },
                                   ),
                                   Container(

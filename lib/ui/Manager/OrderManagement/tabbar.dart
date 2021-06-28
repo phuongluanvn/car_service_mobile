@@ -1,4 +1,5 @@
 import 'package:car_service/ui/Manager/ManagerAccountUi.dart';
+import 'package:car_service/ui/Manager/OrderManagement/CreateOrderUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/ProcessOrderManagement/ProcessOrderUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderUi.dart';
@@ -37,8 +38,8 @@ class _TabManagerState extends State<TabManager> {
               padding: EdgeInsets.only(right: 20),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => ManagerAccountUi()));
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (_) => CreateOrderUI()));
                 },
                 child: Icon(Icons.create),
               ),
