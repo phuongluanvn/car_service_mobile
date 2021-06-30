@@ -10,6 +10,10 @@ class ManagerRepository {
     'Accept': 'application/json'
   };
 
+  createOrder(String manufacture, String licensePlateNumber) async {
+    return 'Thanh cong';
+  }
+
   Future<List<BookingModel>> getBookingList() async {
     List<BookingModel> bookingList = [];
     var res = await http.get(

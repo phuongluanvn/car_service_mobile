@@ -18,15 +18,12 @@ class AssignOrderReviewUi extends StatefulWidget {
 
 class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   bool _visible = false;
-
-  String selectItem;
-  String holder = '';
   String _selection = '';
   @override
   void initState() {
     super.initState();
     setState(() {
-      _selection = widget.staffId.toString();
+      _selection = widget.staffId;
       print('staff =' + _selection);
     });
     BlocProvider.of<AssignOrderBloc>(context)
@@ -209,7 +206,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                       }).toList(),
                                       onChanged: (newValue) {
                                         setState(() {
-                                          this.selectItem = newValue;
+                                          this._selection = newValue;
                                         });
                                       },
                                       value: _selection,
