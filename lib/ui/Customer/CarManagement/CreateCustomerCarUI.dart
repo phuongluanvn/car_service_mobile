@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:car_service/blocs/customer/customerCar/CreateCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CreateCar_event.dart';
 import 'package:car_service/blocs/customer/customerCar/CreateCar_state.dart';
-import 'package:car_service/utils/repository/customer_repo.dart';
-import 'package:car_service/utils/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

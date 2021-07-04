@@ -36,6 +36,7 @@ dependencies:
   google_fonts: 
   path_provider:
   image_picker: ^0.8.1+1
+  table_calendar:
 
 dev_dependencies:
   flutter_test:

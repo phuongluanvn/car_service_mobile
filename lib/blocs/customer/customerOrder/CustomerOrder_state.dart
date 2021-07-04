@@ -7,6 +7,7 @@ enum CustomerOrderStatus {
   loadedOrderSuccess,
   loadedOrderDetailSuccess,
   error,
+  loadingOrderWithBookingStatus
 }
 
 enum CustomerOrderDetailStatus{

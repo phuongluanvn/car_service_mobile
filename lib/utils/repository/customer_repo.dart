@@ -1,6 +1,7 @@
 import 'package:car_service/utils/model/CarModel.dart';
 import 'package:car_service/utils/model/ManufacturerModel.dart';
 import 'package:car_service/utils/model/OrderModel.dart';
+import 'package:car_service/utils/model/ServiceModel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -10,7 +11,7 @@ class CustomerRepository {
     'Accept': 'application/json'
   };
 
-  createCar(String manufacture, String model, String licensePlateNumber) async{
+  createCar(String manufacture, String model, String licensePlateNumber) async {
     return 'Thanh cong';
   }
 
@@ -18,7 +19,7 @@ class CustomerRepository {
     List<CarModel> carLists = [];
     var res = await http.get(
       Uri.parse(
-          "https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=abc"),
+          "https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=abcd"),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -59,7 +60,7 @@ class CustomerRepository {
     }
   }
 
-    Future<List<OrderModel>> getOrderList() async {
+  Future<List<OrderModel>> getOrderList() async {
     List<OrderModel> orderLists = [];
     var res = await http.get(
       Uri.parse(
@@ -69,7 +70,9 @@ class CustomerRepository {
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
       if (data != null) {
-        data.map((order) => orderLists.add(OrderModel.fromJson(order))).toList();
+        data
+            .map((order) => orderLists.add(OrderModel.fromJson(order)))
+            .toList();
         return orderLists;
       } else {
         print('No data');
@@ -105,26 +108,25 @@ class CustomerRepository {
     }
   }
 
-// Future<List<ManufacturerModel>> getManufacturerList() async {
-//     List<ManufacturerModel> manufacturerLists = [];
-//     var res = await http.get(
-//       Uri.parse(
-//           "https://carservicesystem.azurewebsites.net/api/Manufacturers"),
-//       headers: headers,
-//     );
-//     if (res.statusCode == 200) {
-//       var data = json.decode(res.body);
-//       print('duduasasas');
-//       print(data);
-//       print('dudu');
-//       if (data != null) {
-//         data.map((manufacturer) => manufacturerLists.add(ManufacturerModel.fromJson(manufacturer))).toList();
-//         print(manufacturerLists);
-        
-//         return manufacturerLists;
-//       } else {
-//         print('No data');
-//       }
-//     }
-//   }
+  Future<List<ServiceModel>> getServiceList() async {
+    List<ServiceModel> serviceLists = [];
+    var res = await http.get(
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/Services"),
+      headers: headers,
+    );
+    print(res);
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      if (data != null) {
+        data
+            .map((order) => serviceLists.add(ServiceModel.fromJson(order)))
+            .toList();
+        return serviceLists;
+      } else {
+        print('No service data');
+        return null;
+      }
+    }
+  }
 }
