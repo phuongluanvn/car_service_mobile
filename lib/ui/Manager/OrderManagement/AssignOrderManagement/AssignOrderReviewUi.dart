@@ -4,6 +4,7 @@ import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
+import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/ReviewTaskUi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -157,7 +158,8 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                 child: Text('Review Task',
                                     style: TextStyle(color: Colors.white)),
                                 onPressed: () {
-                                  setState(() {});
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) => ReviewTaskUi()));
                                 },
                               ),
                             ),
@@ -200,8 +202,8 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                       items:
                                           staffState.staffList.map((valueItem) {
                                         return DropdownMenuItem<String>(
-                                          child: Text(valueItem.toString()),
-                                          value: valueItem.toString(),
+                                          child: Text(valueItem.taiKhoan),
+                                          value: valueItem.taiKhoan,
                                         );
                                       }).toList(),
                                       onChanged: (newValue) {
