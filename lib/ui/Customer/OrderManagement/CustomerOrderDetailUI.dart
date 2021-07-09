@@ -24,7 +24,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Thông tin của xe'),
+        title: Text('Thông tin đơn hàng'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -44,7 +44,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
                     children: <Widget>[
-                      Text(state.orderDetail[0].id),
+                      Text(state.orderDetail[0].bookingTime),
                       Container(height: 8),
                       Text(state.orderDetail[0].note),
                       Container(height: 16),

@@ -189,25 +189,24 @@ class ManagerRepository {
   }
 
   Future<List<OrderDetailModel>> getVerifyOrderDetail(String id) async {
+    List<OrderDetailModel> listdata = [];
+    List convertData = [];
+
     var res = await http.get(
       Uri.parse('https://carservicesystem.azurewebsites.net/api/Orders/' + id),
       headers: headers,
     );
     if (res.statusCode == 200) {
-      List<dynamic> data = json.decode(res.body);
+      var data = json.decode(res.body);
+      convertData.add(data); //thêm [] để dùng .map bêndưới
 
       try {
         if (data != null) {
-          List<OrderDetailModel> listdata = [];
-          data.forEach((element) {
-            Map<String, dynamic> map = element;
-            listdata.add(OrderDetailModel.fromJson(map));
-          });
-          print('Has data');
-          print(listdata);
+          convertData.map(
+              (element) => listdata.add(OrderDetailModel.fromJson(element))).toList();
           return listdata;
         } else {
-          print('No data');
+          print('No detail order data');
         }
       } catch (e) {
         print(e.toString());

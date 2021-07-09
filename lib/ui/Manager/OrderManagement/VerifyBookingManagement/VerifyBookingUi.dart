@@ -32,6 +32,7 @@ class _VerifyBookingUiState extends State<VerifyBookingUi> {
       backgroundColor: Colors.blue[100],
       body: Center(
         child: BlocBuilder<VerifyBookingBloc, VerifyBookingState>(
+          // ignore: missing_return
           builder: (context, state) {
             if (state.status == BookingStatus.init) {
               return CircularProgressIndicator();
