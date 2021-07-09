@@ -20,7 +20,6 @@ class CustomerCarBloc extends Bloc<CustomerCarEvent, CustomerCarState> {
       try {
         final prefs = await SharedPreferences.getInstance();
         final _username = prefs.getString('Username');
-        print(_username);
         if (_username != null) {
           var carLists = await _repo.getCarListOfCustomer(_username);
           if (carLists != null) {

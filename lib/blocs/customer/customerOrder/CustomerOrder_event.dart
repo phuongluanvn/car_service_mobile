@@ -8,10 +8,10 @@ abstract class CustomerOrderEvent extends Equatable {
 class DoOrderListEvent extends CustomerOrderEvent {}
 
 class DoOrderDetailEvent extends CustomerOrderEvent {
-  final String email;
-  DoOrderDetailEvent({this.email});
+  final String id;
+  DoOrderDetailEvent({this.id});
   @override
-  List<Object> get props => [email];
+  List<Object> get props => [id];
 }
 
 class VerifyBookingTabPressed extends CustomerOrderEvent {}

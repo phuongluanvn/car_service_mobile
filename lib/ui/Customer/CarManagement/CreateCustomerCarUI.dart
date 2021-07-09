@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:car_service/blocs/customer/customerCar/CreateCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CreateCar_event.dart';
 import 'package:car_service/blocs/customer/customerCar/CreateCar_state.dart';
+import 'package:car_service/utils/model/ManufacturerModel.dart';
+import 'package:car_service/utils/repository/customer_repo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,14 +21,23 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
   TextEditingController licensePlateNumber = TextEditingController();
   File _pickerImage;
   CreateCarBloc createCarBloc;
+  CustomerRepository _repo;
+  List<ManufacturerModel> _listManufacturer;
 
   @override
   void initState() {
     createCarBloc = BlocProvider.of<CreateCarBloc>(context);
+    print('List manu ');
+    print(_listManufacturer);
     super.initState();
+    _getListManufacturer();
   }
 
   File _image;
+
+  _getListManufacturer() async {
+    _listManufacturer = await _repo.getManufacturerList();
+  }
 
   _imageFromCamera() async {
     PickedFile image = await ImagePicker()

@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomerOrderDetailUi extends StatefulWidget {
-  final String emailId;
-  CustomerOrderDetailUi({@required this.emailId});
+  final String orderId;
+  CustomerOrderDetailUi({@required this.orderId});
 
   @override
   _CustomerOrderDetailUiState createState() => _CustomerOrderDetailUiState();
@@ -17,14 +17,14 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
   void initState() {
     super.initState();
     BlocProvider.of<CustomerOrderBloc>(context)
-        .add(DoOrderDetailEvent(email: widget.emailId));
+        .add(DoOrderDetailEvent(id: widget.orderId));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit note'),
+        title: Text('Thông tin của xe'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -44,9 +44,9 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
                     children: <Widget>[
-                      Text(state.orderDetail[0].email),
+                      Text(state.orderDetail[0].id),
                       Container(height: 8),
-                      Text(state.orderDetail[0].soDt),
+                      Text(state.orderDetail[0].note),
                       Container(height: 16),
                       SizedBox(
                         width: double.infinity,

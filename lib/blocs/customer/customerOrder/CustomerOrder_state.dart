@@ -1,3 +1,4 @@
+import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/OrderModel.dart';
 import 'package:equatable/equatable.dart';
 
@@ -5,7 +6,7 @@ enum CustomerOrderStatus {
   init,
   loading,
   loadedOrderSuccess,
-  loadedOrderDetailSuccess,
+  // loadedOrderDetailSuccess,
   error,
   loadingOrderWithBookingStatus
 }
@@ -21,7 +22,7 @@ class CustomerOrderState extends Equatable {
   final CustomerOrderStatus status;
   final CustomerOrderDetailStatus detailStatus;
   final List<OrderModel> orderLists;
-  final List<OrderModel> orderDetail;
+  final List<OrderDetailModel> orderDetail;
   final String message;
   const CustomerOrderState({
     this.status: CustomerOrderStatus.init,
@@ -35,7 +36,7 @@ class CustomerOrderState extends Equatable {
     CustomerOrderStatus status,
     CustomerOrderDetailStatus detailStatus,
     List<OrderModel> orderLists,
-    List<OrderModel> orderDetail,
+    List<OrderDetailModel> orderDetail,
     String message,
   }) =>
       CustomerOrderState(

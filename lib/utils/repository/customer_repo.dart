@@ -1,5 +1,6 @@
 import 'package:car_service/utils/model/CarModel.dart';
 import 'package:car_service/utils/model/ManufacturerModel.dart';
+import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/OrderModel.dart';
 import 'package:car_service/utils/model/ServiceModel.dart';
 import 'package:car_service/utils/model/VehicleModel.dart';
@@ -117,11 +118,12 @@ class CustomerRepository {
     }
   }
 
-  Future<List<OrderModel>> getOrderList() async {
+  Future<List<OrderModel>> getOrderList(String username) async {
     List<OrderModel> orderLists = [];
     var res = await http.get(
-      Uri.parse(
-          "https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=abc"),
+      Uri.parse("https://carservicesystem.azurewebsites.net/api/Customers/" +
+          username +
+          "/orders"),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -132,34 +134,39 @@ class CustomerRepository {
             .toList();
         return orderLists;
       } else {
-        print('No data');
+        print('No order data');
       }
     }
   }
 
-  Future<List<OrderModel>> getOrderDetail(String email) async {
+  Future<List<OrderDetailModel>> getOrderDetail(String id) async {
+    List<OrderDetailModel> orderDetails = [];
+    List test = [];
     var res = await http.get(
-      Uri.parse(
-          'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=' +
-              email),
+      Uri.parse('https://carservicesystem.azurewebsites.net/api/Orders/' + id),
       headers: headers,
     );
+    // print(res.body);
     if (res.statusCode == 200) {
-      List<dynamic> data = json.decode(res.body);
-
+      var data = json.decode(res.body);
+      test.add(data);
+      print('?????');
+      print(test);
+      // print(data);
       try {
-        if (data != null) {
-          List<OrderModel> listdata = [];
-          data.forEach((element) {
-            Map<String, dynamic> map = element;
-            listdata.add(OrderModel.fromJson(map));
-          });
-          print(listdata);
-          return listdata;
-        } else {
-          print('No data');
-        }
-      } catch (e) {
+      if (data != null) {
+        test
+            .map((orderDetail) =>
+                orderDetails.add(OrderDetailModel.fromJson(orderDetail)))
+            .toList();
+        print('Order detail');
+        print(orderDetails);
+        return orderDetails;
+      } else {
+        print('No data');
+      }
+      }
+      catch (e) {
         print(e.toString());
       }
     }
@@ -181,6 +188,29 @@ class CustomerRepository {
         return serviceLists;
       } else {
         print('No service data');
+        return null;
+      }
+    }
+  }
+
+  Future<List<ManufacturerModel>> getManufacturerList() async {
+    List<ManufacturerModel> manufacturerLists = [];
+    var res = await http.get(
+      Uri.parse("https://carservicesystem.azurewebsites.net/api/Manufacturers"),
+      headers: headers,
+    );
+    print('object');
+    print(res.body);
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      if (data != null) {
+        data
+            .map((order) =>
+                manufacturerLists.add(ManufacturerModel.fromJson(order)))
+            .toList();
+        return manufacturerLists;
+      } else {
+        print('No manufacturer data');
         return null;
       }
     }

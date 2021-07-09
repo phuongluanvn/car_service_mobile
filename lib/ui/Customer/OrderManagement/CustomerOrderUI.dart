@@ -1,8 +1,8 @@
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_event.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dart';
-import 'package:car_service/ui/Customer/CarManagement/CustomerCarDetailUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CreateOrderManagement/CreateBookingOrderUI.dart';
+import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderDetailUI.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -52,62 +52,30 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           return Card(
-                            child: (state.orderLists[index].hoTen == 'abc')
-                                ? Column(children: [
-                                    ListTile(
-                                      trailing: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.circle,
-                                              color: Colors.red,
-                                            ),
-                                            Text('Đang làm'),
-                                          ]),
-                                      leading: FlutterLogo(),
-                                      title: Text(
-                                          state.orderLists[index].taiKhoan),
-                                      subtitle:
-                                          Text(state.orderLists[index].hoTen),
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (_) =>
-                                                    CustomerCarDetailUi(
-                                                        id: state
-                                                            .orderLists[index]
-                                                            .taiKhoan)));
-                                      },
+                              child: Column(children: [
+                            ListTile(
+                              trailing: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.circle,
+                                      color: Colors.red,
                                     ),
-                                  ])
-                                : Column(children: [
-                                    ListTile(
-                                      trailing: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.circle,
-                                              color: Colors.green,
-                                            ),
-                                            Text('Đợi xác nhận'),
-                                          ]),
-                                      leading: FlutterLogo(),
-                                      title: Text(
-                                          state.orderLists[index].taiKhoan),
-                                      subtitle:
-                                          Text(state.orderLists[index].hoTen),
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (_) =>
-                                                    CustomerCarDetailUi(
-                                                        id: state
-                                                            .orderLists[index]
-                                                            .taiKhoan)));
-                                      },
-                                    ),
+                                    Text('Đợi xác nhận'),
                                   ]),
-                          );
+                              leading: FlutterLogo(),
+                              title: Text(
+                                  state.orderLists[index].vehicle.licensePlate),
+                              subtitle: Text(
+                                  state.orderLists[index].vehicle.manufacturer),
+                              onTap: () {
+                                print(state.orderLists[index].id);
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (_) => CustomerOrderDetailUi(
+                                        orderId: state.orderLists[index].id)));
+                              },
+                            ),
+                          ]));
                         },
                       ),
                       // ),
@@ -123,11 +91,11 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
             }
           },
         ),
-      ),//thêm mới xe
+      ), //thêm mới xe
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => CreateBookingOrderUI()));
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => CreateBookingOrderUI()));
         },
         child: const Icon(Icons.add),
         backgroundColor: Colors.blue[600],
