@@ -1,4 +1,4 @@
-class BookingModel {
+class TestOrderModel {
   String id;
   String bookingTime;
   Null checkinTime;
@@ -8,7 +8,7 @@ class BookingModel {
   Vehicle vehicle;
   Customer customer;
 
-  BookingModel(
+  TestOrderModel(
       {this.id,
       this.bookingTime,
       this.checkinTime,
@@ -18,7 +18,7 @@ class BookingModel {
       this.vehicle,
       this.customer});
 
-  BookingModel.fromJson(Map<String, dynamic> json) {
+  TestOrderModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     bookingTime = json['bookingTime'];
     checkinTime = json['checkinTime'];

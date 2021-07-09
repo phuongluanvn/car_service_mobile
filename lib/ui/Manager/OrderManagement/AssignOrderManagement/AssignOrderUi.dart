@@ -40,13 +40,60 @@ class _AssignOrderUiState extends State<AssignOrderUi> {
                   itemCount: state.assignList.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(state.assignList[index].taiKhoan),
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => AssignOrderDetailUi(
-                                emailId: state.assignList[index].taiKhoan)));
-                      },
+                    return Card(
+                      child: (state.assignList[index].status == 'Checked-In')
+                          ? Column(children: [
+                              ListTile(
+                                trailing: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.circle,
+                                        color: Colors.red,
+                                      ),
+                                      Text('Booked'),
+                                    ]),
+                                leading: FlutterLogo(),
+                                title: Text(
+                                    state.assignList[index].customer.fullname),
+                                subtitle:
+                                    Text(state.assignList[index].bookingTime),
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) => AssignOrderDetailUi(
+                                          emailId:
+                                              state.assignList[index].id)));
+                                },
+                              ),
+                            ])
+                          : SizedBox(),
+                      // : Column(children: [
+                      //     ListTile(
+                      //       trailing: Column(
+                      //           mainAxisSize: MainAxisSize.min,
+                      //           children: <Widget>[
+                      //             Icon(
+                      //               Icons.circle,
+                      //               color: Colors.green,
+                      //             ),
+                      //             Text('Đợi xác nhận'),
+                      //           ]),
+                      //       leading: FlutterLogo(),
+                      //       title: Text(
+                      //           state.orderLists[index].taiKhoan),
+                      //       subtitle:
+                      //           Text(state.orderLists[index].hoTen),
+                      //       onTap: () {
+                      //         Navigator.of(context).push(
+                      //             MaterialPageRoute(
+                      //                 builder: (_) =>
+                      //                     CustomerCarDetailUi(
+                      //                         emailId: state
+                      //                             .orderLists[index]
+                      //                             .taiKhoan)));
+                      //       },
+                      //     ),
+                      //   ]),
                     );
                   },
                 );

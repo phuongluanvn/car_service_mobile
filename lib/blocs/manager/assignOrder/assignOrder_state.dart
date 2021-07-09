@@ -1,5 +1,7 @@
 import 'package:car_service/utils/model/AssignOrderModel.dart';
+import 'package:car_service/utils/model/BookingModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
+import 'package:car_service/utils/model/TestOrderModel.dart';
 import 'package:equatable/equatable.dart';
 
 enum AssignStatus {
@@ -18,20 +20,17 @@ enum AssignDetailStatus {
   error,
 }
 
-
-
 class AssignOrderState extends Equatable {
   final AssignStatus status;
   final AssignDetailStatus detailStatus;
-  
-  final List<AssignOrderModel> assignList;
+
+  final List<BookingModel> assignList;
   final List<AssignOrderModel> assignDetail;
   final List<StaffModel> assignStaff;
   final String message;
   const AssignOrderState({
     this.status: AssignStatus.init,
     this.detailStatus: AssignDetailStatus.init,
-    
     this.assignDetail: const [],
     this.assignList: const [],
     this.assignStaff: const [],
@@ -41,8 +40,7 @@ class AssignOrderState extends Equatable {
   AssignOrderState copyWith({
     AssignStatus status,
     AssignDetailStatus detailStatus,
-    
-    List<AssignOrderModel> assignList,
+    List<BookingModel> assignList,
     List<AssignOrderModel> assignDetail,
     List<StaffModel> assignStaff,
     String message,
@@ -50,7 +48,6 @@ class AssignOrderState extends Equatable {
       AssignOrderState(
         status: status ?? this.status,
         detailStatus: detailStatus ?? this.detailStatus,
-        
         assignList: assignList ?? this.assignList,
         assignDetail: assignDetail ?? this.assignDetail,
         assignStaff: assignStaff ?? this.assignStaff,
@@ -60,7 +57,6 @@ class AssignOrderState extends Equatable {
   List<Object> get props => [
         status,
         detailStatus,
-        
         assignList,
         assignDetail,
         assignStaff,

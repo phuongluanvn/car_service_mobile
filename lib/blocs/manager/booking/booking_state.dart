@@ -1,5 +1,6 @@
 import 'package:car_service/utils/model/BookingModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
+import 'package:car_service/utils/model/TestOrderModel.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../utils/model/BookingModel.dart';
@@ -13,7 +14,7 @@ enum BookingStatus {
   error,
 }
 
-enum BookingDetailStatus{
+enum BookingDetailStatus {
   init,
   loading,
   success,
@@ -28,10 +29,10 @@ class VerifyBookingState extends Equatable {
   final String message;
   const VerifyBookingState({
     this.status: BookingStatus.init,
-    this.detailStatus:BookingDetailStatus.init,
-    this.bookingDetail:const [],
-    this.bookingList:const [],
-    this.message:'',
+    this.detailStatus: BookingDetailStatus.init,
+    this.bookingDetail: const [],
+    this.bookingList: const [],
+    this.message: '',
   });
 
   VerifyBookingState copyWith({
@@ -43,10 +44,10 @@ class VerifyBookingState extends Equatable {
   }) =>
       VerifyBookingState(
         status: status ?? this.status,
-        detailStatus: detailStatus??this.detailStatus,
+        detailStatus: detailStatus ?? this.detailStatus,
         bookingList: bookingList ?? this.bookingList,
         bookingDetail: bookingDetail ?? this.bookingDetail,
-        message: message??this.message,
+        message: message ?? this.message,
       );
   @override
   List<Object> get props => [
