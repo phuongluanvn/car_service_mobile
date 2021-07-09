@@ -1,6 +1,7 @@
 import 'package:car_service/blocs/manager/booking/booking_events.dart';
 import 'package:car_service/blocs/manager/booking/booking_state.dart';
 import 'package:car_service/utils/model/BookingModel.dart';
+import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:car_service/utils/repository/manager_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +22,7 @@ class VerifyBookingBloc extends Bloc<VerifyBookingEvent, VerifyBookingState> {
     if (event is DoListBookingEvent) {
       yield state.copyWith(status: BookingStatus.loading);
       try {
-        var bookingList = await _repo.getBookingOrderList();
+        List<OrderDetailModel> bookingList = await _repo.getBookingOrderList();
         if (bookingList != null) {
           yield state.copyWith(
               bookingList: bookingList, status: BookingStatus.bookingSuccess);
@@ -44,7 +45,7 @@ class VerifyBookingBloc extends Bloc<VerifyBookingEvent, VerifyBookingState> {
       yield state.copyWith(detailStatus: BookingDetailStatus.loading);
       try {
         print('check 1: ' + event.email);
-        List<BookingModel> data = await _repo.getVerifyOrderDetail(event.email);
+        List<OrderDetailModel> data = await _repo.getVerifyOrderDetail(event.email);
         if (data != null) {
           print("Not null");
           yield state.copyWith(

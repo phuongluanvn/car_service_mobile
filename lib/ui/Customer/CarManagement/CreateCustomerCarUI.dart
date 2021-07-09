@@ -112,7 +112,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
       controller: manufacturer,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.precision_manufacturing),
+        // prefixIcon: Icon(Icons.precision_manufacturing),
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),

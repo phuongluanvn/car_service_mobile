@@ -1,4 +1,5 @@
 import 'package:car_service/utils/model/BookingModel.dart';
+import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:car_service/utils/model/TestOrderModel.dart';
 import 'package:equatable/equatable.dart';
@@ -24,8 +25,8 @@ enum BookingDetailStatus {
 class VerifyBookingState extends Equatable {
   final BookingStatus status;
   final BookingDetailStatus detailStatus;
-  final List<BookingModel> bookingList;
-  final List<BookingModel> bookingDetail;
+  final List<OrderDetailModel> bookingList;
+  final List<OrderDetailModel> bookingDetail;
   final String message;
   const VerifyBookingState({
     this.status: BookingStatus.init,
@@ -38,8 +39,8 @@ class VerifyBookingState extends Equatable {
   VerifyBookingState copyWith({
     BookingStatus status,
     BookingDetailStatus detailStatus,
-    List<BookingModel> bookingList,
-    List<BookingModel> bookingDetail,
+    List<OrderDetailModel> bookingList,
+    List<OrderDetailModel> bookingDetail,
     String message,
   }) =>
       VerifyBookingState(

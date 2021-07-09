@@ -1,5 +1,6 @@
 import 'package:car_service/utils/model/AssignOrderModel.dart';
 import 'package:car_service/utils/model/BookingModel.dart';
+import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:car_service/utils/model/TestOrderModel.dart';
 import 'package:equatable/equatable.dart';
@@ -24,7 +25,7 @@ class AssignOrderState extends Equatable {
   final AssignStatus status;
   final AssignDetailStatus detailStatus;
 
-  final List<BookingModel> assignList;
+  final List<OrderDetailModel> assignList;
   final List<AssignOrderModel> assignDetail;
   final List<StaffModel> assignStaff;
   final String message;
@@ -40,7 +41,7 @@ class AssignOrderState extends Equatable {
   AssignOrderState copyWith({
     AssignStatus status,
     AssignDetailStatus detailStatus,
-    List<BookingModel> assignList,
+    List<OrderDetailModel> assignList,
     List<AssignOrderModel> assignDetail,
     List<StaffModel> assignStaff,
     String message,

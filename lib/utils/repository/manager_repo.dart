@@ -1,5 +1,6 @@
 import 'package:car_service/utils/model/AssignOrderModel.dart';
 import 'package:car_service/utils/model/BookingModel.dart';
+import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/ServiceModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:car_service/utils/model/TestOrderModel.dart';
@@ -166,8 +167,8 @@ class ManagerRepository {
     }
   }
 
-  Future<List<BookingModel>> getBookingOrderList() async {
-    List<BookingModel> bookingList = [];
+  Future<List<OrderDetailModel>> getBookingOrderList() async {
+    List<OrderDetailModel> bookingList = [];
     var res = await http.get(
       Uri.parse("https://carservicesystem.azurewebsites.net/api/Orders"),
       headers: headers,
@@ -177,7 +178,7 @@ class ManagerRepository {
       var data = json.decode(res.body);
       if (data != null) {
         data
-            .map((order) => bookingList.add(BookingModel.fromJson(order)))
+            .map((order) => bookingList.add(OrderDetailModel.fromJson(order)))
             .toList();
         return bookingList;
       } else {
@@ -187,7 +188,7 @@ class ManagerRepository {
     }
   }
 
-  Future<List<BookingModel>> getVerifyOrderDetail(String id) async {
+  Future<List<OrderDetailModel>> getVerifyOrderDetail(String id) async {
     var res = await http.get(
       Uri.parse('https://carservicesystem.azurewebsites.net/api/Orders/' + id),
       headers: headers,
@@ -197,10 +198,10 @@ class ManagerRepository {
 
       try {
         if (data != null) {
-          List<BookingModel> listdata = [];
+          List<OrderDetailModel> listdata = [];
           data.forEach((element) {
             Map<String, dynamic> map = element;
-            listdata.add(BookingModel.fromJson(map));
+            listdata.add(OrderDetailModel.fromJson(map));
           });
           print('Has data');
           print(listdata);
