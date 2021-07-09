@@ -6,6 +6,7 @@ abstract class StaffEvent extends Equatable {
 }
 
 class DoListStaffEvent extends StaffEvent {}
+class DoListServiceEvent extends StaffEvent {}
 
 class DoStaffDetailEvent extends StaffEvent {
   final String email;

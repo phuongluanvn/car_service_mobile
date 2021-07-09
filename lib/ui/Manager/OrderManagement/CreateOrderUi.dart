@@ -86,7 +86,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
           ));
         },
         padding: EdgeInsets.all(12),
-        color: Colors.lightBlueAccent,
+        color: Colors.blue,
         child: Text(
           'Tạo đơn hàng',
           style: TextStyle(color: Colors.white),
@@ -147,6 +147,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     child: Container(
                       decoration: BoxDecoration(
+                          color: Colors.white,
                           border: Border.all(),
                           borderRadius: BorderRadius.circular(10)),
                       padding:
@@ -186,6 +187,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                             padding: EdgeInsets.symmetric(horizontal: 10),
                             child: Container(
                               decoration: BoxDecoration(
+                                  color: Colors.white,
                                   border: Border.all(),
                                   borderRadius: BorderRadius.circular(10)),
                               padding: EdgeInsets.symmetric(
@@ -222,6 +224,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Container(
                       decoration: BoxDecoration(
+                          color: Colors.white,
                           border: Border.all(),
                           borderRadius: BorderRadius.circular(10)),
                       padding:

@@ -11,8 +11,8 @@ import '../../../../blocs/manager/booking/booking_state.dart';
 import '../../../../blocs/manager/booking/booking_state.dart';
 
 class VerifyBookingDetailUi extends StatefulWidget {
-  final String emailId;
-  VerifyBookingDetailUi({@required this.emailId});
+  final String orderId;
+  VerifyBookingDetailUi({@required this.orderId});
 
   @override
   _VerifyBookingDetailUiState createState() => _VerifyBookingDetailUiState();
@@ -23,7 +23,8 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
   void initState() {
     super.initState();
     BlocProvider.of<VerifyBookingBloc>(context)
-        .add(DoVerifyBookingDetailEvent(email: widget.emailId));
+        .add(DoVerifyBookingDetailEvent(email: widget.orderId));
+    print(widget.orderId);
   }
 
   @override
@@ -62,7 +63,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.bookingDetail[0].taiKhoan,
+                              state.bookingDetail[0].id,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -82,7 +83,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.bookingDetail[0].hoTen,
+                              state.bookingDetail[0].id,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -102,7 +103,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.bookingDetail[0].email,
+                              state.bookingDetail[0].id,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -122,7 +123,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.bookingDetail[0].soDt,
+                              state.bookingDetail[0].id,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),

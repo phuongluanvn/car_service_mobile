@@ -1,9 +1,9 @@
+import 'package:car_service/utils/model/ServiceModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:equatable/equatable.dart';
 
 // enum StaffStatus{init,loading,}
 class StaffState extends Equatable {
-  
   @override
   List<Object> get props => [];
 }
@@ -17,7 +17,12 @@ class StaffListSuccessState extends StaffState {
   StaffListSuccessState({this.staffList});
 }
 
-class StaffDetailSucessState extends StaffState{
+class ServiceListSuccessState extends StaffState {
+  List<ServiceModel> svList;
+  ServiceListSuccessState({this.svList});
+}
+
+class StaffDetailSucessState extends StaffState {
   List<StaffModel> data;
   StaffDetailSucessState({this.data});
 }

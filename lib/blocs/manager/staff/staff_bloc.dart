@@ -43,6 +43,24 @@ class StaffBloc extends Bloc<StaffEvent, StaffState> {
       } catch (e) {
         yield StaffListErrorState(message: e.toString());
       }
+    }else if (event is DoListServiceEvent) {
+      print('staff 1');
+      yield StaffLoadingState();
+      try {
+        print('staff 2');
+        var serviceList = await repo.getServiceList();
+        print(serviceList);
+        if (serviceList != null) {
+          print('staff 3');
+          yield ServiceListSuccessState(svList: serviceList);
+          
+        } else {
+          yield StaffLoadingState();
+          
+        }
+      } catch (e) {
+        yield StaffListErrorState(message: e.toString());
+      }
     }
   }
 }

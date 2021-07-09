@@ -21,7 +21,7 @@ class VerifyBookingBloc extends Bloc<VerifyBookingEvent, VerifyBookingState> {
     if (event is DoListBookingEvent) {
       yield state.copyWith(status: BookingStatus.loading);
       try {
-        var bookingList = await _repo.getBookingList();
+        var bookingList = await _repo.getBookingOrderList();
         if (bookingList != null) {
           yield state.copyWith(
               bookingList: bookingList, status: BookingStatus.bookingSuccess);
@@ -43,8 +43,8 @@ class VerifyBookingBloc extends Bloc<VerifyBookingEvent, VerifyBookingState> {
     } else if (event is DoVerifyBookingDetailEvent) {
       yield state.copyWith(detailStatus: BookingDetailStatus.loading);
       try {
-        List<BookingModel> data =
-            await _repo.getVerifyBookingDetail(event.email);
+        print('check 1: ' + event.email);
+        List<BookingModel> data = await _repo.getVerifyOrderDetail(event.email);
         if (data != null) {
           print("Not null");
           yield state.copyWith(
