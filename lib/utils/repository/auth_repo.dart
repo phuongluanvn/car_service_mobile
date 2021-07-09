@@ -17,8 +17,6 @@ class AuthRepository {
         Uri.parse('https://carservicesystem.azurewebsites.net/api/Users'),
         headers: headers,
         body: body);
-    print(res.statusCode);
-    print('object');
     if (res.statusCode != null) {
       if (res.statusCode == 200) {
         return res.body;

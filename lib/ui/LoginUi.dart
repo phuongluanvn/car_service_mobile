@@ -43,11 +43,11 @@ class _LoginUiState extends State<LoginUi> {
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.email),
+        prefixIcon: Icon(Icons.person),
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
-        hintText: 'Email',
+        hintText: 'Username',
         contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),

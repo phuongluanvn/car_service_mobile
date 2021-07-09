@@ -1,11 +1,9 @@
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
+import 'package:car_service/blocs/customer/customerOrder/CreateBooking_bloc.dart';
+import 'package:car_service/blocs/customer/customerOrder/CreateBooking_event.dart';
 import 'package:car_service/blocs/customer/customerService/CustomerService_bloc.dart';
 import 'package:car_service/blocs/customer/customerService/CustomerService_event.dart';
-import 'package:car_service/blocs/customer/customerService/CustomerService_state.dart';
-import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
-import 'package:car_service/blocs/manager/staff/staff_state.dart';
-import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -17,15 +15,45 @@ class CreateBookingOrderUI extends StatefulWidget {
 
 class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
   String carId;
-  bool _visible = false;
+  bool _visibleBaoDuong = false;
+  bool _visibleSuaChua = false;
   String selectItem;
+  CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
+  DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay;
-  DateTime _focusedDay;
+  int _valueSelected = 0;
+  bool _valueCheckbox = false;
+  CreateBookingBloc _createBookingBloc;
+  int _selectedTimeButton = 0;
+
+  Widget showTimeButton(String text, int index) {
+    return OutlineButton(
+      onPressed: () {
+        setState(() {
+          _selectedTimeButton = index;
+          // print(_selectedDay.day.toString() + text);
+        });
+      },
+      child: Text(
+        text,
+        style: TextStyle(
+            color: (_selectedTimeButton == index)
+                ? Colors.blueAccent
+                : Colors.blueGrey),
+      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      borderSide: BorderSide(
+          color: (_selectedTimeButton == index)
+              ? Colors.blueAccent
+              : Colors.blueGrey),
+    );
+  }
 
   @override
   void initState() {
     super.initState();
-    context.read<CustomerServiceBloc>().add(DoServiceListEvent());
+    // context.read<CustomerServiceBloc>().add(DoServiceListEvent());
+    _createBookingBloc = BlocProvider.of<CreateBookingBloc>(context);
   }
 
   @override
@@ -40,6 +68,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue[100],
       appBar: AppBar(
         title: Text('Đặt lịch dịch vụ'),
         leading: IconButton(
@@ -51,9 +80,14 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
         child: Center(
           child: Column(
             children: <Widget>[
-              Text('Danh sách xe'),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "Chọn xe",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
               Container(
-                color: Colors.green,
                 child: BlocBuilder<CustomerCarBloc, CustomerCarState>(
                   // ignore: missing_return
                   builder: (context, state) {
@@ -63,12 +97,23 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                       return CircularProgressIndicator();
                     } else if (state.status ==
                         CustomerCarStatus.loadedCarSuccess) {
-                      if (state.carLists != null && state.carLists.isNotEmpty)
-                        return ListView.builder(
-                          itemCount: state.carLists.length,
+                      if (state.vehicleLists != null &&
+                          state.vehicleLists.isNotEmpty)
+                        return GridView.builder(
+                          itemCount: state.vehicleLists.length,
                           shrinkWrap: true,
+                          // ignore: missing_return
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio:
+                                1.6, // Tỉ lệ chiều-ngang/chiều-rộng của một item trong grid, ở đây width = 1.6 * height
+                            crossAxisCount: 2, // Số item trên một hàng ngang
+                            crossAxisSpacing:
+                                0, // Khoảng cách giữa các item trong hàng ngang
+                            mainAxisSpacing: 0,
+                            // Khoảng cách giữa các hàng (giữa các item trong cột dọc)
+                          ),
                           itemBuilder: (context, index) {
-                            //hiển thị list xe
                             return Card(
                               child: ListTile(
                                 leading: CircleAvatar(
@@ -76,23 +121,29 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                       AssetImage('lib/images/car_default.png'),
                                 ),
                                 title: Text(
-                                  state.carLists[index].taiKhoan,
+                                  state.vehicleLists[index].licensePlate,
                                   style: TextStyle(
                                       color: (carId ==
-                                              state.carLists[index].taiKhoan)
+                                              state.vehicleLists[index].id)
                                           ? Colors.blue
                                           : Colors.grey),
                                 ),
-                                subtitle: Text(state.carLists[index].email),
+                                subtitle: Text(
+                                    state.vehicleLists[index].manufacturer +
+                                        " - " +
+                                        state.vehicleLists[index].model),
                                 onTap: () {
                                   setState(() {
-                                    carId = state.carLists[index].taiKhoan;
-                                    _visible = !_visible;
+                                    carId = state.vehicleLists[index].id;
+                                    print(carId);
+                                    // _visible = !_visible;
                                   });
                                 },
                               ),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20)),
+                              margin: EdgeInsets.only(
+                                  top: 12, left: 12, right: 12, bottom: 45),
                             );
                           },
                         );
@@ -108,164 +159,164 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                   // visible: _visible,
                   child: Column(
                 children: <Widget>[
-                  // const Divider(
-                  //   color: Colors.black87,
-                  //   height: 20,
-                  //   thickness: 1,
-                  //   indent: 10,
-                  //   endIndent: 10,
-                  // ),
-                  // Text('Chọn dịch vụ'),
-                  // Container(
-                  //   color: Colors.green,
-                  //   child: BlocBuilder<CustomerServiceBloc,
-                  //       CustomerServiceState>(
-                  //     // ignore: missing_return
-                  //     builder: (context, stateService) {
-                  //       if (stateService.status ==
-                  //           CustomerServiceStatus.init) {
-                  //         return Text('------');
-                  //       } else if (stateService.status ==
-                  //           CustomerServiceStatus.loading) {
-                  //         return Text('?????');
-                  //       } else if (stateService.status ==
-                  //           CustomerServiceStatus.loadedServiceSuccess) {
-                  //         if (stateService.serviceLists != null &&
-                  //             stateService.serviceLists.isNotEmpty)
-                  //           return ListView.builder(
-                  //             itemCount: stateService.serviceLists.length,
-                  //             shrinkWrap: true,
-                  //             itemBuilder: (context, index) {
-                  //               //hiển thị list xe
-                  //               return Card(
-                  //                 child: ListTile(
-                  //                   leading: CircleAvatar(
-                  //                     backgroundImage: AssetImage(
-                  //                         'lib/images/car_default.png'),
-                  //                   ),
-                  //                   title: Text(
-                  //                     stateService.serviceLists[index].name,
-                  //                     style: TextStyle(
-                  //                         color: (carId ==
-                  //                                 stateService
-                  //                                     .serviceLists[index]
-                  //                                     .name)
-                  //                             ? Colors.blue
-                  //                             : Colors.grey),
-                  //                   ),
-                  //                   subtitle: Text(stateService
-                  //                       .serviceLists[index].type),
-                  //                   onTap: () {
-                  //                     setState(() {
-                  //                       carId = stateService
-                  //                           .serviceLists[index].name;
-                  //                       // _visible = !_visible;
-                  //                     });
-                  //                   },
-                  //                 ),
-                  //                 shape: RoundedRectangleBorder(
-                  //                     borderRadius:
-                  //                         BorderRadius.circular(20)),
-                  //               );
-                  //             },
-                  //           );
-                  //         else //nếu không có dịch vụ
-                  //           return Text('Không có thông dịch vụ');
-                  //       } else if (stateService.status ==
-                  //           CustomerServiceStatus.error) {
-                  //         return ErrorWidget(
-                  //             stateService.message.toString());
-                  //       }
-                  //     },
-                  //   ),
-                  // ),
-
-                  Text('Chọn thời gian'),
+                  const Divider(
+                    color: Colors.black87,
+                    height: 20,
+                    thickness: 1,
+                    indent: 10,
+                    endIndent: 10,
+                  ),
+                  Text(
+                    'Chọn dịch vụ',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  Container(
+                    child: Column(
+                      children: <Widget>[
+                        RadioListTile(
+                          value: 1,
+                          groupValue: _valueSelected,
+                          title: Text('Bảo Dưỡng'),
+                          onChanged: (value) {
+                            setState(() {
+                              _valueSelected = value;
+                              print(value);
+                              _visibleBaoDuong = true;
+                              _visibleSuaChua = false;
+                            });
+                          },
+                        ),
+                        Visibility(
+                            visible: _visibleBaoDuong,
+                            child: Column(
+                              children: <Widget>[
+                                CheckboxListTile(
+                                  selected: _valueCheckbox,
+                                  value: _valueCheckbox,
+                                  onChanged: (valuChecked) {
+                                    _valueCheckbox = valuChecked;
+                                  },
+                                  title: Text('Gói 1 (10000 km)'),
+                                ),
+                                CheckboxListTile(
+                                  selected: _valueCheckbox,
+                                  value: _valueCheckbox,
+                                  onChanged: (valuChecked) {
+                                    _valueCheckbox = valuChecked;
+                                  },
+                                  title: Text('Gói 2 (20000 - 50000 km)'),
+                                ),
+                                CheckboxListTile(
+                                  selected: _valueCheckbox,
+                                  value: _valueCheckbox,
+                                  onChanged: (valuChecked) {
+                                    _valueCheckbox = valuChecked;
+                                  },
+                                  title: Text('Gói 3 (> 50000 km)'),
+                                )
+                              ],
+                            )),
+                        
+                        RadioListTile(
+                          value: 2,
+                          groupValue: _valueSelected,
+                          title: Text('Sửa chữa'),
+                          onChanged: (value) {
+                            setState(() {
+                              _valueSelected = value;
+                              print(value);
+                              _visibleBaoDuong = false;
+                              _visibleSuaChua = true;
+                            });
+                          },
+                        ),
+                        Visibility(
+                            visible: _visibleSuaChua, child: Text('data')),
+                      ],
+                    ),
+                  ),
+                  const Divider(
+                    color: Colors.black87,
+                    height: 20,
+                    thickness: 1,
+                    indent: 10,
+                    endIndent: 10,
+                  ),
+                  Text(
+                    'Chọn thời gian',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      backgroundColor: Colors.red,
+                    ),
+                  ),
                   Container(
                     child: TableCalendar(
                       firstDay: DateTime.utc(2020),
                       lastDay: DateTime.utc(2030),
-                      focusedDay: DateTime.now(),
+                      currentDay: DateTime.now(),
+                      calendarFormat: _calendarFormat,
+                      onFormatChanged: (CalendarFormat _format) {
+                        setState(() {
+                          _calendarFormat = _format;
+                        });
+                      },
+                      startingDayOfWeek: StartingDayOfWeek.sunday,
+                      daysOfWeekVisible: true,
+                      focusedDay: _focusedDay,
                       selectedDayPredicate: (day) {
                         return isSameDay(_selectedDay, day);
                       },
                       onDaySelected: (selectedDay, focusedDay) {
-                        setState(() {
-                          _selectedDay = selectedDay;
-                          _focusedDay =
-                              focusedDay; // update `_focusedDay` here as well
-                        });
+                        if (!isSameDay(_selectedDay, selectedDay))
+                          setState(() {
+                            _selectedDay = selectedDay;
+                            _focusedDay = focusedDay;
+                            print(_selectedDay.toIso8601String());
+                          });
                       },
                     ),
-                  )
+                  ),
                 ],
               )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  showTimeButton('7:00', 1),
+                  showTimeButton('7:30', 2),
+                  showTimeButton('8:00', 3),
+                  showTimeButton('8:30', 4),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  showTimeButton('9:00', 5),
+                  showTimeButton('9:30', 6),
+                  showTimeButton('10:00', 7),
+                  showTimeButton('10:30', 8),
+                ],
+              ),
               Divider(),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Colors.blue, // background
                   onPrimary: Colors.white, // foreground
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  _createBookingBloc.add(CreateBookingButtonPressed(
+                    carId: carId,
+                    serviceId: null,
+                    note: "Hong co",
+                    timeBooking: _selectedDay.toIso8601String(),
+                  ));
+                },
                 child: Text('Xác nhận'),
               )
             ],
           ),
         ),
       ),
-      // Visibility(
-      //   visible: _visible,
-      //   child: Container(
-      //     child: BlocBuilder<StaffBloc, StaffState>(
-      //         // ignore: missing_return
-      //         builder: (builder, staffState) {
-      //       if (staffState is StaffInitState) {
-      //         return CircularProgressIndicator();
-      //       } else if (staffState is StaffLoadingState) {
-      //         return CircularProgressIndicator();
-      //       } else if (staffState is StaffListSuccessState) {
-      //         return Column(
-      //           children: [
-      //             DropdownButton<String>(
-      //               hint: Text('Select Staff'),
-      //               items: staffState.staffList.map((valueItem) {
-      //                 return DropdownMenuItem<String>(
-      //                   child: Text(valueItem.taiKhoan),
-      //                   value: valueItem.taiKhoan,
-      //                 );
-      //               }).toList(),
-      //               onChanged: (newValue) {
-      //                 setState(() {
-      //                   this.selectItem = newValue;
-      //                 });
-      //               },
-      //               value: selectItem,
-      //             ),
-      //             ElevatedButton(
-      //               child: Text('Checking'),
-      //               onPressed: () {
-      //                 // getDropDownItem,
-      //                 // Navigator.of(context).push(MaterialPageRoute(
-      //                 //     builder: (_) => AssignOrderReviewUi(
-      //                 //         userId: state.assignDetail[0].taiKhoan,
-      //                 //         staffId: selectItem)));
-      //               },
-      //             ),
-      //             Container(
-      //               // child: Text('$holder'),
-      //             ),
-      //           ],
-      //         );
-      //       }
-      //       // else if (state is StaffListErrorState) {
-      //       //   return ErrorWidget(state.message.toString());
-      //       // }
-      //       ;
-      //     }),
-      //   ),
-      // )
-      // ],
-      // ),
     );
   }
 }

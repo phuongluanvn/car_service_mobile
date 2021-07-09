@@ -27,6 +27,10 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Danh sách xe'),
+        automaticallyImplyLeading: false,
+      ),
       backgroundColor: Colors.blue[100],
       body: Center(
         child: BlocBuilder<CustomerCarBloc, CustomerCarState>(
@@ -37,22 +41,26 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
             } else if (state.status == CustomerCarStatus.loading) {
               return CircularProgressIndicator();
             } else if (state.status == CustomerCarStatus.loadedCarSuccess) {
-              if (state.carLists != null && state.carLists.isNotEmpty)
+              if (state.vehicleLists != null && state.vehicleLists.isNotEmpty)
                 return ListView.builder(
-                  itemCount: state.carLists.length,
+                  itemCount: state.vehicleLists.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     //hiển thị list xe
                     return Card(
                       child: Column(children: [
                         ListTile(
-                          leading: CircleAvatar(backgroundImage: AssetImage('lib/images/car_default.png'),),
-                          title: Text(state.carLists[index].taiKhoan),
-                          subtitle: Text(state.carLists[index].hoTen),
+                          leading: CircleAvatar(
+                            backgroundImage:
+                                AssetImage('lib/images/car_default.png'),
+                          ),
+                          title: Text(state.vehicleLists[index].manufacturer),
+                          subtitle:
+                              Text(state.vehicleLists[index].licensePlate),
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (_) => CustomerCarDetailUi(
-                                    emailId: state.carLists[index].taiKhoan)));
+                                    id: state.vehicleLists[index].id)));
                           },
                         ),
                       ]),
@@ -72,8 +80,8 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
       //thêm mới xe
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => CreateCustomerCarUI()));
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => CreateCustomerCarUI()));
         },
         child: const Icon(Icons.add),
         backgroundColor: Colors.blue[600],

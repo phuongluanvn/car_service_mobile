@@ -74,7 +74,7 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                                             MaterialPageRoute(
                                                 builder: (_) =>
                                                     CustomerCarDetailUi(
-                                                        emailId: state
+                                                        id: state
                                                             .orderLists[index]
                                                             .taiKhoan)));
                                       },
@@ -101,7 +101,7 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                                             MaterialPageRoute(
                                                 builder: (_) =>
                                                     CustomerCarDetailUi(
-                                                        emailId: state
+                                                        id: state
                                                             .orderLists[index]
                                                             .taiKhoan)));
                                       },

@@ -13,17 +13,18 @@ class CreateBookingBloc extends Bloc<CreateBookingEvent, CreateBookingState> {
         super(CreateBookingState());
 
 
+
   @override
   Stream<CreateBookingState> mapEventToState(CreateBookingEvent event) async* {
     if (event is CreateBookingButtonPressed) {
       yield state.copyWith(status: CreateBookingStatus.loading);
       try{
-        var data = await _repo.createCar(event.carId, event.timeBooking, event.serviceId);
+        var data = await _repo.createNewBooking(event.carId, event.serviceId, event.note, event.timeBooking);
       String jsonsDataString = data.toString();
       print(data);
-      final jsonData = jsonDecode(jsonsDataString);
-      print(jsonData);
-      if (jsonData != null) {
+      // final jsonData = jsonDecode(jsonsDataString);
+      // print(jsonData);
+      if (data != null) {
        
         yield state.copyWith(status: CreateBookingStatus.createBookingOrderSuccess);
       } else {

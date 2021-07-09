@@ -2,31 +2,88 @@ import 'package:car_service/utils/model/CarModel.dart';
 import 'package:car_service/utils/model/ManufacturerModel.dart';
 import 'package:car_service/utils/model/OrderModel.dart';
 import 'package:car_service/utils/model/ServiceModel.dart';
+import 'package:car_service/utils/model/VehicleModel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class CustomerRepository {
   Map<String, String> headers = {
     'Content-type': 'application/json',
-    'Accept': 'application/json'
+    'Accept': ' */*'
   };
 
-  createCar(String manufacture, String model, String licensePlateNumber) async {
-    return 'Thanh cong';
+// '{
+//   "vehicleId": "e42d42cf-af6b-4e15-89df-264a7bb9ffee",
+//   "packageId": null,
+//   "note": "Hông có",
+//   "bookingTime": "2021-07-05T15:14:57.644Z"
+// }'
+
+  createNewBooking(String vehicleId, String packageId, String note,
+      String bookingTime) async {
+    var body = {
+      "vehicleId": '$vehicleId',
+      "packageId": null,
+      "note": '$note',
+      "bookingTime": '$bookingTime'
+    };
+    var res = await http.post(
+      Uri.parse("https://carservicesystem.azurewebsites.net/api/Orders"),
+      headers: headers,
+      body: json.encode(body),
+    );
+    if (res.statusCode != null) {
+      if (res.statusCode == 200) {
+        return res.body;
+      } else if (res.statusCode == 404) {
+        return res.body;
+      }
+    } else {
+      return null;
+    }
   }
 
-  Future<List<CarModel>> getCarList() async {
-    List<CarModel> carLists = [];
+  createNewVehicle(String username, String manufacturer, String model,
+      String licensePlateNumber) async {
+    var body = {
+      "username": '$username',
+      "manufacturer": '$manufacturer',
+      "model": '$model',
+      "licensePlate": '$licensePlateNumber'
+    };
+    var res = await http.post(
+      Uri.parse("https://carservicesystem.azurewebsites.net/api/Vehicles"),
+      headers: headers,
+      body: json.encode(body),
+    );
+    if (res.statusCode != null) {
+      if (res.statusCode == 200) {
+        return res.body;
+      } else if (res.statusCode == 404) {
+        return res.body;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<VehicleModel>> getCarListOfCustomer(String username) async {
+    List<VehicleModel> vehicleLists = [];
     var res = await http.get(
-      Uri.parse(
-          "https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=abcd"),
+      Uri.parse("https://carservicesystem.azurewebsites.net/api/Customers/" +
+          username),
       headers: headers,
     );
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
-      if (data != null) {
-        data.map((car) => carLists.add(CarModel.fromJson(car))).toList();
-        return carLists;
+      var enc = json.encode(data);
+      var dec = json.decode(enc);
+
+      if (dec != null) {
+        dec['vehicles']
+            .map((vehicle) => vehicleLists.add(VehicleModel.fromJson(vehicle)))
+            .toList();
+        return vehicleLists;
       } else {
         print('No data');
       }
@@ -111,8 +168,7 @@ class CustomerRepository {
   Future<List<ServiceModel>> getServiceList() async {
     List<ServiceModel> serviceLists = [];
     var res = await http.get(
-      Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Services"),
+      Uri.parse("https://carservicesystem.azurewebsites.net/api/Services"),
       headers: headers,
     );
     print(res);

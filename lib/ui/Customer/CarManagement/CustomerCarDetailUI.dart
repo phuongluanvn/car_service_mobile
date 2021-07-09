@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomerCarDetailUi extends StatefulWidget {
-  final String emailId;
-  CustomerCarDetailUi({@required this.emailId});
+  final String id;
+  CustomerCarDetailUi({@required this.id});
 
   @override
   _CustomerCarDetailUiState createState() => _CustomerCarDetailUiState();
@@ -17,7 +17,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
   void initState() {
     super.initState();
     BlocProvider.of<CustomerCarBloc>(context)
-        .add(DoCarDetailEvent(email: widget.emailId));
+        .add(DoCarDetailEvent(email: widget.id));
   }
 
   @override
@@ -30,17 +30,9 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
             onPressed: () => Navigator.pop(context),
           ),
           actions: [
-            // IconButton(
-            //     onPressed: () => Navigator.pop(context),
-            //     icon: Icon(Icons.edit)),
-            // Padding(
-            //   padding: EdgeInsets.symmetric(horizontal: 16),
-            //   child:
             IconButton(
                 onPressed: () => Navigator.pop(context),
                 icon: Icon(Icons.delete_forever_rounded)),
-
-            // ),
           ]),
       body: Center(
         child: BlocBuilder<CustomerCarBloc, CustomerCarState>(
@@ -51,14 +43,14 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
             } else if (state.detailStatus == CustomerCarDetailStatus.loading) {
               return CircularProgressIndicator();
             } else if (state.detailStatus == CustomerCarDetailStatus.success) {
-              if (state.carDetail != null && state.carDetail.isNotEmpty)
+              if (state.vehicleLists != null && state.vehicleLists.isNotEmpty)
                 return Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
                     children: <Widget>[
                       Container(height: 14),
                       TextFormField(
-                        initialValue: state.carDetail[0].soDt,
+                        initialValue: state.vehicleLists[0].model,
                         keyboardType: TextInputType.text,
                         autofocus: false,
                         decoration: InputDecoration(
@@ -66,7 +58,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                           filled: true,
                           fillColor: Colors.white,
                           hintStyle: TextStyle(color: Colors.black54),
-                          // hintText: state.carDetail[0].taiKhoan,
+                          // hintText: state.vehicleLists[0].taiKhoan,
                           // text
                           labelText: 'Mẫu xe',
                           contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -76,7 +68,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                       ),
                       Container(height: 14),
                       TextFormField(
-                        initialValue: state.carDetail[0].taiKhoan,
+                        initialValue: state.vehicleLists[0].manufacturer,
                         keyboardType: TextInputType.text,
                         autofocus: false,
                         decoration: InputDecoration(
@@ -84,7 +76,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                           filled: true,
                           fillColor: Colors.white,
                           hintStyle: TextStyle(color: Colors.black54),
-                          // hintText: state.carDetail[0].taiKhoan,
+                          // hintText: state.vehicleLists[0].taiKhoan,
                           // text
                           labelText: 'Hãng xe',
                           contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -94,7 +86,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                       ),
                       Container(height: 14),
                       TextFormField(
-                        initialValue: state.carDetail[0].soDt,
+                        initialValue: state.vehicleLists[0].licensePlate,
                         keyboardType: TextInputType.text,
                         autofocus: false,
                         decoration: InputDecoration(
@@ -102,7 +94,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                           filled: true,
                           fillColor: Colors.white,
                           hintStyle: TextStyle(color: Colors.black54),
-                          // hintText: state.carDetail[0].taiKhoan,
+                          // hintText: state.vehicleLists[0].taiKhoan,
                           // text
                           labelText: 'Biển số',
                           contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -111,11 +103,6 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                         ),
                       ),
                       Container(height: 14),
-
-                      // Text(state.carDetail[0].taiKhoan),
-                      // Container(height: 8),
-                      // Text(state.carDetail[0].soDt),
-                      // Container(height: 16),
                       SizedBox(
                         width: double.infinity,
                         height: 35,

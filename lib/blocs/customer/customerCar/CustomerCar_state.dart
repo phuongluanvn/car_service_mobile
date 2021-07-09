@@ -1,3 +1,4 @@
+import 'package:car_service/utils/model/VehicleModel.dart';
 import 'package:equatable/equatable.dart';
 import '../../../utils/model/CarModel.dart';
 
@@ -6,6 +7,7 @@ enum CustomerCarStatus {
   loading,
   loadedCarSuccess,
   loadedCarDetailSuccess,
+  loadedVehicleSuccess,
   error,
 }
 
@@ -21,12 +23,14 @@ class CustomerCarState extends Equatable {
   final CustomerCarDetailStatus detailStatus;
   final List<CarModel> carLists;
   final List<CarModel> carDetail;
+  final List<VehicleModel> vehicleLists;
   final String message;
   const CustomerCarState({
     this.status: CustomerCarStatus.init,
     this.detailStatus:CustomerCarDetailStatus.init,
     this.carDetail:const [],
     this.carLists:const [],
+    this.vehicleLists:const[],
     this.message:'',
   });
 
@@ -35,6 +39,7 @@ class CustomerCarState extends Equatable {
     CustomerCarDetailStatus detailStatus,
     List<CarModel> carLists,
     List<CarModel> carDetail,
+    List<VehicleModel> vehicleLists,
     String message,
   }) =>
       CustomerCarState(
@@ -43,6 +48,7 @@ class CustomerCarState extends Equatable {
         carLists: carLists ?? this.carLists,
         carDetail: carDetail ?? this.carDetail,
         message: message??this.message,
+        vehicleLists: vehicleLists ?? this.vehicleLists,
       );
   @override
   List<Object> get props => [
@@ -50,6 +56,7 @@ class CustomerCarState extends Equatable {
         detailStatus,
         carLists,
         carDetail,
+        vehicleLists,
         message,
       ];
 }

@@ -18,12 +18,12 @@ class CreateCarBloc extends Bloc<CreateCarEvent, CreateCarState> {
     if (event is CreateCarButtonPressed) {
       yield state.copyWith(status: CreateCarStatus.loading);
       try{
-        var data = await _repo.createCar(event.manufacturer, event.model, event.licensePlateNumber);
-      String jsonsDataString = data.toString();
+        var data = await _repo.createNewVehicle(event.username, event.manufacturer, event.model, event.licensePlateNumber);
+      // String jsonsDataString = data.toString();
       print(data);
-      final jsonData = jsonDecode(jsonsDataString);
-      print(jsonData);
-      if (jsonData != null) {
+      // final jsonData = jsonDecode(jsonsDataString);
+      // print(jsonData);
+      if (data != null) {
        
         yield state.copyWith(status: CreateCarStatus.createCarSuccess);
       } else {

@@ -3,6 +3,7 @@ import 'dart:io';
 // import 'package:car_service/blocs/customer_car/customerCar_state.dart';
 import 'package:car_service/blocs/customer/customerCar/CreateCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
+import 'package:car_service/blocs/customer/customerOrder/CreateBooking_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
 import 'package:car_service/blocs/customer/customerService/CustomerService_bloc.dart';
 import 'package:car_service/blocs/login/auth_bloc.dart';
@@ -54,6 +55,8 @@ class Auth extends StatelessWidget {
         BlocProvider(
             create: (context) => CreateCarBloc(repo: CustomerRepository())),
         BlocProvider(
+            create: (context) => CreateBookingBloc(repo: CustomerRepository())),
+        BlocProvider(
             create: (context) =>
                 CustomerServiceBloc(repo: CustomerRepository())),
         BlocProvider(
@@ -73,7 +76,7 @@ class Auth extends StatelessWidget {
       child: GetMaterialApp(
         initialRoute: '/',
         routes: {
-          '/': (context) => CustomerHome(),
+          '/': (context) => LoginUi(),
           '/manager': (context) => ManagerMain(),
           '/staff': (context) => StaffHome(),
           '/customer': (context) => CustomerHome(),

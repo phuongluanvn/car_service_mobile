@@ -30,7 +30,8 @@ class _CustomerProfileState extends State<CustomerProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text('Thông tin'),
+        automaticallyImplyLeading: false,
       ),
       backgroundColor: Colors.blue[100],
       body: SingleChildScrollView(
@@ -46,7 +47,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                   fit: StackFit.expand,
                   overflow: Overflow.visible,
                   children: [
-                    CircleAvatar(),
+                    CircleAvatar(child: Icon(Icons.person),),
                   ],
                 ),
               ),
@@ -72,7 +73,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                   },
                   child: Row(
                     children: [
-                      Expanded(child: Text('Account')),
+                      Expanded(child: Text('Tài khoản')),
                       Icon(Icons.arrow_forward_ios),
                     ],
                   ),
@@ -87,7 +88,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                   onPressed: () {},
                   child: Row(
                     children: [
-                      Expanded(child: Text('Order History')),
+                      Expanded(child: Text('Lịch sử đơn hàng')),
                       Icon(Icons.arrow_forward_ios),
                     ],
                   ),
@@ -102,7 +103,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                   onPressed: () {},
                   child: Row(
                     children: [
-                      Expanded(child: Text('Feedback')),
+                      Expanded(child: Text('Đánh giá')),
                       Icon(Icons.arrow_forward_ios),
                     ],
                   ),
@@ -117,7 +118,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                   onPressed: () {},
                   child: Row(
                     children: [
-                      Expanded(child: Text('Logout')),
+                      Expanded(child: Text('Đăng xuất')),
                       Icon(Icons.arrow_forward_ios),
                     ],
                   ),

@@ -40,6 +40,7 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
           pref.setString("PhoneNumber", dec['PhoneNumber']);
           pref.setString("Address", dec['Address']);
           pref.setString("Email", dec['Email']);
+          pref.setString("Username", data['username']);
 
           yield CustomerLoginSuccessState();
         } else {

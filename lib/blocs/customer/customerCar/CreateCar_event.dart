@@ -25,13 +25,14 @@ class CreateCarLicensePlateNumberChanged extends CreateCarEvent {
 }
 
 class CreateCarButtonPressed extends CreateCarEvent {
+  final String username;
   final String manufacturer;
   final String model;
   final String licensePlateNumber;
   final String imageUrl;
 
   CreateCarButtonPressed(
-      {this.manufacturer, this.model, this.licensePlateNumber, this.imageUrl});
+      {this.username, this.manufacturer, this.model, this.licensePlateNumber, this.imageUrl});
 }
 
 class OpenImagePicker extends CreateCarEvent {

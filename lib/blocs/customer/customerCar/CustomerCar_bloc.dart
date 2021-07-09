@@ -3,6 +3,7 @@ import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
 import 'package:car_service/utils/model/CarModel.dart';
 import 'package:car_service/utils/repository/customer_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomerCarBloc extends Bloc<CustomerCarEvent, CustomerCarState> {
   CustomerRepository _repo;
@@ -11,22 +12,28 @@ class CustomerCarBloc extends Bloc<CustomerCarEvent, CustomerCarState> {
       : _repo = repo,
         super(CustomerCarState());
 
+
   @override
   Stream<CustomerCarState> mapEventToState(CustomerCarEvent event) async* {
     if (event is DoCarListEvent) {
       yield state.copyWith(status: CustomerCarStatus.loading);
       try {
-        var carLists = await _repo.getCarList();
-        if (carLists != null) {
-          yield state.copyWith(
-              carLists: carLists, status: CustomerCarStatus.loadedCarSuccess);
-          print('dada');
+        final prefs = await SharedPreferences.getInstance();
+        final _username = prefs.getString('Username');
+        print(_username);
+        if (_username != null) {
+          var carLists = await _repo.getCarListOfCustomer(_username);
+          if (carLists != null) {
+            yield state.copyWith(
+                // carLists: carLists,
+                vehicleLists: carLists,
+                status: CustomerCarStatus.loadedCarSuccess);
+          }
         } else {
           yield state.copyWith(
             status: CustomerCarStatus.error,
-            message: 'Error',
+            message: 'Error load car of ' + _username,
           );
-          print('no data');
         }
       } catch (e) {
         yield state.copyWith(
@@ -38,8 +45,7 @@ class CustomerCarBloc extends Bloc<CustomerCarEvent, CustomerCarState> {
     } else if (event is DoCarDetailEvent) {
       yield state.copyWith(detailStatus: CustomerCarDetailStatus.loading);
       try {
-        List<CarModel> data =
-            await _repo.getCarDetail(event.email);
+        List<CarModel> data = await _repo.getCarDetail(event.email);
         if (data != null) {
           yield state.copyWith(
             detailStatus: CustomerCarDetailStatus.success,
@@ -48,7 +54,7 @@ class CustomerCarBloc extends Bloc<CustomerCarEvent, CustomerCarState> {
         } else {
           yield state.copyWith(
             detailStatus: CustomerCarDetailStatus.error,
-            message: 'Error',
+            message: 'Error load car detail',
           );
         }
       } catch (e) {

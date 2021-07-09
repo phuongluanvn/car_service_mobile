@@ -42,7 +42,7 @@ class _CustomerAccountUiState extends State<CustomerAccountUi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text('Thông tin cá nhân'),
       ),
       backgroundColor: Colors.blue[100],
       body: SingleChildScrollView(
@@ -88,36 +88,80 @@ class _CustomerAccountUiState extends State<CustomerAccountUi> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Name:'),
-                        Text(_fullName),
+                        Text(
+                          'Họ tên:',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          _fullName,
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
                       ],
                     ),
+                    SizedBox(height: 12,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Email:'),
-                        Text(_email),
+                        Text(
+                          'Email:',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          _email,
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
                       ],
                     ),
+                    SizedBox(height: 12,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Phone Number:'),
-                        Text(_phoneNumber),
+                        Text(
+                          'Điện thoại:',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          _phoneNumber,
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
                       ],
                     ),
+                    SizedBox(height: 12,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Address:'),
-                        Text(_address),
+                        Text(
+                          'Địa chỉ:',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          _address,
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
                       ],
                     ),
+                    SizedBox(height: 12,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Point:'),
-                        Text('$_accumulatedPoint'),
+                        Text(
+                          'Điểm:',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          '$_accumulatedPoint',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
                       ],
                     ),
                   ],
@@ -132,7 +176,7 @@ class _CustomerAccountUiState extends State<CustomerAccountUi> {
                   onPressed: () {},
                   child: Row(
                     children: [
-                      Expanded(child: Text('Logout')),
+                      Expanded(child: Text('Đăng xuất')),
                       Icon(Icons.arrow_forward_ios),
                     ],
                   ),

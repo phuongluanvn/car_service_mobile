@@ -14,9 +14,9 @@ class CreateCustomerCarUI extends StatefulWidget {
 }
 
 class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
-  TextEditingController username = TextEditingController();
-  TextEditingController fullname = TextEditingController();
-  TextEditingController email = TextEditingController();
+  TextEditingController manufacturer = TextEditingController();
+  TextEditingController model = TextEditingController();
+  TextEditingController licensePlateNumber = TextEditingController();
   File _pickerImage;
   CreateCarBloc createCarBloc;
 
@@ -97,11 +97,11 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
       }
     });
 
-    final user = TextField(
-      controller: username,
+    final manufacturerText = TextField(
+      controller: manufacturer,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.email),
+        prefixIcon: Icon(Icons.precision_manufacturing),
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
@@ -111,11 +111,11 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
       ),
     );
 
-    final name = TextField(
-      controller: fullname,
+    final modelText = TextField(
+      controller: model,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.email),
+        prefixIcon: Icon(Icons.drive_eta),
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
@@ -125,16 +125,15 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
       ),
     );
 
-    final emailaddress = TextField(
-      controller: email,
-      keyboardType: TextInputType.emailAddress,
+    final licensePlateNumberText = TextField(
+      controller: licensePlateNumber,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.email),
+        prefixIcon: Icon(Icons.departure_board_sharp),
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
-        hintText: 'Biển số',
+        hintText: 'Biển số xe',
         contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -148,9 +147,10 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
         ),
         onPressed: () {
           createCarBloc.add(CreateCarButtonPressed(
-            manufacturer: username.text,
-            model: fullname.text,
-            licensePlateNumber: email.text,
+            username: 'chonwang',
+            manufacturer: manufacturer.text,
+            model: model.text,
+            licensePlateNumber: licensePlateNumber.text,
           ));
         },
         padding: EdgeInsets.all(12),
@@ -183,15 +183,15 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                 SizedBox(
                   height: 40,
                 ),
-                user,
+                manufacturerText,
                 SizedBox(
                   height: 20,
                 ),
-                name,
+                modelText,
                 SizedBox(
                   height: 20,
                 ),
-                emailaddress,
+                licensePlateNumberText,
                 SizedBox(
                   height: 20,
                 ),
