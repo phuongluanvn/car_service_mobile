@@ -15,4 +15,11 @@ class DoVerifyBookingDetailEvent extends VerifyBookingEvent {
   List<Object> get props => [email];
 }
 
+class UpdateStatusButtonPressed extends VerifyBookingEvent {
+  final String id;
+  final String status;
+
+  UpdateStatusButtonPressed({this.id, this.status});
+}
+
 class VerifyBookingTabPressed extends VerifyBookingEvent {}

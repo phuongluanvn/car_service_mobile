@@ -173,17 +173,38 @@ class ManagerRepository {
       Uri.parse("https://carservicesystem.azurewebsites.net/api/Orders"),
       headers: headers,
     );
-    print(res);
+    
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
       if (data != null) {
         data
             .map((order) => bookingList.add(OrderDetailModel.fromJson(order)))
             .toList();
+        print(bookingList);
         return bookingList;
+        
       } else {
         print('No test order data');
         return null;
+      }
+    }
+  }
+
+    Future<List<OrderDetailModel>> getTestList() async {
+    List<OrderDetailModel> orderLists = [];
+    var res = await http.get(
+      Uri.parse("https://carservicesystem.azurewebsites.net/api/Orders"),
+      headers: headers,
+    );
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      if (data != null) {
+        data
+            .map((order) => orderLists.add(OrderDetailModel.fromJson(order)))
+            .toList();
+        return orderLists;
+      } else {
+        print('No order data');
       }
     }
   }
@@ -202,8 +223,10 @@ class ManagerRepository {
 
       try {
         if (data != null) {
-          convertData.map(
-              (element) => listdata.add(OrderDetailModel.fromJson(element))).toList();
+          convertData
+              .map(
+                  (element) => listdata.add(OrderDetailModel.fromJson(element)))
+              .toList();
           return listdata;
         } else {
           print('No detail order data');
@@ -211,6 +234,25 @@ class ManagerRepository {
       } catch (e) {
         print(e.toString());
       }
+    }
+  }
+
+  updateStatusOrder(String id, String status) async {
+    var body = {
+      "id": '$id',
+      "status": '$status',
+    };
+    var res = await http.put(
+      Uri.parse("https://carservicesystem.azurewebsites.net/api/Orders"),
+      headers: headers,
+      body: json.encode(body),
+    );
+    if (res.statusCode != null) {
+      if (res.statusCode == 200) {
+        return res.body;
+      }
+    } else {
+      return null;
     }
   }
 }

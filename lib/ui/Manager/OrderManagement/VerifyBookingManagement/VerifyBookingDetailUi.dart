@@ -1,5 +1,6 @@
 import 'package:car_service/blocs/manager/booking/booking_state.dart';
 import 'package:car_service/blocs/manager/booking/booking_cubit.dart';
+import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingUi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,7 @@ import '../../../../blocs/manager/booking/booking_state.dart';
 
 class VerifyBookingDetailUi extends StatefulWidget {
   final String orderId;
+
   VerifyBookingDetailUi({@required this.orderId});
 
   @override
@@ -19,8 +21,10 @@ class VerifyBookingDetailUi extends StatefulWidget {
 }
 
 class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
+  VerifyBookingBloc bookingBloc;
   @override
   void initState() {
+    bookingBloc = BlocProvider.of<VerifyBookingBloc>(context);
     super.initState();
     BlocProvider.of<VerifyBookingBloc>(context)
         .add(DoVerifyBookingDetailEvent(email: widget.orderId));
@@ -29,6 +33,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
 
   @override
   Widget build(BuildContext context) {
+    final String acceptStatus = 'Checkin';
     return Scaffold(
       appBar: AppBar(
         title: Text('Booking Information'),
@@ -44,6 +49,11 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
               return CircularProgressIndicator();
             } else if (state.detailStatus == BookingDetailStatus.loading) {
               return CircularProgressIndicator();
+            } else if (state.detailStatus ==
+                BookingDetailStatus.updateStatusSuccess) {
+              Navigator.pushNamed(context, '/manager');
+              //  Navigator.of(context).push(MaterialPageRoute(
+              //         builder: (context) => new ManagerMain()));
             } else if (state.detailStatus == BookingDetailStatus.success) {
               if (state.bookingDetail != null && state.bookingDetail.isNotEmpty)
                 return Padding(
@@ -63,7 +73,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.bookingDetail[0].id,
+                              state.bookingDetail[0].customer.fullname,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -83,7 +93,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.bookingDetail[0].id,
+                              state.bookingDetail[0].customer.email,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -103,7 +113,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.bookingDetail[0].id,
+                              state.bookingDetail[0].bookingTime,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -123,7 +133,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.bookingDetail[0].id,
+                              state.bookingDetail[0].status,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -140,7 +150,11 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                                   primary: Colors.blue),
                               child: Text('Accept',
                                   style: TextStyle(color: Colors.white)),
-                              onPressed: () {},
+                              onPressed: () {
+                                bookingBloc.add(UpdateStatusButtonPressed(
+                                    id: state.bookingDetail[0].id,
+                                    status: acceptStatus));
+                              },
                             ),
                           ),
                           SizedBox(

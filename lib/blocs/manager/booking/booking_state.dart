@@ -19,6 +19,7 @@ enum BookingDetailStatus {
   init,
   loading,
   success,
+  updateStatusSuccess,
   error,
 }
 

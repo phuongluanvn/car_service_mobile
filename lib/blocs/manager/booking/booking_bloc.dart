@@ -22,11 +22,10 @@ class VerifyBookingBloc extends Bloc<VerifyBookingEvent, VerifyBookingState> {
     if (event is DoListBookingEvent) {
       yield state.copyWith(status: BookingStatus.loading);
       try {
-        List<OrderDetailModel> bookingList = await _repo.getBookingOrderList();
+        List<OrderDetailModel> bookingList = await _repo.getTestList();
         if (bookingList != null) {
           yield state.copyWith(
               bookingList: bookingList, status: BookingStatus.bookingSuccess);
-          print('dada');
         } else {
           yield state.copyWith(
             status: BookingStatus.error,
@@ -45,7 +44,8 @@ class VerifyBookingBloc extends Bloc<VerifyBookingEvent, VerifyBookingState> {
       yield state.copyWith(detailStatus: BookingDetailStatus.loading);
       try {
         print('check 1: ' + event.email);
-        List<OrderDetailModel> data = await _repo.getVerifyOrderDetail(event.email);
+        List<OrderDetailModel> data =
+            await _repo.getVerifyOrderDetail(event.email);
         if (data != null) {
           print("Not null");
           yield state.copyWith(
@@ -55,7 +55,28 @@ class VerifyBookingBloc extends Bloc<VerifyBookingEvent, VerifyBookingState> {
         } else {
           yield state.copyWith(
             detailStatus: BookingDetailStatus.error,
-            message: 'Error',
+            message: 'Detail Error',
+          );
+        }
+      } catch (e) {
+        yield state.copyWith(
+            detailStatus: BookingDetailStatus.error, message: e.toString());
+      }
+    } else if (event is UpdateStatusButtonPressed) {
+      yield state.copyWith(detailStatus: BookingDetailStatus.loading);
+      try {
+        print('check 2: ' + event.id);
+        List<OrderDetailModel> data =
+            await _repo.updateStatusOrder(event.id, event.status);
+        if (data != null) {
+          print("Update Success");
+          yield state.copyWith(
+            detailStatus: BookingDetailStatus.updateStatusSuccess,
+          );
+        } else {
+          yield state.copyWith(
+            detailStatus: BookingDetailStatus.error,
+            message: 'Update Error',
           );
         }
       } catch (e) {

@@ -35,66 +35,64 @@ class _AssignOrderUiState extends State<AssignOrderUi> {
             } else if (state.status == AssignStatus.loading) {
               return CircularProgressIndicator();
             } else if (state.status == AssignStatus.assignSuccess) {
-              if (state.assignList != null && state.assignList.isNotEmpty)
+              if (state.assignList != null &&
+                  state.assignList.isNotEmpty &&
+                  state.assignList[0].status == 'Checkin')
                 return ListView.builder(
                   itemCount: state.assignList.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return Card(
-                      child: (state.assignList[index].status == 'Checked-In')
-                          ? Column(children: [
-                              ListTile(
-                                trailing: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.circle,
-                                        color: Colors.red,
-                                      ),
-                                      Text('Booked'),
-                                    ]),
-                                leading: FlutterLogo(),
-                                title: Text(
-                                    state.assignList[index].customer.fullname),
-                                subtitle:
-                                    Text(state.assignList[index].bookingTime),
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => AssignOrderDetailUi(
-                                          emailId:
-                                              state.assignList[index].id)));
-                                },
+                        child: Column(children: [
+                      ListTile(
+                        trailing: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Icon(
+                                Icons.circle,
+                                color: Colors.yellow,
                               ),
-                            ])
-                          : SizedBox(),
-                      // : Column(children: [
-                      //     ListTile(
-                      //       trailing: Column(
-                      //           mainAxisSize: MainAxisSize.min,
-                      //           children: <Widget>[
-                      //             Icon(
-                      //               Icons.circle,
-                      //               color: Colors.green,
-                      //             ),
-                      //             Text('Đợi xác nhận'),
-                      //           ]),
-                      //       leading: FlutterLogo(),
-                      //       title: Text(
-                      //           state.orderLists[index].taiKhoan),
-                      //       subtitle:
-                      //           Text(state.orderLists[index].hoTen),
-                      //       onTap: () {
-                      //         Navigator.of(context).push(
-                      //             MaterialPageRoute(
-                      //                 builder: (_) =>
-                      //                     CustomerCarDetailUi(
-                      //                         emailId: state
-                      //                             .orderLists[index]
-                      //                             .taiKhoan)));
-                      //       },
-                      //     ),
-                      //   ]),
-                    );
+                              Text('Checkin'),
+                            ]),
+                        leading: FlutterLogo(),
+                        title: Text(state.assignList[index].customer.fullname),
+                        subtitle: Text(state.assignList[index].bookingTime),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => AssignOrderDetailUi(
+                                  emailId: state.assignList[index].id)));
+                        },
+                      ),
+                    ])
+
+                        // : Column(children: [
+                        //     ListTile(
+                        //       trailing: Column(
+                        //           mainAxisSize: MainAxisSize.min,
+                        //           children: <Widget>[
+                        //             Icon(
+                        //               Icons.circle,
+                        //               color: Colors.green,
+                        //             ),
+                        //             Text('Đợi xác nhận'),
+                        //           ]),
+                        //       leading: FlutterLogo(),
+                        //       title: Text(
+                        //           state.orderLists[index].taiKhoan),
+                        //       subtitle:
+                        //           Text(state.orderLists[index].hoTen),
+                        //       onTap: () {
+                        //         Navigator.of(context).push(
+                        //             MaterialPageRoute(
+                        //                 builder: (_) =>
+                        //                     CustomerCarDetailUi(
+                        //                         emailId: state
+                        //                             .orderLists[index]
+                        //                             .taiKhoan)));
+                        //       },
+                        //     ),
+                        //   ]),
+                        );
                   },
                 );
               else
