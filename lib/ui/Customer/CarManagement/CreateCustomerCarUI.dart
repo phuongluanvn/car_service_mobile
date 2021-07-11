@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:car_service/blocs/customer/customerCar/CreateCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CreateCar_event.dart';
 import 'package:car_service/blocs/customer/customerCar/CreateCar_state.dart';
+import 'package:car_service/blocs/customer/manufacturers/Manufacturer_bloc.dart';
+import 'package:car_service/blocs/customer/manufacturers/Manufacturer_event.dart';
+import 'package:car_service/blocs/customer/manufacturers/Manufacturer_state.dart';
 import 'package:car_service/utils/model/ManufacturerModel.dart';
 import 'package:car_service/utils/repository/customer_repo.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,24 +22,17 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
   TextEditingController manufacturer = TextEditingController();
   TextEditingController model = TextEditingController();
   TextEditingController licensePlateNumber = TextEditingController();
-  File _pickerImage;
+  // File _pickerImage;
   CreateCarBloc createCarBloc;
-  CustomerRepository _repo;
-  List<ManufacturerModel> _listManufacturer;
+  String _selectManufacturerItem;
+  String _selectModelOfManufacturerItem;
+  bool _visible = false;
+  File _image;
 
   @override
   void initState() {
     createCarBloc = BlocProvider.of<CreateCarBloc>(context);
-    print('List manu ');
-    print(_listManufacturer);
-    super.initState();
-    _getListManufacturer();
-  }
-
-  File _image;
-
-  _getListManufacturer() async {
-    _listManufacturer = await _repo.getManufacturerList();
+    BlocProvider.of<ManufacturerBloc>(context).add(DoManufacturerListEvent());
   }
 
   _imageFromCamera() async {
@@ -108,34 +104,6 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
       }
     });
 
-    final manufacturerText = TextField(
-      controller: manufacturer,
-      autofocus: false,
-      decoration: InputDecoration(
-        // prefixIcon: Icon(Icons.precision_manufacturing),
-        filled: true,
-        fillColor: Colors.white,
-        hintStyle: TextStyle(color: Colors.black54),
-        hintText: 'Hãng xe',
-        contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
-
-    final modelText = TextField(
-      controller: model,
-      autofocus: false,
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.drive_eta),
-        filled: true,
-        fillColor: Colors.white,
-        hintStyle: TextStyle(color: Colors.black54),
-        hintText: 'Loại xe',
-        contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
-
     final licensePlateNumberText = TextField(
       controller: licensePlateNumber,
       autofocus: false,
@@ -143,7 +111,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
         prefixIcon: Icon(Icons.departure_board_sharp),
         filled: true,
         fillColor: Colors.white,
-        hintStyle: TextStyle(color: Colors.black54),
+        hintStyle: TextStyle(color: Colors.black),
         hintText: 'Biển số xe',
         contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -181,7 +149,6 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
       body: BlocListener<CreateCarBloc, CreateCarState>(
           listener: (context, state) {
             if (state.status == CreateCarStatus.createCarSuccess) {
-              print('object');
               Navigator.pushNamed(context, '/customer');
             }
           },
@@ -194,11 +161,216 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                 SizedBox(
                   height: 40,
                 ),
-                manufacturerText,
-                SizedBox(
-                  height: 20,
+                // manufacturerText,
+                Center(
+                  child: BlocBuilder<ManufacturerBloc, ManufacturerState>(
+                    // ignore: missing_return
+                    builder: (builder, manufacturerState) {
+                      if (manufacturerState.status == ManufacturerStatus.init) {
+                        return Container(
+                          padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                          color: Colors.white,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Expanded(
+                                child: DropdownButtonHideUnderline(
+                                  child: ButtonTheme(
+                                    alignedDropdown: true,
+                                    child: DropdownButton<String>(
+                                      iconSize: 30,
+                                      icon: (null),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                      ),
+                                      hint: Text('Chọn hãng xe'),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else if (manufacturerState.status ==
+                          ManufacturerStatus.loading) {
+                        return Container(
+                          padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                          color: Colors.white,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Expanded(
+                                child: DropdownButtonHideUnderline(
+                                  child: ButtonTheme(
+                                    alignedDropdown: true,
+                                    child: DropdownButton<String>(
+                                      iconSize: 30,
+                                      icon: (null),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                      ),
+                                      hint: Text('Chọn hãng xe'),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else if (manufacturerState.status ==
+                          ManufacturerStatus.loadedManufacturerSuccess) {
+                        return Container(
+                          padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                          color: Colors.white,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Expanded(
+                                child: DropdownButtonHideUnderline(
+                                  child: ButtonTheme(
+                                    alignedDropdown: true,
+                                    child: DropdownButton<String>(
+                                      iconSize: 30,
+                                      icon: (null),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                      ),
+                                      hint: Text('Chọn hãng xe'),
+                                      items: manufacturerState.manufacturerLists
+                                          .map((valueManu) {
+                                        return DropdownMenuItem<String>(
+                                          child: Text(valueManu.name),
+                                          value: valueManu.name,
+                                        );
+                                      }).toList(),
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          //thông tin hãng xe
+                                          this._selectManufacturerItem =
+                                              newValue;
+                                          _visible = !_visible;
+                                          BlocProvider.of<ManufacturerBloc>(
+                                                  context)
+                                              .add(DoModelListOfManufacturerEvent(
+                                                  manuName:
+                                                      _selectManufacturerItem));
+                                        });
+                                      },
+                                      value: _selectManufacturerItem,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                  ),
                 ),
-                modelText,
+                SizedBox(
+                  height: 30,
+                ),
+                Center(
+                    // visible: _visible,
+                    child: Container(
+                        child: BlocBuilder<ManufacturerBloc, ManufacturerState>(
+                            // ignore: missing_return
+                            builder: (builder, modelState) {
+                  if (modelState.modelStatus ==
+                      ModelOfManufacturerStatus.init) {
+                    return Container(
+                      padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                      color: Colors.white,
+                      child: Row(children: <Widget>[
+                        Expanded(
+                          child: DropdownButtonHideUnderline(
+                            child: ButtonTheme(
+                              alignedDropdown: true,
+                              child: DropdownButton<String>(
+                                iconSize: 30,
+                                icon: (null),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                ),
+                                hint: Text('Chọn mẫu xe'),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ]),
+                    );
+                  } else if (modelState.modelStatus ==
+                      ModelOfManufacturerStatus.loading) {
+                    return Container(
+                      padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                      color: Colors.white,
+                      child: Row(children: <Widget>[
+                        Expanded(
+                          child: DropdownButtonHideUnderline(
+                            child: ButtonTheme(
+                              alignedDropdown: true,
+                              child: DropdownButton<String>(
+                                iconSize: 30,
+                                icon: (null),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                ),
+                                hint: Text('Chọn mẫu xe'),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ]),
+                    );
+                  } else if (modelState.modelStatus ==
+                      ModelOfManufacturerStatus
+                          .loadedModelOfManufacturerSuccess) {
+                    return Container(
+                      padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                      color: Colors.white,
+                      child: Row(children: <Widget>[
+                        Expanded(
+                          child: DropdownButtonHideUnderline(
+                            child: ButtonTheme(
+                              alignedDropdown: true,
+                              child: DropdownButton<String>(
+                                iconSize: 30,
+                                icon: (null),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                ),
+                                hint: Text('Chọn mẫu xe'),
+                                items: modelState.modelOfManu.map((valueItem) {
+                                  return DropdownMenuItem<String>(
+                                    child: Text(valueItem),
+                                    value: valueItem,
+                                  );
+                                }).toList(),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    //thông tin mẫu xe
+                                    this._selectModelOfManufacturerItem =
+                                        newValue;
+                                  });
+                                },
+                                value: _selectModelOfManufacturerItem,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ]),
+                    );
+                  }
+                }))),
+
+                // modelText,
                 SizedBox(
                   height: 20,
                 ),

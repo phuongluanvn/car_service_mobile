@@ -63,11 +63,12 @@ class VerifyBookingBloc extends Bloc<VerifyBookingEvent, VerifyBookingState> {
             detailStatus: BookingDetailStatus.error, message: e.toString());
       }
     } else if (event is UpdateStatusButtonPressed) {
-      yield state.copyWith(detailStatus: BookingDetailStatus.loading);
+      // yield state.copyWith(detailStatus: BookingDetailStatus.loading);
       try {
         print('check 2: ' + event.id);
-        List<OrderDetailModel> data =
+        var data =
             await _repo.updateStatusOrder(event.id, event.status);
+            print(data);
         if (data != null) {
           print("Update Success");
           yield state.copyWith(

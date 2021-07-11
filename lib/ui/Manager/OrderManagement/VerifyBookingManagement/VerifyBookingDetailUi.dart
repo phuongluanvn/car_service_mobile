@@ -44,6 +44,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
       ),
       body: Center(
         child: BlocBuilder<VerifyBookingBloc, VerifyBookingState>(
+          // ignore: missing_return
           builder: (context, state) {
             if (state.detailStatus == BookingDetailStatus.init) {
               return CircularProgressIndicator();

@@ -18,6 +18,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
     super.initState();
     BlocProvider.of<CustomerOrderBloc>(context)
         .add(DoOrderDetailEvent(id: widget.orderId));
+   
   }
 
   @override
@@ -36,17 +37,21 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
           builder: (context, state) {
             if (state.detailStatus == CustomerOrderDetailStatus.init) {
               return CircularProgressIndicator();
-            } else if (state.detailStatus == CustomerOrderDetailStatus.loading) {
+            } else if (state.detailStatus ==
+                CustomerOrderDetailStatus.loading) {
               return CircularProgressIndicator();
-            } else if (state.detailStatus == CustomerOrderDetailStatus.success) {
+            } else if (state.detailStatus ==
+                CustomerOrderDetailStatus.success) {
               if (state.orderDetail != null && state.orderDetail.isNotEmpty)
                 return Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
                     children: <Widget>[
-                      Text(state.orderDetail[0].bookingTime),
+                      ListTile(
+                        title: Text(state.orderDetail[0].status),
+                        subtitle: Text(state.orderDetail[0].note),
+                      ),
                       Container(height: 8),
-                      Text(state.orderDetail[0].note),
                       Container(height: 16),
                       SizedBox(
                         width: double.infinity,

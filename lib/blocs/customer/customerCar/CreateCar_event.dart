@@ -32,7 +32,11 @@ class CreateCarButtonPressed extends CreateCarEvent {
   final String imageUrl;
 
   CreateCarButtonPressed(
-      {this.username, this.manufacturer, this.model, this.licensePlateNumber, this.imageUrl});
+      {this.username,
+      this.manufacturer,
+      this.model,
+      this.licensePlateNumber,
+      this.imageUrl});
 }
 
 class OpenImagePicker extends CreateCarEvent {
@@ -46,4 +50,11 @@ class ProviderImagePath extends CreateCarEvent {
   ProviderImagePath({this.imageCarPath});
 }
 
-class ChangeImageCarRequest extends CreateCarEvent{}
+class ChangeImageCarRequest extends CreateCarEvent {}
+
+// class DoListManufacturerEvent extends CreateCarEvent {}
+
+// class DoListModelOfManufacturerEvent extends CreateCarEvent {
+//   final String manufacturerId;
+//   DoListModelOfManufacturerEvent({this.manufacturerId});
+// }

@@ -195,20 +195,44 @@ class CustomerRepository {
 
   Future<List<ManufacturerModel>> getManufacturerList() async {
     List<ManufacturerModel> manufacturerLists = [];
+
     var res = await http.get(
       Uri.parse("https://carservicesystem.azurewebsites.net/api/Manufacturers"),
       headers: headers,
     );
-    print('object');
-    print(res.body);
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
+      print(data);
       if (data != null) {
         data
             .map((order) =>
                 manufacturerLists.add(ManufacturerModel.fromJson(order)))
             .toList();
         return manufacturerLists;
+      } else {
+        print('No manufacturer data');
+        return null;
+      }
+    }
+  }
+
+  Future<List<String>> getListModelOfManufacturer(String namuName) async {
+    List<String> modelOfManufacturer = [];
+    var res = await http.get(
+      Uri.parse("https://carservicesystem.azurewebsites.net/api/Manufacturers/" + namuName),
+      headers: headers,
+    );
+    print('model Manufacturer in repo');
+    print(res.body);
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      print(data);
+      if (data != null) {
+        data['vehicleModels']
+            .map((order) =>
+                modelOfManufacturer.add((order)))
+            .toList();
+        return modelOfManufacturer;
       } else {
         print('No manufacturer data');
         return null;
