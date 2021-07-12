@@ -59,9 +59,12 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                                   children: <Widget>[
                                     Icon(
                                       Icons.circle,
-                                      color: Colors.red,
+                                      color: (state.orderLists[index].status ==
+                                              'Booked')
+                                          ? Colors.red
+                                          : Colors.brown,
                                     ),
-                                    Text('Đợi xác nhận'),
+                                    Text(state.orderLists[index].status),
                                   ]),
                               leading: FlutterLogo(),
                               title: Text(
