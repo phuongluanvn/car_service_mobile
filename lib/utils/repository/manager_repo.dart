@@ -4,6 +4,7 @@ import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/ServiceModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:car_service/utils/model/TestOrderModel.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -135,7 +136,6 @@ class ManagerRepository {
             Map<String, dynamic> map = element;
             listdata.add(StaffModel.fromJson(map));
           });
-          print(listdata);
           return listdata;
         } else {
           print('No data');
@@ -169,20 +169,20 @@ class ManagerRepository {
 
   Future<List<OrderDetailModel>> getBookingOrderList() async {
     List<OrderDetailModel> bookingList = [];
+
     var res = await http.get(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/Orders"),
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Accepted"),
       headers: headers,
     );
-    
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
+
       if (data != null) {
         data
             .map((order) => bookingList.add(OrderDetailModel.fromJson(order)))
             .toList();
-        print(bookingList);
         return bookingList;
-        
       } else {
         print('No test order data');
         return null;
@@ -190,10 +190,48 @@ class ManagerRepository {
     }
   }
 
-    Future<List<OrderDetailModel>> getTestList() async {
+  Future<List<OrderDetailModel>> getAssingOrderList() async {
+    List<OrderDetailModel> checkinList = [];
+    List<OrderDetailModel> acceptedList = [];
+
+    var resAccepted = await http.get(
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Booked"),
+      headers: headers,
+    );
+    var resCheckin = await http.get(
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Booked"),
+      headers: headers,
+    );
+    if (resAccepted.statusCode == 200 && resCheckin.statusCode == 200) {
+      var dataAccepted = json.decode(resAccepted.body);
+      var dataCheckin = json.decode(resCheckin.body);
+
+      if (dataAccepted != null && dataCheckin != null) {
+        dataAccepted
+            .map((order) => acceptedList.add(OrderDetailModel.fromJson(order)))
+            .toList();
+        dataCheckin
+            .map((order) => checkinList.add(OrderDetailModel.fromJson(order)))
+            .toList();
+        var newList = [...acceptedList, ...checkinList];
+        print('????');
+        print(newList);
+        return newList;
+      } else {
+        return null;
+      }
+    } else {
+      print('No test order data');
+      return null;
+    }
+  }
+
+  Future<List<OrderDetailModel>> getTestList() async {
     List<OrderDetailModel> orderLists = [];
     var res = await http.get(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/Orders"),
+      Uri.parse("https://carservicesystem.azurewebsites.net/api/Orders?status=Accepted"),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -206,6 +244,8 @@ class ManagerRepository {
       } else {
         print('No order data');
       }
+    } else {
+      return null;
     }
   }
 
@@ -255,6 +295,4 @@ class ManagerRepository {
       return null;
     }
   }
-
-  
 }

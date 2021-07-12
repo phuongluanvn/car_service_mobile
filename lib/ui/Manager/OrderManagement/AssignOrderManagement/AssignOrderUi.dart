@@ -29,73 +29,55 @@ class _AssignOrderUiState extends State<AssignOrderUi> {
       backgroundColor: Colors.blue[100],
       body: Center(
         child: BlocBuilder<AssignOrderBloc, AssignOrderState>(
+          // ignore: missing_return
           builder: (context, state) {
             if (state.status == AssignStatus.init) {
               return CircularProgressIndicator();
             } else if (state.status == AssignStatus.loading) {
               return CircularProgressIndicator();
             } else if (state.status == AssignStatus.assignSuccess) {
-              if (state.assignList != null &&
-                  state.assignList.isNotEmpty &&
-                  state.assignList[0].status == 'Accepted')
+              if (state.assignList != null && state.assignList.isNotEmpty) {
                 return ListView.builder(
                   itemCount: state.assignList.length,
                   shrinkWrap: true,
+                  // ignore: missing_return
                   itemBuilder: (context, index) {
-                    return Card(
-                        child: Column(children: [
-                      ListTile(
-                        trailing: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Icon(
-                                Icons.circle,
-                                color: Colors.yellow,
-                              ),
-                              Text('Accepted'),
-                            ]),
-                        leading: FlutterLogo(),
-                        title: Text(state.assignList[index].customer.fullname),
-                        subtitle: Text(state.assignList[index].bookingTime),
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (_) => AssignOrderDetailUi(
-                                  orderId: state.assignList[index].id)));
-                        },
-                      ),
-                    ])
-
-                        // : Column(children: [
-                        //     ListTile(
-                        //       trailing: Column(
-                        //           mainAxisSize: MainAxisSize.min,
-                        //           children: <Widget>[
-                        //             Icon(
-                        //               Icons.circle,
-                        //               color: Colors.green,
-                        //             ),
-                        //             Text('Đợi xác nhận'),
-                        //           ]),
-                        //       leading: FlutterLogo(),
-                        //       title: Text(
-                        //           state.orderLists[index].taiKhoan),
-                        //       subtitle:
-                        //           Text(state.orderLists[index].hoTen),
-                        //       onTap: () {
-                        //         Navigator.of(context).push(
-                        //             MaterialPageRoute(
-                        //                 builder: (_) =>
-                        //                     CustomerCarDetailUi(
-                        //                         emailId: state
-                        //                             .orderLists[index]
-                        //                             .taiKhoan)));
-                        //       },
-                        //     ),
-                        //   ]),
-                        );
+                    // if (state.assignList[index].status == 'Accepted') {
+                      return Card(
+                          // child: (state.assignList[0].status == 'Checkin')
+                          //     ?
+                          child: Column(children: [
+                        ListTile(
+                          trailing: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.circle,
+                                  color: Colors.yellow,
+                                ),
+                                Text(state.assignList[index].status),
+                              ]),
+                          leading: FlutterLogo(),
+                          title:
+                              Text(state.assignList[index].customer.fullname),
+                          subtitle: Text(state.assignList[index].bookingTime),
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (_) => AssignOrderDetailUi(
+                                    orderId: state.assignList[index].id)));
+                          },
+                        ),
+                      ])
+                          // : SizedBox(),
+                          );
+                    // } else {
+                    //   return Center(
+                    //     child: Text('Empty'),
+                    //   );
+                    // }
                   },
                 );
-              else
+              } else
                 return Center(
                   child: Text('Empty'),
                 );
