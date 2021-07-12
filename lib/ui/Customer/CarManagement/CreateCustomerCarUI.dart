@@ -12,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateCustomerCarUI extends StatefulWidget {
   @override
@@ -19,8 +20,6 @@ class CreateCustomerCarUI extends StatefulWidget {
 }
 
 class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
-  TextEditingController manufacturer = TextEditingController();
-  TextEditingController model = TextEditingController();
   TextEditingController licensePlateNumber = TextEditingController();
   // File _pickerImage;
   CreateCarBloc createCarBloc;
@@ -28,11 +27,22 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
   String _selectModelOfManufacturerItem;
   bool _visible = false;
   File _image;
+  String _username;
 
   @override
   void initState() {
+    _getStringFromSharedPref();
     createCarBloc = BlocProvider.of<CreateCarBloc>(context);
     BlocProvider.of<ManufacturerBloc>(context).add(DoManufacturerListEvent());
+  }
+
+  _getStringFromSharedPref() async {
+    final prefs = await SharedPreferences.getInstance();
+    final username = prefs.getString('Username');
+
+    setState(() {
+      _username = username;
+    });
   }
 
   _imageFromCamera() async {
@@ -49,8 +59,6 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
   _imageFromGallery() async {
     PickedFile image = await ImagePicker()
         .getImage(source: ImageSource.gallery, imageQuality: 50);
-    print('object');
-
     print(image.path);
 
     if (image != null) {
@@ -126,9 +134,9 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
         ),
         onPressed: () {
           createCarBloc.add(CreateCarButtonPressed(
-            username: 'chonwang',
-            manufacturer: manufacturer.text,
-            model: model.text,
+            username: _username,
+            manufacturer: _selectManufacturerItem,
+            model: _selectModelOfManufacturerItem,
             licensePlateNumber: licensePlateNumber.text,
           ));
         },
