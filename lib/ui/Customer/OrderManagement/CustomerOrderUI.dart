@@ -51,6 +51,19 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                         itemCount: state.orderLists.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
+                          Color color;
+                          var status = state.orderLists[index].status;
+                          switch (status) {
+                            case 'Booked':
+                              color = Colors.orange[200];
+                              break;
+                            case 'Checkin':
+                              color = Colors.blue;
+                              break;
+//con nhieu case nua lam sau
+                            default:
+                              color = Colors.black;
+                          }
                           return Card(
                               child: Column(children: [
                             ListTile(
@@ -59,10 +72,7 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                                   children: <Widget>[
                                     Icon(
                                       Icons.circle,
-                                      color: (state.orderLists[index].status ==
-                                              'Booked')
-                                          ? Colors.red
-                                          : Colors.brown,
+                                      color: color,
                                     ),
                                     Text(state.orderLists[index].status),
                                   ]),
