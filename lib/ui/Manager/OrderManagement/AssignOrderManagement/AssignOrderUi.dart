@@ -60,7 +60,7 @@ class _AssignOrderUiState extends State<AssignOrderUi> {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (_) => AssignOrderDetailUi(
-                                  emailId: state.assignList[index].id)));
+                                  orderId: state.assignList[index].id)));
                         },
                       ),
                     ])

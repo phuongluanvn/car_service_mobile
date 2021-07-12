@@ -1,6 +1,7 @@
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
 import 'package:car_service/utils/model/AssignOrderModel.dart';
 import 'package:car_service/utils/model/BookingModel.dart';
+import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:car_service/utils/repository/manager_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,7 +43,7 @@ class AssignOrderBloc extends Bloc<AssignOrderEvent, AssignOrderState> {
     } else if (event is DoAssignOrderDetailEvent) {
       yield state.copyWith(detailStatus: AssignDetailStatus.loading);
       try {
-        List<AssignOrderModel> data = await _repo.getOrderDetail(event.email);
+        List<OrderDetailModel> data = await _repo.getVerifyOrderDetail(event.id);
         if (data != null) {
           yield state.copyWith(
             detailStatus: AssignDetailStatus.success,

@@ -28,7 +28,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
       print('staff =' + _selection);
     });
     BlocProvider.of<AssignOrderBloc>(context)
-        .add(DoAssignOrderDetailEvent(email: widget.userId));
+        .add(DoAssignOrderDetailEvent(id: widget.userId));
     BlocProvider.of<StaffBloc>(context).add(DoListStaffEvent());
   }
 
@@ -79,7 +79,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                             ),
                             Container(
                               child: Text(
-                                state.assignDetail[0].taiKhoan,
+                                state.assignDetail[0].customer.fullname,
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),
@@ -99,7 +99,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                             ),
                             Container(
                               child: Text(
-                                state.assignDetail[0].hoTen,
+                                state.assignDetail[0].customer.phoneNumber,
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),
@@ -119,7 +119,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                             ),
                             Container(
                               child: Text(
-                                state.assignDetail[0].email,
+                                state.assignDetail[0].checkinTime,
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),
@@ -139,7 +139,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                             ),
                             Container(
                               child: Text(
-                                state.assignDetail[0].soDt,
+                                state.assignDetail[0].note,
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),

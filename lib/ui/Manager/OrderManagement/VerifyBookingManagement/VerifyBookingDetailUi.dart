@@ -1,5 +1,8 @@
 import 'package:car_service/blocs/manager/booking/booking_state.dart';
 import 'package:car_service/blocs/manager/booking/booking_cubit.dart';
+import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
+import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.dart';
+import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
 import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingUi.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +24,10 @@ class VerifyBookingDetailUi extends StatefulWidget {
 }
 
 class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
-  VerifyBookingBloc bookingBloc;
+  UpdateStatusOrderBloc updateStatusBloc;
   @override
   void initState() {
-    bookingBloc = BlocProvider.of<VerifyBookingBloc>(context);
+    updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     super.initState();
     BlocProvider.of<VerifyBookingBloc>(context)
         .add(DoVerifyBookingDetailEvent(email: widget.orderId));
@@ -50,11 +53,6 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
               return CircularProgressIndicator();
             } else if (state.detailStatus == BookingDetailStatus.loading) {
               return CircularProgressIndicator();
-            } else if (state.detailStatus ==
-                BookingDetailStatus.updateStatusSuccess) {
-              Navigator.pushNamed(context, '/manager');
-              //  Navigator.of(context).push(MaterialPageRoute(
-              //         builder: (context) => new ManagerMain()));
             } else if (state.detailStatus == BookingDetailStatus.success) {
               if (state.bookingDetail != null && state.bookingDetail.isNotEmpty)
                 return Padding(
@@ -141,35 +139,46 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                         ],
                       ),
                       Container(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.45,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.blue),
-                              child: Text('Accept',
-                                  style: TextStyle(color: Colors.white)),
-                              onPressed: () {
-                                bookingBloc.add(UpdateStatusButtonPressed(
-                                    id: state.bookingDetail[0].id,
-                                    status: acceptStatus));
-                              },
+                      BlocListener<UpdateStatusOrderBloc,
+                          UpdateStatusOrderState>(
+                        // ignore: missing_return
+                        listener: (builder, statusState) {
+                          if (statusState.status ==
+                              UpdateStatus.updateStatusSuccess) {
+                            Navigator.pushNamed(context, '/manager');
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.45,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.blue),
+                                child: Text('Accept',
+                                    style: TextStyle(color: Colors.white)),
+                                onPressed: () {
+                                  updateStatusBloc.add(
+                                      UpdateStatusButtonPressed(
+                                          id: state.bookingDetail[0].id,
+                                          status: acceptStatus));
+                                },
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.45,
-                            child: ElevatedButton(
-                              style:
-                                  ElevatedButton.styleFrom(primary: Colors.red),
-                              child: Text('Deny',
-                                  style: TextStyle(color: Colors.white)),
-                              onPressed: () {},
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.45,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.red),
+                                child: Text('Deny',
+                                    style: TextStyle(color: Colors.white)),
+                                onPressed: () {},
+                              ),
                             ),
-                          ),
-                        ],
-                      )
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 );

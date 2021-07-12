@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AssignOrderDetailUi extends StatefulWidget {
-  final String emailId;
-  AssignOrderDetailUi({@required this.emailId});
+  final String orderId;
+  AssignOrderDetailUi({@required this.orderId});
 
   @override
   _AssignOrderDetailUiState createState() => _AssignOrderDetailUiState();
@@ -26,7 +26,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
     super.initState();
 
     BlocProvider.of<AssignOrderBloc>(context)
-        .add(DoAssignOrderDetailEvent(email: widget.emailId));
+        .add(DoAssignOrderDetailEvent(id: widget.orderId));
     BlocProvider.of<StaffBloc>(context).add(DoListStaffEvent());
   }
 
@@ -73,7 +73,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.assignDetail[0].taiKhoan,
+                              state.assignDetail[0].customer.fullname,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -93,7 +93,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.assignDetail[0].hoTen,
+                              state.assignDetail[0].customer.phoneNumber,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -113,7 +113,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.assignDetail[0].email,
+                              state.assignDetail[0].checkinTime,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -133,7 +133,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.assignDetail[0].soDt,
+                              state.assignDetail[0].note,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -204,8 +204,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                               builder: (_) =>
                                                   AssignOrderReviewUi(
                                                       userId: state
-                                                          .assignDetail[0]
-                                                          .taiKhoan,
+                                                          .assignDetail[0].id,
                                                       staffId: selectItem)));
                                     },
                                   ),

@@ -26,7 +26,7 @@ class AssignOrderState extends Equatable {
   final AssignDetailStatus detailStatus;
 
   final List<OrderDetailModel> assignList;
-  final List<AssignOrderModel> assignDetail;
+  final List<OrderDetailModel> assignDetail;
   final List<StaffModel> assignStaff;
   final String message;
   const AssignOrderState({
@@ -42,7 +42,7 @@ class AssignOrderState extends Equatable {
     AssignStatus status,
     AssignDetailStatus detailStatus,
     List<OrderDetailModel> assignList,
-    List<AssignOrderModel> assignDetail,
+    List<OrderDetailModel> assignDetail,
     List<StaffModel> assignStaff,
     String message,
   }) =>

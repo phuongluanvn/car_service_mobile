@@ -8,10 +8,10 @@ abstract class AssignOrderEvent extends Equatable {
 class DoListAssignOrderEvent extends AssignOrderEvent {}
 
 class DoAssignOrderDetailEvent extends AssignOrderEvent {
-  final String email;
-  DoAssignOrderDetailEvent({this.email});
+  final String id;
+  DoAssignOrderDetailEvent({this.id});
   @override
-  List<Object> get props => [email];
+  List<Object> get props => [id];
 }
 
 class DoListAssignStaffEvent extends AssignOrderEvent{}

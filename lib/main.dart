@@ -16,6 +16,7 @@ import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_cubit.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
+import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
 import 'package:car_service/blocs/sign_up/sign_up_bloc.dart';
 import 'package:car_service/blocs/sign_up/sign_up_state.dart';
 import 'package:car_service/ui/Customer/CustomerMainUI.dart';
@@ -66,6 +67,8 @@ class Auth extends StatelessWidget {
             create: (context) => CreateOrderBloc(repo: ManagerRepository())),
         BlocProvider(
             create: (context) => ProcessOrderBloc(repo: ManagerRepository())),
+        BlocProvider(
+            create: (context) => UpdateStatusOrderBloc(repo: ManagerRepository())),    
         BlocProvider(
             create: (context) =>
                 StaffBloc(StaffInitState(), ManagerRepository())),
