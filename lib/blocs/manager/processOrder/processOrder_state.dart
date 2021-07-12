@@ -1,4 +1,4 @@
-import 'package:car_service/utils/model/AssignOrderModel.dart';
+import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:equatable/equatable.dart';
 
@@ -22,8 +22,8 @@ class ProcessOrderState extends Equatable {
   final ProcessStatus status;
   final ProcessDetailStatus detailStatus;
 
-  final List<AssignOrderModel> processList;
-  final List<AssignOrderModel> processDetail;
+  final List<OrderDetailModel> processList;
+  final List<OrderDetailModel> processDetail;
   final List<StaffModel> assignStaff;
   final String message;
   const ProcessOrderState({
@@ -38,8 +38,8 @@ class ProcessOrderState extends Equatable {
   ProcessOrderState copyWith({
     ProcessStatus status,
     ProcessDetailStatus detailStatus,
-    List<AssignOrderModel> processList,
-    List<AssignOrderModel> processDetail,
+    List<OrderDetailModel> processList,
+    List<OrderDetailModel> processDetail,
     List<StaffModel> assignStaff,
     String message,
   }) =>

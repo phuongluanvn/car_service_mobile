@@ -39,19 +39,64 @@ class _ProcessOrderUiState extends State<ProcessOrderUi> {
             } else if (state.status == ProcessStatus.loading) {
               return CircularProgressIndicator();
             } else if (state.status == ProcessStatus.processSuccess) {
-              if (state.processList != null && state.processList.isNotEmpty)
+              if (state.processList != null &&
+                  state.processList.isNotEmpty &&
+                  state.processList[0].status == 'Checkin')
                 return ListView.builder(
                   itemCount: state.processList.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(state.processList[index].taiKhoan),
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => ProcessOrderDetailUi(
-                                emailId: state.processList[index].taiKhoan)));
-                      },
-                    );
+                    return Card(
+                        child: Column(children: [
+                      ListTile(
+                        trailing: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Icon(
+                                Icons.circle,
+                                color: Colors.yellow,
+                              ),
+                              Text('Checkin'),
+                            ]),
+                        leading: FlutterLogo(),
+                        title: Text(state.processList[index].customer.fullname),
+                        subtitle: Text(state.processList[index].bookingTime),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => ProcessOrderDetailUi(
+                                  orderId: state.processList[index].id)));
+                        },
+                      ),
+                    ])
+
+                        // : Column(children: [
+                        //     ListTile(
+                        //       trailing: Column(
+                        //           mainAxisSize: MainAxisSize.min,
+                        //           children: <Widget>[
+                        //             Icon(
+                        //               Icons.circle,
+                        //               color: Colors.green,
+                        //             ),
+                        //             Text('Đợi xác nhận'),
+                        //           ]),
+                        //       leading: FlutterLogo(),
+                        //       title: Text(
+                        //           state.orderLists[index].taiKhoan),
+                        //       subtitle:
+                        //           Text(state.orderLists[index].hoTen),
+                        //       onTap: () {
+                        //         Navigator.of(context).push(
+                        //             MaterialPageRoute(
+                        //                 builder: (_) =>
+                        //                     CustomerCarDetailUi(
+                        //                         emailId: state
+                        //                             .orderLists[index]
+                        //                             .taiKhoan)));
+                        //       },
+                        //     ),
+                        //   ]),
+                        );
                   },
                 );
               else

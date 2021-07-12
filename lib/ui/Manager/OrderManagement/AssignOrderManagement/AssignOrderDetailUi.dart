@@ -4,6 +4,9 @@ import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
+import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
+import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.dart';
+import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,13 +21,13 @@ class AssignOrderDetailUi extends StatefulWidget {
 
 class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
   bool _visible = false;
-
+  UpdateStatusOrderBloc updateStatusBloc;
   String selectItem;
   String holder = '';
   @override
   void initState() {
     super.initState();
-
+ updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     BlocProvider.of<AssignOrderBloc>(context)
         .add(DoAssignOrderDetailEvent(id: widget.orderId));
     BlocProvider.of<StaffBloc>(context).add(DoListStaffEvent());
@@ -38,6 +41,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
 
   @override
   Widget build(BuildContext context) {
+    final String acceptStatus = 'Checkin';
     return Scaffold(
       appBar: AppBar(
         title: Text('Order Information'),
@@ -140,6 +144,37 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                         ],
                       ),
                       Container(height: 16),
+                      BlocListener<UpdateStatusOrderBloc,
+                          UpdateStatusOrderState>(
+                        // ignore: missing_return
+                        listener: (builder, statusState) {
+                          if (statusState.status ==
+                              UpdateStatus.updateStatusSuccess) {
+                            Navigator.pushNamed(context, '/manager');
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.45,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.blue),
+                                child: Text('Accept',
+                                    style: TextStyle(color: Colors.white)),
+                                onPressed: () {
+                                  updateStatusBloc.add(
+                                      UpdateStatusButtonPressed(
+                                          id: state.assignDetail[0].id,
+                                          status: acceptStatus));
+                                },
+                              ),
+                            ),
+                           
+                          ],
+                        ),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

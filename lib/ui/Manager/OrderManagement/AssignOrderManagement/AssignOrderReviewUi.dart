@@ -32,14 +32,6 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
     BlocProvider.of<StaffBloc>(context).add(DoListStaffEvent());
   }
 
-  void getDropDownItem(String ids) {
-    // setState(() {
-    //   holder = selectItem;
-    // });
-    if (ids != null) {
-      print('null');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

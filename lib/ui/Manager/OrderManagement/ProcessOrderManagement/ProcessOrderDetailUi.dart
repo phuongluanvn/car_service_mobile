@@ -13,8 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProcessOrderDetailUi extends StatefulWidget {
-  final String emailId;
-  ProcessOrderDetailUi({@required this.emailId});
+  final String orderId;
+  ProcessOrderDetailUi({@required this.orderId});
 
   @override
   _ProcessOrderDetailUiState createState() => _ProcessOrderDetailUiState();
@@ -31,7 +31,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
     super.initState();
 
     BlocProvider.of<ProcessOrderBloc>(context)
-        .add(DoProcessOrderDetailEvent(email: widget.emailId));
+        .add(DoProcessOrderDetailEvent(email: widget.orderId));
     BlocProvider.of<StaffBloc>(context).add(DoListStaffEvent());
   }
 
@@ -80,7 +80,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                             ),
                             Container(
                               child: Text(
-                                state.processDetail[0].taiKhoan,
+                                state.processDetail[0].customer.fullname,
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),
@@ -100,7 +100,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                             ),
                             Container(
                               child: Text(
-                                state.processDetail[0].hoTen,
+                                state.processDetail[0].customer.phoneNumber,
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),
@@ -120,7 +120,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                             ),
                             Container(
                               child: Text(
-                                state.processDetail[0].email,
+                                state.processDetail[0].checkinTime,
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),
@@ -140,7 +140,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                             ),
                             Container(
                               child: Text(
-                                state.processDetail[0].soDt,
+                                state.processDetail[0].note,
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),

@@ -1,7 +1,6 @@
 
 import 'package:car_service/blocs/manager/processOrder/processOrder_events.dart';
-import 'package:car_service/utils/model/AssignOrderModel.dart';
-import 'package:car_service/utils/model/BookingModel.dart';
+import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:car_service/utils/repository/manager_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +20,7 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
     if (event is DoListProcessOrderEvent) {
       yield state.copyWith(status: ProcessStatus.loading);
       try {
-        var assignList = await _repo.getOrderList();
+        var assignList = await _repo.getBookingOrderList();
         if (assignList != null) {
           yield state.copyWith(
               processList: assignList, status: ProcessStatus.processSuccess);
@@ -43,7 +42,7 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
     } else if (event is DoProcessOrderDetailEvent) {
       yield state.copyWith(detailStatus: ProcessDetailStatus.loading);
       try {
-        List<AssignOrderModel> data = await _repo.getOrderDetail(event.email);
+        List<OrderDetailModel> data = await _repo.getVerifyOrderDetail(event.email);
         if (data != null) {
           yield state.copyWith(
             detailStatus: ProcessDetailStatus.success,

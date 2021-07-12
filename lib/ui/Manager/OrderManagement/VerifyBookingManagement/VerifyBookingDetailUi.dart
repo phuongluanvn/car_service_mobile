@@ -36,7 +36,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
 
   @override
   Widget build(BuildContext context) {
-    final String acceptStatus = 'Checkin';
+    final String acceptStatus = 'Accepted';
     return Scaffold(
       appBar: AppBar(
         title: Text('Booking Information'),

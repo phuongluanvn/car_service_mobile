@@ -37,7 +37,7 @@ class _AssignOrderUiState extends State<AssignOrderUi> {
             } else if (state.status == AssignStatus.assignSuccess) {
               if (state.assignList != null &&
                   state.assignList.isNotEmpty &&
-                  state.assignList[0].status == 'Checkin')
+                  state.assignList[0].status == 'Accepted')
                 return ListView.builder(
                   itemCount: state.assignList.length,
                   shrinkWrap: true,
@@ -52,7 +52,7 @@ class _AssignOrderUiState extends State<AssignOrderUi> {
                                 Icons.circle,
                                 color: Colors.yellow,
                               ),
-                              Text('Checkin'),
+                              Text('Accepted'),
                             ]),
                         leading: FlutterLogo(),
                         title: Text(state.assignList[index].customer.fullname),
