@@ -8,10 +8,10 @@ abstract class CustomerCarEvent extends Equatable {
 class DoCarListEvent extends CustomerCarEvent {}
 
 class DoCarDetailEvent extends CustomerCarEvent {
-  final String email;
-  DoCarDetailEvent({this.email});
+  final String vehicleId;
+  DoCarDetailEvent({this.vehicleId});
   @override
-  List<Object> get props => [email];
+  List<Object> get props => [vehicleId];
 }
 
 class VerifyBookingTabPressed extends CustomerCarEvent {}

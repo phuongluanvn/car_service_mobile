@@ -1,6 +1,7 @@
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_event.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
 import 'package:car_service/utils/model/CarModel.dart';
+import 'package:car_service/utils/model/VehicleModel.dart';
 import 'package:car_service/utils/repository/customer_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,7 +12,6 @@ class CustomerCarBloc extends Bloc<CustomerCarEvent, CustomerCarState> {
   CustomerCarBloc({CustomerRepository repo})
       : _repo = repo,
         super(CustomerCarState());
-
 
   @override
   Stream<CustomerCarState> mapEventToState(CustomerCarEvent event) async* {
@@ -24,14 +24,13 @@ class CustomerCarBloc extends Bloc<CustomerCarEvent, CustomerCarState> {
           var carLists = await _repo.getCarListOfCustomer(_username);
           if (carLists != null) {
             yield state.copyWith(
-                // carLists: carLists,
                 vehicleLists: carLists,
                 status: CustomerCarStatus.loadedCarSuccess);
           }
         } else {
           yield state.copyWith(
             status: CustomerCarStatus.error,
-            message: 'Error load car of ' + _username,
+            message: 'Error load car of ' + _username + ' customer car bloc',
           );
         }
       } catch (e) {
@@ -39,21 +38,20 @@ class CustomerCarBloc extends Bloc<CustomerCarEvent, CustomerCarState> {
           status: CustomerCarStatus.error,
           message: e.toString(),
         );
-        ;
       }
     } else if (event is DoCarDetailEvent) {
       yield state.copyWith(detailStatus: CustomerCarDetailStatus.loading);
       try {
-        List<CarModel> data = await _repo.getCarDetail(event.email);
+        List<VehicleModel> data = await _repo.getVehicleDetail(event.vehicleId);
         if (data != null) {
           yield state.copyWith(
             detailStatus: CustomerCarDetailStatus.success,
-            carDetail: data,
+            vehicleDetail: data,
           );
         } else {
           yield state.copyWith(
             detailStatus: CustomerCarDetailStatus.error,
-            message: 'Error load car detail',
+            message: 'Error load car detail - customer car bloc',
           );
         }
       } catch (e) {

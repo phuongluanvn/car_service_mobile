@@ -17,8 +17,10 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
   void initState() {
     super.initState();
     BlocProvider.of<CustomerCarBloc>(context)
-        .add(DoCarDetailEvent(email: widget.id));
+        .add(DoCarDetailEvent(vehicleId: widget.id));
   }
+
+  Image image;
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +45,39 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
             } else if (state.detailStatus == CustomerCarDetailStatus.loading) {
               return CircularProgressIndicator();
             } else if (state.detailStatus == CustomerCarDetailStatus.success) {
-              if (state.vehicleLists != null && state.vehicleLists.isNotEmpty)
+              if (state.vehicleLists != null && state.vehicleLists.isNotEmpty) {
+                switch (state.vehicleLists[0].manufacturer) {
+                  case 'Axa':
+                    image = Image.network(
+                        'https://picsum.photos/400/200?image=1070');
+                    break;
+                  default:
+                    image = Image.network(
+                        'https://picsum.photos/400/200?image=1071');
+                }
                 return Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
                     children: <Widget>[
+                      image,
+                      Container(height: 18),
+                      TextFormField(
+                        initialValue: state.vehicleLists[0].manufacturer,
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.directions_car),
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintStyle: TextStyle(color: Colors.black54),
+                          // hintText: state.vehicleLists[0].taiKhoan,
+                          // text
+                          labelText: 'Hãng xe',
+                          contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                      ),
                       Container(height: 14),
                       TextFormField(
                         initialValue: state.vehicleLists[0].model,
@@ -61,24 +91,6 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                           // hintText: state.vehicleLists[0].taiKhoan,
                           // text
                           labelText: 'Mẫu xe',
-                          contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                      ),
-                      Container(height: 14),
-                      TextFormField(
-                        initialValue: state.vehicleLists[0].manufacturer,
-                        keyboardType: TextInputType.text,
-                        autofocus: false,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.directions_car),
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintStyle: TextStyle(color: Colors.black54),
-                          // hintText: state.vehicleLists[0].taiKhoan,
-                          // text
-                          labelText: 'Hãng xe',
                           contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
@@ -104,10 +116,10 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                       ),
                       Container(height: 14),
                       SizedBox(
-                        width: double.infinity,
+                        width: 150,
                         height: 35,
                         child: RaisedButton(
-                          child: Text('Submit',
+                          child: Text('Lưu',
                               style: TextStyle(color: Colors.white)),
                           color: Theme.of(context).primaryColor,
                           onPressed: () {},
@@ -116,7 +128,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                     ],
                   ),
                 );
-              else
+              } else
                 return Center(child: Text('Empty'));
             } else if (state.detailStatus == CustomerCarDetailStatus.error) {
               return ErrorWidget(state.message.toString());

@@ -18,8 +18,21 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
     super.initState();
     BlocProvider.of<CustomerOrderBloc>(context)
         .add(DoOrderDetailEvent(id: widget.orderId));
-   
   }
+
+  List<Step> steps = [
+    Step(
+      title: Text('?????'),
+      state: StepState.complete,
+      isActive: false,
+      content: Text('data'),
+    ),
+    Step(
+      title: Text('?????'),
+      isActive: true,
+      content: Text('data'),
+    )
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +59,20 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                 return Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
+                    //                     String id;
+                    // String note;
+                    // String status;
+                    // String createdTime;
+                    // String bookingTime;
+                    // String checkinTime;
+                    // Customer customer;
+                    // Vehicle vehicle;
+                    // String package;
                     children: <Widget>[
+                      Expanded(child: 
+                      Stepper(
+                        steps: steps,
+                        )),
                       ListTile(
                         title: Text(state.orderDetail[0].status),
                         subtitle: Text(state.orderDetail[0].note),

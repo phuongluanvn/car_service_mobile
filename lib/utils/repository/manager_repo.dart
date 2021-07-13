@@ -231,7 +231,7 @@ class ManagerRepository {
   Future<List<OrderDetailModel>> getTestList() async {
     List<OrderDetailModel> orderLists = [];
     var res = await http.get(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/Orders?status=Accepted"),
+      Uri.parse("https://carservicesystem.azurewebsites.net/api/Orders?status=Booked"),
       headers: headers,
     );
     if (res.statusCode == 200) {

@@ -13,6 +13,8 @@ class CustomerRepository {
     'Accept': ' */*'
   };
 
+  String BASE_URL = 'https://carservicesystem.azurewebsites.net/api/';
+
 // '{
 //   "vehicleId": "e42d42cf-af6b-4e15-89df-264a7bb9ffee",
 //   "packageId": null,
@@ -29,7 +31,7 @@ class CustomerRepository {
       "bookingTime": '$bookingTime'
     };
     var res = await http.post(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/Orders"),
+      Uri.parse(BASE_URL + "Orders"),
       headers: headers,
       body: json.encode(body),
     );
@@ -68,45 +70,46 @@ class CustomerRepository {
     }
   }
 
-  Future<List<VehicleModel>> getCarListOfCustomer(String username) async {
+  getCarListOfCustomer(String username) async {
+    String message = '';
     List<VehicleModel> vehicleLists = [];
-    var res = await http.get(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/Customers/" +
-          username),
+    var ressponse = await http.get(
+      Uri.parse(BASE_URL + "Customers/" + username),
       headers: headers,
     );
-    if (res.statusCode == 200) {
-      var data = json.decode(res.body);
+    if (ressponse.statusCode == 200) {
+      var data = json.decode(ressponse.body);
       var enc = json.encode(data);
       var dec = json.decode(enc);
-
       if (dec != null) {
         dec['vehicles']
             .map((vehicle) => vehicleLists.add(VehicleModel.fromJson(vehicle)))
             .toList();
         return vehicleLists;
       } else {
-        print('No data');
+        return 'Không tìm thấy xe';
       }
+    } else if (ressponse.statusCode == 404) {
+      message = 'Không tìm thấy xe ' + ressponse.statusCode.toString();
+      return message;
+    } else {
+      return ressponse.body;
     }
   }
 
-  Future<List<CarModel>> getCarDetail(String email) async {
+  Future<List<VehicleModel>> getVehicleDetail(String vehicleId) async {
     var res = await http.get(
-      Uri.parse(
-          'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=' +
-              email),
+      Uri.parse('https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=' + vehicleId),
       headers: headers,
     );
     if (res.statusCode == 200) {
-      List<dynamic> data = json.decode(res.body);
-
+      var data = json.decode(res.body);
       try {
         if (data != null) {
-          List<CarModel> listdata = [];
+          List<VehicleModel> listdata = [];
           data.forEach((element) {
             Map<String, dynamic> map = element;
-            listdata.add(CarModel.fromJson(map));
+            listdata.add(VehicleModel.fromJson(map));
           });
           return listdata;
         } else {
@@ -118,12 +121,10 @@ class CustomerRepository {
     }
   }
 
-  Future<List<OrderModel>> getOrderList(String username) async {
+  getOrderList(String username) async {
     List<OrderModel> orderLists = [];
     var res = await http.get(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/Customers/" +
-          username +
-          "/orders"),
+      Uri.parse(BASE_URL + "Customers/" + username + "/orders"),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -134,41 +135,38 @@ class CustomerRepository {
             .toList();
         return orderLists;
       } else {
-        print('No order data');
+        return res.body;
       }
+    } else {
+      return res.body;
     }
   }
 
-  Future<List<OrderDetailModel>> getOrderDetail(String id) async {
+  getOrderDetail(String id) async {
     List<OrderDetailModel> orderDetails = [];
-    List test = [];
+    List convertData = [];
     var res = await http.get(
-      Uri.parse('https://carservicesystem.azurewebsites.net/api/Orders/' + id),
+      Uri.parse(BASE_URL + 'Orders/' + id),
       headers: headers,
     );
-    // print(res.body);
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
-      test.add(data);
-      print('?????');
-      print(test);
-      // print(data);
+      convertData.add(data);
       try {
-      if (data != null) {
-        test
-            .map((orderDetail) =>
-                orderDetails.add(OrderDetailModel.fromJson(orderDetail)))
-            .toList();
-        print('Order detail');
-        print(orderDetails);
-        return orderDetails;
-      } else {
-        print('No data');
+        if (data != null) {
+          convertData
+              .map((orderDetail) =>
+                  orderDetails.add(OrderDetailModel.fromJson(orderDetail)))
+              .toList();
+          return orderDetails;
+        } else {
+          res.body;
+        }
+      } catch (e) {
+        res.body;
       }
-      }
-      catch (e) {
-        print(e.toString());
-      }
+    } else {
+      res.body;
     }
   }
 
@@ -219,7 +217,9 @@ class CustomerRepository {
   Future<List<String>> getListModelOfManufacturer(String namuName) async {
     List<String> modelOfManufacturer = [];
     var res = await http.get(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/Manufacturers/" + namuName),
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/Manufacturers/" +
+              namuName),
       headers: headers,
     );
     print('model Manufacturer in repo');
@@ -229,8 +229,7 @@ class CustomerRepository {
       print(data);
       if (data != null) {
         data['vehicleModels']
-            .map((order) =>
-                modelOfManufacturer.add((order)))
+            .map((order) => modelOfManufacturer.add((order)))
             .toList();
         return modelOfManufacturer;
       } else {

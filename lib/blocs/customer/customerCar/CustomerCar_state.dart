@@ -21,15 +21,14 @@ enum CustomerCarDetailStatus{
 class CustomerCarState extends Equatable {
   final CustomerCarStatus status;
   final CustomerCarDetailStatus detailStatus;
-  final List<CarModel> carLists;
-  final List<CarModel> carDetail;
+  final List<VehicleModel> vehicleDetail;
   final List<VehicleModel> vehicleLists;
+
   final String message;
   const CustomerCarState({
     this.status: CustomerCarStatus.init,
     this.detailStatus:CustomerCarDetailStatus.init,
-    this.carDetail:const [],
-    this.carLists:const [],
+    this.vehicleDetail:const [],
     this.vehicleLists:const[],
     this.message:'',
   });
@@ -37,16 +36,14 @@ class CustomerCarState extends Equatable {
   CustomerCarState copyWith({
     CustomerCarStatus status,
     CustomerCarDetailStatus detailStatus,
-    List<CarModel> carLists,
-    List<CarModel> carDetail,
+    List<VehicleModel> vehicleDetail,
     List<VehicleModel> vehicleLists,
     String message,
   }) =>
       CustomerCarState(
         status: status ?? this.status,
         detailStatus: detailStatus??this.detailStatus,
-        carLists: carLists ?? this.carLists,
-        carDetail: carDetail ?? this.carDetail,
+        vehicleDetail: vehicleDetail ?? this.vehicleDetail,
         message: message??this.message,
         vehicleLists: vehicleLists ?? this.vehicleLists,
       );
@@ -54,8 +51,7 @@ class CustomerCarState extends Equatable {
   List<Object> get props => [
         status,
         detailStatus,
-        carLists,
-        carDetail,
+        vehicleDetail,
         vehicleLists,
         message,
       ];
