@@ -196,12 +196,12 @@ class ManagerRepository {
 
     var resAccepted = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Booked"),
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Accepted"),
       headers: headers,
     );
     var resCheckin = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Booked"),
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Checkin"),
       headers: headers,
     );
     if (resAccepted.statusCode == 200 && resCheckin.statusCode == 200) {
@@ -231,7 +231,8 @@ class ManagerRepository {
   Future<List<OrderDetailModel>> getTestList() async {
     List<OrderDetailModel> orderLists = [];
     var res = await http.get(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/Orders?status=Booked"),
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Booked"),
       headers: headers,
     );
     if (res.statusCode == 200) {

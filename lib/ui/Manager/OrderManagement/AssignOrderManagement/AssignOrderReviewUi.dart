@@ -4,6 +4,9 @@ import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
+import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
+import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.dart';
+import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/ReviewTaskUi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,10 +21,13 @@ class AssignOrderReviewUi extends StatefulWidget {
 }
 
 class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
+  final String processingStatus = 'Processing';
+  UpdateStatusOrderBloc updateStatusBloc;
   bool _visible = false;
   String _selection = '';
   @override
   void initState() {
+    updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     super.initState();
     setState(() {
       _selection = widget.staffId;
@@ -31,7 +37,6 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
         .add(DoAssignOrderDetailEvent(id: widget.userId));
     BlocProvider.of<StaffBloc>(context).add(DoListStaffEvent());
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +76,8 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                             ),
                             Container(
                               child: Text(
-                                state.assignDetail[0].customer.fullname,
+                                state.assignDetail[0].customer.fullname ??
+                                    'empty',
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),
@@ -91,7 +97,8 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                             ),
                             Container(
                               child: Text(
-                                state.assignDetail[0].customer.phoneNumber,
+                                state.assignDetail[0].customer.phoneNumber ??
+                                    'empty',
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),
@@ -111,7 +118,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                             ),
                             Container(
                               child: Text(
-                                state.assignDetail[0].checkinTime,
+                                state.assignDetail[0].checkinTime ?? 'empty',
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),
@@ -131,7 +138,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                             ),
                             Container(
                               child: Text(
-                                state.assignDetail[0].note,
+                                state.assignDetail[0].note ?? 'empty',
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),
@@ -259,14 +266,33 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                             ;
                           }),
                         ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.6,
-                          child: ElevatedButton(
-                            style:
-                                ElevatedButton.styleFrom(primary: Colors.blue),
-                            child: Text('Start Process',
-                                style: TextStyle(color: Colors.white)),
-                            onPressed: () {},
+                        BlocListener<UpdateStatusOrderBloc,
+                            UpdateStatusOrderState>(
+                          // ignore: missing_return
+                          listener: (builder, statusState) {
+                            if (statusState.status ==
+                                UpdateStatus.updateStatusSuccess) {
+                              // Navigator.pushNamed(context, '/manager');
+                            }
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.6,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Colors.blue),
+                                  child: Text('Start Process',
+                                      style: TextStyle(color: Colors.white)),
+                                  onPressed: () {
+                                    UpdateStatusButtonPressed(
+                                        id: state.assignDetail[0].id,
+                                        status: processingStatus);
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],

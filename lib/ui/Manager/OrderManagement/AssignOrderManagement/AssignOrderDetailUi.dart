@@ -27,7 +27,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
   @override
   void initState() {
     super.initState();
- updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
+    updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     BlocProvider.of<AssignOrderBloc>(context)
         .add(DoAssignOrderDetailEvent(id: widget.orderId));
     BlocProvider.of<StaffBloc>(context).add(DoListStaffEvent());
@@ -41,7 +41,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
 
   @override
   Widget build(BuildContext context) {
-    final String acceptStatus = 'Checkin';
+    final String checkinStatus = 'Checkin';
+    final String checkingStatus = 'Checking';
     return Scaffold(
       appBar: AppBar(
         title: Text('Order Information'),
@@ -77,7 +78,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.assignDetail[0].customer.fullname,
+                              state.assignDetail[0].customer.fullname ??
+                                  'empty',
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -97,7 +99,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.assignDetail[0].customer.phoneNumber,
+                              state.assignDetail[0].customer.phoneNumber ??
+                                  'empty',
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -117,7 +120,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.assignDetail[0].checkinTime,
+                              state.assignDetail[0].bookingTime ?? 'empty',
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -137,7 +140,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                           ),
                           Container(
                             child: Text(
-                              state.assignDetail[0].note,
+                              state.assignDetail[0].note ?? 'empty',
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -150,118 +153,133 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                         listener: (builder, statusState) {
                           if (statusState.status ==
                               UpdateStatus.updateStatusSuccess) {
-                            Navigator.pushNamed(context, '/manager');
+                            setState(() {
+                              _visible = !_visible;
+                            });
                           }
                         },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Column(
                           children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.45,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    primary: Colors.blue),
-                                child: Text('Accept',
-                                    style: TextStyle(color: Colors.white)),
-                                onPressed: () {
-                                  updateStatusBloc.add(
-                                      UpdateStatusButtonPressed(
-                                          id: state.assignDetail[0].id,
-                                          status: acceptStatus));
-                                },
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.45,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        primary: Colors.blue),
+                                    child: Text('Checkin',
+                                        style: TextStyle(color: Colors.white)),
+                                    onPressed: () {
+                                      updateStatusBloc.add(
+                                          UpdateStatusButtonPressed(
+                                              id: state.assignDetail[0].id,
+                                              status: checkinStatus));
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Divider(
+                              color: Colors.black87,
+                              height: 20,
+                              thickness: 1,
+                              indent: 10,
+                              endIndent: 10,
+                            ),
+                            Visibility(
+                              visible: _visible,
+                              child: Container(
+                                child: BlocBuilder<StaffBloc, StaffState>(
+                                    // ignore: missing_return
+                                    builder: (builder, staffState) {
+                                  if (staffState is StaffInitState) {
+                                    return CircularProgressIndicator();
+                                  } else if (staffState is StaffLoadingState) {
+                                    return CircularProgressIndicator();
+                                  } else if (staffState
+                                      is StaffListSuccessState) {
+                                    return Column(
+                                      children: [
+                                        DropdownButton<String>(
+                                          hint: Text('Select Staff'),
+                                          items: staffState.staffList
+                                              .map((valueItem) {
+                                            return DropdownMenuItem<String>(
+                                              child: Text(valueItem.taiKhoan),
+                                              value: valueItem.taiKhoan,
+                                            );
+                                          }).toList(),
+                                          onChanged: (newValue) {
+                                            setState(() {
+                                              this.selectItem = newValue;
+                                            });
+                                          },
+                                          value: selectItem,
+                                        ),
+                                        ElevatedButton(
+                                          child: Text('Checking'),
+                                          onPressed: () {
+                                            updateStatusBloc.add(
+                                                UpdateStatusButtonPressed(
+                                                    id: state
+                                                        .assignDetail[0].id,
+                                                    status: checkingStatus));
+                                            // getDropDownItem,
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        AssignOrderReviewUi(
+                                                            userId: state
+                                                                .assignDetail[0]
+                                                                .id,
+                                                            staffId:
+                                                                selectItem)));
+                                          },
+                                        ),
+                                        Container(
+                                          child: Text('$holder'),
+                                        ),
+                                      ],
+                                    );
+                                  } else if (state is StaffListErrorState) {
+                                    return ErrorWidget(
+                                        state.message.toString());
+                                  }
+                                  ;
+                                }),
                               ),
                             ),
-                           
                           ],
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.45,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.blue),
-                              child: Text('Check-in',
-                                  style: TextStyle(color: Colors.white)),
-                              onPressed: () {
-                                setState(() {
-                                  _visible = !_visible;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Divider(
-                        color: Colors.black87,
-                        height: 20,
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
-                      Visibility(
-                        visible: _visible,
-                        child: Container(
-                          child: BlocBuilder<StaffBloc, StaffState>(
-                              // ignore: missing_return
-                              builder: (builder, staffState) {
-                            if (staffState is StaffInitState) {
-                              return CircularProgressIndicator();
-                            } else if (staffState is StaffLoadingState) {
-                              return CircularProgressIndicator();
-                            } else if (staffState is StaffListSuccessState) {
-                              return Column(
-                                children: [
-                                  DropdownButton<String>(
-                                    hint: Text('Select Staff'),
-                                    items:
-                                        staffState.staffList.map((valueItem) {
-                                      return DropdownMenuItem<String>(
-                                        child: Text(valueItem.taiKhoan),
-                                        value: valueItem.taiKhoan,
-                                      );
-                                    }).toList(),
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        this.selectItem = newValue;
-                                      });
-                                    },
-                                    value: selectItem,
-                                  ),
-                                  ElevatedButton(
-                                    child: Text('Checking'),
-                                    onPressed: () {
-                                      // getDropDownItem,
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (_) =>
-                                                  AssignOrderReviewUi(
-                                                      userId: state
-                                                          .assignDetail[0].id,
-                                                      staffId: selectItem)));
-                                    },
-                                  ),
-                                  Container(
-                                    child: Text('$holder'),
-                                  ),
-                                ],
-                              );
-                            } else if (state is StaffListErrorState) {
-                              return ErrorWidget(state.message.toString());
-                            }
-                            ;
-                          }),
-                        ),
-                      )
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     SizedBox(
+                      //       width: MediaQuery.of(context).size.width * 0.45,
+                      //       child: ElevatedButton(
+                      //         style: ElevatedButton.styleFrom(
+                      //             primary: Colors.blue),
+                      //         child: Text('Check-in',
+                      //             style: TextStyle(color: Colors.white)),
+                      //         onPressed: () {
+                      //           setState(() {
+                      //             _visible = !_visible;
+                      //           });
+                      //         },
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 );
               else
                 return Center(child: Text('Empty'));
             } else if (state.detailStatus == AssignDetailStatus.error) {
-              return ErrorWidget(state.message.toString());
+              return Text(state.message.toString());
             }
           },
         ),
