@@ -271,12 +271,12 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                           // ignore: missing_return
                           listener: (builder, statusState) {
                             if (statusState.status ==
-                                UpdateStatus.updateStatusSuccess) {
-                              // Navigator.pushNamed(context, '/manager');
+                                UpdateStatus.updateStatusStartSuccess) {
+                              Navigator.pushNamed(context, '/manager');
                             }
                           },
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.6,
@@ -286,7 +286,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                   child: Text('Start Process',
                                       style: TextStyle(color: Colors.white)),
                                   onPressed: () {
-                                    UpdateStatusButtonPressed(
+                                    UpdateStatusStartButtonPressed(
                                         id: state.assignDetail[0].id,
                                         status: processingStatus);
                                   },

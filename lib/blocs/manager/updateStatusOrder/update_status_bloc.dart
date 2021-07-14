@@ -46,6 +46,7 @@ class UpdateStatusOrderBloc
         // print(jsonData);
         if (data != null) {
           yield state.copyWith(status: UpdateStatus.updateStatusStartSuccess);
+          print('Start Success');
         } else {
           yield state.copyWith(
               status: UpdateStatus.error, message: 'Error Update');
