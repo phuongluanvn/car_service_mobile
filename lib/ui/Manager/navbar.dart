@@ -1,3 +1,4 @@
+import 'package:car_service/ui/Customer/NotificationUI.dart';
 import 'package:car_service/ui/Manager/OrderManagement/ManagementBookingOrder.dart';
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingUi.dart';
 import 'package:car_service/ui/Manager/ManagerProfile.dart';
@@ -10,11 +11,12 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
-  int _selectedIndex =1;
+  int _selectedIndex = 1;
   List<Widget> _widgetOptions = <Widget>[
     StaffUi(),
     ManagementBookingOrder(),
     ManagerProfile(),
+    NotificationUI(),
   ];
 
   void _onItemTap(int index) {
@@ -33,33 +35,38 @@ class _NavBarState extends State<NavBar> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.home,
+              Icons.engineering,
+              color: Colors.blue,
             ),
-            title: Text(
-              'Staff',
-            ),
+            label: 'Nhân viên',
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.message,
+              Icons.description,
+              color: Colors.blue,
             ),
-            title: Text(
-              'Management',
-            ),
+            label: 'Đơn hàng',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person,
+              color: Colors.blue,
             ),
-            title: Text(
-              'Profile',
+            label: 'Thông tin',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.notifications,
+              color: Colors.blue,
             ),
+            label: 'Thông báo',
           ),
         ],
         currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue,
         onTap: _onItemTap,
-        selectedFontSize: 13.0,
-        unselectedFontSize: 13.0,
+        selectedFontSize: 12.0,
+        unselectedFontSize: 12.0,
       ),
     );
   }

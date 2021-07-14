@@ -1,5 +1,6 @@
 import 'package:car_service/ui/Customer/CarManagement/CustomerCarUI.dart';
 import 'package:car_service/ui/Customer/CustomerProfile.dart';
+import 'package:car_service/ui/Customer/NotificationUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/ManageOrderTab.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class _NavState extends State<Nav> {
     ManageOrderTab(),
     CustomerCarUi(),
     CustomerProfile(),
+    NotificationUI(),
   ];
 
   void _onItemTap(int index) {
@@ -30,36 +32,43 @@ class _NavState extends State<Nav> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
               Icons.description,
+              color: Colors.blue,
             ),
-            title: Text(
-              'Order',
-            ),
+            label: 'Đơn hàng',
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.home,
+              Icons.drive_eta,
+              color: Colors.blue,
             ),
-            title: Text(
-              'Home',
-            ),
+            label: 'Xe của tôi',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person,
+              color: Colors.blue,
             ),
-            title: Text(
-              'Profile',
+            label: 'Thông tin',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.notifications,
+              color: Colors.blue,
             ),
+            label: 'Thông báo',
+            // backgroundColor: Colors.blue87,
           ),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTap,
         selectedFontSize: 12.0,
         unselectedFontSize: 12.0,
+        // fixedColor: Colors.blue,
+        selectedItemColor: Colors.blue,
       ),
     );
   }

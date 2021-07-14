@@ -1,10 +1,5 @@
-import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
+import 'package:car_service/ui/Customer/OrderManagement/ConfirmOrderManagement/ConfirmOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderUI.dart';
-import 'package:car_service/ui/Manager/ManagerAccountUi.dart';
-import 'package:car_service/ui/Manager/OrderManagement/ProcessOrderManagement/ProcessOrderUi.dart';
-import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingUi.dart';
-import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderUi.dart';
-
 import 'package:flutter/material.dart';
 
 class TabOrderCustomer extends StatefulWidget {
@@ -16,7 +11,8 @@ class _TabOrderState extends State<TabOrderCustomer> {
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = <Widget>[
     CustomerOrderUi(),
-    AssignOrderUi(),
+    // ConfirmOrderUI(orderId: '7380a13f-bfc1-4cd8-9847-7c95ae7f8fc1',),
+    ConfirmOrderUI(),
   ];
 
   void _onItemTap(int index) {
@@ -33,25 +29,25 @@ class _TabOrderState extends State<TabOrderCustomer> {
         appBar: AppBar(
           title: Text('Order'),
           automaticallyImplyLeading: false,
-          actions: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(right: 20),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => ManagerAccountUi()));
-                },
-                child: Icon(Icons.create),
-              ),
-            )
-          ],
+          // actions: <Widget>[
+          //   Padding(
+          //     padding: EdgeInsets.only(right: 20),
+          //     child: GestureDetector(
+          //       onTap: () {
+          //         Navigator.of(context).push(
+          //             MaterialPageRoute(builder: (_) => ManagerAccountUi()));
+          //       },
+          //       child: Icon(Icons.create),
+          //     ),
+          //   )
+          // ],
           bottom: TabBar(
             tabs: <Widget>[
               Tab(
-                text: 'Đơn hàng',
+                text: 'Đơn hàng hiện tại',
               ),
               Tab(
-                text: 'Lịch sử',
+                text: 'Cần xác nhận',
               ),
             ],
           ),

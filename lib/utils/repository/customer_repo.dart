@@ -176,7 +176,6 @@ class CustomerRepository {
       Uri.parse("https://carservicesystem.azurewebsites.net/api/Services"),
       headers: headers,
     );
-    print(res);
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
       if (data != null) {
@@ -200,7 +199,6 @@ class CustomerRepository {
     );
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
-      print(data);
       if (data != null) {
         data
             .map((order) =>
@@ -222,8 +220,6 @@ class CustomerRepository {
               namuName),
       headers: headers,
     );
-    print('model Manufacturer in repo');
-    print(res.body);
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
       print(data);

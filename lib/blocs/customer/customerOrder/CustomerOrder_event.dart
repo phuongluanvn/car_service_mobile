@@ -14,4 +14,6 @@ class DoOrderDetailEvent extends CustomerOrderEvent {
   List<Object> get props => [id];
 }
 
-class VerifyBookingTabPressed extends CustomerOrderEvent {}
+
+
+class DoConfirmOrderEvent extends CustomerOrderEvent {}

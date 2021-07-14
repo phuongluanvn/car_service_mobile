@@ -55,10 +55,34 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                           var status = state.orderLists[index].status;
                           switch (status) {
                             case 'Booked':
-                              color = Colors.orange[200];
+                              color = Colors.orange[600];
+                              break;
+                            case 'Accepted':
+                              color = Colors.green[200];
                               break;
                             case 'Checkin':
-                              color = Colors.blue;
+                              color = Colors.blue[400];
+                              break;
+                            case 'Checking':
+                              color = Colors.blue[700];
+                              break;
+                            case 'Waiting confirm':
+                              color = Colors.orange;
+                              break;
+                            case 'Confirmed':
+                              color = Colors.teal[300];
+                              break;
+                            case 'Denied':
+                              color = Colors.red[600];
+                              break;
+                            case 'Working':
+                              color = Colors.green[300];
+                              break;
+                            case 'Complete':
+                              color = Colors.green[600];
+                              break;
+                            case 'Cancle':
+                              color = Colors.red;
                               break;
 //con nhieu case nua lam sau
                             default:
@@ -74,7 +98,10 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                                       Icons.circle,
                                       color: color,
                                     ),
-                                    Text(state.orderLists[index].status),
+                                    Text(
+                                      state.orderLists[index].status,
+                                      style: TextStyle(color: color),
+                                    ),
                                   ]),
                               leading: FlutterLogo(),
                               title: Text(
@@ -82,7 +109,6 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                               subtitle: Text(
                                   state.orderLists[index].vehicle.manufacturer),
                               onTap: () {
-                                print(state.orderLists[index].id);
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (_) => CustomerOrderDetailUi(
                                         orderId: state.orderLists[index].id)));

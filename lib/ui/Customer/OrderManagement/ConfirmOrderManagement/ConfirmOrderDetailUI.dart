@@ -4,35 +4,22 @@ import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CustomerOrderDetailUi extends StatefulWidget {
+class ConfirmOrderDetailUi extends StatefulWidget {
   final String orderId;
-  CustomerOrderDetailUi({@required this.orderId});
+  ConfirmOrderDetailUi({@required this.orderId});
 
   @override
-  _CustomerOrderDetailUiState createState() => _CustomerOrderDetailUiState();
+  _ConfirmOrderDetailUiState createState() => _ConfirmOrderDetailUiState();
 }
 
-class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
+class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
   @override
+  bool _visibleByDenied = false;
   void initState() {
     super.initState();
     BlocProvider.of<CustomerOrderBloc>(context)
         .add(DoOrderDetailEvent(id: widget.orderId));
   }
-
-  List<Step> steps = [
-    Step(
-      title: Text('?????'),
-      state: StepState.complete,
-      isActive: false,
-      content: Text('data'),
-    ),
-    Step(
-      title: Text('?????'),
-      isActive: true,
-      content: Text('data'),
-    )
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -73,17 +60,26 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                           state.orderDetail[0].vehicle.manufacturer,
                           state.orderDetail[0].vehicle.model,
                           state.orderDetail[0].vehicle.licensePlate),
-
-                      // SizedBox(
-                      //   width: double.infinity,
-                      //   height: 35,
-                      //   child: RaisedButton(
-                      //     child: Text('Submit',
-                      //         style: TextStyle(color: Colors.white)),
-                      //     color: Theme.of(context).primaryColor,
-                      //     onPressed: () {},
-                      //   ),
-                      // )
+                      ListTile(
+                        leading: RaisedButton(
+                          child: Text('Đồng ý',
+                              style: TextStyle(color: Colors.white)),
+                          color: Theme.of(context).primaryColor,
+                          onPressed: () {
+                            _visibleByDenied = false;
+                          },
+                        ),
+                        trailing: RaisedButton(
+                          child: Text('Từ chối',
+                              style: TextStyle(color: Colors.white)),
+                          color: Theme.of(context).errorColor,
+                          onPressed: () {
+                            _visibleByDenied = true;
+                            print('object');
+                          },
+                        ),
+                      ),
+                      Visibility(visible: _visibleByDenied, child: Text('data'))
                     ],
                   ),
                 );
