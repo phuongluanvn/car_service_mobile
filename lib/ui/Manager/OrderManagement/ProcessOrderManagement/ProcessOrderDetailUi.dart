@@ -32,7 +32,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
 
     BlocProvider.of<ProcessOrderBloc>(context)
         .add(DoProcessOrderDetailEvent(email: widget.orderId));
-    BlocProvider.of<StaffBloc>(context).add(DoListStaffEvent());
+    BlocProvider.of<ManageStaffBloc>(context).add(DoListStaffEvent());
   }
 
   void getDropDownItem() {
@@ -335,7 +335,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                     style: TextStyle(color: Colors.white)),
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => CheckoutOrderUi()));
+                                      builder: (_) => CheckoutOrderUi(orderId: state.processDetail[0].id,)));
                                 },
                               ),
                             ),

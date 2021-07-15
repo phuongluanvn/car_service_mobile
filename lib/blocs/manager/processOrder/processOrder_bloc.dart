@@ -1,4 +1,3 @@
-
 import 'package:car_service/blocs/manager/processOrder/processOrder_events.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
@@ -42,7 +41,8 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
     } else if (event is DoProcessOrderDetailEvent) {
       yield state.copyWith(detailStatus: ProcessDetailStatus.loading);
       try {
-        List<OrderDetailModel> data = await _repo.getVerifyOrderDetail(event.email);
+        List<OrderDetailModel> data =
+            await _repo.getVerifyOrderDetail(event.email);
         if (data != null) {
           yield state.copyWith(
             detailStatus: ProcessDetailStatus.success,

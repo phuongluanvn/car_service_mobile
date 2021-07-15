@@ -1,16 +1,16 @@
 import 'package:equatable/equatable.dart';
 
-abstract class StaffEvent extends Equatable {
+abstract class ManageStaffEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
 
-class DoListStaffEvent extends StaffEvent {}
-class DoListServiceEvent extends StaffEvent {}
+class DoListStaffEvent extends ManageStaffEvent {}
+class DoListServiceEvent extends ManageStaffEvent {}
 
-class DoStaffDetailEvent extends StaffEvent {
-  final String email;
-  DoStaffDetailEvent({this.email});
+class DoStaffDetailEvent extends ManageStaffEvent {
+  final String username;
+  DoStaffDetailEvent({this.username});
 }
 
-class StaffTabPressed extends StaffEvent {}
+class StaffTabPressed extends ManageStaffEvent {}

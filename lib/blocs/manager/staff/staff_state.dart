@@ -1,33 +1,56 @@
-import 'package:car_service/utils/model/ServiceModel.dart';
+
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:equatable/equatable.dart';
 
-// enum StaffStatus{init,loading,}
-class StaffState extends Equatable {
-  @override
-  List<Object> get props => [];
+enum StaffStatus {
+  init,
+  loading,
+  staffListsuccess,
+  staffDetailsuccess,
+  error,
 }
 
-class StaffInitState extends StaffState {}
-
-class StaffLoadingState extends StaffState {}
-
-class StaffListSuccessState extends StaffState {
-  List<StaffModel> staffList;
-  StaffListSuccessState({this.staffList});
+enum StaffDetailStatus {
+  init,
+  loading,
+  success,
+  error,
 }
 
-class ServiceListSuccessState extends StaffState {
-  List<ServiceModel> svList;
-  ServiceListSuccessState({this.svList});
-}
-
-class StaffDetailSucessState extends StaffState {
-  List<StaffModel> data;
-  StaffDetailSucessState({this.data});
-}
-
-class StaffListErrorState extends StaffState {
+class ManageStaffState extends Equatable {
+  final StaffStatus status;
+  final StaffDetailStatus detailStatus;
+  final List<StaffModel> staffList;
+  final List<StaffModel> staffDetail;
   final String message;
-  StaffListErrorState({this.message});
+  const ManageStaffState({
+    this.status: StaffStatus.init,
+    this.detailStatus: StaffDetailStatus.init,
+    this.staffDetail: const [],
+    this.staffList: const [],
+    this.message: '',
+  });
+
+  ManageStaffState copyWith({
+    StaffStatus status,
+    StaffDetailStatus detailStatus,
+    List<StaffModel> staffList,
+    List<StaffModel> staffDetail,
+    String message,
+  }) =>
+      ManageStaffState(
+        status: status ?? this.status,
+        detailStatus: detailStatus ?? this.detailStatus,
+        staffList: staffList ?? this.staffList,
+        staffDetail: staffDetail ?? this.staffDetail,
+        message: message ?? this.message,
+      );
+  @override
+  List<Object> get props => [
+        status,
+        detailStatus,
+        staffList,
+        staffDetail,
+        message,
+      ];
 }

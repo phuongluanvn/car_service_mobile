@@ -99,46 +99,52 @@ class ManagerRepository {
 
   Future<List<StaffModel>> getStaffList() async {
     List<StaffModel> staffList = [];
+
+    var resStaff = await http.get(
+      Uri.parse("https://carservicesystem.azurewebsites.net/api/employees"),
+      headers: headers,
+    );
+    if (resStaff.statusCode == 200) {
+      var dataProcessing = json.decode(resStaff.body);
+
+      if (dataProcessing != null) {
+        dataProcessing
+            .map((order) => staffList.add(StaffModel.fromJson(order)))
+            .toList();
+        var newList = [...staffList];
+        print('????');
+        print(newList);
+        return newList;
+      } else {
+        return null;
+      }
+    } else {
+      print('No test order data');
+      return null;
+    }
+  }
+
+  Future<List<StaffModel>> getStaffDetail(String username) async {
+    List<StaffModel> listdata = [];
+    List convertData = [];
+
     var res = await http.get(
-      Uri.parse(
-          "https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP03"),
+      Uri.parse('https://carservicesystem.azurewebsites.net/api/employees/' +
+          username),
       headers: headers,
     );
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
-      print("object");
-      print(data);
-      if (data != null) {
-        data.map((staff) => staffList.add(StaffModel.fromJson(staff))).toList();
-        print('lala');
-        print(staffList);
-        return staffList;
-      } else {
-        print('No data');
-      }
-    }
-  }
-
-  Future<List<StaffModel>> getStaffDetail(String email) async {
-    var res = await http.get(
-      Uri.parse(
-          'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP03&tuKhoa=' +
-              email),
-      headers: headers,
-    );
-    if (res.statusCode == 200) {
-      List<dynamic> data = json.decode(res.body);
+      convertData.add(data); //thêm [] để dùng .map bêndưới
 
       try {
         if (data != null) {
-          List<StaffModel> listdata = [];
-          data.forEach((element) {
-            Map<String, dynamic> map = element;
-            listdata.add(StaffModel.fromJson(map));
-          });
+          convertData
+              .map((element) => listdata.add(StaffModel.fromJson(element)))
+              .toList();
           return listdata;
         } else {
-          print('No data');
+          print('No detail order data');
         }
       } catch (e) {
         print(e.toString());
@@ -193,6 +199,7 @@ class ManagerRepository {
   Future<List<OrderDetailModel>> getAssingOrderList() async {
     List<OrderDetailModel> checkinList = [];
     List<OrderDetailModel> acceptedList = [];
+    List<OrderDetailModel> checkingList = [];
 
     var resAccepted = await http.get(
       Uri.parse(
@@ -204,18 +211,29 @@ class ManagerRepository {
           "https://carservicesystem.azurewebsites.net/api/Orders?status=Checkin"),
       headers: headers,
     );
-    if (resAccepted.statusCode == 200 && resCheckin.statusCode == 200) {
+    var resChecking = await http.get(
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Checking"),
+      headers: headers,
+    );
+    if (resAccepted.statusCode == 200 &&
+        resCheckin.statusCode == 200 &&
+        resChecking.statusCode == 200) {
       var dataAccepted = json.decode(resAccepted.body);
       var dataCheckin = json.decode(resCheckin.body);
+      var dataChecking = json.decode(resChecking.body);
 
-      if (dataAccepted != null && dataCheckin != null) {
+      if (dataAccepted != null && dataCheckin != null && dataChecking != null) {
         dataAccepted
             .map((order) => acceptedList.add(OrderDetailModel.fromJson(order)))
             .toList();
         dataCheckin
             .map((order) => checkinList.add(OrderDetailModel.fromJson(order)))
             .toList();
-        var newList = [...acceptedList, ...checkinList];
+        dataChecking
+            .map((order) => checkingList.add(OrderDetailModel.fromJson(order)))
+            .toList();
+        var newList = [...acceptedList, ...checkinList, ...checkingList];
         print('????');
         print(newList);
         return newList;
@@ -256,7 +274,6 @@ class ManagerRepository {
     }
   }
 
-  
   Future<List<OrderDetailModel>> getTestList() async {
     List<OrderDetailModel> orderLists = [];
     var res = await http.get(
@@ -322,6 +339,49 @@ class ManagerRepository {
         return res.body;
       }
     } else {
+      return null;
+    }
+  }
+
+  Future<List<OrderDetailModel>> getOrderHistoryList() async {
+    List<OrderDetailModel> finishList = [];
+    List<OrderDetailModel> cancelList = [];
+
+    var resAccepted = await http.get(
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Finish"),
+      headers: headers,
+    );
+    var resCheckin = await http.get(
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Cancel"),
+      headers: headers,
+    );
+
+    if (resAccepted.statusCode == 200 && resCheckin.statusCode == 200) {
+      var dataAccepted = json.decode(resAccepted.body);
+      var dataCheckin = json.decode(resCheckin.body);
+
+      if (dataAccepted != null && dataCheckin != null) {
+        dataAccepted
+            .map((order) => finishList.add(OrderDetailModel.fromJson(order)))
+            .toList();
+        dataCheckin
+            .map((order) => cancelList.add(OrderDetailModel.fromJson(order)))
+            .toList();
+
+        var newList = [
+          ...finishList,
+          ...cancelList,
+        ];
+        print('????');
+        print(newList);
+        return newList;
+      } else {
+        return null;
+      }
+    } else {
+      print('No test order data');
       return null;
     }
   }

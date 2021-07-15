@@ -36,7 +36,7 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
 
     // BlocProvider.of<ProcessOrderBloc>(context)
     //     .add(DoProcessOrderDetailEvent(email: widget.emailId));
-    BlocProvider.of<StaffBloc>(context).add(DoListServiceEvent());
+    BlocProvider.of<ManageStaffBloc>(context).add(DoListServiceEvent());
   }
 
   void onChanged(bool value) {
@@ -78,14 +78,14 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
         ),
       ),
       body: Container(
-        child: BlocBuilder<StaffBloc, StaffState>(
+        child: BlocBuilder<ManageStaffBloc, ManageStaffState>(
           // ignore: missing_return
           builder: (context, state) {
-            if (state is StaffInitState) {
+            if (state.status == StaffStatus.init) {
               return CircularProgressIndicator();
-            } else if (state is StaffLoadingState) {
+            } else if (state.status == StaffStatus.init) {
               return CircularProgressIndicator();
-            } else if (state is ServiceListSuccessState) {
+            } else if (state.status == StaffStatus.init) {
               return Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: SingleChildScrollView(
@@ -132,10 +132,10 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                   ),
                                 ),
                               ],
-                              rows: state.svList
+                              rows: state.staffList
                                   .map((data) => DataRow(cells: [
-                                        DataCell(Text(data.name)),
-                                        DataCell(Text(data.price.toString())),
+                                        DataCell(Text(data.fullname)),
+                                        DataCell(Text(data.role.toString())),
                                         DataCell(Checkbox(
                                           value: checkedValue,
                                           onChanged: (bool value) {
@@ -193,7 +193,7 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                   ),
                                 ),
                               ],
-                              rows: state.svList
+                              rows: state.staffList
                                   .map((data) =>
                                       // we return a DataRow every time
                                       DataRow(
@@ -207,9 +207,9 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                             //     : Icon(Icons.cancel, color: Colors.red)),
                                             // I want to display a green color icon when user is verified and red when unverified
 
-                                            DataCell(Text(data.name)),
+                                            DataCell(Text(data.fullname)),
                                             DataCell(
-                                                Text(data.price.toString())),
+                                                Text(data.role.toString())),
                                             DataCell(Checkbox(
                                               value: checkedValue,
                                               onChanged: (bool value) {
@@ -260,7 +260,7 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                 // ),
                 // ),
               );
-            } else if (state is StaffListErrorState) {
+            } else if (state.status == StaffStatus.error) {
               return ErrorWidget(state.message.toString());
             }
           },

@@ -1,36 +1,44 @@
 class StaffModel {
-  String taiKhoan;
-  String hoTen;
+  String username;
+  String role;
+  String fullname;
+  String phoneNumber;
   String email;
-  String soDt;
-  String matKhau;
-  String maLoaiNguoiDung;
+  String address;
+  String dateOfBirth;
+  String status;
 
   StaffModel(
-      {this.taiKhoan,
-      this.hoTen,
+      {this.username,
+      this.role,
+      this.fullname,
+      this.phoneNumber,
       this.email,
-      this.soDt,
-      this.matKhau,
-      this.maLoaiNguoiDung});
+      this.address,
+      this.dateOfBirth,
+      this.status});
 
   StaffModel.fromJson(Map<String, dynamic> json) {
-    taiKhoan = json['taiKhoan'];
-    hoTen = json['hoTen'];
+    username = json['username'];
+    role = json['role'];
+    fullname = json['fullname'];
+    phoneNumber = json['phoneNumber'];
     email = json['email'];
-    soDt = json['soDt'];
-    matKhau = json['matKhau'];
-    maLoaiNguoiDung = json['maLoaiNguoiDung'];
+    address = json['address'];
+    dateOfBirth = json['dateOfBirth'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['taiKhoan'] = this.taiKhoan;
-    data['hoTen'] = this.hoTen;
+    data['username'] = this.username;
+    data['role'] = this.role;
+    data['fullname'] = this.fullname;
+    data['phoneNumber'] = this.phoneNumber;
     data['email'] = this.email;
-    data['soDt'] = this.soDt;
-    data['matKhau'] = this.matKhau;
-    data['maLoaiNguoiDung'] = this.maLoaiNguoiDung;
+    data['address'] = this.address;
+    data['dateOfBirth'] = this.dateOfBirth;
+    data['status'] = this.status;
     return data;
   }
 }

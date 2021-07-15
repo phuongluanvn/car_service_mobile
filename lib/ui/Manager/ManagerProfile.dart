@@ -1,4 +1,5 @@
 import 'package:car_service/ui/Manager/ManagerAccountUi.dart';
+import 'package:car_service/ui/Manager/OrderManagement/OrderHistory/OrderHistoryUi.dart';
 import 'package:flutter/material.dart';
 
 class ManagerProfile extends StatelessWidget {
@@ -60,7 +61,10 @@ class ManagerProfile extends StatelessWidget {
               child: Container(
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => OrderHistoryUi()));
+                  },
                   child: Row(
                     children: [
                       Expanded(child: Text('Order History')),

@@ -30,7 +30,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     BlocProvider.of<AssignOrderBloc>(context)
         .add(DoAssignOrderDetailEvent(id: widget.orderId));
-    BlocProvider.of<StaffBloc>(context).add(DoListStaffEvent());
+    BlocProvider.of<ManageStaffBloc>(context).add(DoListStaffEvent());
   }
 
   void getDropDownItem() {
@@ -191,15 +191,15 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                             Visibility(
                               visible: _visible,
                               child: Container(
-                                child: BlocBuilder<StaffBloc, StaffState>(
+                                child: BlocBuilder<ManageStaffBloc, ManageStaffState>(
                                     // ignore: missing_return
                                     builder: (builder, staffState) {
-                                  if (staffState is StaffInitState) {
+                                  if (staffState.status == StaffStatus.init) {
                                     return CircularProgressIndicator();
-                                  } else if (staffState is StaffLoadingState) {
+                                  } else if (staffState.status ==  StaffStatus.loading) {
                                     return CircularProgressIndicator();
-                                  } else if (staffState
-                                      is StaffListSuccessState) {
+                                  } else if (staffState.status
+                                      == StaffStatus.staffListsuccess) {
                                     return Column(
                                       children: [
                                         DropdownButton<String>(
@@ -207,8 +207,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                           items: staffState.staffList
                                               .map((valueItem) {
                                             return DropdownMenuItem<String>(
-                                              child: Text(valueItem.taiKhoan),
-                                              value: valueItem.taiKhoan,
+                                              child: Text(valueItem.fullname),
+                                              value: valueItem.fullname,
                                             );
                                           }).toList(),
                                           onChanged: (newValue) {
@@ -243,7 +243,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                         ),
                                       ],
                                     );
-                                  } else if (state is StaffListErrorState) {
+                                  } else if (staffState.status == StaffStatus.error) {
                                     return ErrorWidget(
                                         state.message.toString());
                                   }

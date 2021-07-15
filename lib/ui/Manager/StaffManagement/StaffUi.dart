@@ -1,4 +1,5 @@
-import 'package:car_service/blocs/manager/staff/staff_cubit.dart';
+import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
+import 'package:car_service/blocs/manager/staff/staff_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/ui/Manager/StaffManagement/StaffDetailUi.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
@@ -14,7 +15,7 @@ class _StaffUiState extends State<StaffUi> {
   @override
   void initState() {
     super.initState();
-    context.read<StaffCubit>().getStaffList();
+    context.read<ManageStaffBloc>().add(DoListStaffEvent());
   }
 
   @override
@@ -31,95 +32,54 @@ class _StaffUiState extends State<StaffUi> {
       ),
       backgroundColor: Colors.blue[100],
       body: Center(
-        child: BlocBuilder<StaffCubit, StaffState>(
+        child: BlocBuilder<ManageStaffBloc, ManageStaffState>(
           // ignore: missing_return
           builder: (context, state) {
-            if (state is StaffInitState) {
+            if (state.status == StaffStatus.init) {
               return CircularProgressIndicator();
-            } else if (state is StaffLoadingState) {
+            } else if (state.status == StaffStatus.loading) {
               return CircularProgressIndicator();
-            } else if (state is StaffListSuccessState) {
+            } else if (state.status == StaffStatus.staffListsuccess) {
               return ListView.builder(
                 itemCount: state.staffList.length,
                 shrinkWrap: true,
+                // ignore: missing_return
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(state.staffList[index].taiKhoan),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => StaffDetailUi(
-                              emailId: state.staffList[index].taiKhoan)));
-                    },
-                  );
-                  // Container(
-                  //   width: MediaQuery.of(context).size.width,
-                  //   padding:
-                  //       EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                  //   child: Card(
-                  //     elevation: 5.0,
-                  //     shape: RoundedRectangleBorder(
-                  //       borderRadius: BorderRadius.circular(10.0),
-                  //     ),
-                  //     child: GestureDetector(
-                  //       child: Container(
-                  //         width: MediaQuery.of(context).size.width,
-                  //         padding: EdgeInsets.symmetric(
-                  //             horizontal: 10.0, vertical: 10.0),
-                  //         child: Row(
-                  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //           crossAxisAlignment: CrossAxisAlignment.start,
-                  //           children: <Widget>[
-                  //             Row(
-                  //               crossAxisAlignment: CrossAxisAlignment.start,
-                  //               children: <Widget>[
-                  //                 Container(
-                  //                   width: 70.0,
-                  //                   height: 70.0,
-                  //                   decoration: BoxDecoration(
-                  //                       borderRadius:
-                  //                           BorderRadius.circular(5.0)),
-                  //                   child: CircleAvatar(
-                  //                     radius: 5.0,
-                  //                     backgroundColor: Colors.blue[300],
-                  //                     foregroundColor: Colors.green[300],
-                  //                   ),
-                  //                 ),
-                  //                 SizedBox(width: 30.0),
-                  //                 Column(
-                  //                   crossAxisAlignment:
-                  //                       CrossAxisAlignment.start,
-                  //                   children: <Widget>[
-                  //                     Text(
-                  //                       state.staffList[index].hoTen,
-                  //                       style: TextStyle(
-                  //                           color: Colors.black,
-                  //                           fontSize: 25.0,
-                  //                           fontWeight: FontWeight.bold),
-                  //                     ),
-                  //                     Text(
-                  //                       state.staffList[index].email,
-                  //                       style: TextStyle(
-                  //                           color: Colors.black45,
-                  //                           fontSize: 15.0),
-                  //                     ),
-                  //                   ],
-                  //                 )
-                  //               ],
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //       onTap: () {
-                  //         Navigator.of(context).push(MaterialPageRoute(
-                  //             builder: (_) => StaffDetailUi(
-                  //                 emailId: state.staffList[index].email)));
-                  //       },
-                  //     ),
-                  //   ),
-                  // );
+                  // if (state.assignList[index].status == 'Accepted') {
+                  return Card(
+                      // child: (state.assignList[0].status == 'Checkin')
+                      //     ?
+                      child: Column(children: [
+                    ListTile(
+                      trailing: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Icon(
+                              Icons.circle,
+                              color: Colors.greenAccent[400],
+                            ),
+                            Text(state.staffList[index].status),
+                          ]),
+                      leading: FlutterLogo(),
+                      title: Text(state.staffList[index].fullname),
+                      subtitle: Text(state.staffList[index].status.toString()),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => StaffDetailUi(
+                                username: state.staffList[index].username)));
+                      },
+                    ),
+                  ])
+                      // : SizedBox(),
+                      );
+                  // } else {
+                  //   return Center(
+                  //     child: Text('Empty'),
+                  //   );
+                  // }
                 },
               );
-            } else if (state is StaffListErrorState) {
+            } else if (state.status == StaffStatus.error) {
               return ErrorWidget(state.message.toString());
             }
             return SizedBox();

@@ -12,9 +12,9 @@ import 'package:car_service/blocs/login/auth_state.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
 import 'package:car_service/blocs/manager/booking/booking_bloc.dart';
 import 'package:car_service/blocs/manager/createOrder/createOrder_bloc.dart';
+import 'package:car_service/blocs/manager/orderHistory/orderHistory_bloc.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
-import 'package:car_service/blocs/manager/staff/staff_cubit.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
 import 'package:car_service/blocs/sign_up/sign_up_bloc.dart';
@@ -23,6 +23,7 @@ import 'package:car_service/ui/Customer/CustomerMainUI.dart';
 import 'package:car_service/ui/LoginUi.dart';
 import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Staff/StaffHome.dart';
+import 'package:car_service/utils/model/BookingModel.dart';
 import 'package:car_service/utils/repository/auth_repo.dart';
 import 'package:car_service/utils/repository/customer_repo.dart';
 import 'package:car_service/utils/repository/manager_repo.dart';
@@ -68,21 +69,20 @@ class Auth extends StatelessWidget {
         BlocProvider(
             create: (context) => ProcessOrderBloc(repo: ManagerRepository())),
         BlocProvider(
-            create: (context) => UpdateStatusOrderBloc(repo: ManagerRepository())),    
+            create: (context) => OrderHistoryBloc(repo: ManagerRepository())),
         BlocProvider(
             create: (context) =>
-                StaffBloc(StaffInitState(), ManagerRepository())),
+                UpdateStatusOrderBloc(repo: ManagerRepository())),
+        BlocProvider(
+            create: (context) => ManageStaffBloc(repo: ManagerRepository())),
         // BlocProvider(
         //     create: (context) =>
         //         BookingCubit(VerifyBookingInitState(), ManagerRepository())),
-        BlocProvider(
-            create: (context) =>
-                StaffCubit(StaffInitState(), ManagerRepository())),
       ],
       child: GetMaterialApp(
         initialRoute: '/',
         routes: {
-          '/': (context) => CustomerHome(),
+          '/': (context) => ManagerMain(),
           '/manager': (context) => ManagerMain(),
           '/staff': (context) => StaffHome(),
           '/customer': (context) => CustomerHome(),
