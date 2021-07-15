@@ -27,8 +27,8 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   String _selection = '';
   @override
   void initState() {
-    updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     super.initState();
+    updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     setState(() {
       _selection = widget.staffId;
       print('staff =' + _selection);
@@ -286,9 +286,10 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                   child: Text('Start Process',
                                       style: TextStyle(color: Colors.white)),
                                   onPressed: () {
-                                    UpdateStatusStartButtonPressed(
-                                        id: state.assignDetail[0].id,
-                                        status: processingStatus);
+                                    updateStatusBloc.add(
+                                        UpdateStatusStartButtonPressed(
+                                            id: state.assignDetail[0].id,
+                                            status: processingStatus));
                                   },
                                 ),
                               ),

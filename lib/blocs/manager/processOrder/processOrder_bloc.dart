@@ -20,7 +20,7 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
     if (event is DoListProcessOrderEvent) {
       yield state.copyWith(status: ProcessStatus.loading);
       try {
-        var assignList = await _repo.getBookingOrderList();
+        var assignList = await _repo.getProcessOrderList();
         if (assignList != null) {
           yield state.copyWith(
               processList: assignList, status: ProcessStatus.processSuccess);

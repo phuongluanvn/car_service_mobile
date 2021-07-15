@@ -228,6 +228,35 @@ class ManagerRepository {
     }
   }
 
+  Future<List<OrderDetailModel>> getProcessOrderList() async {
+    List<OrderDetailModel> processList = [];
+
+    var resProcessing = await http.get(
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Processing"),
+      headers: headers,
+    );
+    if (resProcessing.statusCode == 200) {
+      var dataProcessing = json.decode(resProcessing.body);
+
+      if (dataProcessing != null) {
+        dataProcessing
+            .map((order) => processList.add(OrderDetailModel.fromJson(order)))
+            .toList();
+        var newList = [...processList];
+        print('????');
+        print(newList);
+        return newList;
+      } else {
+        return null;
+      }
+    } else {
+      print('No test order data');
+      return null;
+    }
+  }
+
+  
   Future<List<OrderDetailModel>> getTestList() async {
     List<OrderDetailModel> orderLists = [];
     var res = await http.get(

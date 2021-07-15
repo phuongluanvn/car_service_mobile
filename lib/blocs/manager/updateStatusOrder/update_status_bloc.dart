@@ -37,6 +37,7 @@ class UpdateStatusOrderBloc
         );
       }
     } else if (event is UpdateStatusStartButtonPressed) {
+      print('loading');
       yield state.copyWith(status: UpdateStatus.loading);
       try {
         var data = await _repo.updateStatusOrder(event.id, event.status);
