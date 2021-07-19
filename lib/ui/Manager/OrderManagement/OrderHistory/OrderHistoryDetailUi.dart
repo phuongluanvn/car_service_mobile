@@ -1,5 +1,8 @@
 import 'package:car_service/blocs/manager/booking/booking_state.dart';
 import 'package:car_service/blocs/manager/booking/booking_cubit.dart';
+import 'package:car_service/blocs/manager/orderHistory/orderHistory_bloc.dart';
+import 'package:car_service/blocs/manager/orderHistory/orderHistory_events.dart';
+import 'package:car_service/blocs/manager/orderHistory/orderHistory_state.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
@@ -8,29 +11,23 @@ import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/V
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../blocs/manager/booking/booking_bloc.dart';
-import '../../../../blocs/manager/booking/booking_bloc.dart';
-import '../../../../blocs/manager/booking/booking_events.dart';
-import '../../../../blocs/manager/booking/booking_state.dart';
-import '../../../../blocs/manager/booking/booking_state.dart';
-
-class VerifyBookingDetailUi extends StatefulWidget {
+class OrderHistoryDetailUi extends StatefulWidget {
   final String orderId;
 
-  VerifyBookingDetailUi({@required this.orderId});
+  OrderHistoryDetailUi({@required this.orderId});
 
   @override
-  _VerifyBookingDetailUiState createState() => _VerifyBookingDetailUiState();
+  _OrderHistoryDetailUiState createState() => _OrderHistoryDetailUiState();
 }
 
-class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
-  UpdateStatusOrderBloc updateStatusBloc;
+class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
+  // UpdateStatusOrderBloc updateStatusBloc;
   @override
   void initState() {
-    updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
+    // updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     super.initState();
-    BlocProvider.of<VerifyBookingBloc>(context)
-        .add(DoVerifyBookingDetailEvent(email: widget.orderId));
+    BlocProvider.of<OrderHistoryBloc>(context)
+        .add(DoOrderHistoryDetailEvent(id: widget.orderId));
     print(widget.orderId);
   }
 
@@ -46,15 +43,15 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
         ),
       ),
       body: Center(
-        child: BlocBuilder<VerifyBookingBloc, VerifyBookingState>(
+        child: BlocBuilder<OrderHistoryBloc, OrderHistoryState>(
           // ignore: missing_return
           builder: (context, state) {
-            if (state.detailStatus == BookingDetailStatus.init) {
+            if (state.detailStatus == OrderHistoryDetailStatus.init) {
               return CircularProgressIndicator();
-            } else if (state.detailStatus == BookingDetailStatus.loading) {
+            } else if (state.detailStatus == OrderHistoryDetailStatus.loading) {
               return CircularProgressIndicator();
-            } else if (state.detailStatus == BookingDetailStatus.success) {
-              if (state.bookingDetail != null && state.bookingDetail.isNotEmpty)
+            } else if (state.detailStatus == OrderHistoryDetailStatus.success) {
+              if (state.historyDetail != null && state.historyDetail.isNotEmpty)
                 return Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
@@ -64,15 +61,15 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.2,
                             child: Text(
-                              'A:',
+                              'Fullname:',
                               style: TextStyle(fontSize: 16.0),
                             ),
                           ),
                           Container(
                             child: Text(
-                              state.bookingDetail[0].customer.fullname,
+                              state.historyDetail[0].customer.fullname,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -84,15 +81,15 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.2,
                             child: Text(
-                              'B:',
+                              'Email:',
                               style: TextStyle(fontSize: 16.0),
                             ),
                           ),
                           Container(
                             child: Text(
-                              state.bookingDetail[0].customer.email,
+                              state.historyDetail[0].customer.email,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -104,15 +101,15 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.2,
                             child: Text(
-                              'C:',
+                              'Booking time:',
                               style: TextStyle(fontSize: 16.0),
                             ),
                           ),
                           Container(
                             child: Text(
-                              state.bookingDetail[0].bookingTime,
+                              state.historyDetail[0].bookingTime,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -124,61 +121,61 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.2,
                             child: Text(
-                              'D:',
+                              'Status:',
                               style: TextStyle(fontSize: 16.0),
                             ),
                           ),
                           Container(
                             child: Text(
-                              state.bookingDetail[0].status,
+                              state.historyDetail[0].status,
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
                         ],
                       ),
                       Container(height: 16),
-                      BlocListener<UpdateStatusOrderBloc,
-                          UpdateStatusOrderState>(
-                        // ignore: missing_return
-                        listener: (builder, statusState) {
-                          if (statusState.status ==
-                              UpdateStatus.updateStatusSuccess) {
-                            Navigator.pushNamed(context, '/manager');
-                          }
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.45,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    primary: Colors.blue),
-                                child: Text('Accept',
-                                    style: TextStyle(color: Colors.white)),
-                                onPressed: () {
-                                  updateStatusBloc.add(
-                                      UpdateStatusButtonPressed(
-                                          id: state.bookingDetail[0].id,
-                                          status: acceptStatus));
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.45,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    primary: Colors.red),
-                                child: Text('Deny',
-                                    style: TextStyle(color: Colors.white)),
-                                onPressed: () {},
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // BlocListener<UpdateStatusOrderBloc,
+                      //     UpdateStatusOrderState>(
+                      //   // ignore: missing_return
+                      //   listener: (builder, statusState) {
+                      //     if (statusState.status ==
+                      //         UpdateStatus.updateStatusSuccess) {
+                      //       Navigator.pushNamed(context, '/manager');
+                      //     }
+                      //   },
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       SizedBox(
+                      //         width: MediaQuery.of(context).size.width * 0.45,
+                      //         child: ElevatedButton(
+                      //           style: ElevatedButton.styleFrom(
+                      //               primary: Colors.blue),
+                      //           child: Text('Accept',
+                      //               style: TextStyle(color: Colors.white)),
+                      //           onPressed: () {
+                      //             updateStatusBloc.add(
+                      //                 UpdateStatusButtonPressed(
+                      //                     id: state.bookingDetail[0].id,
+                      //                     status: acceptStatus));
+                      //           },
+                      //         ),
+                      //       ),
+                      //       SizedBox(
+                      //         width: MediaQuery.of(context).size.width * 0.45,
+                      //         child: ElevatedButton(
+                      //           style: ElevatedButton.styleFrom(
+                      //               primary: Colors.red),
+                      //           child: Text('Deny',
+                      //               style: TextStyle(color: Colors.white)),
+                      //           onPressed: () {},
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                     ],
                   ),
                 );

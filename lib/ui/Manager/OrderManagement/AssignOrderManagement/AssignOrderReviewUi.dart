@@ -68,9 +68,9 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                           textBaseline: TextBaseline.alphabetic,
                           children: [
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.1,
+                              width: MediaQuery.of(context).size.width * 0.2,
                               child: Text(
-                                'A:',
+                                'Fullname:',
                                 style: TextStyle(fontSize: 16.0),
                               ),
                             ),
@@ -89,16 +89,15 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                           textBaseline: TextBaseline.alphabetic,
                           children: [
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.1,
+                              width: MediaQuery.of(context).size.width * 0.2,
                               child: Text(
-                                'B:',
+                                'Email:',
                                 style: TextStyle(fontSize: 16.0),
                               ),
                             ),
                             Container(
                               child: Text(
-                                state.assignDetail[0].customer.phoneNumber ??
-                                    'empty',
+                                state.assignDetail[0].customer.email ?? 'empty',
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),
@@ -110,9 +109,9 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                           textBaseline: TextBaseline.alphabetic,
                           children: [
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.1,
+                              width: MediaQuery.of(context).size.width * 0.3,
                               child: Text(
-                                'C:',
+                                'Checkin time:',
                                 style: TextStyle(fontSize: 16.0),
                               ),
                             ),
@@ -130,15 +129,15 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                           textBaseline: TextBaseline.alphabetic,
                           children: [
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.1,
+                              width: MediaQuery.of(context).size.width * 0.2,
                               child: Text(
-                                'D:',
+                                'Status:',
                                 style: TextStyle(fontSize: 16.0),
                               ),
                             ),
                             Container(
                               child: Text(
-                                state.assignDetail[0].note ?? 'empty',
+                                state.assignDetail[0].status ?? 'empty',
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),
@@ -189,9 +188,11 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                               builder: (builder, staffState) {
                             if (staffState.status == StaffStatus.init) {
                               return CircularProgressIndicator();
-                            } else if (staffState.status == StaffStatus.loading) {
+                            } else if (staffState.status ==
+                                StaffStatus.loading) {
                               return CircularProgressIndicator();
-                            } else if (staffState.status == StaffStatus.staffListsuccess) {
+                            } else if (staffState.status ==
+                                StaffStatus.staffListsuccess) {
                               if (staffState.staffList != null &&
                                   staffState.staffList.isNotEmpty)
                                 return Column(

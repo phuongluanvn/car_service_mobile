@@ -72,9 +72,9 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                           textBaseline: TextBaseline.alphabetic,
                           children: [
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.1,
+                              width: MediaQuery.of(context).size.width * 0.2,
                               child: Text(
-                                'A:',
+                                'Fullname:',
                                 style: TextStyle(fontSize: 16.0),
                               ),
                             ),
@@ -92,15 +92,15 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                           textBaseline: TextBaseline.alphabetic,
                           children: [
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.1,
+                              width: MediaQuery.of(context).size.width * 0.2,
                               child: Text(
-                                'B:',
+                                'Email:',
                                 style: TextStyle(fontSize: 16.0),
                               ),
                             ),
                             Container(
                               child: Text(
-                                state.processDetail[0].customer.phoneNumber,
+                                state.processDetail[0].customer.email,
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),
@@ -112,9 +112,9 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                           textBaseline: TextBaseline.alphabetic,
                           children: [
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.1,
+                              width: MediaQuery.of(context).size.width * 0.3,
                               child: Text(
-                                'C:',
+                                'Checkin time:',
                                 style: TextStyle(fontSize: 16.0),
                               ),
                             ),
@@ -132,15 +132,15 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                           textBaseline: TextBaseline.alphabetic,
                           children: [
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.1,
+                              width: MediaQuery.of(context).size.width * 0.2,
                               child: Text(
-                                'D:',
+                                'Status:',
                                 style: TextStyle(fontSize: 16.0),
                               ),
                             ),
                             Container(
                               child: Text(
-                                state.processDetail[0].note,
+                                state.processDetail[0].status,
                                 style: TextStyle(fontSize: 15.0),
                               ),
                             ),
@@ -335,7 +335,9 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                     style: TextStyle(color: Colors.white)),
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => CheckoutOrderUi(orderId: state.processDetail[0].id,)));
+                                      builder: (_) => CheckoutOrderUi(
+                                            orderId: state.processDetail[0].id,
+                                          )));
                                 },
                               ),
                             ),

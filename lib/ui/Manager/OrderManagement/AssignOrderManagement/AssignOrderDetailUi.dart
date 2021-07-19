@@ -70,9 +70,9 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.2,
                             child: Text(
-                              'A:',
+                              'Fullname:',
                               style: TextStyle(fontSize: 16.0),
                             ),
                           ),
@@ -91,16 +91,15 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.2,
                             child: Text(
-                              'B:',
+                              'Email:',
                               style: TextStyle(fontSize: 16.0),
                             ),
                           ),
                           Container(
                             child: Text(
-                              state.assignDetail[0].customer.phoneNumber ??
-                                  'empty',
+                              state.assignDetail[0].customer.email ?? 'empty',
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -112,9 +111,9 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.3,
                             child: Text(
-                              'C:',
+                              'Booking time:',
                               style: TextStyle(fontSize: 16.0),
                             ),
                           ),
@@ -132,15 +131,15 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.2,
                             child: Text(
-                              'D:',
+                              'Status:',
                               style: TextStyle(fontSize: 16.0),
                             ),
                           ),
                           Container(
                             child: Text(
-                              state.assignDetail[0].note ?? 'empty',
+                              state.assignDetail[0].status ?? 'empty',
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ),
@@ -152,11 +151,12 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                         // ignore: missing_return
                         listener: (builder, statusState) {
                           if (statusState.status ==
-                              UpdateStatus.updateStatusSuccess) {
+                              UpdateStatus.updateStatusCheckinSuccess) {
                             setState(() {
                               _visible = !_visible;
                             });
-                          }
+                          }else if(statusState.status ==
+                              UpdateStatus.updateStatusCheckingSuccess){}
                         },
                         child: Column(
                           children: [
@@ -173,7 +173,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                         style: TextStyle(color: Colors.white)),
                                     onPressed: () {
                                       updateStatusBloc.add(
-                                          UpdateStatusButtonPressed(
+                                          UpdateStatusCheckinButtonPressed(
                                               id: state.assignDetail[0].id,
                                               status: checkinStatus));
                                     },
@@ -191,15 +191,17 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                             Visibility(
                               visible: _visible,
                               child: Container(
-                                child: BlocBuilder<ManageStaffBloc, ManageStaffState>(
+                                child: BlocBuilder<ManageStaffBloc,
+                                        ManageStaffState>(
                                     // ignore: missing_return
                                     builder: (builder, staffState) {
                                   if (staffState.status == StaffStatus.init) {
                                     return CircularProgressIndicator();
-                                  } else if (staffState.status ==  StaffStatus.loading) {
+                                  } else if (staffState.status ==
+                                      StaffStatus.loading) {
                                     return CircularProgressIndicator();
-                                  } else if (staffState.status
-                                      == StaffStatus.staffListsuccess) {
+                                  } else if (staffState.status ==
+                                      StaffStatus.staffListsuccess) {
                                     return Column(
                                       children: [
                                         DropdownButton<String>(
@@ -222,7 +224,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                           child: Text('Checking'),
                                           onPressed: () {
                                             updateStatusBloc.add(
-                                                UpdateStatusButtonPressed(
+                                                UpdateStatusCheckingButtonPressed(
                                                     id: state
                                                         .assignDetail[0].id,
                                                     status: checkingStatus));
@@ -243,7 +245,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                         ),
                                       ],
                                     );
-                                  } else if (staffState.status == StaffStatus.error) {
+                                  } else if (staffState.status ==
+                                      StaffStatus.error) {
                                     return ErrorWidget(
                                         state.message.toString());
                                   }

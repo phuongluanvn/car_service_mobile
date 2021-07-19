@@ -3,6 +3,7 @@ import 'package:car_service/blocs/manager/booking/booking_state.dart';
 import 'package:car_service/blocs/manager/orderHistory/orderHistory_bloc.dart';
 import 'package:car_service/blocs/manager/orderHistory/orderHistory_events.dart';
 import 'package:car_service/blocs/manager/orderHistory/orderHistory_state.dart';
+import 'package:car_service/ui/Manager/OrderManagement/OrderHistory/OrderHistoryDetailUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingDetailUi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -67,7 +68,7 @@ class _OrderHistoryUiState extends State<OrderHistoryUi> {
                         subtitle: Text(state.historyList[index].bookingTime),
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (_) => VerifyBookingDetailUi(
+                              builder: (_) => OrderHistoryDetailUi(
                                   orderId: state.historyList[index].id)));
                         },
                       ),

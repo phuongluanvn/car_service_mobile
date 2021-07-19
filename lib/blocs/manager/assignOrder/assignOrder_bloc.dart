@@ -24,7 +24,7 @@ class AssignOrderBloc extends Bloc<AssignOrderEvent, AssignOrderState> {
         } else {
           yield state.copyWith(
             status: AssignStatus.error,
-            message: 'Error',
+            message: 'Assin Error',
           );
           print('no data');
         }
@@ -48,7 +48,7 @@ class AssignOrderBloc extends Bloc<AssignOrderEvent, AssignOrderState> {
         } else {
           yield state.copyWith(
             detailStatus: AssignDetailStatus.error,
-            message: 'Error',
+            message: 'Detail Error',
           );
         }
       } catch (e) {

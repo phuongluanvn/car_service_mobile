@@ -26,7 +26,7 @@ class ManageStaffBloc extends Bloc<ManageStaffEvent, ManageStaffState> {
         } else {
           yield state.copyWith(
             status: StaffStatus.error,
-            message: 'Error',
+            message: 'Staff Error',
           );
           print('no data');
         }

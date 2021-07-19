@@ -64,9 +64,9 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.2,
                             child: Text(
-                              'A:',
+                              'Fullname:',
                               style: TextStyle(fontSize: 16.0),
                             ),
                           ),
@@ -84,9 +84,9 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.2,
                             child: Text(
-                              'B:',
+                              'Email:',
                               style: TextStyle(fontSize: 16.0),
                             ),
                           ),
@@ -104,9 +104,9 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.3,
                             child: Text(
-                              'C:',
+                              'Booking Time:',
                               style: TextStyle(fontSize: 16.0),
                             ),
                           ),
@@ -124,9 +124,9 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.2,
                             child: Text(
-                              'D:',
+                              'Status:',
                               style: TextStyle(fontSize: 16.0),
                             ),
                           ),

@@ -61,7 +61,8 @@ class _ProcessOrderUiState extends State<ProcessOrderUi> {
                               Text(state.processList[index].status),
                             ]),
                         leading: FlutterLogo(),
-                        title: Text(state.processList[index].customer.fullname),
+                        title:
+                            Text(state.processList[index].vehicle.licensePlate),
                         subtitle: Text(state.processList[index].bookingTime),
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(

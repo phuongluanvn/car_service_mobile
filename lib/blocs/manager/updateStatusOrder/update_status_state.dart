@@ -5,6 +5,8 @@ enum UpdateStatus {
   loading,
   updateStatusSuccess,
   updateStatusStartSuccess,
+  updateStatusCheckinSuccess,
+  updateStatusCheckingSuccess,
   error,
 }
 

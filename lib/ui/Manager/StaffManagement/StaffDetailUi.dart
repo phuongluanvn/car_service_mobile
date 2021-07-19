@@ -45,9 +45,9 @@ class _StaffDetailUiState extends State<StaffDetailUi> {
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.2,
                             child: Text(
-                              'A:',
+                              'Fullname:',
                               style: TextStyle(fontSize: 16.0),
                             ),
                           ),
@@ -65,9 +65,9 @@ class _StaffDetailUiState extends State<StaffDetailUi> {
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.2,
                             child: Text(
-                              'B:',
+                              'Email:',
                               style: TextStyle(fontSize: 16.0),
                             ),
                           ),
@@ -85,9 +85,9 @@ class _StaffDetailUiState extends State<StaffDetailUi> {
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.2,
                             child: Text(
-                              'C:',
+                              'Status:',
                               style: TextStyle(fontSize: 16.0),
                             ),
                           ),

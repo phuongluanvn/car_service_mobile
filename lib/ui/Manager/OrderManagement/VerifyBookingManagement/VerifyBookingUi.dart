@@ -58,8 +58,8 @@ class _VerifyBookingUiState extends State<VerifyBookingUi> {
                                       Text('Booked'),
                                     ]),
                                 leading: FlutterLogo(),
-                                title: Text(
-                                    state.bookingList[index].customer.fullname),
+                                title: Text(state
+                                    .bookingList[index].vehicle.licensePlate),
                                 subtitle:
                                     Text(state.bookingList[index].bookingTime),
                                 onTap: () {

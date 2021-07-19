@@ -59,7 +59,7 @@ class _AssignOrderUiState extends State<AssignOrderUi> {
                               ]),
                           leading: FlutterLogo(),
                           title:
-                              Text(state.assignList[index].customer.fullname),
+                              Text(state.assignList[index].vehicle.licensePlate),
                           subtitle: Text(state.assignList[index].bookingTime),
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
