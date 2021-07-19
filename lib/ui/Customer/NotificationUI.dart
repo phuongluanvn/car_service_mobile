@@ -9,8 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-
-int _counter=0;
+int _counter = 0;
 AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
@@ -29,8 +28,15 @@ Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging _message = FirebaseMessaging.instance;
+  String token = await _message.getToken();
+  print("token ne");
+  print(token);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation();
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
 
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
@@ -39,6 +45,7 @@ void main() async {
   );
   // runApp(Auth());
 }
+
 class NotificationUI extends StatefulWidget {
   @override
   _NotificationUIState createState() => _NotificationUIState();
@@ -47,6 +54,7 @@ class NotificationUI extends StatefulWidget {
 class _NotificationUIState extends State<NotificationUI> {
   @override
   void initState() {
+    main();
     super.initState();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification notification = message.notification;
@@ -92,23 +100,43 @@ class _NotificationUIState extends State<NotificationUI> {
   }
 
   void _showNotification() {
-    setState(() {
-      _counter++;
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification;
+      AndroidNotification android = message.notification?.android;
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                channel.description,
+                color: Colors.blue,
+                playSound: true,
+                icon: '@mipmap/ic_launcher',
+              ),
+            ));
+      }
     });
-    flutterLocalNotificationsPlugin.show(
-        0,
-        "Testing $_counter",
-        "How you doin ?",
-        NotificationDetails(
-            android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          channel.description,
-          importance: Importance.high,
-          color: Colors.blue,
-          playSound: true,
-          icon: '@mipmap/ic_launcher',
-        )));
+    // setState(() {
+    //   _counter++;
+    // });
+    // flutterLocalNotificationsPlugin.show(
+    //     0,
+    //     "Testing $_counter",
+    //     "How you doin ?",
+    //     NotificationDetails(
+    //         android: AndroidNotificationDetails(
+    //       channel.id,
+    //       channel.name,
+    //       channel.description,
+    //       importance: Importance.high,
+    //       color: Colors.blue,
+    //       playSound: true,
+    //       icon: '@mipmap/ic_launcher',
+    //     )));
   }
 
   @override
