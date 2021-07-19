@@ -2,9 +2,43 @@ import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_event.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
 import 'package:car_service/ui/Customer/CarManagement/CustomerCarDetailUI.dart';
+import 'package:car_service/ui/Customer/message.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+
+int _counter=0;
+AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'high_importance_channel', // id
+    'High Importance Notifications', // title
+    'This channel is used for important notifications.', // description
+    importance: Importance.high,
+    playSound: true);
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('A bg message just showed up : ${message.messageId}');
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation();
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+  // runApp(Auth());
+}
 class NotificationUI extends StatefulWidget {
   @override
   _NotificationUIState createState() => _NotificationUIState();
@@ -14,8 +48,67 @@ class _NotificationUIState extends State<NotificationUI> {
   @override
   void initState() {
     super.initState();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification;
+      AndroidNotification android = message.notification?.android;
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                channel.description,
+                color: Colors.blue,
+                playSound: true,
+                icon: '@mipmap/ic_launcher',
+              ),
+            ));
+      }
+    });
 
-    context.read<CustomerCarBloc>().add(DoCarListEvent());
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('A new onMessageOpenedApp event was published!');
+      RemoteNotification notification = message.notification;
+      AndroidNotification android = message.notification?.android;
+      if (notification != null && android != null) {
+        showDialog(
+            context: context,
+            builder: (_) {
+              return AlertDialog(
+                title: Text(notification.title),
+                content: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [Text(notification.body)],
+                  ),
+                ),
+              );
+            });
+      }
+    });
+  }
+
+  void _showNotification() {
+    setState(() {
+      _counter++;
+    });
+    flutterLocalNotificationsPlugin.show(
+        0,
+        "Testing $_counter",
+        "How you doin ?",
+        NotificationDetails(
+            android: AndroidNotificationDetails(
+          channel.id,
+          channel.name,
+          channel.description,
+          importance: Importance.high,
+          color: Colors.blue,
+          playSound: true,
+          icon: '@mipmap/ic_launcher',
+        )));
   }
 
   @override
@@ -32,51 +125,23 @@ class _NotificationUIState extends State<NotificationUI> {
       ),
       backgroundColor: Colors.blue[100],
       body: Center(
-        child: BlocBuilder<CustomerCarBloc, CustomerCarState>(
-          // ignore: missing_return
-          builder: (context, state) {
-            if (state.status == CustomerCarStatus.init) {
-              return CircularProgressIndicator();
-            } else if (state.status == CustomerCarStatus.loading) {
-              return CircularProgressIndicator();
-            } else if (state.status == CustomerCarStatus.loadedCarSuccess) {
-              if (state.vehicleLists != null && state.vehicleLists.isNotEmpty)
-                return ListView.builder(
-                  itemCount: state.vehicleLists.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    //hiển thị list xe
-                    return Card(
-                      child: Column(children: [
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage:
-                                AssetImage('lib/images/car_default.png'),
-                          ),
-                          title: Text('Xe của bạn đã hoàn thành'),
-                          subtitle:
-                              Text('Mời bạn đến nhận xe ở cửa hàng'),
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => CustomerCarDetailUi(
-                                    id: state.vehicleLists[index].id)));
-                          },
-                        ),
-                      ]),
-                    );
-                  },
-                );
-              else
-                return Center(
-                  child: Text('Không có thông báo'),
-                );
-            } else if (state.status == CustomerCarStatus.error) {
-              return ErrorWidget(state.message.toString());
-            }
-          },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'You have pushed the button this many times:',
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headline4,
+            ),
+          ],
         ),
       ),
-      
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showNotification,
+        child: Icon(Icons.add),
+      ),
     );
   }
 }

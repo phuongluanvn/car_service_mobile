@@ -27,14 +27,19 @@ import 'package:car_service/utils/model/BookingModel.dart';
 import 'package:car_service/utils/repository/auth_repo.dart';
 import 'package:car_service/utils/repository/customer_repo.dart';
 import 'package:car_service/utils/repository/manager_repo.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-
 import 'ui/Manager/ManagerMain.dart';
 
-void main() {
+
+
+void main() async {
   HttpOverrides.global = new MyHttpOverrides();
+
   runApp(Auth());
 }
 
@@ -82,7 +87,7 @@ class Auth extends StatelessWidget {
       child: GetMaterialApp(
         initialRoute: '/',
         routes: {
-          '/': (context) => ManagerMain(),
+          '/': (context) => LoginUi(),
           '/manager': (context) => ManagerMain(),
           '/staff': (context) => StaffHome(),
           '/customer': (context) => CustomerHome(),
@@ -100,3 +105,5 @@ class MyHttpOverrides extends HttpOverrides {
           (X509Certificate cert, String host, int port) => true;
   }
 }
+
+
