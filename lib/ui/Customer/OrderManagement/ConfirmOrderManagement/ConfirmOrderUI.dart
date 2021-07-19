@@ -44,9 +44,14 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
                     Divider(),
                     Text(
                       'Đơn cần xác nhận',
-                      style: TextStyle(fontSize: 12),
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
-                    Divider(),
+                    Divider(
+                      thickness: 2,
+                      endIndent: 20,
+                      indent: 20,
+                      color: Colors.black,
+                    ),
                     Expanded(
                       child: ListView.builder(
                         itemCount: state.orderLists.length,
@@ -132,14 +137,6 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
           },
         ),
       ), //thêm mới xe
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => CreateBookingOrderUI()));
-        },
-        child: const Icon(Icons.add),
-        backgroundColor: Colors.blue[600],
-      ),
     );
   }
 }

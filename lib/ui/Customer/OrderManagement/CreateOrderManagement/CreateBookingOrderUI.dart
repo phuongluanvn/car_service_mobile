@@ -1,9 +1,14 @@
+import 'package:car_service/blocs/customer/customerCar/CreateCar_bloc.dart';
+import 'package:car_service/blocs/customer/customerCar/CreateCar_state.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
 import 'package:car_service/blocs/customer/customerOrder/CreateBooking_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CreateBooking_event.dart';
+import 'package:car_service/blocs/customer/customerOrder/CreateBooking_state.dart';
 import 'package:car_service/blocs/customer/customerService/CustomerService_bloc.dart';
 import 'package:car_service/blocs/customer/customerService/CustomerService_event.dart';
+import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderUI.dart';
+import 'package:car_service/ui/Customer/OrderManagement/tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -18,7 +23,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
   bool _visibleBaoDuong = false;
   bool _visibleSuaChua = false;
   String selectItem;
-  CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
+  CalendarFormat _calendarFormat = CalendarFormat.week;
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay;
   int _valueSelected = 0;
@@ -81,11 +86,15 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
           child: Column(
             children: <Widget>[
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               Text(
                 "Chọn xe",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+                textAlign: TextAlign.start,
               ),
               Container(
                 child: BlocBuilder<CustomerCarBloc, CustomerCarState>(
@@ -135,7 +144,6 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                 onTap: () {
                                   setState(() {
                                     carId = state.vehicleLists[index].id;
-                                    print(carId);
                                     // _visible = !_visible;
                                   });
                                 },
@@ -216,7 +224,6 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                 )
                               ],
                             )),
-                        
                         RadioListTile(
                           value: 2,
                           groupValue: _valueSelected,
@@ -247,7 +254,6 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      backgroundColor: Colors.red,
                     ),
                   ),
                   Container(
@@ -298,20 +304,33 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                 ],
               ),
               Divider(),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blue, // background
-                  onPrimary: Colors.white, // foreground
-                ),
-                onPressed: () {
-                  _createBookingBloc.add(CreateBookingButtonPressed(
-                    carId: carId,
-                    serviceId: null,
-                    note: "Hong co",
-                    timeBooking: _selectedDay.toIso8601String(),
-                  ));
+              BlocListener<CreateBookingBloc, CreateBookingState>(
+                listener: (context, state) {
+                  if (state.status ==
+                      CreateBookingStatus.createBookingOrderSuccess) {
+                    // Navigator.pop(context);
+                    Navigator.pop(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => TabOrderCustomer()),
+                    );
+                  }
                 },
-                child: Text('Xác nhận'),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.blue, // background
+                    onPrimary: Colors.white, // foreground
+                  ),
+                  onPressed: () {
+                    _createBookingBloc.add(CreateBookingButtonPressed(
+                      carId: carId,
+                      serviceId: null,
+                      note: "Hong co",
+                      timeBooking: _selectedDay.toIso8601String(),
+                    ));
+                  },
+                  child: Text('Xác nhận'),
+                ),
               )
             ],
           ),
