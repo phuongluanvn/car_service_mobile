@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -9,9 +10,14 @@ class AuthRepository {
   };
 
   login(String username, String password) async {
+    FirebaseMessaging _message = FirebaseMessaging.instance;
+    String token = await _message.getToken();
+    print("token ne");
+    print(token);
     final body = jsonEncode({
       "username": '${username}',
       "password": '${password}',
+      // "deviceToken": '${token}',
     });
     var res = await http.post(
         Uri.parse('https://carservicesystem.azurewebsites.net/api/Users'),
@@ -66,18 +72,5 @@ class AuthRepository {
     } else {
       return null;
     }
-    // if (data['message'] == "manager logged in" ||
-    //     data['message' == "customer logged in"] ||
-    //     data['message' == 'staff logged in']) {
-    //   return data;
-    // } else {
-    //   return "auth problem";
-    // }
-
-    // var testt = await http.get(Uri.parse(
-    //     "https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01"),
-    //     headers: {},
-    //     );
-    // print(testt.body);
   }
 }
