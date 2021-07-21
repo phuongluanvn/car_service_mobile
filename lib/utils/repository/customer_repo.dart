@@ -2,6 +2,7 @@ import 'package:car_service/utils/model/CarModel.dart';
 import 'package:car_service/utils/model/ManufacturerModel.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/OrderModel.dart';
+import 'package:car_service/utils/model/PackageServiceModel.dart';
 import 'package:car_service/utils/model/ServiceModel.dart';
 import 'package:car_service/utils/model/VehicleModel.dart';
 import 'package:http/http.dart' as http;
@@ -99,7 +100,9 @@ class CustomerRepository {
 
   Future<List<VehicleModel>> getVehicleDetail(String vehicleId) async {
     var res = await http.get(
-      Uri.parse('https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=' + vehicleId),
+      Uri.parse(
+          'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=' +
+              vehicleId),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -143,6 +146,56 @@ class CustomerRepository {
   }
 
   getOrderDetail(String id) async {
+    List<OrderDetailModel> orderDetails = [];
+    List convertData = [];
+    var res = await http.get(
+      Uri.parse(BASE_URL + 'Orders/' + id),
+      headers: headers,
+    );
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      convertData.add(data);
+      try {
+        if (data != null) {
+          convertData
+              .map((orderDetail) =>
+                  orderDetails.add(OrderDetailModel.fromJson(orderDetail)))
+              .toList();
+          return orderDetails;
+        } else {
+          res.body;
+        }
+      } catch (e) {
+        res.body;
+      }
+    } else {
+      res.body;
+    }
+  }
+
+  getPackageServiceList() async {
+    List<PackageServiceModel> packageServiceLists = [];
+    var res = await http.get(
+      Uri.parse(BASE_URL + "packages"),
+      headers: headers,
+    );
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      if (data != null) {
+        data
+            .map((order) =>
+                packageServiceLists.add(PackageServiceModel.fromJson(order)))
+            .toList();
+        return packageServiceLists;
+      } else {
+        return res.body;
+      }
+    } else {
+      return res.body;
+    }
+  }
+
+  getPackageServiceDetail(String id) async {
     List<OrderDetailModel> orderDetails = [];
     List convertData = [];
     var res = await http.get(

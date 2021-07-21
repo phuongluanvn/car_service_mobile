@@ -1,4 +1,5 @@
 import 'package:car_service/ui/Customer/CustomerAccountUI.dart';
+import 'package:car_service/ui/LoginUi.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,8 +9,8 @@ class CustomerProfile extends StatefulWidget {
 }
 
 class _CustomerProfileState extends State<CustomerProfile> {
-
   String _fullName = '';
+  bool _isShown = true;
 
   @override
   void initState() {
@@ -20,12 +21,12 @@ class _CustomerProfileState extends State<CustomerProfile> {
   _getStringFromSharedPref() async {
     final prefs = await SharedPreferences.getInstance();
     final fullname = prefs.getString('Fullname');
-  
 
     setState(() {
       _fullName = fullname;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +48,9 @@ class _CustomerProfileState extends State<CustomerProfile> {
                   fit: StackFit.expand,
                   overflow: Overflow.visible,
                   children: [
-                    CircleAvatar(child: Icon(Icons.person),),
+                    CircleAvatar(
+                      child: Icon(Icons.person),
+                    ),
                   ],
                 ),
               ),
@@ -115,7 +118,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
               child: Container(
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: _isShown == true ? () => _logout(context) : null,
                   child: Row(
                     children: [
                       Expanded(child: Text('Đăng xuất')),
@@ -129,5 +132,37 @@ class _CustomerProfileState extends State<CustomerProfile> {
         ),
       ),
     );
+  }
+
+  void _logout(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text('Xác nhận'),
+            content: Text('Bạn xác nhận muốn thoát ứng dụng?'),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                  onPressed: () {
+                    // hide the box
+                    setState(() {
+                      _isShown = false;
+                    });
+
+                    // Close the dialog
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginUi()));
+                  },
+                  child: Text('Có')),
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Không'))
+            ],
+          );
+        });
   }
 }

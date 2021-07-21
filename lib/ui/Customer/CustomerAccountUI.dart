@@ -1,3 +1,4 @@
+import 'package:car_service/ui/LoginUi.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,6 +15,7 @@ class _CustomerAccountUiState extends State<CustomerAccountUi> {
   String _address = '';
   String _email = '';
   int _accumulatedPoint;
+  bool _isShown = true;
 
   @override
   void initState() {
@@ -100,7 +102,9 @@ class _CustomerAccountUiState extends State<CustomerAccountUi> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 12,),
+                    SizedBox(
+                      height: 12,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -116,7 +120,9 @@ class _CustomerAccountUiState extends State<CustomerAccountUi> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 12,),
+                    SizedBox(
+                      height: 12,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -132,7 +138,9 @@ class _CustomerAccountUiState extends State<CustomerAccountUi> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 12,),
+                    SizedBox(
+                      height: 12,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -148,7 +156,9 @@ class _CustomerAccountUiState extends State<CustomerAccountUi> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 12,),
+                    SizedBox(
+                      height: 12,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -173,7 +183,7 @@ class _CustomerAccountUiState extends State<CustomerAccountUi> {
               child: Container(
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: _isShown == true ? () => _logout(context) : null,
                   child: Row(
                     children: [
                       Expanded(child: Text('Đăng xuất')),
@@ -187,5 +197,37 @@ class _CustomerAccountUiState extends State<CustomerAccountUi> {
         ),
       ),
     );
+  }
+
+  void _logout(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text('Xác nhận'),
+            content: Text('Bạn xác nhận muốn thoát ứng dụng?'),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                  onPressed: () {
+                    // hide the box
+                    setState(() {
+                      _isShown = false;
+                    });
+
+                    // Close the dialog
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginUi()));
+                  },
+                  child: Text('Có')),
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Không'))
+            ],
+          );
+        });
   }
 }
