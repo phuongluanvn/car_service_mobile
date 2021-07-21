@@ -17,12 +17,14 @@ class AuthRepository {
     final body = jsonEncode({
       "username": '${username}',
       "password": '${password}',
+      "device_Token": '${token}'
       // "deviceToken": '${token}',
     });
     var res = await http.post(
         Uri.parse('https://carservicesystem.azurewebsites.net/api/Users'),
         headers: headers,
         body: body);
+        print(body);
     if (res.statusCode != null) {
       if (res.statusCode == 200) {
         return res.body;
@@ -30,7 +32,7 @@ class AuthRepository {
         return res.body;
       }
     } else {
-      return null;
+      return res.body;
     }
   }
 

@@ -1,66 +1,64 @@
-import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_event.dart';
-import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dart';
-import 'package:car_service/blocs/customer/customerService/CustomerService_event.dart';
-import 'package:car_service/blocs/customer/customerService/CustomerService_state.dart';
-import 'package:car_service/utils/model/OrderModel.dart';
+import 'package:car_service/blocs/customer/manufacturers/Manufacturer_event.dart';
+import 'package:car_service/blocs/customer/manufacturers/Manufacturer_state.dart';
+import 'package:car_service/blocs/packageService/PackageService_event.dart';
+import 'package:car_service/blocs/packageService/PackageService_state.dart';
 import 'package:car_service/utils/repository/customer_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CustomerServiceBloc
-    extends Bloc<CustomerServiceEvent, CustomerServiceState> {
+class PackageServiceBloc extends Bloc<PackageServiceEvent, PackageServiceState> {
   CustomerRepository _repo;
 
-  CustomerServiceBloc({CustomerRepository repo})
+  PackageServiceBloc({CustomerRepository repo})
       : _repo = repo,
-        super(CustomerServiceState());
+        super(PackageServiceState());
 
   @override
-  Stream<CustomerServiceState> mapEventToState(
-      CustomerServiceEvent event) async* {
-    if (event is DoServiceListEvent) {
-      yield state.copyWith(status: CustomerServiceStatus.loading);
+  Stream<PackageServiceState> mapEventToState(PackageServiceEvent event) async* {
+    if (event is DoPackageServiceListEvent) {
+      yield state.copyWith(status: PackageServiceStatus.loading);
       try {
-        var serviceLists = await _repo.getServiceList();
-        if (serviceLists != null) {
+        var packageServiceLists = await _repo.getPackageServiceList();
+        if (packageServiceLists != null) {
           yield state.copyWith(
-              serviceLists: serviceLists,
-              status: CustomerServiceStatus.loadedServiceSuccess);
-          print('service');
+              packageServiceLists: packageServiceLists,
+              status: PackageServiceStatus.loadedPackagesSuccess);
+          print('package in bloc');
         } else {
           yield state.copyWith(
-            status: CustomerServiceStatus.error,
-            message: 'Error',
+            status: PackageServiceStatus.error,
+            message: 'Error package',
           );
-          print('no service data');
+          print('no package data');
         }
       } catch (e) {
         yield state.copyWith(
-          status: CustomerServiceStatus.error,
+          status: PackageServiceStatus.error,
           message: e.toString(),
         );
-        ;
+      }
+    } else if (event is DoDetailOfPackageServiceEvent) {
+      yield state.copyWith(detailStatus: DetailOfPackageStatus.loading);
+      try {
+        var data = await _repo.getListModelOfManufacturer(event.packageId);
+        print('Model');
+        print(data);
+        if (data != null) {
+          yield state.copyWith(
+            detailStatus:
+                DetailOfPackageStatus.loadedDetailOfPackageSuccess,
+            detailOfPackage: data,
+          );
+        } else {
+          yield state.copyWith(
+            detailStatus: DetailOfPackageStatus.error,
+            message: 'Error aaa',
+          );
+        }
+      } catch (e) {
+        yield state.copyWith(
+            detailStatus: DetailOfPackageStatus.error,
+            message: e.toString());
       }
     }
-    //  else if (event is DoOrderDetailEvent) {
-    //   yield state.copyWith(detailStatus: CustomerOrderDetailStatus.loading);
-    //   try {
-    //     List<OrderModel> data =
-    //         await _repo.getOrderDetail(event.email);
-    //     if (data != null) {
-    //       yield state.copyWith(
-    //         detailStatus: CustomerOrderDetailStatus.success,
-    //         orderDetail: data,
-    //       );
-    //     } else {
-    //       yield state.copyWith(
-    //         detailStatus: CustomerOrderDetailStatus.error,
-    //         message: 'Error',
-    //       );
-    //     }
-    //   } catch (e) {
-    //     yield state.copyWith(
-    //         detailStatus: CustomerOrderDetailStatus.error, message: e.toString());
-    //   }
-    // }
   }
 }

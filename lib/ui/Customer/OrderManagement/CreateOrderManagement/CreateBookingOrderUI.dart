@@ -7,6 +7,9 @@ import 'package:car_service/blocs/customer/customerOrder/CreateBooking_event.dar
 import 'package:car_service/blocs/customer/customerOrder/CreateBooking_state.dart';
 import 'package:car_service/blocs/customer/customerService/CustomerService_bloc.dart';
 import 'package:car_service/blocs/customer/customerService/CustomerService_event.dart';
+import 'package:car_service/blocs/packageService/PackageService_bloc.dart';
+import 'package:car_service/blocs/packageService/PackageService_event.dart';
+import 'package:car_service/blocs/packageService/PackageService_state.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/tabbar.dart';
 import 'package:flutter/material.dart';
@@ -57,17 +60,14 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
   @override
   void initState() {
     super.initState();
-    // context.read<CustomerServiceBloc>().add(DoServiceListEvent());
+    BlocProvider.of<PackageServiceBloc>(context)
+        .add(DoPackageServiceListEvent());
     _createBookingBloc = BlocProvider.of<CreateBookingBloc>(context);
   }
 
   @override
   void dispose() {
     super.dispose();
-  }
-
-  void getDropDownItem() {
-    setState(() {});
   }
 
   @override
@@ -198,29 +198,74 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                             visible: _visibleBaoDuong,
                             child: Column(
                               children: <Widget>[
-                                CheckboxListTile(
-                                  selected: _valueCheckbox,
-                                  value: _valueCheckbox,
-                                  onChanged: (valuChecked) {
-                                    _valueCheckbox = valuChecked;
-                                  },
-                                  title: Text('Gói 1 (10000 km)'),
-                                ),
-                                CheckboxListTile(
-                                  selected: _valueCheckbox,
-                                  value: _valueCheckbox,
-                                  onChanged: (valuChecked) {
-                                    _valueCheckbox = valuChecked;
-                                  },
-                                  title: Text('Gói 2 (20000 - 50000 km)'),
-                                ),
-                                CheckboxListTile(
-                                  selected: _valueCheckbox,
-                                  value: _valueCheckbox,
-                                  onChanged: (valuChecked) {
-                                    _valueCheckbox = valuChecked;
-                                  },
-                                  title: Text('Gói 3 (> 50000 km)'),
+                                Container(
+                                  // child: SingleChildScrollView(
+                                  child: BlocBuilder<PackageServiceBloc,
+                                      PackageServiceState>(
+                                    // ignore: missing_return
+                                    builder: (context, stateOfPackage) {
+                                      if (stateOfPackage.status ==
+                                          PackageServiceStatus.init) {
+                                        return CircularProgressIndicator();
+                                      } else if (stateOfPackage.status ==
+                                          PackageServiceStatus.loading) {
+                                        return CircularProgressIndicator();
+                                      } else if (stateOfPackage.status ==
+                                          PackageServiceStatus
+                                              .loadedPackagesSuccess) {
+                                        if (stateOfPackage
+                                                    .packageServiceLists !=
+                                                null &&
+                                            stateOfPackage
+                                                .packageServiceLists.isNotEmpty)
+                                          return ListView.builder(
+                                            itemCount: stateOfPackage
+                                                .packageServiceLists.length,
+                                            shrinkWrap: true,
+                                            // ignore: missing_return
+                                            itemBuilder: (context, index) {
+                                              return Card(
+                                                child: ListTile(
+                                                  title: Text(
+                                                    stateOfPackage
+                                                        .packageServiceLists[
+                                                            index]
+                                                        .name,
+                                                    style: TextStyle(
+                                                        color: (carId ==
+                                                                stateOfPackage
+                                                                    .packageServiceLists[
+                                                                        index]
+                                                                    .name)
+                                                            ? Colors.blue
+                                                            : Colors.grey),
+                                                  ),
+                                                  subtitle: Text(stateOfPackage
+                                                      .packageServiceLists[
+                                                          index]
+                                                      .name),
+                                                  onTap: () {
+                                                    setState(() {
+                                                      carId = stateOfPackage
+                                                          .packageServiceLists[
+                                                              index]
+                                                          .name;
+                                                    });
+                                                  },
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        else //nếu không có xe nào
+                                          return Text('Không có thông tin xe');
+                                      } else if (stateOfPackage.status ==
+                                          PackageServiceStatus.error) {
+                                        return ErrorWidget(
+                                            stateOfPackage.message.toString());
+                                      }
+                                    },
+                                  ),
+                                  // ),
                                 )
                               ],
                             )),

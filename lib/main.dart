@@ -17,9 +17,11 @@ import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
+import 'package:car_service/blocs/packageService/PackageService_bloc.dart';
 import 'package:car_service/blocs/sign_up/sign_up_bloc.dart';
 import 'package:car_service/blocs/sign_up/sign_up_state.dart';
 import 'package:car_service/ui/Customer/CustomerMainUI.dart';
+import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderUI.dart';
 import 'package:car_service/ui/LoginUi.dart';
 import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Staff/StaffHome.dart';
@@ -75,7 +77,6 @@ class Auth extends StatefulWidget {
 }
 
 class _AuthState extends State<Auth> {
-
   @override
   void initState() {
     super.initState();
@@ -124,7 +125,6 @@ class _AuthState extends State<Auth> {
 
   @override
   void dispose() {
-    
     super.dispose();
   }
 
@@ -164,6 +164,8 @@ class _AuthState extends State<Auth> {
                 UpdateStatusOrderBloc(repo: ManagerRepository())),
         BlocProvider(
             create: (context) => ManageStaffBloc(repo: ManagerRepository())),
+        BlocProvider(
+            create: (context) => PackageServiceBloc(repo: CustomerRepository())),
         // BlocProvider(
         //     create: (context) =>
         //         BookingCubit(VerifyBookingInitState(), ManagerRepository())),

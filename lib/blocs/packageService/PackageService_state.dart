@@ -1,37 +1,56 @@
+import 'package:car_service/utils/model/PackageServiceDetailModel.dart';
+import 'package:car_service/utils/model/PackageServiceModel.dart';
 import 'package:car_service/utils/model/ServiceModel.dart';
 import 'package:equatable/equatable.dart';
 
-enum CustomerServiceStatus {
+enum PackageServiceStatus {
   init,
   loading,
-  loadedServiceSuccess,
+  loadedPackagesSuccess,
   error,
 }
 
-class CustomerServiceState extends Equatable {
-  final CustomerServiceStatus status;
-  final List<ServiceModel> serviceLists;
+enum DetailOfPackageStatus {
+  init,
+  loading,
+  loadedDetailOfPackageSuccess,
+  error,
+}
+
+class PackageServiceState extends Equatable {
+  final PackageServiceStatus status;
+  final DetailOfPackageStatus detailStatus;
+  final List<PackageServiceModel> packageServiceLists;
+  final List<PackageServiceDetailModel> detailOfPackage;
   final String message;
-  const CustomerServiceState({
-    this.status: CustomerServiceStatus.init,
-    this.serviceLists:const [],
-    this.message:'',
+  const PackageServiceState({
+    this.status: PackageServiceStatus.init,
+    this.detailStatus: DetailOfPackageStatus.init,
+    this.packageServiceLists: const [],
+    this.detailOfPackage: const [],
+    this.message: '',
   });
 
-  CustomerServiceState copyWith({
-    CustomerServiceStatus status,
-    List<ServiceModel> serviceLists,
+  PackageServiceState copyWith({
+    PackageServiceStatus status,
+    DetailOfPackageStatus detailStatus,
+    List<PackageServiceModel> packageServiceLists,
+    List<String> detailOfPackage,
     String message,
   }) =>
-      CustomerServiceState(
+      PackageServiceState(
         status: status ?? this.status,
-        serviceLists: serviceLists ?? this.serviceLists,
-        message: message??this.message,
+        detailStatus: detailStatus ?? this.detailStatus,
+        packageServiceLists: packageServiceLists ?? this.packageServiceLists,
+        detailOfPackage: detailOfPackage ?? this.detailOfPackage,
+        message: message ?? this.message,
       );
   @override
   List<Object> get props => [
         status,
-        serviceLists,
+        detailStatus,
+        packageServiceLists,
+        detailOfPackage,
         message,
       ];
 }

@@ -1,5 +1,5 @@
 import 'package:car_service/utils/model/CarModel.dart';
-import 'package:car_service/utils/model/ServiceModel.dart';
+import 'package:car_service/utils/model/PackageServiceModel.dart';
 import 'package:equatable/equatable.dart';
 
 enum CreateBookingStatus {
@@ -15,12 +15,12 @@ class CreateBookingState extends Equatable {
   final String message;
 
   List<CarModel> listCars;
-  List<ServiceModel> listServices;
+  List<PackageServiceModel> listPackageServices;
 
   CreateBookingState(
       {this.status: CreateBookingStatus.init,
       this.listCars: const [],
-      this.listServices: const [],
+      this.listPackageServices: const [],
       this.message: ''});
 
   CreateBookingState copyWith({
@@ -30,9 +30,9 @@ class CreateBookingState extends Equatable {
       CreateBookingState(
         status: status ?? this.status,
         listCars: listCars ?? this.listCars,
-        listServices: listServices ?? this.listServices,
+        listPackageServices: listPackageServices ?? this.listPackageServices,
         message: message ?? this.message,
       );
   @override
-  List<Object> get props => [status, listCars, listServices, message];
+  List<Object> get props => [status, listCars, listPackageServices, message];
 }
