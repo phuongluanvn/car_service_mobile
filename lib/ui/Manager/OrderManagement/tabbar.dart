@@ -38,8 +38,8 @@ class _TabManagerState extends State<TabManager> {
               padding: EdgeInsets.only(right: 20),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (_) => CreateOrderUI()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => CreateOrderUI()));
                 },
                 child: Icon(Icons.create),
               ),

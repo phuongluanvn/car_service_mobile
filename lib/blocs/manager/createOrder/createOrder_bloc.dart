@@ -40,6 +40,8 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
       yield state.copyWith(detailStatus: CreateDetailStatus.loading);
       try {
         List<CustomerModel> data = await _repo.getCreateOrderDetail(event.id);
+        print('hihihihihuhuhuhu');
+        print(data);
         if (data != null) {
           yield state.copyWith(
             detailStatus: CreateDetailStatus.success,

@@ -68,6 +68,26 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
     }
   }
 
+  void _showSuccessDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text('Thông báo!',
+            style: TextStyle(color: Colors.redAccent),),
+            content: Text('Thêm mới xe không thành công!'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Đồng ý'))
+            ],
+          );
+        });
+  }
+
 //option
   void _showPicker(context) {
     showModalBottomSheet(
@@ -133,12 +153,13 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          createCarBloc.add(CreateCarButtonPressed(
-            username: _username,
-            manufacturer: _selectManufacturerItem,
-            model: _selectModelOfManufacturerItem,
-            licensePlateNumber: licensePlateNumber.text,
-          ));
+          _showSuccessDialog();
+          // createCarBloc.add(CreateCarButtonPressed(
+          //   username: _username,
+          //   manufacturer: _selectManufacturerItem,
+          //   model: _selectModelOfManufacturerItem,
+          //   licensePlateNumber: licensePlateNumber.text,
+          // ));
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,

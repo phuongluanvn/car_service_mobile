@@ -188,7 +188,6 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                           onChanged: (value) {
                             setState(() {
                               _valueSelected = value;
-                              print(value);
                               _visibleBaoDuong = true;
                               _visibleSuaChua = false;
                             });

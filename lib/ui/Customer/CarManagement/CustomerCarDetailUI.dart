@@ -22,6 +22,63 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
 
   Image image;
 
+  void _showSuccessUpdateDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              'Thông báo!',
+              style: TextStyle(color: Colors.greenAccent),
+            ),
+            content: Text('Xóa thông tin xe thành công!'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Đồng ý'))
+            ],
+          );
+        });
+  }
+
+  void _showDeleteDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              'Thông báo!',
+              style: TextStyle(color: Colors.redAccent),
+            ),
+            content: Text('Bạn có chắc muốn xóa xe này?'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    _showSuccessUpdateDialog();
+                    // hide the box
+                    // setState(() {
+                    //   _isShown = false;
+                    // });
+
+                    // Close the dialog
+                    // Navigator.push(context,
+                    //     MaterialPageRoute(builder: (context) => LoginUi()));
+                  },
+                  child: Text('Hủy')),
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Đồng ý'))
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +90,9 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
           ),
           actions: [
             IconButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  _showDeleteDialog();
+                },
                 icon: Icon(Icons.delete_forever_rounded)),
           ]),
       body: Center(
@@ -122,7 +181,9 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                           child: Text('Lưu',
                               style: TextStyle(color: Colors.white)),
                           color: Theme.of(context).primaryColor,
-                          onPressed: () {},
+                          onPressed: () {
+                            _showSuccessUpdateDialog();
+                          },
                         ),
                       )
                     ],

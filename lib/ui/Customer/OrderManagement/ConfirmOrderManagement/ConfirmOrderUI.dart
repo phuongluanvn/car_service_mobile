@@ -102,11 +102,11 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
                                   children: <Widget>[
                                     Icon(
                                       Icons.circle,
-                                      color: color,
+                                      color: Colors.orangeAccent,
                                     ),
                                     Text(
-                                      state.orderLists[index].status,
-                                      style: TextStyle(color: color),
+                                      'Waiting Confirm',
+                                      style: TextStyle(color: Colors.orangeAccent),
                                     ),
                                   ]),
                               leading: FlutterLogo(),
