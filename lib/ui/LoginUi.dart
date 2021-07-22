@@ -24,8 +24,13 @@ class _LoginUiState extends State<LoginUi> {
   @override
   Widget build(BuildContext context) {
     final logo = Center(
-      child: Icon(Icons.supervised_user_circle, size: 150),
-    );
+        child: Image.asset(
+      'lib/images/logo_blue.png',
+      height: 150,
+      width: 150,
+    )
+        // Icon(Icons.supervised_user_circle, size: 130),
+        );
 
     final msg = BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
       if (state is LoginErrorState) {
@@ -43,7 +48,7 @@ class _LoginUiState extends State<LoginUi> {
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.person),
+        prefixIcon: Icon(Icons.person, color: Color.fromRGBO(8, 56, 99, 1)),
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
@@ -58,7 +63,10 @@ class _LoginUiState extends State<LoginUi> {
       obscureText: true,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.lock),
+        prefixIcon: Icon(
+          Icons.lock,
+          color: Color.fromRGBO(8, 56, 99, 1),
+        ),
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
@@ -69,32 +77,53 @@ class _LoginUiState extends State<LoginUi> {
     );
 
     final loginButton = Padding(
-      padding: EdgeInsets.symmetric(vertical: 16),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
-        onPressed: () {
-          authBloc.add(
-              LoginButtonPressed(email: email.text, password: password.text));
-        },
-        padding: EdgeInsets.all(12),
-        color: Colors.lightBlueAccent,
-        child: Text(
-          'Log In',
-          style: TextStyle(color: Colors.white),
+      padding: EdgeInsets.only(left: 50, right: 50),
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.055,
+        child: ElevatedButton(
+          onPressed: () {
+            authBloc.add(
+                LoginButtonPressed(email: email.text, password: password.text));
+          },
+          // color: Color.fromRGBO(8, 56, 99, 1),
+          style:
+              ElevatedButton.styleFrom(primary: Color.fromRGBO(8, 56, 99, 1)),
+          child: Text(
+            'Đăng nhập',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
       ),
     );
 
-    final signUpLink = SafeArea(
+    final signUpLink = Padding(
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 1),
+      // child: SafeArea(
+      child: TextButton(
+        child: Text(
+          'Tạo tài khoản mới!',
+          // style: TextStyle(color: Color.fromRGBO(59, 102, 193, 1)),
+        ),
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => SignUpUi()));
+        },
+      ),
+      // ),
+    );
+
+    final forgetPass = Padding(
+        padding: EdgeInsets.zero,
         child: TextButton(
-      child: Text('Don\'t have an account? Sign up.'),
-      onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => SignUpUi()));
-      },
-    ));
+          child: Text(
+            'Quên mật khẩu?',
+            // style: TextStyle(color: Color.fromRGBO(59, 102, 193, 1)),
+          ),
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => SignUpUi()));
+          },
+        ));
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -110,7 +139,7 @@ class _LoginUiState extends State<LoginUi> {
         },
         child: ListView(
           shrinkWrap: true,
-          padding: EdgeInsets.only(left: 24, right: 24),
+          padding: EdgeInsets.only(left: 24, right: 24, top: 50),
           children: <Widget>[
             logo,
             SizedBox(
@@ -129,10 +158,11 @@ class _LoginUiState extends State<LoginUi> {
               height: 20,
             ),
             loginButton,
-            SizedBox(
-              height: 20,
-            ),
+            // SizedBox(
+            //   height: 20,
+            // ),
             signUpLink,
+            forgetPass,
           ],
         ),
       ),

@@ -30,8 +30,11 @@ class _SignUpUiState extends State<SignUpUi> {
   @override
   Widget build(BuildContext context) {
     final logo = Center(
-      child: Icon(Icons.supervised_user_circle, size: 150),
-    );
+        child: Image.asset(
+      'lib/images/logo_blue.png',
+      height: 100,
+      width: 100,
+    ));
 
     final msg = BlocBuilder<SignUpBloc, SignUpState>(builder: (context, state) {
       if (state.status == SignUpStatus.error) {
@@ -49,7 +52,7 @@ class _SignUpUiState extends State<SignUpUi> {
       controller: username,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.person),
+        prefixIcon: Icon(Icons.person, color: Color.fromRGBO(8, 56, 99, 1)),
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
@@ -63,7 +66,8 @@ class _SignUpUiState extends State<SignUpUi> {
       controller: fullname,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.email),
+        prefixIcon:
+            Icon(Icons.face ,color: Color.fromRGBO(8, 56, 99, 1)),
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
@@ -78,7 +82,7 @@ class _SignUpUiState extends State<SignUpUi> {
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.email),
+        prefixIcon: Icon(Icons.email, color: Color.fromRGBO(8, 56, 99, 1)),
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
@@ -92,7 +96,7 @@ class _SignUpUiState extends State<SignUpUi> {
       controller: phoneNumber,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.phone),
+        prefixIcon: Icon(Icons.phone, color: Color.fromRGBO(8, 56, 99, 1)),
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
@@ -107,7 +111,7 @@ class _SignUpUiState extends State<SignUpUi> {
       obscureText: true,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.lock),
+        prefixIcon: Icon(Icons.lock, color: Color.fromRGBO(8, 56, 99, 1)),
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
@@ -115,6 +119,7 @@ class _SignUpUiState extends State<SignUpUi> {
         contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
+      
     );
 
     final confirmpass = TextFormField(
@@ -122,7 +127,7 @@ class _SignUpUiState extends State<SignUpUi> {
       obscureText: true,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.lock),
+        prefixIcon: Icon(Icons.lock, color: Color.fromRGBO(8, 56, 99, 1)),
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
@@ -139,36 +144,42 @@ class _SignUpUiState extends State<SignUpUi> {
     );
 
     final signUpButton = Padding(
-      padding: EdgeInsets.symmetric(vertical: 16),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
-        onPressed: () {
-          signUpBloc.add(SignUpButtonPressed(
-              user: username.text,
-              name: fullname.text,
-              email: email.text,
-              phone: phoneNumber.text,
-              password: password.text));
-        },
-        padding: EdgeInsets.all(12),
-        color: Colors.lightBlueAccent,
-        child: Text(
-          'Sign Up',
-          style: TextStyle(color: Colors.white),
+      padding: EdgeInsets.only(left: 50, right: 50),
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.055,
+        child: ElevatedButton(
+          // shape: RoundedRectangleBorder(
+          //   borderRadius: BorderRadius.circular(24),
+          // ),
+          onPressed: () {
+            signUpBloc.add(SignUpButtonPressed(
+                user: username.text,
+                name: fullname.text,
+                email: email.text,
+                phone: phoneNumber.text,
+                password: password.text));
+          },
+          style:
+              ElevatedButton.styleFrom(primary: Color.fromRGBO(8, 56, 99, 1)),
+          // padding: EdgeInsets.all(12),
+          // color: Colors.lightBlueAccent,
+          child: Text(
+            'Tạo tài khoản',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
       ),
     );
 
-    final signInLink = SafeArea(
+    final signInLink = Padding(
+        padding: EdgeInsets.zero,
         child: TextButton(
-      child: Text('Already have an account? Sign In.'),
-      onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginUi()));
-      },
-    ));
+          child: Text('Bạn đã có tài khoản? Đăng nhập!'),
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => LoginUi()));
+          },
+        ));
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -182,10 +193,10 @@ class _SignUpUiState extends State<SignUpUi> {
           shrinkWrap: true,
           padding: EdgeInsets.only(left: 24, right: 24),
           children: <Widget>[
-            logo,
             SizedBox(
-              height: 20,
+              height: 40,
             ),
+            logo,
             msg,
             SizedBox(
               height: 40,
