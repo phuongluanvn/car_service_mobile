@@ -56,7 +56,7 @@ class _ProcessOrderUiState extends State<ProcessOrderUi> {
                             children: <Widget>[
                               Icon(
                                 Icons.circle,
-                                color: Colors.yellow,
+                                color: Colors.orange[300],
                               ),
                               Text(state.processList[index].status),
                             ]),

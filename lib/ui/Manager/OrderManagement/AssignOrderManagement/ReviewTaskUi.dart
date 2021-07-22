@@ -1,23 +1,19 @@
-import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
-import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
-import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
-import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
-import 'package:car_service/blocs/manager/processOrder/processOrder_events.dart';
-import 'package:car_service/blocs/manager/processOrder/processOrder_state.dart';
-import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
-import 'package:car_service/blocs/manager/staff/staff_events.dart';
+
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
+import 'package:car_service/blocs/packageService/PackageService_bloc.dart';
+import 'package:car_service/blocs/packageService/PackageService_event.dart';
+import 'package:car_service/blocs/packageService/PackageService_state.dart';
 import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
+import 'package:car_service/utils/model/PackageServiceModel.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sizer/sizer.dart';
 
 class ReviewTaskUi extends StatefulWidget {
-  // CheckoutOrderUi(
-  //   // {@required this.emailId}
-  //   );
-
+  final String orderId;
+  ReviewTaskUi({@required this.orderId});
   @override
   _ReviewTaskUiState createState() => _ReviewTaskUiState();
 }
@@ -29,14 +25,16 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
   bool checkedValue = false;
   String selectItem;
   String holder = '';
-  List results = [];
+  List results = [1, 2, 3, 4, 5];
+  List<PackageServiceModel> selectedPackage;
   @override
   void initState() {
     super.initState();
-
+    print('Order id is:' + widget.orderId);
     // BlocProvider.of<ProcessOrderBloc>(context)
     //     .add(DoProcessOrderDetailEvent(email: widget.emailId));
-    BlocProvider.of<ManageStaffBloc>(context).add(DoListServiceEvent());
+    BlocProvider.of<PackageServiceBloc>(context)
+        .add(DoPackageServiceListEvent());
   }
 
   void onChanged(bool value) {
@@ -78,152 +76,96 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
         ),
       ),
       body: Container(
-        child: BlocBuilder<ManageStaffBloc, ManageStaffState>(
+        child: BlocBuilder<PackageServiceBloc, PackageServiceState>(
           // ignore: missing_return
           builder: (context, state) {
-            if (state.status == StaffStatus.init) {
+            if (state.status == PackageServiceStatus.init) {
               return CircularProgressIndicator();
-            } else if (state.status == StaffStatus.init) {
+            } else if (state.status == PackageServiceStatus.loading) {
               return CircularProgressIndicator();
-            } else if (state.status == StaffStatus.init) {
+            } else if (state.status ==
+                PackageServiceStatus.loadedPackagesSuccess) {
+              selectedPackage = List.from(state.packageServiceLists);
               return Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      ListTile(
-                        title: ExpansionTileCard(
-                          title: Text('Thay nhớt'),
-                          children: [
-                            DataTable(
-                              columns: <DataColumn>[
-                                DataColumn(
-                                  label: Expanded(
-                                    child: Text(
-                                      'Gói dịch vụ',
-                                      style: TextStyle(
-                                          fontStyle: FontStyle.italic),
+                      Center(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.95,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              DataTable(
+                                columns: <DataColumn>[
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Text(
+                                        'Gói dịch vụ',
+                                        style: TextStyle(
+                                            fontStyle: FontStyle.italic),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                DataColumn(
-                                  label: Expanded(
-                                    child: Text(
-                                      'Số\nlượng',
-                                      style: TextStyle(
-                                          fontStyle: FontStyle.italic),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Text(
+                                        'Số\nlượng',
+                                        style: TextStyle(
+                                            fontStyle: FontStyle.italic),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                DataColumn(
-                                  label: Expanded(
-                                    child: Text(
-                                      'Đơn\n giá',
-                                      style: TextStyle(
-                                          fontStyle: FontStyle.italic),
+                                  DataColumn(
+                                    label: Expanded(
+                                      child: Text(
+                                        'Đơn\n giá',
+                                        style: TextStyle(
+                                            fontStyle: FontStyle.italic),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Gói dịch vụ',
-                                    style:
-                                        TextStyle(fontStyle: FontStyle.italic),
-                                  ),
-                                ),
-                              ],
-                              rows: state.staffList
-                                  .map((data) => DataRow(cells: [
-                                        DataCell(Text(data.fullname)),
-                                        DataCell(Text(data.role.toString())),
-                                        DataCell(Checkbox(
-                                          value: checkedValue,
-                                          onChanged: (bool value) {
-                                            onChanged(value);
-                                          },
-                                        )),
-                                        DataCell(Flexible(
-                                          child: ExpansionTileCard(
-                                              title: Text('title')),
-                                        )),
-                                      ]))
-                                  .toList(),
-                            ),
-                          ],
-                        ),
-                      ),
-                      ListTile(
-                        title: ExpansionTileCard(
-                          title: Text('Vệ sinh'),
-                          children: [
-                            DataTable(
-                              columns: <DataColumn>[
-                                DataColumn(
-                                  label: Expanded(
-                                    child: Text(
-                                      'Gói dịch vụ',
-                                      style: TextStyle(
-                                          fontStyle: FontStyle.italic),
-                                    ),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Expanded(
-                                    child: Text(
-                                      'Số\nlượng',
-                                      style: TextStyle(
-                                          fontStyle: FontStyle.italic),
-                                    ),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Expanded(
-                                    child: Text(
-                                      'Đơn\n giá',
-                                      style: TextStyle(
-                                          fontStyle: FontStyle.italic),
-                                    ),
-                                  ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Gói dịch vụ',
-                                    style:
-                                        TextStyle(fontStyle: FontStyle.italic),
-                                  ),
-                                ),
-                              ],
-                              rows: state.staffList
-                                  .map((data) =>
-                                      // we return a DataRow every time
-                                      DataRow(
-                                          // List<DataCell> cells is required in every row
-                                          cells: [
-                                            // DataCell((data.verified)
-                                            //     ? Icon(
-                                            //         Icons.verified_user,
-                                            //         color: Colors.green,
-                                            //       )
-                                            //     : Icon(Icons.cancel, color: Colors.red)),
-                                            // I want to display a green color icon when user is verified and red when unverified
-
-                                            DataCell(Text(data.fullname)),
-                                            DataCell(
-                                                Text(data.role.toString())),
-                                            DataCell(Checkbox(
-                                              value: checkedValue,
-                                              onChanged: (bool value) {
-                                                onChanged(value);
-                                              },
-                                            )),
-                                            DataCell(Flexible(
-                                              child: ExpansionTileCard(
-                                                  title: Text('title')),
-                                            )),
-                                          ]))
-                                  .toList(),
-                            ),
-                          ],
+                                ],
+                                rows:
+                                    selectedPackage.asMap().entries.map((data) {
+                                  int index = data.key;
+                                  return DataRow(cells: [
+                                    DataCell(
+                                        DropdownButton<PackageServiceModel>(
+                                      isExpanded: true,
+                                      value: selectedPackage[index],
+                                      onChanged:
+                                          (PackageServiceModel newPackage) {
+                                        setState(() {
+                                          selectedPackage[index] = newPackage;
+                                        });
+                                      },
+                                      items: state.packageServiceLists.map<
+                                              DropdownMenuItem<
+                                                  PackageServiceModel>>(
+                                          (PackageServiceModel value) {
+                                        return DropdownMenuItem<
+                                            PackageServiceModel>(
+                                          value: value,
+                                          child: Text(value.name),
+                                        );
+                                      }).toList(),
+                                    )),
+                                    DataCell(Text(selectedPackage[index]
+                                        .price
+                                        .toString())),
+                                    DataCell(Checkbox(
+                                      value: checkedValue,
+                                      onChanged: (bool value) {
+                                        onChanged(value);
+                                      },
+                                    )),
+                                  ]);
+                                }).toList(),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       const Divider(
@@ -248,7 +190,10 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                   style: TextStyle(color: Colors.white)),
                               onPressed: () {
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) => ManagerMain()));
+                                    builder: (_) => AssignOrderReviewUi(
+                                          userId: widget.orderId,
+                                          
+                                        )));
                               },
                             ),
                           ),

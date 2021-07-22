@@ -157,7 +157,9 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                     style: TextStyle(color: Colors.white)),
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => ReviewTaskUi()));
+                                      builder: (_) => ReviewTaskUi(
+                                            orderId: state.assignDetail[0].id,
+                                          )));
                                 },
                               ),
                             ),

@@ -24,6 +24,7 @@ import 'package:car_service/ui/Customer/CustomerMainUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderUI.dart';
 import 'package:car_service/ui/LoginUi.dart';
 import 'package:car_service/ui/Manager/ManagerMain.dart';
+import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/ReviewTaskUi.dart';
 import 'package:car_service/ui/Staff/StaffHome.dart';
 import 'package:car_service/utils/model/BookingModel.dart';
 import 'package:car_service/utils/repository/auth_repo.dart';
@@ -165,7 +166,8 @@ class _AuthState extends State<Auth> {
         BlocProvider(
             create: (context) => ManageStaffBloc(repo: ManagerRepository())),
         BlocProvider(
-            create: (context) => PackageServiceBloc(repo: CustomerRepository())),
+            create: (context) =>
+                PackageServiceBloc(repo: CustomerRepository())),
         // BlocProvider(
         //     create: (context) =>
         //         BookingCubit(VerifyBookingInitState(), ManagerRepository())),
@@ -174,7 +176,7 @@ class _AuthState extends State<Auth> {
         debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {
-          '/': (context) => LoginUi(),
+          '/': (context) => ManagerMain(),
           '/manager': (context) => ManagerMain(),
           '/staff': (context) => StaffHome(),
           '/customer': (context) => CustomerHome(),

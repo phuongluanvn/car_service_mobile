@@ -1,6 +1,9 @@
 import 'package:car_service/blocs/manager/createOrder/createOrder_bloc.dart';
 import 'package:car_service/blocs/manager/createOrder/createOrder_state.dart';
 import 'package:car_service/blocs/manager/createOrder/createOrder_event.dart';
+import 'package:car_service/blocs/packageService/PackageService_bloc.dart';
+import 'package:car_service/blocs/packageService/PackageService_state.dart';
+import 'package:car_service/utils/model/CustomerModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,11 +13,9 @@ class CreateOrderUI extends StatefulWidget {
 }
 
 class _CreateOrderUIState extends State<CreateOrderUI> {
-  TextEditingController fullname = TextEditingController();
+  TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
   CreateOrderBloc createOrderBloc;
-  static const values = <String>['Sữa chữa', 'Bảo dưỡng'];
-  String selectedValue = values.first;
 
   final selectedColor = Colors.blue[700];
   final unselectedColor = Colors.black;
@@ -27,35 +28,37 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
 
   @override
   Widget build(BuildContext context) {
+    String carId;
+    bool _visibleBaoDuong = false;
+    bool _visibleSuaChua = false;
+    String selectItem;
+    List<CustomerModel> listload;
+    int _valueSelected = 0;
+    bool _valueCheckbox = false;
+    CreateOrderBloc _createOrderBloc;
+    int _selectedTimeButton = 0;
+
     // final logo = Center(
     //   child: Icon(Icons.supervised_user_circle, size: 150),
     // );
 
-    final msg = BlocBuilder<CreateOrderBloc, CreateOrderState>(
-        builder: (context, state) {
-      if (state.status == CreateOrderStatus.error) {
-        return Text(state.message.toString());
-      } else if (state.status == CreateOrderStatus.loading) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      } else {
-        return Container();
-      }
-    });
-
-    final name = TextField(
-      controller: fullname,
+    final name = TextFormField(
+      maxLines: null,
       autofocus: false,
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.email),
         filled: true,
         fillColor: Colors.white,
-        hintStyle: TextStyle(color: Colors.black54),
+        hintStyle: TextStyle(color: Colors.black),
         hintText: 'Tài khoản',
         contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
+      validator: (value) {
+        if (value.contains('\n')) {
+          createOrderBloc.add(DoCreateOrderDetailEvent(id: value));
+        }
+      },
     );
 
     final emailaddress = TextField(
@@ -81,8 +84,10 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
         ),
         onPressed: () {
           createOrderBloc.add(CreateOrderButtonPressed(
-            manufacturer: fullname.text,
-            licensePlateNumber: email.text,
+            carId: '',
+            cusId: '',
+            serviceId: '',
+            note: '',
           ));
         },
         padding: EdgeInsets.all(12),
@@ -94,45 +99,20 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
       ),
     );
 
-    Widget buildRadios() => Theme(
-          data: Theme.of(context).copyWith(
-            unselectedWidgetColor: unselectedColor,
-          ),
-          child: Column(
-            children: values.map(
-              (value) {
-                final selected = this.selectedValue == value;
-                final color = selected ? selectedColor : unselectedColor;
-
-                return RadioListTile<String>(
-                  value: value,
-                  groupValue: selectedValue,
-                  title: Text(
-                    value,
-                    style: TextStyle(color: color),
-                  ),
-                  activeColor: selectedColor,
-                  onChanged: (value) =>
-                      setState(() => this.selectedValue = value),
-                );
-              },
-            ).toList(),
-          ),
-        );
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Tạo đơn hàng'),
       ),
       backgroundColor: Colors.blue[100],
       body: BlocListener<CreateOrderBloc, CreateOrderState>(
-          listener: (context, state) {
-            if (state.status == CreateOrderStatus.createOrderSuccess) {
-              print('object');
-              Navigator.pushNamed(context, '/customer');
-            }
-          },
-          child: SingleChildScrollView(
+        listener: (context, state) {
+          if (state.detailStatus == CreateDetailStatus.success) {
+            listload = state.listCus;
+            print(listload);
+          }
+        },
+          child:
+          SingleChildScrollView(
             child: Center(
               child: Column(
                 children: <Widget>[
@@ -157,25 +137,25 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                           Row(
                             children: [
                               Text('Họ Tên:'),
-                              Text('1'),
+                              Text(listload[0].fullname),
                             ],
                           ),
                           Row(
                             children: [
                               Text('Email:'),
-                              Text('2'),
+                              Text(listload[0].email),
                             ],
                           ),
                           Row(
                             children: [
                               Text('SĐT:'),
-                              Text('3'),
+                              Text(listload[0].phoneNumber),
                             ],
                           ),
                           Row(
                             children: [
                               Text('Địa chỉ:'),
-                              Text('4'),
+                              Text(listload[0].address),
                             ],
                           ),
                           Padding(
@@ -220,35 +200,149 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(),
-                          borderRadius: BorderRadius.circular(10)),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  Visibility(
+                      // visible: _visible,
                       child: Column(
-                        children: [
-                          buildRadios(),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: TextField(
-                              maxLines: 6,
-                              decoration:
-                                  InputDecoration.collapsed(hintText: 'Mô tả'),
-                            ),
-                          ),
-                        ],
+                    children: <Widget>[
+                      const Divider(
+                        color: Colors.black87,
+                        height: 20,
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
                       ),
-                    ),
-                  ),
+                      Text(
+                        'Chọn dịch vụ',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                      Container(
+                        child: Column(
+                          children: <Widget>[
+                            RadioListTile(
+                              value: 1,
+                              groupValue: _valueSelected,
+                              title: Text('Bảo Dưỡng'),
+                              onChanged: (value) {
+                                setState(() {
+                                  _valueSelected = value;
+                                  print(value);
+                                  _visibleBaoDuong = true;
+                                  _visibleSuaChua = false;
+                                });
+                              },
+                            ),
+                            Visibility(
+                                visible: _visibleBaoDuong,
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                      // child: SingleChildScrollView(
+                                      child: BlocBuilder<PackageServiceBloc,
+                                          PackageServiceState>(
+                                        // ignore: missing_return
+                                        builder: (context, stateOfPackage) {
+                                          if (stateOfPackage.status ==
+                                              PackageServiceStatus.init) {
+                                            return CircularProgressIndicator();
+                                          } else if (stateOfPackage.status ==
+                                              PackageServiceStatus.loading) {
+                                            return CircularProgressIndicator();
+                                          } else if (stateOfPackage.status ==
+                                              PackageServiceStatus
+                                                  .loadedPackagesSuccess) {
+                                            if (stateOfPackage
+                                                        .packageServiceLists !=
+                                                    null &&
+                                                stateOfPackage
+                                                    .packageServiceLists
+                                                    .isNotEmpty)
+                                              return ListView.builder(
+                                                itemCount: stateOfPackage
+                                                    .packageServiceLists.length,
+                                                shrinkWrap: true,
+                                                // ignore: missing_return
+                                                itemBuilder: (context, index) {
+                                                  return Card(
+                                                    child: ListTile(
+                                                      title: Text(
+                                                        stateOfPackage
+                                                            .packageServiceLists[
+                                                                index]
+                                                            .name,
+                                                        style: TextStyle(
+                                                            color: (carId ==
+                                                                    stateOfPackage
+                                                                        .packageServiceLists[
+                                                                            index]
+                                                                        .name)
+                                                                ? Colors.blue
+                                                                : Colors.grey),
+                                                      ),
+                                                      subtitle: Text(stateOfPackage
+                                                          .packageServiceLists[
+                                                              index]
+                                                          .name),
+                                                      onTap: () {
+                                                        setState(() {
+                                                          carId = stateOfPackage
+                                                              .packageServiceLists[
+                                                                  index]
+                                                              .name;
+                                                        });
+                                                      },
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            else //nếu không có xe nào
+                                              return Text(
+                                                  'Không có thông tin xe');
+                                          } else if (stateOfPackage.status ==
+                                              PackageServiceStatus.error) {
+                                            return ErrorWidget(stateOfPackage
+                                                .message
+                                                .toString());
+                                          }
+                                        },
+                                      ),
+                                      // ),
+                                    )
+                                  ],
+                                )),
+                            RadioListTile(
+                              value: 2,
+                              groupValue: _valueSelected,
+                              title: Text('Sửa chữa'),
+                              onChanged: (value) {
+                                setState(() {
+                                  _valueSelected = value;
+                                  print(value);
+                                  _visibleBaoDuong = false;
+                                  _visibleSuaChua = true;
+                                });
+                              },
+                            ),
+                            Visibility(
+                                visible: _visibleSuaChua, child: Text('data')),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: TextField(
+                                maxLines: 6,
+                                decoration: InputDecoration.collapsed(
+                                    hintText: 'Mô tả'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
                   createOrderButton,
                   SizedBox(
                     height: 20,
@@ -256,7 +350,9 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                 ],
               ),
             ),
-          )),
+          ),
+        
+      ),
     );
   }
 }

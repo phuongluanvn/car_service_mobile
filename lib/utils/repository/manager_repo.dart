@@ -1,5 +1,6 @@
 import 'package:car_service/utils/model/AssignOrderModel.dart';
 import 'package:car_service/utils/model/BookingModel.dart';
+import 'package:car_service/utils/model/CustomerModel.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/ServiceModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
@@ -385,4 +386,56 @@ class ManagerRepository {
       return null;
     }
   }
+
+  Future<List<CustomerModel>> getCreateOrderDetail(String id) async {
+    List<CustomerModel> listdata = [];
+    List convertData = [];
+
+    var res = await http.get(
+      Uri.parse(
+          'https://carservicesystem.azurewebsites.net/api/customers/' + id),
+      headers: headers,
+    );
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      convertData.add(data); //thêm [] để dùng .map bêndưới
+
+      try {
+        if (data != null) {
+          convertData
+              .map((element) => listdata.add(CustomerModel.fromJson(element)))
+              .toList();
+          return listdata;
+        } else {
+          print('No detail order data');
+        }
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+  }
+
+  //   createNewOrder(String cusId, String packageId, String note,
+  //     String bookingTime) async {
+  //   var body = {
+  //     "vehicleId": '$cusId',
+  //     "packageId": null,
+  //     "note": '$note',
+  //     "bookingTime": '$bookingTime'
+  //   };
+  //   var res = await http.post(
+  //     Uri.parse(BASE_URL + "Orders"),
+  //     headers: headers,
+  //     body: json.encode(body),
+  //   );
+  //   if (res.statusCode != null) {
+  //     if (res.statusCode == 200) {
+  //       return res.body;
+  //     } else if (res.statusCode == 404) {
+  //       return res.body;
+  //     }
+  //   } else {
+  //     return null;
+  //   }
+  // }
 }
