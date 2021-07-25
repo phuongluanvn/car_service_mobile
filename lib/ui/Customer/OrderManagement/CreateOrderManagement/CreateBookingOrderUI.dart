@@ -22,17 +22,21 @@ class CreateBookingOrderUI extends StatefulWidget {
 }
 
 class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
-  String carId;
+  String _carId;
+  String _packageId;
   bool _visibleBaoDuong = false;
   bool _visibleSuaChua = false;
-  String selectItem;
+  String _selectItem;
   CalendarFormat _calendarFormat = CalendarFormat.week;
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay;
   int _valueSelected = 0;
+  String _valueSelectedPackageService;
   bool _valueCheckbox = false;
   CreateBookingBloc _createBookingBloc;
   int _selectedTimeButton = 0;
+  String _note;
+  Map<String, bool> checkboxListValues = {};
 
   Widget showTimeButton(String text, int index) {
     return OutlineButton(
@@ -132,7 +136,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                 title: Text(
                                   state.vehicleLists[index].licensePlate,
                                   style: TextStyle(
-                                      color: (carId ==
+                                      color: (_carId ==
                                               state.vehicleLists[index].id)
                                           ? Colors.blue
                                           : Colors.grey),
@@ -143,7 +147,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                         state.vehicleLists[index].model),
                                 onTap: () {
                                   setState(() {
-                                    carId = state.vehicleLists[index].id;
+                                    _carId = state.vehicleLists[index].id;
                                     // _visible = !_visible;
                                   });
                                 },
@@ -197,74 +201,86 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                             visible: _visibleBaoDuong,
                             child: Column(
                               children: <Widget>[
-                                Container(
-                                  // child: SingleChildScrollView(
-                                  child: BlocBuilder<PackageServiceBloc,
-                                      PackageServiceState>(
-                                    // ignore: missing_return
-                                    builder: (context, stateOfPackage) {
-                                      if (stateOfPackage.status ==
-                                          PackageServiceStatus.init) {
-                                        return CircularProgressIndicator();
-                                      } else if (stateOfPackage.status ==
-                                          PackageServiceStatus.loading) {
-                                        return CircularProgressIndicator();
-                                      } else if (stateOfPackage.status ==
-                                          PackageServiceStatus
-                                              .loadedPackagesSuccess) {
-                                        if (stateOfPackage
-                                                    .packageServiceLists !=
-                                                null &&
-                                            stateOfPackage
-                                                .packageServiceLists.isNotEmpty)
-                                          return ListView.builder(
-                                            itemCount: stateOfPackage
-                                                .packageServiceLists.length,
-                                            shrinkWrap: true,
-                                            // ignore: missing_return
-                                            itemBuilder: (context, index) {
-                                              return Card(
-                                                child: ListTile(
-                                                  title: Text(
-                                                    stateOfPackage
-                                                        .packageServiceLists[
-                                                            index]
-                                                        .name,
-                                                    style: TextStyle(
-                                                        color: (carId ==
-                                                                stateOfPackage
-                                                                    .packageServiceLists[
-                                                                        index]
-                                                                    .name)
-                                                            ? Colors.blue
-                                                            : Colors.grey),
-                                                  ),
-                                                  subtitle: Text(stateOfPackage
-                                                      .packageServiceLists[
-                                                          index]
-                                                      .name),
-                                                  onTap: () {
-                                                    setState(() {
-                                                      carId = stateOfPackage
-                                                          .packageServiceLists[
-                                                              index]
-                                                          .name;
-                                                    });
-                                                  },
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        else //nếu không có xe nào
-                                          return Text('Không có thông tin xe');
-                                      } else if (stateOfPackage.status ==
-                                          PackageServiceStatus.error) {
-                                        return ErrorWidget(
-                                            stateOfPackage.message.toString());
-                                      }
-                                    },
+                                Padding(
+                                  padding: const EdgeInsets.all(18.0),
+                                  child: Container(
+                                    // child: SingleChildScrollView(
+                                    child: BlocBuilder<PackageServiceBloc,
+                                        PackageServiceState>(
+                                      // ignore: missing_return
+                                      builder: (context, stateOfPackage) {
+                                        if (stateOfPackage.status ==
+                                            PackageServiceStatus.init) {
+                                          return CircularProgressIndicator();
+                                        } else if (stateOfPackage.status ==
+                                            PackageServiceStatus.loading) {
+                                          return CircularProgressIndicator();
+                                        } else if (stateOfPackage.status ==
+                                            PackageServiceStatus
+                                                .loadedPackagesSuccess) {
+                                          if (stateOfPackage
+                                                      .packageServiceLists !=
+                                                  null &&
+                                              stateOfPackage.packageServiceLists
+                                                  .isNotEmpty)
+                                            return ExpansionPanelList.radio(
+                                              children: stateOfPackage
+                                                  .packageServiceLists
+                                                  .map<ExpansionPanelRadio>(
+                                                (e) {
+                                                  return ExpansionPanelRadio(
+                                                      value: e.id,
+                                                      headerBuilder: (context,
+                                                          isExpanded) {
+                                                        return RadioListTile(
+                                                          title: Text(e.name),
+                                                          onChanged: (value) {
+                                                            setState(() {
+                                                              _valueSelectedPackageService =
+                                                                  value;
+                                                              _packageId =
+                                                                  value;
+                                                              _note = null;
+                                                            });
+                                                          },
+                                                          controlAffinity:
+                                                              ListTileControlAffinity
+                                                                  .leading,
+                                                          groupValue:
+                                                              _valueSelectedPackageService,
+                                                          value: e.id,
+                                                        );
+                                                      },
+                                                      body:
+                                                          SingleChildScrollView(
+                                                        child: ListView(
+                                                          shrinkWrap: true,
+                                                          children: e.services
+                                                              .map((service) {
+                                                            return ListTile(
+                                                              title: Text(
+                                                                  service.name),
+                                                            );
+                                                          }).toList(),
+                                                        ),
+                                                      ));
+                                                  // );
+                                                },
+                                              ).toList(),
+                                            );
+                                          else //nếu không có xe nào
+                                            return Text(
+                                                'Không có thông các gói dịch vụ');
+                                        } else if (stateOfPackage.status ==
+                                            PackageServiceStatus.error) {
+                                          return ErrorWidget(stateOfPackage
+                                              .message
+                                              .toString());
+                                        }
+                                      },
+                                    ),
+                                    // ),
                                   ),
-                                  // ),
                                 )
                               ],
                             )),
@@ -275,14 +291,36 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                           onChanged: (value) {
                             setState(() {
                               _valueSelected = value;
-                              print(value);
                               _visibleBaoDuong = false;
                               _visibleSuaChua = true;
                             });
                           },
                         ),
                         Visibility(
-                            visible: _visibleSuaChua, child: Text('data')),
+                          visible: _visibleSuaChua,
+                          child: Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: TextField(
+                                onChanged: (noteValue) {
+                                  setState(() {
+                                    _packageId = null;
+                                    _note = noteValue;
+                                  });
+                                },
+                                maxLines: 6,
+                                decoration: InputDecoration.collapsed(
+                                    hintText: 'Tình trạng xe'),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -366,12 +404,41 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                     onPrimary: Colors.white, // foreground
                   ),
                   onPressed: () {
-                    _createBookingBloc.add(CreateBookingButtonPressed(
-                      carId: carId,
-                      serviceId: null,
-                      note: "Hong co",
-                      timeBooking: _selectedDay.toIso8601String(),
-                    ));
+                    if (_carId == null) {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext ctx) {
+                            return AlertDialog(
+                              title: Text(
+                                'Thông báo!',
+                                style: TextStyle(color: Colors.redAccent),
+                              ),
+                              content: Text('Vui lòng chọn xe!'),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      // Close the dialog
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('Đồng ý'))
+                              ],
+                            );
+                          });
+                    } else if (_note == null) {
+                      _createBookingBloc.add(CreateBookingButtonPressed(
+                        carId: _carId,
+                        serviceId: _packageId,
+                        note: null,
+                        timeBooking: _selectedDay.toIso8601String(),
+                      ));
+                    } else if (_packageId == null) {
+                      _createBookingBloc.add(CreateBookingButtonPressed(
+                        carId: _carId,
+                        serviceId: null,
+                        note: _note,
+                        timeBooking: _selectedDay.toIso8601String(),
+                      ));
+                    }
                   },
                   child: Text('Xác nhận'),
                 ),

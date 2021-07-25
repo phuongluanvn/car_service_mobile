@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart' as path;
 
 class CreateCustomerCarUI extends StatefulWidget {
   @override
@@ -27,6 +29,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
   String _selectModelOfManufacturerItem;
   bool _visible = false;
   File _image;
+  String _uploadedFileURL;
   String _username;
 
   @override
@@ -73,8 +76,10 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
         context: context,
         builder: (BuildContext ctx) {
           return AlertDialog(
-            title: Text('Thông báo!',
-            style: TextStyle(color: Colors.redAccent),),
+            title: Text(
+              'Thông báo!',
+              style: TextStyle(color: Colors.redAccent),
+            ),
             content: Text('Thêm mới xe không thành công!'),
             actions: [
               TextButton(
@@ -146,6 +151,17 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
       ),
     );
 
+    Future uploadImageToFirebase(BuildContext context) async {
+      String fileName = path.basename(_image.path);
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference ref = storage.ref().child('mobiles/customer_car/$fileName');
+      UploadTask uploadTask = ref.putFile(_image);
+      uploadTask.then((res) {
+        res.ref.getDownloadURL();
+        print('Done: $res');
+      });
+    }
+
     final createCarButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16),
       child: RaisedButton(
@@ -153,7 +169,10 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          _showSuccessDialog();
+          print(_image.path);
+          print(_image);
+          uploadImageToFirebase(context);
+          // _showSuccessDialog();
           // createCarBloc.add(CreateCarButtonPressed(
           //   username: _username,
           //   manufacturer: _selectManufacturerItem,

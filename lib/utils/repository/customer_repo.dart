@@ -2,6 +2,7 @@ import 'package:car_service/utils/model/CarModel.dart';
 import 'package:car_service/utils/model/ManufacturerModel.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/OrderModel.dart';
+import 'package:car_service/utils/model/PackageServiceDetailModel.dart';
 import 'package:car_service/utils/model/PackageServiceModel.dart';
 import 'package:car_service/utils/model/ServiceModel.dart';
 import 'package:car_service/utils/model/VehicleModel.dart';
@@ -27,12 +28,12 @@ class CustomerRepository {
       String bookingTime) async {
     var body = {
       "vehicleId": '$vehicleId',
-      "packageId": null,
+      "packageId": packageId,
       "note": '$note',
       "bookingTime": '$bookingTime'
     };
     var res = await http.post(
-      Uri.parse(BASE_URL + "Orders"),
+      Uri.parse(BASE_URL + "orders"),
       headers: headers,
       body: json.encode(body),
     );
@@ -56,7 +57,7 @@ class CustomerRepository {
       "licensePlate": '$licensePlateNumber'
     };
     var res = await http.post(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/Vehicles"),
+      Uri.parse(BASE_URL + "vehicles"),
       headers: headers,
       body: json.encode(body),
     );
@@ -75,7 +76,7 @@ class CustomerRepository {
     String message = '';
     List<VehicleModel> vehicleLists = [];
     var ressponse = await http.get(
-      Uri.parse(BASE_URL + "Customers/" + username),
+      Uri.parse(BASE_URL + "customers/" + username),
       headers: headers,
     );
     if (ressponse.statusCode == 200) {
@@ -127,7 +128,7 @@ class CustomerRepository {
   getOrderList(String username) async {
     List<OrderModel> orderLists = [];
     var res = await http.get(
-      Uri.parse(BASE_URL + "Customers/" + username + "/orders"),
+      Uri.parse(BASE_URL + "customers/" + username + "/orders"),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -148,19 +149,24 @@ class CustomerRepository {
   getOrderDetail(String id) async {
     List<OrderDetailModel> orderDetails = [];
     List convertData = [];
+    print(id);
     var res = await http.get(
       Uri.parse(BASE_URL + 'Orders/' + id),
       headers: headers,
     );
+    print(res.body);
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
       convertData.add(data);
+      print(convertData);
       try {
         if (data != null) {
+          print('jịịịịịi');
           convertData
               .map((orderDetail) =>
                   orderDetails.add(OrderDetailModel.fromJson(orderDetail)))
               .toList();
+              print('?????');
           return orderDetails;
         } else {
           res.body;
@@ -176,7 +182,7 @@ class CustomerRepository {
   getPackageServiceList() async {
     List<PackageServiceModel> packageServiceLists = [];
     var res = await http.get(
-      Uri.parse(BASE_URL + "packages"),
+      Uri.parse(BASE_URL + "packages/content"),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -196,10 +202,10 @@ class CustomerRepository {
   }
 
   getPackageServiceDetail(String id) async {
-    List<OrderDetailModel> orderDetails = [];
+    List<PackageServiceDetailModel> orderDetails = [];
     List convertData = [];
     var res = await http.get(
-      Uri.parse(BASE_URL + 'Orders/' + id),
+      Uri.parse(BASE_URL + 'packages/' + id),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -208,8 +214,8 @@ class CustomerRepository {
       try {
         if (data != null) {
           convertData
-              .map((orderDetail) =>
-                  orderDetails.add(OrderDetailModel.fromJson(orderDetail)))
+              .map((orderDetail) => orderDetails
+                  .add(PackageServiceDetailModel.fromJson(orderDetail)))
               .toList();
           return orderDetails;
         } else {
@@ -247,7 +253,7 @@ class CustomerRepository {
     List<ManufacturerModel> manufacturerLists = [];
 
     var res = await http.get(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/Manufacturers"),
+      Uri.parse( BASE_URL+ "Manufacturers"),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -269,13 +275,12 @@ class CustomerRepository {
     List<String> modelOfManufacturer = [];
     var res = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Manufacturers/" +
+          BASE_URL+"Manufacturers/" +
               namuName),
       headers: headers,
     );
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
-      print(data);
       if (data != null) {
         data['vehicleModels']
             .map((order) => modelOfManufacturer.add((order)))

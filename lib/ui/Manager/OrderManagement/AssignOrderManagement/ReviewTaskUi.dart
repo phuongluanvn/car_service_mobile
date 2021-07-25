@@ -30,7 +30,10 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
   String holder = '';
   List results = [1, 2, 3, 4, 5];
   List<OrderDetailModel> selectedValue;
+  String _selectedValueDetail;
+
   List selectedDetailsValue;
+  
   @override
   void initState() {
     super.initState();
@@ -130,37 +133,33 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                     ),
                                   ),
                                 ],
-                                rows: selectedValue[0].orderDetails.map((data) {
+                                
+                                rows: selectedValue.map((data) {
                                   // int index = data.key;
                                   selectedDetailsValue =
                                       state.processDetail[0].orderDetails;
+                                      _selectedValueDetail = data.orderDetails[0].name;
                                   return DataRow(cells: [
-                                    DataCell(DropdownButton(
+                                    DataCell(
+                                      DropdownButton(
                                       isExpanded: true,
-                                      value: selectedValue[0],
+                                      value: _selectedValueDetail,
                                       onChanged: (newPackage) {
                                         setState(() {
-                                          selectedValue[0] = newPackage;
+                                          _selectedValueDetail = newPackage;
                                         });
                                       },
-                                      items: selectedValue[0]
-                                          .orderDetails
-                                          .map<DropdownMenuItem>((value) {
+                                      items: data.orderDetails.map<DropdownMenuItem>((value) {
                                         return DropdownMenuItem(
-                                          value: value,
+                                          value: value.name,
                                           child: Text(value.name),
                                         );
                                       }).toList(),
-                                    )),
+                                      )),
                                     DataCell(
                                       Text(selectedValue[0].status),
                                     ),
-                                    DataCell(Checkbox(
-                                      value: checkedValue,
-                                      onChanged: (bool value) {
-                                        onChanged(value);
-                                      },
-                                    )),
+                                    DataCell(Text(selectedValue[0].status)),
                                   ]);
                                 }).toList(),
                               ),

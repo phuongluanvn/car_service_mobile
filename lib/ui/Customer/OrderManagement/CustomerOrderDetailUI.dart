@@ -63,32 +63,22 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                       cardInforOrder(
                           state.orderDetail[0].status,
                           state.orderDetail[0].bookingTime,
-                          state.orderDetail[0].checkinTime,
+                          state.orderDetail[0].bookingTime,
                           state.orderDetail[0].note),
                       cardInforService(
                           state.orderDetail[0].vehicle.model,
                           state.orderDetail[0].vehicle.model,
-                          state.orderDetail[0].vehicle.licensePlate),
+                          state.orderDetail[0].vehicle.licensePlate,
+                          state.orderDetail[0].orderDetails),
                       cardInforCar(
                           state.orderDetail[0].vehicle.manufacturer,
                           state.orderDetail[0].vehicle.model,
                           state.orderDetail[0].vehicle.licensePlate),
-
-                      // SizedBox(
-                      //   width: double.infinity,
-                      //   height: 35,
-                      //   child: RaisedButton(
-                      //     child: Text('Submit',
-                      //         style: TextStyle(color: Colors.white)),
-                      //     color: Theme.of(context).primaryColor,
-                      //     onPressed: () {},
-                      //   ),
-                      // )
                     ],
                   ),
                 );
               else
-                return Center(child: Text('Empty'));
+                return Center(child: Text('Không có thông tin đơn đặt lịch'));
             } else if (state.detailStatus == CustomerOrderDetailStatus.error) {
               return ErrorWidget(state.message.toString());
             }
@@ -140,15 +130,20 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
           ),
           ListTile(
             title: Text('Ghi chú từ người dùng: '),
-            trailing: Text(note),
+            subtitle: Text(
+              note,
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+            ),
+            isThreeLine: true,
           ),
         ],
       ),
     );
   }
 
-  Widget cardInforService(
-      String servicePackageName, String serviceName, String price) {
+  Widget cardInforService(String servicePackageName, String serviceName,
+      String price, List services) {
     return Card(
       child: Column(
         children: [
@@ -157,9 +152,18 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
             title: Text('Loại dịch vụ: '),
             trailing: Text(servicePackageName),
           ),
-          ListTile(
-            title: Text('Chi tiết: '),
-            trailing: Text('Giá tiền'),
+          // ListTile(
+          //   title: Text('Chi tiết: '),
+          //   trailing: Text('Giá tiền'),
+          // ),
+          ExpansionTile(
+            title: Text('Chi tiết:'),
+            children: services.map((service) {
+              return ListTile(
+                title: Text(service.name),
+                trailing: Text('${service.price}'),
+              );
+            }).toList(),
           ),
           Divider(
             color: Colors.black,
