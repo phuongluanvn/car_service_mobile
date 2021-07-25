@@ -1,10 +1,13 @@
-
+import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
+import 'package:car_service/blocs/manager/processOrder/processOrder_events.dart';
+import 'package:car_service/blocs/manager/processOrder/processOrder_state.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/blocs/packageService/PackageService_bloc.dart';
 import 'package:car_service/blocs/packageService/PackageService_event.dart';
 import 'package:car_service/blocs/packageService/PackageService_state.dart';
 import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
+import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/PackageServiceModel.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
@@ -26,15 +29,16 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
   String selectItem;
   String holder = '';
   List results = [1, 2, 3, 4, 5];
-  List<PackageServiceModel> selectedPackage;
+  List<OrderDetailModel> selectedValue;
+  List selectedDetailsValue;
   @override
   void initState() {
     super.initState();
     print('Order id is:' + widget.orderId);
-    // BlocProvider.of<ProcessOrderBloc>(context)
-    //     .add(DoProcessOrderDetailEvent(email: widget.emailId));
-    BlocProvider.of<PackageServiceBloc>(context)
-        .add(DoPackageServiceListEvent());
+    BlocProvider.of<ProcessOrderBloc>(context)
+        .add(DoProcessOrderDetailEvent(email: widget.orderId));
+    // BlocProvider.of<PackageServiceBloc>(context)
+    //     .add(DoPackageServiceListEvent());
   }
 
   void onChanged(bool value) {
@@ -76,16 +80,15 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
         ),
       ),
       body: Container(
-        child: BlocBuilder<PackageServiceBloc, PackageServiceState>(
+        child: BlocBuilder<ProcessOrderBloc, ProcessOrderState>(
           // ignore: missing_return
           builder: (context, state) {
-            if (state.status == PackageServiceStatus.init) {
+            if (state.detailStatus == ProcessDetailStatus.init) {
               return CircularProgressIndicator();
-            } else if (state.status == PackageServiceStatus.loading) {
+            } else if (state.detailStatus == ProcessDetailStatus.loading) {
               return CircularProgressIndicator();
-            } else if (state.status ==
-                PackageServiceStatus.loadedPackagesSuccess) {
-              selectedPackage = List.from(state.packageServiceLists);
+            } else if (state.detailStatus == ProcessDetailStatus.success) {
+              selectedValue = List.from(state.processDetail);
               return Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: SingleChildScrollView(
@@ -127,34 +130,31 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                     ),
                                   ),
                                 ],
-                                rows:
-                                    selectedPackage.asMap().entries.map((data) {
-                                  int index = data.key;
+                                rows: selectedValue[0].orderDetails.map((data) {
+                                  // int index = data.key;
+                                  selectedDetailsValue =
+                                      state.processDetail[0].orderDetails;
                                   return DataRow(cells: [
-                                    DataCell(
-                                        DropdownButton<PackageServiceModel>(
+                                    DataCell(DropdownButton(
                                       isExpanded: true,
-                                      value: selectedPackage[index],
-                                      onChanged:
-                                          (PackageServiceModel newPackage) {
+                                      value: selectedValue[0],
+                                      onChanged: (newPackage) {
                                         setState(() {
-                                          selectedPackage[index] = newPackage;
+                                          selectedValue[0] = newPackage;
                                         });
                                       },
-                                      items: state.packageServiceLists.map<
-                                              DropdownMenuItem<
-                                                  PackageServiceModel>>(
-                                          (PackageServiceModel value) {
-                                        return DropdownMenuItem<
-                                            PackageServiceModel>(
+                                      items: selectedValue[0]
+                                          .orderDetails
+                                          .map<DropdownMenuItem>((value) {
+                                        return DropdownMenuItem(
                                           value: value,
                                           child: Text(value.name),
                                         );
                                       }).toList(),
                                     )),
-                                    DataCell(Text(selectedPackage[index]
-                                        .price
-                                        .toString())),
+                                    DataCell(
+                                      Text(selectedValue[0].status),
+                                    ),
                                     DataCell(Checkbox(
                                       value: checkedValue,
                                       onChanged: (bool value) {
@@ -192,7 +192,6 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (_) => AssignOrderReviewUi(
                                           userId: widget.orderId,
-                                          
                                         )));
                               },
                             ),
@@ -205,7 +204,7 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                 // ),
                 // ),
               );
-            } else if (state.status == StaffStatus.error) {
+            } else if (state.detailStatus == ProcessDetailStatus.error) {
               return ErrorWidget(state.message.toString());
             }
           },

@@ -179,7 +179,7 @@ class ManagerRepository {
 
     var res = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Accepted"),
+          "https://carservicesystem.azurewebsites.net/api/orders?status=Accepted"),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -204,17 +204,17 @@ class ManagerRepository {
 
     var resAccepted = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Accepted"),
+          "https://carservicesystem.azurewebsites.net/api/orders?status=Accepted"),
       headers: headers,
     );
     var resCheckin = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Checkin"),
+          "https://carservicesystem.azurewebsites.net/api/orders?status=Checkin"),
       headers: headers,
     );
     var resChecking = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Checking"),
+          "https://carservicesystem.azurewebsites.net/api/orders?status=Checking"),
       headers: headers,
     );
     if (resAccepted.statusCode == 200 &&
@@ -225,6 +225,7 @@ class ManagerRepository {
       var dataChecking = json.decode(resChecking.body);
 
       if (dataAccepted != null && dataCheckin != null && dataChecking != null) {
+        print('Check assign success');
         dataAccepted
             .map((order) => acceptedList.add(OrderDetailModel.fromJson(order)))
             .toList();
@@ -234,11 +235,16 @@ class ManagerRepository {
         dataChecking
             .map((order) => checkingList.add(OrderDetailModel.fromJson(order)))
             .toList();
-        var newList = [...acceptedList, ...checkinList, ...checkingList];
+        List<OrderDetailModel> newList = [
+          ...acceptedList,
+          ...checkinList,
+          ...checkingList
+        ];
         print('????');
         print(newList);
         return newList;
       } else {
+        print('Đuu');
         return null;
       }
     } else {
@@ -302,7 +308,7 @@ class ManagerRepository {
     List convertData = [];
 
     var res = await http.get(
-      Uri.parse('https://carservicesystem.azurewebsites.net/api/Orders/' + id),
+      Uri.parse('https://carservicesystem.azurewebsites.net/api/orders/' + id),
       headers: headers,
     );
     if (res.statusCode == 200) {

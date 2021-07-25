@@ -4,7 +4,7 @@ class OrderDetailModel {
   String status;
   String createdTime;
   String bookingTime;
-  Null checkinTime;
+  String checkinTime;
   Customer customer;
   Vehicle vehicle;
   Package package;

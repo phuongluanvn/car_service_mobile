@@ -17,8 +17,10 @@ class AssignOrderBloc extends Bloc<AssignOrderEvent, AssignOrderState> {
     if (event is DoListAssignOrderEvent) {
       yield state.copyWith(status: AssignStatus.loading);
       try {
-        var assignList = await _repo.getAssingOrderList();
+        print('Check ass list 1');
+        List<OrderDetailModel> assignList = await _repo.getAssingOrderList();
         if (assignList != null) {
+          print(assignList);
           yield state.copyWith(
               assignList: assignList, status: AssignStatus.assignSuccess);
         } else {
