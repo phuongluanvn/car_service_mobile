@@ -1,3 +1,6 @@
+import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
+import 'package:car_service/blocs/customer/customerCar/CustomerCar_event.dart';
+import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
 import 'package:car_service/blocs/manager/createOrder/createOrder_bloc.dart';
 import 'package:car_service/blocs/manager/createOrder/createOrder_state.dart';
 import 'package:car_service/blocs/manager/createOrder/createOrder_event.dart';
@@ -17,6 +20,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
   TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
   CreateOrderBloc createOrderBloc;
+  CustomerCarBloc customerCarBloc;
   bool _testVi = false;
   String carId;
   bool _visibleBaoDuong = false;
@@ -36,6 +40,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
     BlocProvider.of<PackageServiceBloc>(context)
         .add(DoPackageServiceListEvent());
     createOrderBloc = BlocProvider.of<CreateOrderBloc>(context);
+    customerCarBloc = BlocProvider.of<CustomerCarBloc>(context);
 
     super.initState();
   }
@@ -58,33 +63,13 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
         contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
-      // ignore: missing_return
-      onFieldSubmitted: (value) {
-        // if (value.contains('\n')) {
-        print('hihihihihi');
-        createOrderBloc.add(DoCreateOrderDetailEvent(id: value));
-        // }
-      },
       onChanged: (event) {
         createOrderBloc.add(DoCreateOrderDetailEvent(id: event));
+        customerCarBloc.add(DoCarListWithIdEvent(vehicleId: event));
+
         print(event);
       },
       textInputAction: TextInputAction.search,
-    );
-
-    final emailaddress = TextField(
-      controller: email,
-      keyboardType: TextInputType.emailAddress,
-      autofocus: false,
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.email),
-        filled: true,
-        fillColor: Colors.white,
-        hintStyle: TextStyle(color: Colors.black54),
-        hintText: 'Biển số',
-        contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
     );
 
     final createOrderButton = Padding(
@@ -137,35 +122,6 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                     visible: _testVi,
                     child: Column(
                       children: [
-                        Row(
-                          children: [
-                            Text('Họ Tên:'),
-                            Text(listload[0].fullname),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text('Email:'),
-                            Text(listload[0].email),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text('SĐT:'),
-                            Text(listload[0].phoneNumber),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text('Địa chỉ:'),
-                            Text(listload[0].address),
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 20),
-                          child: emailaddress,
-                        ),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10),
                           child: Container(
@@ -179,21 +135,129 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                               children: [
                                 Row(
                                   children: [
-                                    Text('Loại xe:'),
-                                    Text('1'),
+                                    Text('Họ Tên:'),
+                                    Text(listload[0].fullname),
                                   ],
                                 ),
                                 Row(
                                   children: [
-                                    Text('Hãng xe:'),
-                                    Text('2'),
+                                    Text('Email:'),
+                                    Text(listload[0].email),
                                   ],
                                 ),
                                 Row(
                                   children: [
-                                    Text('Màu sắc:'),
-                                    Text('3'),
+                                    Text('SĐT:'),
+                                    Text(listload[0].phoneNumber),
                                   ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text('Địa chỉ:'),
+                                    Text(listload[0].address),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 0, vertical: 20),
+                                  child: Container(
+                                    child: BlocBuilder<CustomerCarBloc,
+                                        CustomerCarState>(
+                                      // ignore: missing_return
+                                      builder: (context, state) {
+                                        if (state.withIdstatus ==
+                                            CustomerCarWithIdStatus.init) {
+                                          return CircularProgressIndicator();
+                                        } else if (state.withIdstatus ==
+                                            CustomerCarWithIdStatus.loading) {
+                                          return CircularProgressIndicator();
+                                        } else if (state.withIdstatus ==
+                                            CustomerCarWithIdStatus
+                                                .loadedCarSuccess) {
+                                          if (state.vehicleLists != null &&
+                                              state.vehicleLists.isNotEmpty)
+                                            return GridView.builder(
+                                              itemCount:
+                                                  state.vehicleLists.length,
+                                              shrinkWrap: true,
+                                              // ignore: missing_return
+                                              gridDelegate:
+                                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                                childAspectRatio:
+                                                    1.6, // Tỉ lệ chiều-ngang/chiều-rộng của một item trong grid, ở đây width = 1.6 * height
+                                                crossAxisCount:
+                                                    2, // Số item trên một hàng ngang
+                                                crossAxisSpacing:
+                                                    0, // Khoảng cách giữa các item trong hàng ngang
+                                                mainAxisSpacing: 0,
+                                                // Khoảng cách giữa các hàng (giữa các item trong cột dọc)
+                                              ),
+                                              itemBuilder: (context, index) {
+                                                return Container(
+                                                  child: Card(
+                                                    child: ListTile(
+                                                      leading: CircleAvatar(
+                                                        backgroundImage: AssetImage(
+                                                            'lib/images/car_default.png'),
+                                                      ),
+                                                      title: Text(
+                                                        state
+                                                            .vehicleLists[index]
+                                                            .licensePlate,
+                                                        style: TextStyle(
+                                                            color: (carId ==
+                                                                    state
+                                                                        .vehicleLists[
+                                                                            index]
+                                                                        .id)
+                                                                ? Colors.blue
+                                                                : Colors.grey),
+                                                      ),
+                                                      subtitle: Text(state
+                                                              .vehicleLists[
+                                                                  index]
+                                                              .manufacturer +
+                                                          " - " +
+                                                          state
+                                                              .vehicleLists[
+                                                                  index]
+                                                              .model),
+                                                      onTap: () {
+                                                        setState(() {
+                                                          carId = state
+                                                              .vehicleLists[
+                                                                  index]
+                                                              .id;
+                                                          // _visible = !_visible;
+                                                        });
+                                                      },
+                                                    ),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20)),
+                                                    margin: EdgeInsets.only(
+                                                        top: 0,
+                                                        left: 2,
+                                                        right: 2,
+                                                        bottom: 40),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          else //nếu không có xe nào
+                                            return Text(
+                                                'Không có thông tin xe');
+                                        } else if (state.withIdstatus ==
+                                            CustomerCarWithIdStatus.error) {
+                                          return ErrorWidget(
+                                              state.message.toString());
+                                        }
+                                      },
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),

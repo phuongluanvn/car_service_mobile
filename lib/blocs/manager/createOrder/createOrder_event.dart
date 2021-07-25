@@ -30,6 +30,13 @@ class DoCreateOrderDetailEvent extends CreateOrderEvent {
   List<Object> get props => [id];
 }
 
+class DoLicenseDetailEvent extends CreateOrderEvent {
+  final String id;
+  DoLicenseDetailEvent({this.id});
+  @override
+  List<Object> get props => [id];
+}
+
 
 class CreateOrderServiceChanged extends CreateOrderEvent {
   final String serviceId;

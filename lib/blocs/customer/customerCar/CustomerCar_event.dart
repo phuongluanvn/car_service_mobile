@@ -7,6 +7,13 @@ abstract class CustomerCarEvent extends Equatable {
 
 class DoCarListEvent extends CustomerCarEvent {}
 
+class DoCarListWithIdEvent extends CustomerCarEvent {
+  final String vehicleId;
+  DoCarListWithIdEvent({this.vehicleId});
+  @override
+  List<Object> get props => [vehicleId];
+}
+
 class DoCarDetailEvent extends CustomerCarEvent {
   final String vehicleId;
   DoCarDetailEvent({this.vehicleId});

@@ -11,7 +11,16 @@ enum CustomerCarStatus {
   error,
 }
 
-enum CustomerCarDetailStatus{
+enum CustomerCarWithIdStatus {
+  init,
+  loading,
+  loadedCarSuccess,
+  loadedCarDetailSuccess,
+  loadedVehicleSuccess,
+  error,
+}
+
+enum CustomerCarDetailStatus {
   init,
   loading,
   success,
@@ -20,6 +29,7 @@ enum CustomerCarDetailStatus{
 
 class CustomerCarState extends Equatable {
   final CustomerCarStatus status;
+  final CustomerCarWithIdStatus withIdstatus;
   final CustomerCarDetailStatus detailStatus;
   final List<VehicleModel> vehicleDetail;
   final List<VehicleModel> vehicleLists;
@@ -27,14 +37,16 @@ class CustomerCarState extends Equatable {
   final String message;
   const CustomerCarState({
     this.status: CustomerCarStatus.init,
-    this.detailStatus:CustomerCarDetailStatus.init,
-    this.vehicleDetail:const [],
-    this.vehicleLists:const[],
-    this.message:'',
+    this.withIdstatus: CustomerCarWithIdStatus.init,
+    this.detailStatus: CustomerCarDetailStatus.init,
+    this.vehicleDetail: const [],
+    this.vehicleLists: const [],
+    this.message: '',
   });
 
   CustomerCarState copyWith({
     CustomerCarStatus status,
+    final CustomerCarWithIdStatus withIdstatus,
     CustomerCarDetailStatus detailStatus,
     List<VehicleModel> vehicleDetail,
     List<VehicleModel> vehicleLists,
@@ -42,9 +54,10 @@ class CustomerCarState extends Equatable {
   }) =>
       CustomerCarState(
         status: status ?? this.status,
-        detailStatus: detailStatus??this.detailStatus,
+        withIdstatus: withIdstatus ?? this.withIdstatus,
+        detailStatus: detailStatus ?? this.detailStatus,
         vehicleDetail: vehicleDetail ?? this.vehicleDetail,
-        message: message??this.message,
+        message: message ?? this.message,
         vehicleLists: vehicleLists ?? this.vehicleLists,
       );
   @override

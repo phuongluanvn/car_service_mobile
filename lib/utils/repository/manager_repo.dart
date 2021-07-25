@@ -331,7 +331,7 @@ class ManagerRepository {
       "status": '$status',
     };
     var res = await http.put(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/Orders"),
+      Uri.parse("https://carservicesystem.azurewebsites.net/api/orders/status"),
       headers: headers,
       body: json.encode(body),
     );

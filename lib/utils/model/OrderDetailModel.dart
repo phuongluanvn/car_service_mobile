@@ -4,10 +4,11 @@ class OrderDetailModel {
   String status;
   String createdTime;
   String bookingTime;
-  String checkinTime;
+  Null checkinTime;
   Customer customer;
   Vehicle vehicle;
-  String package;
+  Package package;
+  List<OrderDetails> orderDetails;
 
   OrderDetailModel(
       {this.id,
@@ -18,7 +19,8 @@ class OrderDetailModel {
       this.checkinTime,
       this.customer,
       this.vehicle,
-      this.package});
+      this.package,
+      this.orderDetails});
 
   OrderDetailModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -32,7 +34,14 @@ class OrderDetailModel {
         : null;
     vehicle =
         json['vehicle'] != null ? new Vehicle.fromJson(json['vehicle']) : null;
-    package = json['package'];
+    package =
+        json['package'] != null ? new Package.fromJson(json['package']) : null;
+    if (json['orderDetails'] != null) {
+      orderDetails = new List<OrderDetails>();
+      json['orderDetails'].forEach((v) {
+        orderDetails.add(new OrderDetails.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -49,7 +58,12 @@ class OrderDetailModel {
     if (this.vehicle != null) {
       data['vehicle'] = this.vehicle.toJson();
     }
-    data['package'] = this.package;
+    if (this.package != null) {
+      data['package'] = this.package.toJson();
+    }
+    if (this.orderDetails != null) {
+      data['orderDetails'] = this.orderDetails.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
@@ -124,6 +138,76 @@ class Vehicle {
     data['licensePlate'] = this.licensePlate;
     data['dateOfLastMaintenance'] = this.dateOfLastMaintenance;
     data['millageCount'] = this.millageCount;
+    return data;
+  }
+}
+
+class Package {
+  String id;
+  String name;
+  String description;
+  int price;
+
+  Package({this.id, this.name, this.description, this.price});
+
+  Package.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    description = json['description'];
+    price = json['price'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['description'] = this.description;
+    data['price'] = this.price;
+    return data;
+  }
+}
+
+class OrderDetails {
+  String id;
+  String serviceId;
+  Null accessoryId;
+  String name;
+  int price;
+  bool isIncurred;
+  bool isFinished;
+  Null timeFinished;
+
+  OrderDetails(
+      {this.id,
+      this.serviceId,
+      this.accessoryId,
+      this.name,
+      this.price,
+      this.isIncurred,
+      this.isFinished,
+      this.timeFinished});
+
+  OrderDetails.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    serviceId = json['serviceId'];
+    accessoryId = json['accessoryId'];
+    name = json['name'];
+    price = json['price'];
+    isIncurred = json['isIncurred'];
+    isFinished = json['isFinished'];
+    timeFinished = json['timeFinished'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['serviceId'] = this.serviceId;
+    data['accessoryId'] = this.accessoryId;
+    data['name'] = this.name;
+    data['price'] = this.price;
+    data['isIncurred'] = this.isIncurred;
+    data['isFinished'] = this.isFinished;
+    data['timeFinished'] = this.timeFinished;
     return data;
   }
 }

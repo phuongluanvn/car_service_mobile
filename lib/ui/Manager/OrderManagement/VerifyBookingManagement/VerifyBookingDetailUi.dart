@@ -162,6 +162,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                                   updateStatusBloc.add(
                                       UpdateStatusButtonPressed(
                                           id: state.bookingDetail[0].id,
+                                          
                                           status: acceptStatus));
                                 },
                               ),
