@@ -105,14 +105,13 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                       child: Row(
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.5,
+                            width: MediaQuery.of(context).size.width * 1,
                             height: MediaQuery.of(context).size.height * 1,
                             child: Column(
                               children: [
                                 Center(
-                                  child: ExpansionPanelList(
-                                    children: state
-                                        .processDetail[0].orderDetails
+                                  child: ExpansionPanelList.radio(
+                                    children: state.processDetail[0].orderDetails
                                         .map<ExpansionPanelRadio>(
                                       (e) {
                                         return ExpansionPanelRadio(
@@ -120,7 +119,14 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                             headerBuilder:
                                                 (context, isExpanded) {
                                               return RadioListTile(
-                                                title: Text(e.name),
+                                                title:
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                      children: [
+                                                        Text(e.name),
+                                                        Text('${e.price}'),
+                                                        
+                                                      ],),
                                                 onChanged: (value) {
                                                   setState(() {
                                                     _valueSelectedPackageService =
@@ -129,27 +135,24 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                                     _note = null;
                                                   });
                                                 },
-                                                controlAffinity:
-                                                    ListTileControlAffinity
-                                                        .leading,
                                                 groupValue:
                                                     _valueSelectedPackageService,
                                                 value: e.id,
                                               );
                                             },
                                             body: SingleChildScrollView(
-                                              child: Text('AAAAAAA'),
-                                              // ListView(
-                                              //   shrinkWrap: true,
-                                              //   children: state.processList
-                                              //       .map((service) {
-                                              //     return ListTile(
-                                              //       title: Text(service.note),
-                                              //     );
-                                              //   }).toList(),
-                                              // ),
+                                              child: 
+                                              // Text('????')
+                                              ListView(
+                                                shrinkWrap: true,
+                                                children: state.processDetail
+                                                    .map((service) {
+                                                  return ListTile(
+                                                    title: Text(service.orderDetails[0].name),
+                                                  );
+                                                }).toList(),
+                                              ),
                                             ));
-                                        // );
                                       },
                                     ).toList(),
                                   ),
