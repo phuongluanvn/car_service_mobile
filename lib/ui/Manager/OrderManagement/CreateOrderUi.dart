@@ -22,7 +22,10 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
   CreateOrderBloc createOrderBloc;
   CustomerCarBloc customerCarBloc;
   bool _testVi = false;
-  String carId;
+  String _carId;
+  String _packageId;
+  String _note;
+  DateTime _timeCurrenBooking = new DateTime.now();
   bool _visibleBaoDuong = false;
   bool _visibleSuaChua = false;
   String selectItem;
@@ -79,12 +82,41 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          createOrderBloc.add(CreateOrderButtonPressed(
-            carId: '',
-            cusId: '',
-            serviceId: '',
-            note: '',
-          ));
+          if (_carId == null) {
+            showDialog(
+                context: context,
+                builder: (BuildContext ctx) {
+                  return AlertDialog(
+                    title: Text(
+                      'Thông báo!',
+                      style: TextStyle(color: Colors.redAccent),
+                    ),
+                    content: Text('Vui lòng chọn xe!'),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            // Close the dialog
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('Đồng ý'))
+                    ],
+                  );
+                });
+          } else if (_note == null) {
+            createOrderBloc.add(CreateOrderButtonPressed(
+              carId: _carId,
+              serviceId: _packageId,
+              note: null,
+              timeBooking: _timeCurrenBooking.toIso8601String(),
+            ));
+          } else if (_packageId == null) {
+            createOrderBloc.add(CreateOrderButtonPressed(
+              carId: _carId,
+              serviceId: null,
+              note: _note,
+              timeBooking: _timeCurrenBooking.toIso8601String(),
+            ));
+          }
         },
         padding: EdgeInsets.all(12),
         color: Colors.blue,
@@ -230,7 +262,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                                                     index]
                                                                 .licensePlate,
                                                             style: TextStyle(
-                                                                color: (carId ==
+                                                                color: (_carId ==
                                                                         state
                                                                             .vehicleLists[
                                                                                 index]
@@ -251,10 +283,11 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                                                   .model),
                                                           onTap: () {
                                                             setState(() {
-                                                              carId = state
+                                                              _carId = state
                                                                   .vehicleLists[
                                                                       index]
                                                                   .id;
+                                                                  print(_carId);
                                                               // _visible = !_visible;
                                                             });
                                                           },
@@ -382,7 +415,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                                                           index]
                                                                       .name,
                                                                   style: TextStyle(
-                                                                      color: (carId == stateOfPackage.packageServiceLists[index].name)
+                                                                      color: (_packageId == stateOfPackage.packageServiceLists[index].id)
                                                                           ? Colors
                                                                               .blue
                                                                           : Colors
@@ -395,10 +428,13 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                                                         .name),
                                                                 onTap: () {
                                                                   setState(() {
-                                                                    carId = stateOfPackage
+                                                                    _packageId = stateOfPackage
                                                                         .packageServiceLists[
                                                                             index]
-                                                                        .name;
+                                                                        .id;
+                                                                        print(_packageId);
+                                                                    _note =
+                                                                        null;
                                                                   });
                                                                 },
                                                               ),
@@ -435,25 +471,34 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                         },
                                       ),
                                       Visibility(
-                                          visible: _visibleSuaChua,
-                                          child: Text('data')),
-                                      Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          child: InputDecorator(
-                                            decoration: InputDecoration(
-                                              
-                                              labelText: 'Mô tả',
-                                              border: OutlineInputBorder(
+                                        visible: _visibleSuaChua,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(18.0),
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
                                                   borderRadius:
                                                       BorderRadius.circular(5)),
-                                            ),
-                                            child: TextFormField(
-                                              maxLines: 6,
-                                            ),
-                                          )),
+                                              child: InputDecorator(
+                                                decoration: InputDecoration(
+                                                  labelText: 'Mô tả',
+                                                  border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5)),
+                                                ),
+                                                child: TextFormField(
+                                                  maxLines: 6,
+                                                  onChanged: (noteValue) {
+                                                    setState(() {
+                                                      _packageId = null;
+                                                      _note = noteValue;
+                                                    });
+                                                  },
+                                                ),
+                                              )),
+                                        ),
+                                      ),
                                       SizedBox(
                                         height: 20,
                                       ),

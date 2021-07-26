@@ -24,6 +24,7 @@ class CreateBookingOrderUI extends StatefulWidget {
 class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
   String _carId;
   String _packageId;
+  String _note;
   bool _visibleBaoDuong = false;
   bool _visibleSuaChua = false;
   String _selectItem;
@@ -35,7 +36,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
   bool _valueCheckbox = false;
   CreateBookingBloc _createBookingBloc;
   int _selectedTimeButton = 0;
-  String _note;
+  
   Map<String, bool> checkboxListValues = {};
 
   Widget showTimeButton(String text, int index) {

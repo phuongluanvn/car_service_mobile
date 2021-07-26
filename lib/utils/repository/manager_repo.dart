@@ -15,86 +15,30 @@ class ManagerRepository {
     'Accept': 'application/json'
   };
 
-  createOrder(String manufacture, String licensePlateNumber) async {
-    return 'Thanh cong';
-  }
+  String BASE_URL = 'https://carservicesystem.azurewebsites.net/api/';
 
-  Future<List<BookingModel>> getVerifyBookingDetail(String email) async {
-    var res = await http.get(
-      Uri.parse(
-          'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=' +
-              email),
+  createOrder(String vehicleId, String packageId, String note,
+      String bookingTime) async {
+    var body = {
+      "vehicleId": '$vehicleId',
+      "packageId": '$packageId',
+      "note": '$note',
+      "bookingTime": '$bookingTime'
+    };
+    var res = await http.post(
+      Uri.parse(BASE_URL + "orders"),
       headers: headers,
+      body: json.encode(body),
     );
-    if (res.statusCode == 200) {
-      List<dynamic> data = json.decode(res.body);
-
-      try {
-        if (data != null) {
-          List<BookingModel> listdata = [];
-          data.forEach((element) {
-            Map<String, dynamic> map = element;
-            listdata.add(BookingModel.fromJson(map));
-          });
-          print(listdata);
-          return listdata;
-        } else {
-          print('No data');
-        }
-      } catch (e) {
-        print(e.toString());
+    if (res.statusCode != null) {
+      if (res.statusCode == 200) {
+        // updateStatusOrder(res.body.id)
+        return res.body;
+      } else if (res.statusCode == 404) {
+        return res.body;
       }
-    }
-  }
-
-  Future<List<AssignOrderModel>> getOrderList() async {
-    List<AssignOrderModel> assignOrderList = [];
-    var res = await http.get(
-      Uri.parse(
-          "https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP02"),
-      headers: headers,
-    );
-    if (res.statusCode == 200) {
-      var data = json.decode(res.body);
-      if (data != null) {
-        data
-            .map((booking) =>
-                assignOrderList.add(AssignOrderModel.fromJson(booking)))
-            .toList();
-        print('lala');
-        print(assignOrderList);
-        return assignOrderList;
-      } else {
-        print('No data');
-      }
-    }
-  }
-
-  Future<List<AssignOrderModel>> getOrderDetail(String email) async {
-    var res = await http.get(
-      Uri.parse(
-          'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP02&tuKhoa=' +
-              email),
-      headers: headers,
-    );
-    if (res.statusCode == 200) {
-      List<dynamic> data = json.decode(res.body);
-
-      try {
-        if (data != null) {
-          List<AssignOrderModel> listdata = [];
-          data.forEach((element) {
-            Map<String, dynamic> map = element;
-            listdata.add(AssignOrderModel.fromJson(map));
-          });
-          print(listdata);
-          return listdata;
-        } else {
-          print('No data');
-        }
-      } catch (e) {
-        print(e.toString());
-      }
+    } else {
+      return null;
     }
   }
 
@@ -113,8 +57,6 @@ class ManagerRepository {
             .map((order) => staffList.add(StaffModel.fromJson(order)))
             .toList();
         var newList = [...staffList];
-        print('????');
-        print(newList);
         return newList;
       } else {
         return null;

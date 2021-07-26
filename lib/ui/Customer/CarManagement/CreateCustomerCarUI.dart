@@ -154,7 +154,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
     Future uploadImageToFirebase(BuildContext context) async {
       String fileName = path.basename(_image.path);
       FirebaseStorage storage = FirebaseStorage.instance;
-      Reference ref = storage.ref().child('mobiles/customer_car/$fileName');
+      Reference ref = storage.ref().child('mobile_customer/cars/add_new_car/$fileName');
       UploadTask uploadTask = ref.putFile(_image);
       uploadTask.then((res) {
         res.ref.getDownloadURL();

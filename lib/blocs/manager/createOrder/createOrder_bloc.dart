@@ -18,12 +18,10 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
     if (event is CreateOrderButtonPressed) {
       yield state.copyWith(status: CreateOrderStatus.loading);
       try {
-        var data = await _repo.createOrder(event.carId, event.serviceId);
+        var data = await _repo.createOrder(event.carId, event.serviceId, event.note, event.timeBooking);
         String jsonsDataString = data.toString();
-        print(data);
-        final jsonData = jsonDecode(jsonsDataString);
-        print(jsonData);
-        if (jsonData != null) {
+        // final jsonData = jsonDecode(jsonsDataString);
+        if (data != null) {
           yield state.copyWith(status: CreateOrderStatus.createOrderSuccess);
         } else {
           yield state.copyWith(
