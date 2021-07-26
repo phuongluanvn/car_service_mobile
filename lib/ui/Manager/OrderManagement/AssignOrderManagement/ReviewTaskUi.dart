@@ -31,9 +31,12 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
   List results = [1, 2, 3, 4, 5];
   List<OrderDetailModel> selectedValue;
   String _selectedValueDetail;
+  String _valueSelectedPackageService;
+  String _packageId;
+  String _note;
 
   List selectedDetailsValue;
-  
+
   @override
   void initState() {
     super.initState();
@@ -82,134 +85,190 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Container(
-        child: BlocBuilder<ProcessOrderBloc, ProcessOrderState>(
-          // ignore: missing_return
-          builder: (context, state) {
-            if (state.detailStatus == ProcessDetailStatus.init) {
-              return CircularProgressIndicator();
-            } else if (state.detailStatus == ProcessDetailStatus.loading) {
-              return CircularProgressIndicator();
-            } else if (state.detailStatus == ProcessDetailStatus.success) {
-              selectedValue = List.from(state.processDetail);
-              return Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Center(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.95,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              DataTable(
-                                columns: <DataColumn>[
-                                  DataColumn(
-                                    label: Expanded(
-                                      child: Text(
-                                        'Gói dịch vụ',
-                                        style: TextStyle(
-                                            fontStyle: FontStyle.italic),
-                                      ),
-                                    ),
-                                  ),
-                                  DataColumn(
-                                    label: Expanded(
-                                      child: Text(
-                                        'Số\nlượng',
-                                        style: TextStyle(
-                                            fontStyle: FontStyle.italic),
-                                      ),
-                                    ),
-                                  ),
-                                  DataColumn(
-                                    label: Expanded(
-                                      child: Text(
-                                        'Đơn\n giá',
-                                        style: TextStyle(
-                                            fontStyle: FontStyle.italic),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                                
-                                rows: selectedValue.map((data) {
-                                  // int index = data.key;
-                                  selectedDetailsValue =
-                                      state.processDetail[0].orderDetails;
-                                      _selectedValueDetail = data.orderDetails[0].name;
-                                  return DataRow(cells: [
-                                    DataCell(
-                                      DropdownButton(
-                                      isExpanded: true,
-                                      value: _selectedValueDetail,
-                                      onChanged: (newPackage) {
-                                        setState(() {
-                                          _selectedValueDetail = newPackage;
-                                        });
-                                      },
-                                      items: data.orderDetails.map<DropdownMenuItem>((value) {
-                                        return DropdownMenuItem(
-                                          value: value.name,
-                                          child: Text(value.name),
-                                        );
-                                      }).toList(),
-                                      )),
-                                    DataCell(
-                                      Text(selectedValue[0].status),
-                                    ),
-                                    DataCell(Text(selectedValue[0].status)),
-                                  ]);
-                                }).toList(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const Divider(
-                        color: Colors.black87,
-                        height: 20,
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+      body: SingleChildScrollView(
+        child: Container(
+          child: BlocBuilder<ProcessOrderBloc, ProcessOrderState>(
+            // ignore: missing_return
+            builder: (context, state) {
+              if (state.detailStatus == ProcessDetailStatus.init) {
+                return CircularProgressIndicator();
+              } else if (state.detailStatus == ProcessDetailStatus.loading) {
+                return CircularProgressIndicator();
+              } else if (state.detailStatus == ProcessDetailStatus.success) {
+                selectedValue = List.from(state.processDetail);
+
+                return Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  // child: SingleChildScrollView(
+                  child: Center(
+                    child: FittedBox(
+                      child: Row(
                         children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.45,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.blue),
-                              child: Text('Lưu',
-                                  style: TextStyle(color: Colors.white)),
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) => AssignOrderReviewUi(
-                                          userId: widget.orderId,
-                                        )));
-                              },
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            height: MediaQuery.of(context).size.height * 1,
+                            child: Column(
+                              children: [
+                                Center(
+                                  child: ExpansionPanelList(
+                                    children: state
+                                        .processDetail[0].orderDetails
+                                        .map<ExpansionPanelRadio>(
+                                      (e) {
+                                        return ExpansionPanelRadio(
+                                            value: e.name,
+                                            headerBuilder:
+                                                (context, isExpanded) {
+                                              return RadioListTile(
+                                                title: Text(e.name),
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _valueSelectedPackageService =
+                                                        value;
+                                                    _packageId = value;
+                                                    _note = null;
+                                                  });
+                                                },
+                                                controlAffinity:
+                                                    ListTileControlAffinity
+                                                        .leading,
+                                                groupValue:
+                                                    _valueSelectedPackageService,
+                                                value: e.id,
+                                              );
+                                            },
+                                            body: SingleChildScrollView(
+                                              child: Text('AAAAAAA'),
+                                              // ListView(
+                                              //   shrinkWrap: true,
+                                              //   children: state.processList
+                                              //       .map((service) {
+                                              //     return ListTile(
+                                              //       title: Text(service.note),
+                                              //     );
+                                              //   }).toList(),
+                                              // ),
+                                            ));
+                                        // );
+                                      },
+                                    ).toList(),
+                                  ),
+                                ),
+                                const Divider(
+                                  color: Colors.black87,
+                                  height: 20,
+                                  thickness: 1,
+                                  indent: 10,
+                                  endIndent: 10,
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.45,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            primary: Colors.blue),
+                                        child: Text('Lưu',
+                                            style:
+                                                TextStyle(color: Colors.white)),
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      AssignOrderReviewUi(
+                                                        userId: widget.orderId,
+                                                      )));
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
+                          // Container(
+                          //   width: MediaQuery.of(context).size.width * 0.5,
+                          //   height: MediaQuery.of(context).size.height * 1,
+                          //   child: Column(
+                          //     children: [
+                          //       Center(
+                          //         child: ExpansionPanelList(
+                          //           children: state.processDetail[0].orderDetails
+                          //               .map<ExpansionPanelRadio>(
+                          //             (e) {
+                          //               return ExpansionPanelRadio(
+                          //                   value: e.name,
+                          //                   headerBuilder: (context, isExpanded) {
+                          //                     return RadioListTile(
+                          //                       title: Text(e.name),
+                          //                       onChanged: (value) {
+                          //                         setState(() {
+                          //                           _valueSelectedPackageService =
+                          //                               value;
+                          //                           _packageId = value;
+                          //                           _note = null;
+                          //                         });
+                          //                       },
+                          //                       controlAffinity:
+                          //                           ListTileControlAffinity
+                          //                               .leading,
+                          //                       groupValue:
+                          //                           _valueSelectedPackageService,
+                          //                       value: e.id,
+                          //                     );
+                          //                   },
+                          //                   body: SingleChildScrollView(
+                          //                     child: ListView(
+                          //                       shrinkWrap: true,
+                          //                       children: state
+                          //                           .processDetail[0].orderDetails
+                          //                           .map((service) {
+                          //                         return ListTile(
+                          //                           title: Text(service.name),
+                          //                         );
+                          //                       }).toList(),
+                          //                     ),
+                          //                   ));
+                          //               // );
+                          //             },
+                          //           ).toList(),
+                          //         ),
+                          //       ),
+                          //       const Divider(
+                          //         color: Colors.black87,
+                          //         height: 20,
+                          //         thickness: 1,
+                          //         indent: 10,
+                          //         endIndent: 10,
+                          //       ),
+                          //       SizedBox(
+                          //         height: 20,
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-                // ),
-                // ),
-              );
-            } else if (state.detailStatus == ProcessDetailStatus.error) {
-              return ErrorWidget(state.message.toString());
-            }
-          },
+
+                  // ),
+                  // ),
+                  // ),
+                );
+              } else if (state.detailStatus == ProcessDetailStatus.error) {
+                return ErrorWidget(state.message.toString());
+              }
+            },
+          ),
+          // ),
+          // ),
         ),
-        // ),
-        // ),
       ),
     );
   }
