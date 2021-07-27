@@ -1,3 +1,4 @@
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/ManagerAccountUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/OrderHistory/OrderHistoryUi.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,8 @@ class ManagerProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        backgroundColor: AppTheme.colors.deepBlue,
+        title: Text('Thông tin người dùng'),
       ),
       backgroundColor: Colors.blue[100],
       body: SingleChildScrollView(
@@ -43,13 +45,15 @@ class ManagerProfile extends StatelessWidget {
               child: Container(
                 height: 50,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: AppTheme.colors.deepBlue),
                   onPressed: () {
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => ManagerAccountUi()));
                   },
                   child: Row(
                     children: [
-                      Expanded(child: Text('Account')),
+                      Expanded(child: Text('Tài khoản')),
                       Icon(Icons.arrow_forward_ios),
                     ],
                   ),
@@ -61,13 +65,15 @@ class ManagerProfile extends StatelessWidget {
               child: Container(
                 height: 50,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: AppTheme.colors.deepBlue),
                   onPressed: () {
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => OrderHistoryUi()));
                   },
                   child: Row(
                     children: [
-                      Expanded(child: Text('Order History')),
+                      Expanded(child: Text('Lịch sử đơn hàng')),
                       Icon(Icons.arrow_forward_ios),
                     ],
                   ),
@@ -79,10 +85,12 @@ class ManagerProfile extends StatelessWidget {
               child: Container(
                 height: 50,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: AppTheme.colors.deepBlue),
                   onPressed: () {},
                   child: Row(
                     children: [
-                      Expanded(child: Text('Feedback')),
+                      Expanded(child: Text('Phản hồi từ khách hàng')),
                       Icon(Icons.arrow_forward_ios),
                     ],
                   ),
@@ -94,10 +102,12 @@ class ManagerProfile extends StatelessWidget {
               child: Container(
                 height: 50,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: AppTheme.colors.deepBlue),
                   onPressed: () {},
                   child: Row(
                     children: [
-                      Expanded(child: Text('Logout')),
+                      Expanded(child: Text('Đăng xuất')),
                       Icon(Icons.arrow_forward_ios),
                     ],
                   ),

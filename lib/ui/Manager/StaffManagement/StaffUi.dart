@@ -1,6 +1,7 @@
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/StaffManagement/StaffDetailUi.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,8 @@ class _StaffUiState extends State<StaffUi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Staff Management'),
+        backgroundColor: AppTheme.colors.deepBlue,
+        title: Text('Quản lý nhân viên'),
         automaticallyImplyLeading: false,
       ),
       backgroundColor: Colors.blue[100],

@@ -1,3 +1,4 @@
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/NotificationUI.dart';
 import 'package:car_service/ui/Manager/OrderManagement/ManagementBookingOrder.dart';
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingUi.dart';
@@ -32,38 +33,38 @@ class _NavBarState extends State<NavBar> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
               Icons.engineering,
-              color: Colors.blue,
+              color: AppTheme.colors.deepBlue,
             ),
             label: 'Nhân viên',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.description,
-              color: Colors.blue,
+              color: AppTheme.colors.deepBlue,
             ),
             label: 'Đơn hàng',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person,
-              color: Colors.blue,
+              color: AppTheme.colors.deepBlue,
             ),
             label: 'Thông tin',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.notifications,
-              color: Colors.blue,
+              color: AppTheme.colors.deepBlue,
             ),
             label: 'Thông báo',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: AppTheme.colors.deepBlue,
         onTap: _onItemTap,
         selectedFontSize: 12.0,
         unselectedFontSize: 12.0,

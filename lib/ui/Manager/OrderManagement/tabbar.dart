@@ -1,3 +1,4 @@
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/ManagerAccountUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/CreateOrderUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/ProcessOrderManagement/ProcessOrderUi.dart';
@@ -31,7 +32,8 @@ class _TabManagerState extends State<TabManager> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Management'),
+          title: Text('Quản lý đơn hàng'),
+          backgroundColor: AppTheme.colors.deepBlue,
           automaticallyImplyLeading: false,
           actions: <Widget>[
             Padding(
@@ -48,13 +50,13 @@ class _TabManagerState extends State<TabManager> {
           bottom: TabBar(
             tabs: <Widget>[
               Tab(
-                text: 'Booking',
+                text: 'Chờ duyệt',
               ),
               Tab(
-                text: 'Order',
+                text: 'Chờ xử lý',
               ),
               Tab(
-                text: 'Processing',
+                text: 'Đang xử lý',
               )
             ],
           ),

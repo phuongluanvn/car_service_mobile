@@ -7,7 +7,9 @@ import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
+import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,10 +22,12 @@ class AssignOrderDetailUi extends StatefulWidget {
 }
 
 class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _visible = false;
   UpdateStatusOrderBloc updateStatusBloc;
   String selectItem;
   String holder = '';
+  List<StaffModel> selectData;
   @override
   void initState() {
     super.initState();
@@ -45,7 +49,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
     final String checkingStatus = 'Checking';
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order Information'),
+        backgroundColor: AppTheme.colors.deepBlue,
+        title: Text('Thông tin đơn hàng'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -155,8 +160,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                             setState(() {
                               _visible = !_visible;
                             });
-                          }else if(statusState.status ==
-                              UpdateStatus.updateStatusCheckingSuccess){}
+                          } else if (statusState.status ==
+                              UpdateStatus.updateStatusCheckingSuccess) {}
                         },
                         child: Column(
                           children: [
@@ -204,45 +209,51 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                       StaffStatus.staffListsuccess) {
                                     return Column(
                                       children: [
-                                        DropdownButton<String>(
-                                          hint: Text('Select Staff'),
-                                          items: staffState.staffList
-                                              .map((valueItem) {
-                                            return DropdownMenuItem<String>(
-                                              child: Text(valueItem.fullname),
-                                              value: valueItem.fullname,
-                                            );
-                                          }).toList(),
-                                          onChanged: (newValue) {
-                                            setState(() {
-                                              this.selectItem = newValue;
-                                            });
-                                          },
-                                          value: selectItem,
-                                        ),
                                         ElevatedButton(
-                                          child: Text('Checking'),
-                                          onPressed: () {
-                                            updateStatusBloc.add(
-                                                UpdateStatusCheckingButtonPressed(
-                                                    id: state
-                                                        .assignDetail[0].id,
-                                                    status: checkingStatus));
-                                            // getDropDownItem,
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (_) =>
-                                                        AssignOrderReviewUi(
-                                                            userId: state
-                                                                .assignDetail[0]
-                                                                .id,
-                                                            staffId:
-                                                                selectItem)));
-                                          },
-                                        ),
-                                        Container(
-                                          child: Text('$holder'),
-                                        ),
+                                          child: Text('Chọn nhân viên'),
+                                          onPressed: () =>
+                                              showInformationDialog(context,
+                                                  staffState.staffList),
+                                        )
+                                        // DropdownButton<String>(
+                                        //   hint: Text('Select Staff'),
+                                        //   items: staffState.staffList
+                                        //       .map((valueItem) {
+                                        //     return DropdownMenuItem<String>(
+                                        //       child: Text(valueItem.fullname),
+                                        //       value: valueItem.fullname,
+                                        //     );
+                                        //   }).toList(),
+                                        //   onChanged: (newValue) {
+                                        //     setState(() {
+                                        //       this.selectItem = newValue;
+                                        //     });
+                                        //   },
+                                        //   value: selectItem,
+                                        // ),
+                                        // ElevatedButton(
+                                        //   child: Text('Checking'),
+                                        //   onPressed: () {
+                                        //     updateStatusBloc.add(
+                                        //         UpdateStatusCheckingButtonPressed(
+                                        //             id: state
+                                        //                 .assignDetail[0].id,
+                                        //             status: checkingStatus));
+                                        //     // getDropDownItem,
+                                        //     Navigator.of(context).push(
+                                        //         MaterialPageRoute(
+                                        //             builder: (_) =>
+                                        //                 AssignOrderReviewUi(
+                                        //                     userId: state
+                                        //                         .assignDetail[0]
+                                        //                         .id,
+                                        //                     staffId:
+                                        //                         selectItem)));
+                                        //   },
+                                        // ),
+                                        // Container(
+                                        //   child: Text('$holder'),
+                                        // ),
                                       ],
                                     );
                                   } else if (staffState.status ==
@@ -257,25 +268,6 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                           ],
                         ),
                       ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: [
-                      //     SizedBox(
-                      //       width: MediaQuery.of(context).size.width * 0.45,
-                      //       child: ElevatedButton(
-                      //         style: ElevatedButton.styleFrom(
-                      //             primary: Colors.blue),
-                      //         child: Text('Check-in',
-                      //             style: TextStyle(color: Colors.white)),
-                      //         onPressed: () {
-                      //           setState(() {
-                      //             _visible = !_visible;
-                      //           });
-                      //         },
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
                     ],
                   ),
                 );
@@ -288,5 +280,82 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
         ),
       ),
     );
+  }
+
+  // ======================
+
+  Future<void> showInformationDialog(
+      BuildContext context, List stafflist) async {
+    return await showDialog(
+        context: context,
+        builder: (context) {
+          bool isChecked = false;
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              content: Form(
+                key: _formKey,
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 1,
+                  width: MediaQuery.of(context).size.width * 7,
+                  child: ListView.builder(
+                      itemCount: stafflist.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return new Card(
+                          child: new Container(
+                            padding: new EdgeInsets.all(10.0),
+                            child: Column(
+                              children: stafflist.map((e) {
+                                return CheckboxListTile(
+                                    activeColor: Colors.pink[300],
+                                    dense: true,
+                                    //font change
+                                    title: new Text(
+                                      stafflist[index].username,
+                                    ),
+                                    value: selectData.indexOf(e) < 0
+                                        ? false
+                                        : true,
+                                    // secondary: Container(
+                                    //   height: 50,
+                                    //   width: 50,
+                                    //   child: Image.asset(
+                                    //     checkBoxListTileModel[index].img,
+                                    //     fit: BoxFit.cover,
+                                    //   ),
+                                    // ),
+                                    onChanged: (bool val) {
+                                      if (selectData.indexOf(e) < 0) {
+                                        setState(() {
+                                          selectData.add(e);
+                                        });
+                                      } else {
+                                        setState(() {
+                                          selectData.removeWhere(
+                                              (element) => element == e);
+                                        });
+                                      }
+                                      print(selectData);
+                                    });
+                              }).toList(),
+                            ),
+                          ),
+                        );
+                      }),
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Okay'),
+                  onPressed: () {
+                    if (_formKey.currentState.validate()) {
+                      // Do something like updating SharedPreferences or User Settings etc.
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
+              ],
+            );
+          });
+        });
   }
 }

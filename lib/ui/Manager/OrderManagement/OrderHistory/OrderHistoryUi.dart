@@ -3,6 +3,7 @@ import 'package:car_service/blocs/manager/booking/booking_state.dart';
 import 'package:car_service/blocs/manager/orderHistory/orderHistory_bloc.dart';
 import 'package:car_service/blocs/manager/orderHistory/orderHistory_events.dart';
 import 'package:car_service/blocs/manager/orderHistory/orderHistory_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/OrderHistory/OrderHistoryDetailUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingDetailUi.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,8 @@ class _OrderHistoryUiState extends State<OrderHistoryUi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order History'),
+        backgroundColor: AppTheme.colors.deepBlue,
+        title: Text('Lịch sử đơn hàng'),
       ),
       backgroundColor: Colors.blue[100],
       body: Center(

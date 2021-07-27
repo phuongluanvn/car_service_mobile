@@ -1,3 +1,4 @@
+import 'package:car_service/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class ManagerAccountUi extends StatefulWidget {
@@ -12,7 +13,8 @@ class _ManagerAccountUiState extends State<ManagerAccountUi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        backgroundColor: AppTheme.colors.deepBlue,
+        title: Text('Thông tin tài khoản'),
       ),
       backgroundColor: Colors.blue[100],
       body: SingleChildScrollView(

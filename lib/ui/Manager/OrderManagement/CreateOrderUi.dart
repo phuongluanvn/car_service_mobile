@@ -7,6 +7,7 @@ import 'package:car_service/blocs/manager/createOrder/createOrder_event.dart';
 import 'package:car_service/blocs/packageService/PackageService_bloc.dart';
 import 'package:car_service/blocs/packageService/PackageService_event.dart';
 import 'package:car_service/blocs/packageService/PackageService_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/utils/model/CustomerModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -129,6 +130,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppTheme.colors.deepBlue,
         title: Text('Tạo đơn hàng'),
       ),
       backgroundColor: Colors.blue[100],
@@ -287,7 +289,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                                                   .vehicleLists[
                                                                       index]
                                                                   .id;
-                                                                  print(_carId);
+                                                              print(_carId);
                                                               // _visible = !_visible;
                                                             });
                                                           },
@@ -428,11 +430,12 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                                                         .name),
                                                                 onTap: () {
                                                                   setState(() {
-                                                                    _packageId = stateOfPackage
-                                                                        .packageServiceLists[
-                                                                            index]
-                                                                        .id;
-                                                                        print(_packageId);
+                                                                    _packageId =
+                                                                        stateOfPackage
+                                                                            .packageServiceLists[index]
+                                                                            .id;
+                                                                    print(
+                                                                        _packageId);
                                                                     _note =
                                                                         null;
                                                                   });

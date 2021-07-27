@@ -5,6 +5,7 @@ import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/blocs/packageService/PackageService_bloc.dart';
 import 'package:car_service/blocs/packageService/PackageService_event.dart';
 import 'package:car_service/blocs/packageService/PackageService_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
@@ -79,6 +80,7 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppTheme.colors.deepBlue,
         title: Text('Dịch vụ'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -111,7 +113,8 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                               children: [
                                 Center(
                                   child: ExpansionPanelList.radio(
-                                    children: state.processDetail[0].orderDetails
+                                    children: state
+                                        .processDetail[0].orderDetails
                                         .map<ExpansionPanelRadio>(
                                       (e) {
                                         return ExpansionPanelRadio(
@@ -119,14 +122,15 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                             headerBuilder:
                                                 (context, isExpanded) {
                                               return RadioListTile(
-                                                title:
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                      children: [
-                                                        Text(e.name),
-                                                        Text('${e.price}'),
-                                                        
-                                                      ],),
+                                                title: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    Text(e.name),
+                                                    Text('${e.price}'),
+                                                  ],
+                                                ),
                                                 onChanged: (value) {
                                                   setState(() {
                                                     _valueSelectedPackageService =
@@ -141,14 +145,15 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                               );
                                             },
                                             body: SingleChildScrollView(
-                                              child: 
-                                              // Text('????')
-                                              ListView(
+                                              child:
+                                                  // Text('????')
+                                                  ListView(
                                                 shrinkWrap: true,
                                                 children: state.processDetail
                                                     .map((service) {
                                                   return ListTile(
-                                                    title: Text(service.orderDetails[0].name),
+                                                    title: Text(service
+                                                        .orderDetails[0].name),
                                                   );
                                                 }).toList(),
                                               ),

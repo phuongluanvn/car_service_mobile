@@ -1,6 +1,7 @@
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_event.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/CarManagement/CustomerCarDetailUI.dart';
 import 'package:car_service/ui/Customer/message.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -28,7 +29,7 @@ Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
@@ -110,7 +111,7 @@ class _NotificationUIState extends State<NotificationUI> {
                 channel.id,
                 channel.name,
                 channel.description,
-                color: Colors.blue,
+                color: AppTheme.colors.deepBlue,
                 playSound: true,
                 icon: '@mipmap/ic_launcher',
               ),
@@ -145,6 +146,7 @@ class _NotificationUIState extends State<NotificationUI> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppTheme.colors.deepBlue,
         title: Text('Thông báo'),
         automaticallyImplyLeading: false,
       ),

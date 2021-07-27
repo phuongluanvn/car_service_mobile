@@ -6,6 +6,7 @@ import 'package:car_service/blocs/manager/orderHistory/orderHistory_state.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingUi.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,7 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
     final String acceptStatus = 'Accepted';
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppTheme.colors.deepBlue,
         title: Text('Booking Information'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),

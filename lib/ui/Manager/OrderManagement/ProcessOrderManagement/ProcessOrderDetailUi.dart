@@ -7,6 +7,7 @@ import 'package:car_service/blocs/manager/processOrder/processOrder_state.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/ProcessOrderManagement/CheckoutOrderUi.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppTheme.colors.deepBlue,
         title: Text('Processing Orrder Detail'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),

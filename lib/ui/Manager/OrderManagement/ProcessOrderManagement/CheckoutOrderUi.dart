@@ -10,6 +10,7 @@ import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +51,7 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppTheme.colors.deepBlue,
         title: Text('Processing Orrder Detail'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),

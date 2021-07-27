@@ -7,6 +7,7 @@ import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/ReviewTaskUi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,6 +43,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppTheme.colors.deepBlue,
         title: Text('Order Review'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),

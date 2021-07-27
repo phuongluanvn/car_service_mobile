@@ -20,6 +20,7 @@ import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.d
 import 'package:car_service/blocs/packageService/PackageService_bloc.dart';
 import 'package:car_service/blocs/sign_up/sign_up_bloc.dart';
 import 'package:car_service/blocs/sign_up/sign_up_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/CustomerMainUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderUI.dart';
 import 'package:car_service/ui/LoginUi.dart';
