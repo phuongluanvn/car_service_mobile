@@ -27,7 +27,9 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
   UpdateStatusOrderBloc updateStatusBloc;
   String selectItem;
   String holder = '';
-  List<StaffModel> selectData;
+  List selectData;
+  bool _selectStaff = false;
+
   @override
   void initState() {
     super.initState();
@@ -297,24 +299,22 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                 child: Container(
                   height: MediaQuery.of(context).size.height * 1,
                   width: MediaQuery.of(context).size.width * 7,
-                  child: ListView.builder(
-                      itemCount: stafflist.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return new Card(
+                  // child: ListView.builder(
+                  //     itemCount: stafflist.length,
+                  //     itemBuilder: (BuildContext context, int index) {
+                        child: Card(
                           child: new Container(
                             padding: new EdgeInsets.all(10.0),
                             child: Column(
                               children: stafflist.map((e) {
                                 return CheckboxListTile(
                                     activeColor: Colors.pink[300],
-                                    dense: true,
+                                    // dense: true,
                                     //font change
                                     title: new Text(
-                                      stafflist[index].username,
+                                      e.username,
                                     ),
-                                    value: selectData.indexOf(e) < 0
-                                        ? false
-                                        : true,
+                                    value: _selectStaff,
                                     // secondary: Container(
                                     //   height: 50,
                                     //   width: 50,
@@ -327,6 +327,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                       if (selectData.indexOf(e) < 0) {
                                         setState(() {
                                           selectData.add(e);
+                                          _selectStaff=true;
                                         });
                                       } else {
                                         setState(() {
@@ -339,8 +340,9 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                               }).toList(),
                             ),
                           ),
-                        );
-                      }),
+                        ),
+                      
+                      // }),
                 ),
               ),
               actions: <Widget>[
