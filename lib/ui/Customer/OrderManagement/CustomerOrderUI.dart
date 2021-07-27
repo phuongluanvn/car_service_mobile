@@ -103,7 +103,7 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                                       style: TextStyle(color: color),
                                     ),
                                   ]),
-                              leading: FlutterLogo(),
+                              leading: Image.asset('lib/images/order_small.png'),
                               title: Text(
                                   state.orderLists[index].vehicle.licensePlate),
                               subtitle: Text(

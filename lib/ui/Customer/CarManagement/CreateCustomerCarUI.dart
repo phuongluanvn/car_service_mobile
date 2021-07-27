@@ -430,25 +430,30 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                 SizedBox(
                   height: 20,
                 ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 26),
-                  width: 300,
-                  height: 150,
-                  color: Colors.white24,
-                  child: _image != null
+                // Container(
+                //   margin: EdgeInsets.symmetric(horizontal: 26),
+                //   width: 300,
+                //   height: 150,
+                //   color: Colors.white24,
+                //   child: _image != null
+                //       ? Image.file(
+                //           _image,
+                //           fit: BoxFit.fill,
+                //         )
+                //       : Icon(Icons.camera_alt),
+                // ),
+                Center(
+                  child: GestureDetector(
+                    child: Container(
+                      color: Colors.white24,
+                      height: 150,
+                      width: 300,
+                      child:  _image != null
                       ? Image.file(
                           _image,
                           fit: BoxFit.fill,
                         )
-                      : Icon(Icons.camera_alt),
-                ),
-                Center(
-                  child: GestureDetector(
-                    child: Container(
-                      color: Colors.teal,
-                      height: 30,
-                      width: 100,
-                      child: Text('Select image'),
+                      : Icon(Icons.add_a_photo),
                       alignment: Alignment.center,
                     ),
                     onTap: () {

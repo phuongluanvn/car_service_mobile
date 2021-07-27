@@ -174,6 +174,42 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                         ),
                       ),
                       Container(height: 14),
+                      TextFormField(
+                        initialValue: state.vehicleLists[0].dateOfLastMaintenance,
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.phone),
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintStyle: TextStyle(color: Colors.black54),
+                          // hintText: state.vehicleLists[0].taiKhoan,
+                          // text
+                          labelText: 'Bảo dưỡng lần cuối',
+                          contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                      ),
+                      Container(height: 14),
+                      TextFormField(
+                        initialValue: state.vehicleLists[0].millageCount.toString(),
+                        keyboardType: TextInputType.text,
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.phone),
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintStyle: TextStyle(color: Colors.black54),
+                          // hintText: state.vehicleLists[0].taiKhoan,
+                          // text
+                          labelText: 'Số km',
+                          contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                      ),
+                      Container(height: 14),
                       SizedBox(
                         width: 150,
                         height: 35,

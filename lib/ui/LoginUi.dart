@@ -14,6 +14,7 @@ class _LoginUiState extends State<LoginUi> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   AuthBloc authBloc;
+  bool _obscureText = false;
 
   @override
   void initState() {
@@ -60,20 +61,28 @@ class _LoginUiState extends State<LoginUi> {
 
     final pass = TextField(
       controller: password,
-      obscureText: true,
+      obscureText: _obscureText,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(
-          Icons.lock,
-          color: Color.fromRGBO(8, 56, 99, 1),
-        ),
-        filled: true,
-        fillColor: Colors.white,
-        hintStyle: TextStyle(color: Colors.black54),
-        hintText: 'Password',
-        contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      ),
+          prefixIcon: Icon(
+            Icons.lock,
+            color: Color.fromRGBO(8, 56, 99, 1),
+          ),
+          filled: true,
+          fillColor: Colors.white,
+          hintStyle: TextStyle(color: Colors.black54),
+          hintText: 'Password',
+          contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          suffixIcon: IconButton(
+            icon: Icon(_obscureText ? (Icons.visibility) : (Icons.visibility_off),
+            color: Theme.of(context).primaryColorDark,), 
+            onPressed: () { setState(() {
+              _obscureText = !_obscureText;
+            }); },
+          ),
+          
+          ),
     );
 
     final loginButton = Padding(

@@ -50,10 +50,7 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
                     return Card(
                       child: Column(children: [
                         ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage:
-                                AssetImage('lib/images/car_default.png'),
-                          ),
+                          leading: Image.asset('lib/images/logo_blue.png'),
                           title: Text(state.vehicleLists[index].manufacturer),
                           subtitle:
                               Text(state.vehicleLists[index].licensePlate),

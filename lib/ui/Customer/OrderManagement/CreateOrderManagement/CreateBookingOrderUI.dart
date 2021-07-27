@@ -36,7 +36,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
   bool _valueCheckbox = false;
   CreateBookingBloc _createBookingBloc;
   int _selectedTimeButton = 0;
-  
+
   Map<String, bool> checkboxListValues = {};
 
   Widget showTimeButton(String text, int index) {
@@ -132,7 +132,8 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                               child: ListTile(
                                 leading: CircleAvatar(
                                   backgroundImage:
-                                      AssetImage('lib/images/car_default.png'),
+                                      AssetImage('lib/images/logo_blue.png'),
+                                  backgroundColor: Colors.white24,
                                 ),
                                 title: Text(
                                   state.vehicleLists[index].licensePlate,
@@ -233,23 +234,35 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                                       value: e.id,
                                                       headerBuilder: (context,
                                                           isExpanded) {
-                                                        return RadioListTile(
-                                                          title: Text(e.name),
-                                                          onChanged: (value) {
+                                                        return ListTile(
+                                                          title: Text(
+                                                            e.name,
+                                                            style: TextStyle(
+                                                                color: (_valueSelectedPackageService ==
+                                                                        e.id)
+                                                                    ? Colors
+                                                                        .blue
+                                                                    : Colors
+                                                                        .grey),
+                                                          ),
+                                                          trailing: Text(
+                                                            e.price.toString(),
+                                                            style: TextStyle(
+                                                                color: (_valueSelectedPackageService ==
+                                                                        e.id)
+                                                                    ? Colors
+                                                                        .blue
+                                                                    : Colors
+                                                                        .grey),
+                                                          ),
+                                                          onTap: () {
                                                             setState(() {
                                                               _valueSelectedPackageService =
-                                                                  value;
-                                                              _packageId =
-                                                                  value;
+                                                                  e.id;
+                                                              _packageId = e.id;
                                                               _note = null;
                                                             });
                                                           },
-                                                          controlAffinity:
-                                                              ListTileControlAffinity
-                                                                  .leading,
-                                                          groupValue:
-                                                              _valueSelectedPackageService,
-                                                          value: e.id,
                                                         );
                                                       },
                                                       body:
@@ -261,6 +274,10 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                                             return ListTile(
                                                               title: Text(
                                                                   service.name),
+                                                              trailing: Text(
+                                                                service.price
+                                                                    .toString(),
+                                                              ),
                                                             );
                                                           }).toList(),
                                                         ),

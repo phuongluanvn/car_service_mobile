@@ -109,7 +109,7 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
                                       style: TextStyle(color: Colors.orangeAccent),
                                     ),
                                   ]),
-                              leading: FlutterLogo(),
+                              leading: Image.asset('lib/images/order_small.png'),
                               title: Text(
                                   state.orderLists[index].vehicle.licensePlate),
                               subtitle: Text(
