@@ -27,7 +27,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
   UpdateStatusOrderBloc updateStatusBloc;
   String selectItem;
   String holder = '';
-  List selectData;
+  List selectData = [];
+  List selectbackvalue = [];
   bool _selectStaff = false;
 
   @override
@@ -302,47 +303,47 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                   // child: ListView.builder(
                   //     itemCount: stafflist.length,
                   //     itemBuilder: (BuildContext context, int index) {
-                        child: Card(
-                          child: new Container(
-                            padding: new EdgeInsets.all(10.0),
-                            child: Column(
-                              children: stafflist.map((e) {
-                                return CheckboxListTile(
-                                    activeColor: Colors.pink[300],
-                                    // dense: true,
-                                    //font change
-                                    title: new Text(
-                                      e.username,
-                                    ),
-                                    value: _selectStaff,
-                                    // secondary: Container(
-                                    //   height: 50,
-                                    //   width: 50,
-                                    //   child: Image.asset(
-                                    //     checkBoxListTileModel[index].img,
-                                    //     fit: BoxFit.cover,
-                                    //   ),
-                                    // ),
-                                    onChanged: (bool val) {
-                                      if (selectData.indexOf(e) < 0) {
-                                        setState(() {
-                                          selectData.add(e);
-                                          _selectStaff=true;
-                                        });
-                                      } else {
-                                        setState(() {
-                                          selectData.removeWhere(
-                                              (element) => element == e);
-                                        });
-                                      }
-                                      print(selectData);
-                                    });
-                              }).toList(),
-                            ),
-                          ),
-                        ),
-                      
-                      // }),
+                  child: Card(
+                    child: new Container(
+                      padding: new EdgeInsets.all(10.0),
+                      child: Column(
+                        children: stafflist.map((e) {
+                          return CheckboxListTile(
+                              activeColor: Colors.pink[300],
+                              // dense: true,
+                              //font change
+                              title: new Text(
+                                e.username,
+                              ),
+                              value: selectData.indexOf(e) < 0 ? false : true,
+                              // secondary: Container(
+                              //   height: 50,
+                              //   width: 50,
+                              //   child: Image.asset(
+                              //     checkBoxListTileModel[index].img,
+                              //     fit: BoxFit.cover,
+                              //   ),
+                              // ),
+                              onChanged: (bool val) {
+                                if (selectData.indexOf(e) < 0) {
+                                  setState(() {
+                                    selectData.add(e);
+                                    _selectStaff = true;
+                                  });
+                                } else {
+                                  setState(() {
+                                    selectData
+                                        .removeWhere((element) => element == e);
+                                  });
+                                }
+                                print(selectData);
+                              });
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+
+                  // }),
                 ),
               ),
               actions: <Widget>[
@@ -351,7 +352,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
                       // Do something like updating SharedPreferences or User Settings etc.
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pop(context,selectData);
                     }
                   },
                 ),
