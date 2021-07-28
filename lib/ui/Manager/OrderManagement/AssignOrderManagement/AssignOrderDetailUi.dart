@@ -216,7 +216,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                           child: Text('Chọn nhân viên'),
                                           onPressed: () =>
                                               showInformationDialog(context,
-                                                  staffState.staffList),
+                                                  staffState.staffList).then((value) => print(selectData[1].fullname)),
                                         )
                                         // DropdownButton<String>(
                                         //   hint: Text('Select Staff'),
@@ -352,7 +352,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
                       // Do something like updating SharedPreferences or User Settings etc.
-                      Navigator.of(context).pop(context,selectData);
+                      Navigator.pop(context,selectData);
                     }
                   },
                 ),
