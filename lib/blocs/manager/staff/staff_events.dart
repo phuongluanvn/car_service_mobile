@@ -1,3 +1,4 @@
+import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class ManageStaffEvent extends Equatable {
@@ -6,7 +7,11 @@ abstract class ManageStaffEvent extends Equatable {
 }
 
 class DoListStaffEvent extends ManageStaffEvent {}
-class DoListServiceEvent extends ManageStaffEvent {}
+
+class DoListSelectStaffEvent extends ManageStaffEvent {
+  final List<StaffModel> listDataStaff;
+  DoListSelectStaffEvent({this.listDataStaff});
+}
 
 class DoStaffDetailEvent extends ManageStaffEvent {
   final String username;

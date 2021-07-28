@@ -214,33 +214,66 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                         StaffStatus.staffListsuccess) {
                                       return Column(
                                         children: [
-                                          Container(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.3,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.7,
-                                            child: ListView.builder(
-                                              shrinkWrap: true,
-                                              itemCount: selectbackvalue.length,
-                                              itemBuilder: (context, index) {
-                                                return Card(
-                                                  child: Column(children: [
-                                                    ListTile(
-                                                      leading: Image.asset(
-                                                          'lib/images/logo_blue.png'),
-                                                      title: Text(
-                                                          selectbackvalue[index]
-                                                              .fullname),
-                                                    ),
-                                                  ]),
+                                          BlocBuilder<
+                                                  ManageStaffBloc, ManageStaffState>(
+                                              builder:
+                                                  // ignore: missing_return
+                                                  (builder, staffSelectState) {
+                                            if (staffSelectState
+                                                    .staffSelectStt ==
+                                                StaffSelectStatus.loading) {
+                                              return CircularProgressIndicator();
+                                            } else if (staffSelectState
+                                                    .staffSelectStt ==
+                                                StaffSelectStatus.success) {
+                                              if (staffSelectState
+                                                          .staffSelect !=
+                                                      null &&
+                                                  staffSelectState
+                                                      .staffSelect.isNotEmpty) {
+                                                Container(
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.3,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.7,
+                                                  child: ListView.builder(
+                                                    shrinkWrap: true,
+                                                    itemCount: staffSelectState
+                                                        .staffSelect.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return Card(
+                                                        child:
+                                                            Column(children: [
+                                                          ListTile(
+                                                            leading: Image.asset(
+                                                                'lib/images/logo_blue.png'),
+                                                            title: Text(
+                                                                staffSelectState
+                                                                    .staffSelect[
+                                                                        index]
+                                                                    .fullname),
+                                                          ),
+                                                        ]),
+                                                      );
+                                                    },
+                                                  ),
                                                 );
-                                              },
-                                            ),
-                                          ),
+                                              } else {
+                                                return SizedBox();
+                                              }
+                                            } else if (staffSelectState
+                                                    .staffSelectStt ==
+                                                StaffSelectStatus.error) {
+                                              return ErrorWidget(
+                                                  state.message.toString());
+                                            }
+                                            ;
+                                          }),
 
                                           ElevatedButton(
                                               child: Text('Chọn nhân viên'),
@@ -376,9 +409,11 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                   child: Text('Okay'),
                   onPressed: () {
                     // Do something like updating SharedPreferences or User Settings etc.
+                    BlocProvider.of<ManageStaffBloc>(context)
+                        .add(DoListSelectStaffEvent(listDataStaff: selectData));
                     setState(() {
-                      return Navigator.pop(context, selectbackvalue);
                       selectData = selectbackvalue;
+                      return Navigator.pop(context, selectbackvalue);
                     });
                   },
                 ),

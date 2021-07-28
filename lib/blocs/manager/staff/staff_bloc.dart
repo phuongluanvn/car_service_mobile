@@ -57,6 +57,26 @@ class ManageStaffBloc extends Bloc<ManageStaffEvent, ManageStaffState> {
         yield state.copyWith(
             detailStatus: StaffDetailStatus.error, message: e.toString());
       }
+    } else if (event is DoListSelectStaffEvent) {
+      yield state.copyWith(staffSelectStt: StaffSelectStatus.loading);
+      try {
+        var data = event.listDataStaff;
+        if (data != null) {
+          print("Not null");
+          yield state.copyWith(
+            staffSelectStt: StaffSelectStatus.success,
+            staffSelect: data,
+          );
+        } else {
+          yield state.copyWith(
+            staffSelectStt: StaffSelectStatus.error,
+            message: 'Detail Error',
+          );
+        }
+      } catch (e) {
+        yield state.copyWith(
+            staffSelectStt: StaffSelectStatus.error, message: e.toString());
+      }
     }
   }
 }

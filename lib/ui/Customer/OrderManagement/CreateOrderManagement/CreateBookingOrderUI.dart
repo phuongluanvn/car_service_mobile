@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:car_service/blocs/customer/customerCar/CreateCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CreateCar_state.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
@@ -14,6 +16,7 @@ import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CreateBookingOrderUI extends StatefulWidget {
@@ -36,6 +39,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
   bool _valueCheckbox = false;
   CreateBookingBloc _createBookingBloc;
   int _selectedTimeButton = 0;
+  File _image;
 
   Map<String, bool> checkboxListValues = {};
 
@@ -73,6 +77,57 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  _imageFromCamera() async {
+    PickedFile image = await ImagePicker()
+        .getImage(source: ImageSource.camera, imageQuality: 50);
+
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+      });
+    }
+  }
+
+  _imageFromGallery() async {
+    PickedFile image = await ImagePicker()
+        .getImage(source: ImageSource.gallery, imageQuality: 50);
+    print(image.path);
+
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+      });
+    }
+  }
+
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+              child: Wrap(
+            children: [
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Gallery'),
+                onTap: () {
+                  _imageFromGallery();
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.camera_alt),
+                title: Text('Camera'),
+                onTap: () {
+                  _imageFromCamera();
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ));
+        });
   }
 
   @override
@@ -318,24 +373,48 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                           visible: _visibleSuaChua,
                           child: Padding(
                             padding: const EdgeInsets.all(18.0),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 10),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: TextField(
-                                onChanged: (noteValue) {
-                                  setState(() {
-                                    _packageId = null;
-                                    _note = noteValue;
-                                  });
-                                },
-                                maxLines: 6,
-                                decoration: InputDecoration.collapsed(
-                                    hintText: 'Tình trạng xe'),
-                              ),
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: TextField(
+                                    onChanged: (noteValue) {
+                                      setState(() {
+                                        _packageId = null;
+                                        _note = noteValue;
+                                      });
+                                    },
+                                    maxLines: 3,
+                                    decoration: InputDecoration.collapsed(
+                                        hintText: 'Tình trạng xe'),
+                                  ),
+                                ),
+                                SizedBox(height: 12,),
+                                Center(
+                                  child: GestureDetector(
+                                    child: Container(
+                                      color: Colors.white24,
+                                      height: 150,
+                                      width: 300,
+                                      child: _image != null
+                                          ? Image.file(
+                                              _image,
+                                              fit: BoxFit.fill,
+                                            )
+                                          : Icon(Icons.add_a_photo),
+                                      alignment: Alignment.center,
+                                    ),
+                                    onTap: () {
+                                      _showPicker(context);
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
