@@ -53,12 +53,13 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Thông tin đơn hàng'),
+        title: Text('Quản lý đơn hàng'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
       ),
+      backgroundColor: Colors.blue[100],
       body: SingleChildScrollView(
         child: Center(
           child: BlocBuilder<AssignOrderBloc, AssignOrderState>(
@@ -74,133 +75,297 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                     padding: const EdgeInsets.all(12.0),
                     child: Column(
                       children: <Widget>[
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.2,
-                              child: Text(
-                                'Fullname:',
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                state.assignDetail[0].customer.fullname ??
-                                    'empty',
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(height: 16),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.2,
-                              child: Text(
-                                'Email:',
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                state.assignDetail[0].customer.email ?? 'empty',
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(height: 16),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.3,
-                              child: Text(
-                                'Booking time:',
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                state.assignDetail[0].bookingTime ?? 'empty',
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(height: 16),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.2,
-                              child: Text(
-                                'Status:',
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                state.assignDetail[0].status ?? 'empty',
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(height: 16),
-                        BlocListener<UpdateStatusOrderBloc,
-                            UpdateStatusOrderState>(
-                          // ignore: missing_return
-                          listener: (builder, statusState) {
-                            if (statusState.status ==
-                                UpdateStatus.updateStatusCheckinSuccess) {
-                              setState(() {
-                                _visible = !_visible;
-                              });
-                            } else if (statusState.status ==
-                                UpdateStatus.updateStatusCheckingSuccess) {}
-                          },
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5)),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
                           child: Column(
-                            children: [
+                            children: <Widget>[
+                              Text(
+                                'Thông tin khách hàng',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.baseline,
+                                textBaseline: TextBaseline.alphabetic,
                                 children: [
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.45,
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          primary: Colors.blue),
-                                      child: Text('Checkin',
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                      onPressed: () {
-                                        updateStatusBloc.add(
-                                            UpdateStatusCheckinButtonPressed(
-                                                id: state.assignDetail[0].id,
-                                                status: checkinStatus));
-                                      },
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.2,
+                                    child: Text(
+                                      'Fullname:',
+                                      style: TextStyle(fontSize: 16.0),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Text(
+                                      state.assignDetail[0].customer.fullname,
+                                      style: TextStyle(fontSize: 15.0),
                                     ),
                                   ),
                                 ],
                               ),
-                              const Divider(
-                                color: Colors.black87,
-                                height: 20,
-                                thickness: 1,
-                                indent: 10,
-                                endIndent: 10,
+                              Container(height: 16),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.baseline,
+                                textBaseline: TextBaseline.alphabetic,
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.2,
+                                    child: Text(
+                                      'Email:',
+                                      style: TextStyle(fontSize: 16.0),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Text(
+                                      state.assignDetail[0].customer.email,
+                                      style: TextStyle(fontSize: 15.0),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Visibility(
-                                visible: /*_visible*/ true,
+                              Container(height: 16),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.baseline,
+                                textBaseline: TextBaseline.alphabetic,
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.3,
+                                    child: Text(
+                                      'Booking Time:',
+                                      style: TextStyle(fontSize: 16.0),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Text(
+                                      state.assignDetail[0].bookingTime,
+                                      style: TextStyle(fontSize: 15.0),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(height: 16),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.baseline,
+                                textBaseline: TextBaseline.alphabetic,
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.2,
+                                    child: Text(
+                                      'Status:',
+                                      style: TextStyle(fontSize: 16.0),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Text(
+                                      state.assignDetail[0].status,
+                                      style: TextStyle(fontSize: 15.0),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 20, horizontal: 5),
                                 child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black26),
+                                      borderRadius: BorderRadius.circular(5)),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 5, vertical: 10),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        'Thông tin xe',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      Container(height: 10),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.baseline,
+                                        textBaseline: TextBaseline.alphabetic,
+                                        children: [
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.2,
+                                            child: Text(
+                                              'Biển số xe:',
+                                              style: TextStyle(fontSize: 16.0),
+                                            ),
+                                          ),
+                                          Container(
+                                            child: Text(
+                                              state.assignDetail[0].vehicle
+                                                  .licensePlate,
+                                              style: TextStyle(fontSize: 15.0),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Container(height: 10),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.baseline,
+                                        textBaseline: TextBaseline.alphabetic,
+                                        children: [
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.2,
+                                            child: Text(
+                                              'Hãng xe:',
+                                              style: TextStyle(fontSize: 16.0),
+                                            ),
+                                          ),
+                                          Container(
+                                            child: Text(
+                                              state.assignDetail[0].vehicle
+                                                  .manufacturer,
+                                              style: TextStyle(fontSize: 15.0),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Container(height: 10),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.baseline,
+                                        textBaseline: TextBaseline.alphabetic,
+                                        children: [
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.2,
+                                            child: Text(
+                                              'Mã xe:',
+                                              style: TextStyle(fontSize: 16.0),
+                                            ),
+                                          ),
+                                          Container(
+                                            child: Text(
+                                              state.assignDetail[0].vehicle
+                                                  .model,
+                                              style: TextStyle(fontSize: 15.0),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              // Padding(
+                              //   padding: const EdgeInsets.symmetric(
+                              //       vertical: 5, horizontal: 5),
+                              //   child: Container(
+                              //     decoration: BoxDecoration(
+                              //         border: Border.all(color: Colors.black26),
+                              //         borderRadius: BorderRadius.circular(5)),
+                              //     padding: EdgeInsets.symmetric(
+                              //         horizontal: 5, vertical: 10),
+                              //     child: Column(
+                              //       children: [
+                              //         Text(
+                              //           'Thông tin gói dịch vụ',
+                              //           style: TextStyle(
+                              //               fontSize: 16,
+                              //               fontWeight: FontWeight.w600),
+                              //         ),
+                              //         ListView(
+                              //           shrinkWrap: true,
+                              //           children: state
+                              //               .bookingDetail[0].orderDetails
+                              //               .map((service) {
+                              //             return ListTile(
+                              //               title: Text(service.name),
+                              //             );
+                              //           }).toList(),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ),
+                              // ),
+                              BlocListener<UpdateStatusOrderBloc,
+                                  UpdateStatusOrderState>(
+                                // ignore: missing_return
+                                listener: (builder, statusState) {
+                                  if (statusState.status ==
+                                      UpdateStatus.updateStatusCheckinSuccess) {
+                                    setState(() {
+                                      _visible = !_visible;
+                                    });
+                                  } else if (statusState.status ==
+                                      UpdateStatus
+                                          .updateStatusCheckingSuccess) {}
+                                },
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.45,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                primary: Colors.blue),
+                                            child: Text('Checkin',
+                                                style: TextStyle(
+                                                    color: Colors.white)),
+                                            onPressed: () {
+                                              updateStatusBloc.add(
+                                                  UpdateStatusCheckinButtonPressed(
+                                                      id: state
+                                                          .assignDetail[0].id,
+                                                      status: checkinStatus));
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Divider(
+                          color: Colors.black87,
+                          height: 20,
+                          thickness: 1,
+                          indent: 10,
+                          endIndent: 10,
+                        ),
+                        Visibility(
+                          visible: _visible,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5)),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 20),
+                            child: Column(
+                              children: <Widget>[
+                                Container(
                                   child: BlocBuilder<ManageStaffBloc,
                                           ManageStaffState>(
                                       // ignore: missing_return
@@ -214,115 +379,117 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                         StaffStatus.staffListsuccess) {
                                       return Column(
                                         children: [
-                                          BlocBuilder<
-                                                  ManageStaffBloc, ManageStaffState>(
-                                              builder:
-                                                  // ignore: missing_return
-                                                  (builder, staffSelectState) {
-                                            if (staffSelectState
-                                                    .staffSelectStt ==
-                                                StaffSelectStatus.loading) {
-                                              return CircularProgressIndicator();
-                                            } else if (staffSelectState
-                                                    .staffSelectStt ==
-                                                StaffSelectStatus.success) {
-                                              if (staffSelectState
-                                                          .staffSelect !=
-                                                      null &&
-                                                  staffSelectState
-                                                      .staffSelect.isNotEmpty) {
-                                                Container(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.3,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.7,
-                                                  child: ListView.builder(
-                                                    shrinkWrap: true,
-                                                    itemCount: staffSelectState
-                                                        .staffSelect.length,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return Card(
-                                                        child:
-                                                            Column(children: [
-                                                          ListTile(
-                                                            leading: Image.asset(
-                                                                'lib/images/logo_blue.png'),
-                                                            title: Text(
-                                                                staffSelectState
-                                                                    .staffSelect[
-                                                                        index]
-                                                                    .fullname),
-                                                          ),
-                                                        ]),
-                                                      );
-                                                    },
-                                                  ),
-                                                );
-                                              } else {
-                                                return SizedBox();
-                                              }
-                                            } else if (staffSelectState
-                                                    .staffSelectStt ==
-                                                StaffSelectStatus.error) {
-                                              return ErrorWidget(
-                                                  state.message.toString());
-                                            }
-                                            ;
-                                          }),
+                                          // Container(
+                                          //   height: MediaQuery.of(context)
+                                          //           .size
+                                          //           .height *
+                                          //       0.3,
+                                          //   width: MediaQuery.of(context)
+                                          //           .size
+                                          //           .width *
+                                          //       0.7,
+                                          //   child:
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.black26),
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 5, vertical: 10),
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  'Thông tin nhân viên',
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                                SizedBox(
+                                                  height: 20,
+                                                ),
+                                                ListView.builder(
+                                                  shrinkWrap: true,
+                                                  itemCount: selectData.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Card(
+                                                      child: Column(children: [
+                                                        ListTile(
+                                                          leading: Image.asset(
+                                                              'lib/images/logo_blue.png'),
+                                                          title: Text(
+                                                              selectData[index]
+                                                                  .fullname),
+                                                        ),
+                                                      ]),
+                                                    );
+                                                  },
+                                                ),
+                                                // ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                ElevatedButton(
+                                                    child:
+                                                        Text('Chọn nhân viên'),
+                                                    onPressed: () =>
+                                                        setState(() {
+                                                          showInformationDialog(
+                                                                  context,
+                                                                  staffState
+                                                                      .staffList)
+                                                              .then((value) {
+                                                            setState(() {
+                                                              selectData =
+                                                                  value;
+                                                              _visible = true;
+                                                            });
+                                                          });
+                                                        })),
+                                                Container(height: 10),
+                                              ],
+                                            ),
+                                          ),
 
-                                          ElevatedButton(
-                                              child: Text('Chọn nhân viên'),
-                                              onPressed: () => setState(() {
-                                                    showInformationDialog(
-                                                            context,
-                                                            staffState
-                                                                .staffList)
-                                                        .then((value) =>
-                                                            selectbackvalue =
-                                                                selectData);
-                                                  })),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.6,
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  primary: Colors.blue),
+                                              child: Text('Checking',
+                                                  style: TextStyle(
+                                                      color: Colors.white)),
+                                              onPressed: () {
+                                                updateStatusBloc.add(
+                                                    UpdateStatusCheckingButtonPressed(
+                                                        id: state
+                                                            .assignDetail[0].id,
+                                                        status:
+                                                            checkingStatus));
+                                                // getDropDownItem,
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (_) =>
+                                                            AssignOrderReviewUi(
+                                                              userId: state
+                                                                  .assignDetail[
+                                                                      0]
+                                                                  .id,
+                                                              selectStaff:
+                                                                  selectData,
+                                                            )));
+                                              },
+                                            ),
+                                          ),
 
-                                          // DropdownButton<String>(
-                                          //   hint: Text('Select Staff'),
-                                          //   items: staffState.staffList
-                                          //       .map((valueItem) {
-                                          //     return DropdownMenuItem<String>(
-                                          //       child: Text(valueItem.fullname),
-                                          //       value: valueItem.fullname,
-                                          //     );
-                                          //   }).toList(),
-                                          //   onChanged: (newValue) {
-                                          //     setState(() {
-                                          //       this.selectItem = newValue;
-                                          //     });
-                                          //   },
-                                          //   value: selectItem,
-                                          // ),
-                                          // ElevatedButton(
-                                          //   child: Text('Checking'),
-                                          //   onPressed: () {
-                                          //     updateStatusBloc.add(
-                                          //         UpdateStatusCheckingButtonPressed(
-                                          //             id: state
-                                          //                 .assignDetail[0].id,
-                                          //             status: checkingStatus));
-                                          //     // getDropDownItem,
-                                          //     Navigator.of(context).push(
-                                          //         MaterialPageRoute(
-                                          //             builder: (_) =>
-                                          //                 AssignOrderReviewUi(
-                                          //                     userId: state
-                                          //                         .assignDetail[0]
-                                          //                         .id,
-                                          //                     staffId:
-                                          //                         selectItem)));
-                                          //   },
-                                          // ),
                                           // Container(
                                           //   child: Text('$holder'),
                                           // ),
@@ -336,8 +503,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                     ;
                                   }),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -357,9 +524,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
 
   // ======================
 
-  Future<void> showInformationDialog(
-      BuildContext context, List stafflist) async {
-    return await showDialog(
+  Future showInformationDialog(BuildContext context, List stafflist) async {
+    return showDialog(
         context: context,
         builder: (context) {
           return StatefulBuilder(builder: (context, setState) {
@@ -378,14 +544,14 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                             e.username,
                           ),
                           value: selectData.indexOf(e) < 0 ? false : true,
-                          // secondary: Container(
-                          //   height: 50,
-                          //   width: 50,
-                          //   child: Image.asset(
-                          //     checkBoxListTileModel[index].img,
-                          //     fit: BoxFit.cover,
-                          //   ),
-                          // ),
+                          secondary: Container(
+                            height: 50,
+                            width: 50,
+                            child: Image.asset(
+                              'lib/images/logo_blue.png',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                           onChanged: (bool val) {
                             if (selectData.indexOf(e) < 0) {
                               setState(() {
@@ -409,12 +575,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                   child: Text('Okay'),
                   onPressed: () {
                     // Do something like updating SharedPreferences or User Settings etc.
-                    BlocProvider.of<ManageStaffBloc>(context)
-                        .add(DoListSelectStaffEvent(listDataStaff: selectData));
-                    setState(() {
-                      selectData = selectbackvalue;
-                      return Navigator.pop(context, selectbackvalue);
-                    });
+
+                    Navigator.pop(context, selectData);
                   },
                 ),
               ],
