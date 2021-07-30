@@ -177,7 +177,7 @@ class _AuthState extends State<Auth> {
         debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {
-          '/': (context) => LoginUi(),
+          '/': (context) => ManagerMain(),
           '/manager': (context) => ManagerMain(),
           '/staff': (context) => StaffHome(),
           '/customer': (context) => CustomerHome(),

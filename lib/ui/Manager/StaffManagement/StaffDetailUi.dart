@@ -42,75 +42,108 @@ class _StaffDetailUiState extends State<StaffDetailUi> {
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
                     children: <Widget>[
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.2,
-                            child: Text(
-                              'Fullname:',
-                              style: TextStyle(fontSize: 16.0),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5)),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              'Thông tin khách hàng',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600),
                             ),
-                          ),
-                          Container(
-                            child: Text(
-                              state.staffDetail[0].fullname ?? 'Empty',
-                              style: TextStyle(fontSize: 15.0),
+                            SizedBox(
+                              height: 10,
                             ),
-                          ),
-                        ],
-                      ),
-                      Container(height: 16),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.2,
-                            child: Text(
-                              'Email:',
-                              style: TextStyle(fontSize: 16.0),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.alphabetic,
+                              children: [
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.2,
+                                  child: Text(
+                                    'Fullname:',
+                                    style: TextStyle(fontSize: 16.0),
+                                  ),
+                                ),
+                                Container(
+                                  child: Text(
+                                    state.staffDetail[0].fullname,
+                                    style: TextStyle(fontSize: 15.0),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          Container(
-                            child: Text(
-                              state.staffDetail[0].email ?? 'Empty',
-                              style: TextStyle(fontSize: 15.0),
+                            Container(height: 16),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.alphabetic,
+                              children: [
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.2,
+                                  child: Text(
+                                    'Email:',
+                                    style: TextStyle(fontSize: 16.0),
+                                  ),
+                                ),
+                                Container(
+                                  child: Text(
+                                    state.staffDetail[0].email,
+                                    style: TextStyle(fontSize: 15.0),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      Container(height: 16),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.2,
-                            child: Text(
-                              'Status:',
-                              style: TextStyle(fontSize: 16.0),
+                            Container(height: 16),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.alphabetic,
+                              children: [
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.3,
+                                  child: Text(
+                                    'Phone number:',
+                                    style: TextStyle(fontSize: 16.0),
+                                  ),
+                                ),
+                                Container(
+                                  child: Text(
+                                    state.staffDetail[0].phoneNumber,
+                                    style: TextStyle(fontSize: 15.0),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          Container(
-                            child: Text(
-                              state.staffDetail[0].status ?? 'Empty',
-                              style: TextStyle(fontSize: 15.0),
+                            Container(height: 16),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.alphabetic,
+                              children: [
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.2,
+                                  child: Text(
+                                    'Status:',
+                                    style: TextStyle(fontSize: 16.0),
+                                  ),
+                                ),
+                                Container(
+                                  child: Text(
+                                    state.staffDetail[0].status,
+                                    style: TextStyle(fontSize: 15.0),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      Container(height: 16),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        height: 35,
-                        child: ElevatedButton(
-                          child: Text('Absent',
-                              style: TextStyle(color: Colors.white)),
-                          onPressed: () {},
+                          ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 );

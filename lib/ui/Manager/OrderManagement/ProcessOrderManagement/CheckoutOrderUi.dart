@@ -58,6 +58,7 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
+      backgroundColor: AppTheme.colors.lightblue,
       body: Center(
         child: BlocBuilder<ProcessOrderBloc, ProcessOrderState>(
           // ignore: missing_return
@@ -149,7 +150,7 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                               width: MediaQuery.of(context).size.width * 0.45,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    primary: Colors.blue),
+                                    primary: AppTheme.colors.blue),
                                 child: Text('Finish',
                                     style: TextStyle(color: Colors.white)),
                                 onPressed: () {

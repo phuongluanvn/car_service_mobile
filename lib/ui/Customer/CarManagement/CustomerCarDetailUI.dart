@@ -179,7 +179,8 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                         ),
                         Container(height: 14),
                         TextFormField(
-                          initialValue: state.vehicleLists[0].dateOfLastMaintenance,
+                          initialValue:
+                              state.vehicleLists[0].dateOfLastMaintenance,
                           keyboardType: TextInputType.text,
                           autofocus: false,
                           decoration: InputDecoration(
@@ -197,7 +198,8 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                         ),
                         Container(height: 14),
                         TextFormField(
-                          initialValue: state.vehicleLists[0].millageCount.toString(),
+                          initialValue:
+                              state.vehicleLists[0].millageCount.toString(),
                           keyboardType: TextInputType.text,
                           autofocus: false,
                           decoration: InputDecoration(

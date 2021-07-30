@@ -348,6 +348,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                             ],
                           ),
                         ),
+                        
                         const Divider(
                           color: Colors.black87,
                           height: 20,

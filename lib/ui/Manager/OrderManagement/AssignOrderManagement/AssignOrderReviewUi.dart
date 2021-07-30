@@ -269,7 +269,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                   ),
                                 ),
                               ),
-                              
+
                               // Padding(
                               //   padding: const EdgeInsets.symmetric(
                               //       vertical: 5, horizontal: 5),
@@ -557,9 +557,10 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                           title: new Text(
                             e.username,
                           ),
-                          value: 
-                          (selectData.indexOf(e) < 0) &&
-                          (fullname == e.username) ? true : false,
+                          value: (selectData.indexOf(e) < 0) &&
+                                  (fullname == e.username)
+                              ? true
+                              : false,
                           secondary: Container(
                             height: 50,
                             width: 50,
