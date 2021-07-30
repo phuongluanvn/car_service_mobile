@@ -44,7 +44,8 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
                     Divider(),
                     Text(
                       'Đơn cần xác nhận',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     Divider(
                       thickness: 2,
@@ -56,71 +57,42 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
                       child: ListView.builder(
                         itemCount: state.orderLists.length,
                         shrinkWrap: true,
+                        // ignore: missing_return
                         itemBuilder: (context, index) {
-                          Color color;
-                          var status = state.orderLists[index].status;
-                          switch (status) {
-                            case 'Booked':
-                              color = Colors.orange[600];
-                              break;
-                            case 'Accepted':
-                              color = Colors.green[200];
-                              break;
-                            case 'Checkin':
-                              color = Colors.blue[400];
-                              break;
-                            case 'Checking':
-                              color = Colors.blue[700];
-                              break;
-                            case 'Waiting confirm':
-                              color = Colors.orange;
-                              break;
-                            case 'Confirmed':
-                              color = Colors.teal[300];
-                              break;
-                            case 'Denied':
-                              color = Colors.red[600];
-                              break;
-                            case 'Working':
-                              color = Colors.green[300];
-                              break;
-                            case 'Complete':
-                              color = Colors.green[600];
-                              break;
-                            case 'Cancle':
-                              color = Colors.red;
-                              break;
-//con nhieu case nua lam sau
-                            default:
-                              color = Colors.black;
-                          }
-                          return Card(
-                              child: Column(children: [
-                            ListTile(
-                              trailing: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.circle,
-                                      color: Colors.orangeAccent,
-                                    ),
-                                    Text(
-                                      'Waiting Confirm',
-                                      style: TextStyle(color: Colors.orangeAccent),
-                                    ),
-                                  ]),
-                              leading: Image.asset('lib/images/order_small.png'),
-                              title: Text(
-                                  state.orderLists[index].vehicle.licensePlate),
-                              subtitle: Text(
-                                  state.orderLists[index].vehicle.manufacturer),
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) => ConfirmOrderDetailUi(
-                                        orderId: state.orderLists[index].id)));
-                              },
-                            ),
-                          ]));
+                          assert(context != null);
+                          if (state.orderLists[index].status ==
+                              'Waitting Confirm') {
+                            return Card(
+                                child: Column(children: [
+                              ListTile(
+                                trailing: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.circle,
+                                        color: Colors.orangeAccent,
+                                      ),
+                                      Text(
+                                        state.orderLists[index].status,
+                                        style: TextStyle(
+                                            color: Colors.orangeAccent),
+                                      ),
+                                    ]),
+                                leading:
+                                    Image.asset('lib/images/order_small.png'),
+                                title: Text(state
+                                    .orderLists[index].vehicle.licensePlate),
+                                subtitle: Text(state
+                                    .orderLists[index].vehicle.manufacturer),
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) => ConfirmOrderDetailUi(
+                                          orderId:
+                                              state.orderLists[index].id)));
+                                },
+                              ),
+                            ]));
+                          } 
                         },
                       ),
                       // ),

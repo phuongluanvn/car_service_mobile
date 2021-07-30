@@ -14,7 +14,7 @@ class _LoginUiState extends State<LoginUi> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   AuthBloc authBloc;
-  bool _obscureText = false;
+  bool _obscureText = true;
 
   @override
   void initState() {

@@ -1,6 +1,7 @@
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_event.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/CarManagement/CreateCustomerCarUI.dart';
 import 'package:car_service/ui/Customer/CarManagement/CustomerCarDetailUI.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,8 @@ class CustomerCarUi extends StatefulWidget {
 }
 
 class _CustomerCarUiState extends State<CustomerCarUi> {
+  Image image;
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +33,19 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
       appBar: AppBar(
         title: Text('Danh sách xe'),
         automaticallyImplyLeading: false,
+        backgroundColor: AppTheme.colors.deepBlue,
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 20),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => CreateCustomerCarUI()));
+              },
+              child: Icon(Icons.add_box_outlined),
+            ),
+          )
+        ],
       ),
       backgroundColor: Colors.blue[100],
       body: Center(
@@ -51,9 +67,9 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
                       child: Column(children: [
                         ListTile(
                           leading: Image.asset('lib/images/logo_blue.png'),
-                          title: Text(state.vehicleLists[index].manufacturer),
+                          title: Text(state.vehicleLists[index].licensePlate),
                           subtitle:
-                              Text(state.vehicleLists[index].licensePlate),
+                              Text(state.vehicleLists[index].manufacturer),
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (_) => CustomerCarDetailUi(
@@ -75,14 +91,14 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
         ),
       ),
       //thêm mới xe
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => CreateCustomerCarUI()));
-        },
-        child: const Icon(Icons.add),
-        backgroundColor: Colors.blue[600],
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Navigator.of(context)
+      //         .push(MaterialPageRoute(builder: (_) => CreateCustomerCarUI()));
+      //   },
+      //   child: const Icon(Icons.add),
+      //   backgroundColor: Colors.blue[600],
+      // ),
     );
   }
 }

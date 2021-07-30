@@ -1,3 +1,4 @@
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/CustomerAccountUI.dart';
 import 'package:car_service/ui/LoginUi.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
       appBar: AppBar(
         title: Text('Thông tin'),
         automaticallyImplyLeading: false,
+        backgroundColor: AppTheme.colors.deepBlue,
       ),
       backgroundColor: Colors.blue[100],
       body: SingleChildScrollView(
@@ -50,6 +52,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                   children: [
                     CircleAvatar(
                       child: Icon(Icons.person),
+                      backgroundColor: AppTheme.colors.deepBlue,
                     ),
                   ],
                 ),

@@ -43,6 +43,7 @@ dependencies:
   flutter_local_notifications:
   sizer: ^2.0.13
   firebase_storage: 
+  multi_image_picker:
 
 dev_dependencies:
   flutter_test:
