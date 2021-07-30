@@ -32,7 +32,7 @@ class _StaffUiState extends State<StaffUi> {
         title: Text('Quản lý nhân viên'),
         automaticallyImplyLeading: false,
       ),
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: Center(
         child: BlocBuilder<ManageStaffBloc, ManageStaffState>(
           // ignore: missing_return

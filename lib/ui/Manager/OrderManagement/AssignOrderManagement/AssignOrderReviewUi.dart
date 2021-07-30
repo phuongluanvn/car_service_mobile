@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
@@ -14,6 +15,7 @@ import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/Rev
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AssignOrderReviewUi extends StatefulWidget {
   final String userId;
@@ -29,6 +31,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visible = false;
   List<StaffModel> _selection = [];
+
   @override
   void initState() {
     super.initState();
@@ -53,7 +56,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: SingleChildScrollView(
         child: Center(
           child: BlocBuilder<AssignOrderBloc, AssignOrderState>(
@@ -305,7 +308,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                         MediaQuery.of(context).size.width * 0.4,
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                          primary: Colors.blue),
+                                          primary: AppTheme.colors.blue),
                                       child: Text('Review Task',
                                           style:
                                               TextStyle(color: Colors.white)),
@@ -324,7 +327,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                         MediaQuery.of(context).size.width * 0.4,
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                          primary: Colors.blue),
+                                          primary: AppTheme.colors.blue),
                                       child: Text('Send Confirm',
                                           style:
                                               TextStyle(color: Colors.white)),
@@ -388,7 +391,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                           child: Column(
                                             children: [
                                               Text(
-                                                'Thông tin nhân viên',
+                                                'Nhân viên phụ trách',
                                                 style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight:
@@ -419,6 +422,11 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                 height: 10,
                                               ),
                                               ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    primary:
+                                                        AppTheme.colors.blue,
+                                                  ),
                                                   child: Text('Chọn nhân viên'),
                                                   onPressed: () {}
                                                   // setState(() {
@@ -472,8 +480,8 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                   child: ElevatedButton(
                                                     style: ElevatedButton
                                                         .styleFrom(
-                                                            primary:
-                                                                Colors.blue),
+                                                            primary: AppTheme
+                                                                .colors.blue),
                                                     child: Text('Start Process',
                                                         style: TextStyle(
                                                             color:

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
@@ -10,8 +12,12 @@ import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/ProcessOrderManagement/CheckoutOrderUi.dart';
+import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProcessOrderDetailUi extends StatefulWidget {
   final String orderId;
@@ -27,6 +33,13 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
   String selectItem;
   bool checkedValue = false;
   String holder = '';
+  List<StaffModel> selectStaff = [];
+  String _selectedValueDetail;
+  String _valueSelectedPackageService;
+  String _packageId;
+  String _note;
+  List<StaffModel> selectData = [];
+
   @override
   void initState() {
     super.initState();
@@ -47,12 +60,13 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Processing Orrder Detail'),
+        title: Text('Quản lý đơn hàng'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
       ),
+      backgroundColor: AppTheme.colors.lightblue,
       body: SingleChildScrollView(
         child: Center(
           child: BlocBuilder<ProcessOrderBloc, ProcessOrderState>(
@@ -69,86 +83,235 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                     padding: EdgeInsets.all(12.0),
                     child: Column(
                       children: <Widget>[
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.2,
-                              child: Text(
-                                'Fullname:',
-                                style: TextStyle(fontSize: 16.0),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5)),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                'Thông tin khách hàng',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w600),
                               ),
-                            ),
-                            Container(
-                              child: Text(
-                                state.processDetail[0].customer.fullname,
-                                style: TextStyle(fontSize: 15.0),
+                              SizedBox(
+                                height: 10,
                               ),
-                            ),
-                          ],
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.baseline,
+                                textBaseline: TextBaseline.alphabetic,
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.2,
+                                    child: Text(
+                                      'Fullname:',
+                                      style: TextStyle(fontSize: 16.0),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Text(
+                                      state.processDetail[0].customer.fullname,
+                                      style: TextStyle(fontSize: 15.0),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(height: 16),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.baseline,
+                                textBaseline: TextBaseline.alphabetic,
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.2,
+                                    child: Text(
+                                      'Email:',
+                                      style: TextStyle(fontSize: 16.0),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Text(
+                                      state.processDetail[0].customer.email,
+                                      style: TextStyle(fontSize: 15.0),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(height: 16),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.baseline,
+                                textBaseline: TextBaseline.alphabetic,
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.3,
+                                    child: Text(
+                                      'Booking Time:',
+                                      style: TextStyle(fontSize: 16.0),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Text(
+                                      state.processDetail[0].bookingTime,
+                                      style: TextStyle(fontSize: 15.0),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(height: 16),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.baseline,
+                                textBaseline: TextBaseline.alphabetic,
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.2,
+                                    child: Text(
+                                      'Status:',
+                                      style: TextStyle(fontSize: 16.0),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Text(
+                                      state.processDetail[0].status,
+                                      style: TextStyle(fontSize: 15.0),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 20, horizontal: 5),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black26),
+                                      borderRadius: BorderRadius.circular(5)),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 5, vertical: 10),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        'Thông tin xe',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      Container(height: 10),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.baseline,
+                                        textBaseline: TextBaseline.alphabetic,
+                                        children: [
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.2,
+                                            child: Text(
+                                              'Biển số xe:',
+                                              style: TextStyle(fontSize: 16.0),
+                                            ),
+                                          ),
+                                          Container(
+                                            child: Text(
+                                              state.processDetail[0].vehicle
+                                                  .licensePlate,
+                                              style: TextStyle(fontSize: 15.0),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Container(height: 10),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.baseline,
+                                        textBaseline: TextBaseline.alphabetic,
+                                        children: [
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.2,
+                                            child: Text(
+                                              'Hãng xe:',
+                                              style: TextStyle(fontSize: 16.0),
+                                            ),
+                                          ),
+                                          Container(
+                                            child: Text(
+                                              state.processDetail[0].vehicle
+                                                  .manufacturer,
+                                              style: TextStyle(fontSize: 15.0),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Container(height: 10),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.baseline,
+                                        textBaseline: TextBaseline.alphabetic,
+                                        children: [
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.2,
+                                            child: Text(
+                                              'Mã xe:',
+                                              style: TextStyle(fontSize: 16.0),
+                                            ),
+                                          ),
+                                          Container(
+                                            child: Text(
+                                              state.processDetail[0].vehicle
+                                                  .model,
+                                              style: TextStyle(fontSize: 15.0),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              // Padding(
+                              //   padding: const EdgeInsets.symmetric(
+                              //       vertical: 5, horizontal: 5),
+                              //   child: Container(
+                              //     decoration: BoxDecoration(
+                              //         border: Border.all(color: Colors.black26),
+                              //         borderRadius: BorderRadius.circular(5)),
+                              //     padding: EdgeInsets.symmetric(
+                              //         horizontal: 5, vertical: 10),
+                              //     child: Column(
+                              //       children: [
+                              //         Text(
+                              //           'Thông tin gói dịch vụ',
+                              //           style: TextStyle(
+                              //               fontSize: 16,
+                              //               fontWeight: FontWeight.w600),
+                              //         ),
+                              //         ListView(
+                              //           shrinkWrap: true,
+                              //           children: state
+                              //               .bookingDetail[0].orderDetails
+                              //               .map((service) {
+                              //             return ListTile(
+                              //               title: Text(service.name),
+                              //             );
+                              //           }).toList(),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ),
+                              // ),
+                            ],
+                          ),
                         ),
-                        Container(height: 16),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.2,
-                              child: Text(
-                                'Email:',
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                state.processDetail[0].customer.email,
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(height: 16),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.3,
-                              child: Text(
-                                'Checkin time:',
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                state.processDetail[0].checkinTime,
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(height: 16),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.2,
-                              child: Text(
-                                'Status:',
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                state.processDetail[0].status,
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(height: 16),
                         Divider(
                           color: Colors.black87,
                           height: 20,
@@ -156,59 +319,70 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                           indent: 10,
                           endIndent: 10,
                         ),
-                        DataTable(
-                          columns: <DataColumn>[
-                            DataColumn(
-                              label: Text(
-                                'Tasks',
-                                style: TextStyle(fontStyle: FontStyle.italic),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5)),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                'Thông tin gói dịch vụ',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w600),
                               ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                'Status',
-                                style: TextStyle(fontStyle: FontStyle.italic),
+                              Center(
+                                child: ExpansionPanelList.radio(
+                                  children: state.processDetail[0].orderDetails
+                                      .map<ExpansionPanelRadio>(
+                                    (e) {
+                                      return ExpansionPanelRadio(
+                                          value: e.name,
+                                          headerBuilder: (context, isExpanded) {
+                                            return RadioListTile(
+                                              title: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  Text(e.name),
+                                                  Text('${e.price}'),
+                                                ],
+                                              ),
+                                              onChanged: (value) {
+                                                // setState(() {
+                                                //   _valueSelectedPackageService =
+                                                //       value;
+                                                //   _packageId = value;
+                                                //   _note = null;
+                                                // });
+                                              },
+                                              groupValue:
+                                                  _valueSelectedPackageService,
+                                              value: e.id,
+                                            );
+                                          },
+                                          body: SingleChildScrollView(
+                                            child:
+                                                // Text('????')
+                                                ListView(
+                                              shrinkWrap: true,
+                                              children: state.processDetail
+                                                  .map((service) {
+                                                return ListTile(
+                                                  title: Text(service
+                                                      .orderDetails[0].name),
+                                                );
+                                              }).toList(),
+                                            ),
+                                          ));
+                                    },
+                                  ).toList(),
+                                ),
                               ),
-                            ),
-                          ],
-                          rows: <DataRow>[
-                            DataRow(
-                              cells: <DataCell>[
-                                DataCell(Text('Goi Service 1')),
-                                DataCell(Checkbox(
-                                    value: checkedValue,
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        this.checkedValue = newValue;
-                                      });
-                                    })),
-                              ],
-                            ),
-                            DataRow(
-                              cells: <DataCell>[
-                                DataCell(Text('Goi Service 2')),
-                                DataCell(Checkbox(
-                                    value: checkedValue,
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        this.checkedValue = newValue;
-                                      });
-                                    })),
-                              ],
-                            ),
-                            DataRow(
-                              cells: <DataCell>[
-                                DataCell(Text('Goi Service 3')),
-                                DataCell(Checkbox(
-                                    value: checkedValue,
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        this.checkedValue = newValue;
-                                      });
-                                    })),
-                              ],
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         Container(height: 16),
                         Divider(
@@ -219,131 +393,145 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                           endIndent: 10,
                         ),
                         Container(
-                          child:
-                              // BlocBuilder<StaffBloc, StaffState>(
-                              //     // ignore: missing_return
-                              //     builder: (builder, state) {
-                              //   if (state is StaffInitState) {
-                              //     return CircularProgressIndicator();
-                              //   } else if (state is StaffLoadingState) {
-                              //     return CircularProgressIndicator();
-                              //   } else if (state is StaffListSuccessState) {
-                              //     return
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5)),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Column(
+                            children: <Widget>[
                               Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black12)),
-                            child: Column(
-                              children: [
-                                DropdownButton<String>(
-                                  hint: Text('Select Staff'),
-                                  items: TestList.map((valueItem) {
-                                    return DropdownMenuItem<String>(
-                                      child: Text(valueItem.toString()),
-                                      value: valueItem.toString(),
+                                child: BlocBuilder<ManageStaffBloc,
+                                        ManageStaffState>(
+                                    // ignore: missing_return
+                                    builder: (builder, staffState) {
+                                  if (staffState.status == StaffStatus.init) {
+                                    return CircularProgressIndicator();
+                                  } else if (staffState.status ==
+                                      StaffStatus.loading) {
+                                    return CircularProgressIndicator();
+                                  } else if (staffState.status ==
+                                      StaffStatus.staffListsuccess) {
+                                    return Column(
+                                      children: [
+                                        // Container(
+                                        //   height: MediaQuery.of(context)
+                                        //           .size
+                                        //           .height *
+                                        //       0.3,
+                                        //   width: MediaQuery.of(context)
+                                        //           .size
+                                        //           .width *
+                                        //       0.7,
+                                        //   child:
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.black26),
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 5, vertical: 10),
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                'Nhân viên phụ trách',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              SizedBox(
+                                                height: 20,
+                                              ),
+                                              ListView.builder(
+                                                shrinkWrap: true,
+                                                itemCount: selectData.length,
+                                                itemBuilder: (context, index) {
+                                                  return Card(
+                                                    child: Column(children: [
+                                                      ListTile(
+                                                        leading: Image.asset(
+                                                            'lib/images/logo_blue.png'),
+                                                        title: Text(
+                                                            selectData[index]
+                                                                .fullname),
+                                                      ),
+                                                    ]),
+                                                  );
+                                                },
+                                              ),
+                                              // ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    primary:
+                                                        AppTheme.colors.blue,
+                                                  ),
+                                                  child: Text('Chọn nhân viên'),
+                                                  onPressed: () => setState(() {
+                                                        showInformationDialog(
+                                                                context,
+                                                                staffState
+                                                                    .staffList)
+                                                            .then((value) {
+                                                          setState(() {
+                                                            selectData = value;
+                                                            _visible = true;
+                                                          });
+                                                        });
+                                                      })),
+                                              Container(height: 10),
+                                            ],
+                                          ),
+                                        ),
+
+                                        SizedBox(
+                                          height: 15,
+                                        ),
+
+                                        // Container(
+                                        //   child: Text('$holder'),
+                                        // ),
+                                      ],
                                     );
-                                  }).toList(),
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      this.selectItem = newValue;
-                                    });
-                                  },
-                                  value: selectItem,
-                                ),
-                                DropdownButton<String>(
-                                  hint: Text('Select Staff'),
-                                  items: TestList.map((valueItem) {
-                                    return DropdownMenuItem<String>(
-                                      child: Text(valueItem.toString()),
-                                      value: valueItem.toString(),
-                                    );
-                                  }).toList(),
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      this.selectItem = newValue;
-                                    });
-                                  },
-                                  value: selectItem,
-                                ),
-                                DropdownButton<String>(
-                                  hint: Text('Select Staff'),
-                                  items: TestList.map((valueItem) {
-                                    return DropdownMenuItem<String>(
-                                      child: Text(valueItem.toString()),
-                                      value: valueItem.toString(),
-                                    );
-                                  }).toList(),
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      this.selectItem = newValue;
-                                    });
-                                  },
-                                  value: selectItem,
-                                ),
-                                DropdownButton<String>(
-                                  hint: Text('Select Staff'),
-                                  items: TestList.map((valueItem) {
-                                    return DropdownMenuItem<String>(
-                                      child: Text(valueItem.toString()),
-                                      value: valueItem.toString(),
-                                    );
-                                  }).toList(),
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      this.selectItem = newValue;
-                                    });
-                                  },
-                                  value: selectItem,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    ElevatedButton(
-                                      child: Text('Update'),
+                                  } else if (staffState.status ==
+                                      StaffStatus.error) {
+                                    return ErrorWidget(
+                                        state.message.toString());
+                                  }
+                                  ;
+                                }),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.45,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          primary: AppTheme.colors.blue),
+                                      child: Text('Process complete',
+                                          style:
+                                              TextStyle(color: Colors.white)),
                                       onPressed: () {
-                                        // getDropDownItem,
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                                builder: (_) => CheckoutOrderUi(
+                                                      orderId: state
+                                                          .processDetail[0].id,
+                                                    )));
                                       },
                                     ),
-                                    ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          primary: Colors.red),
-                                      child: Text('Cancel'),
-                                      onPressed: () {},
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          // } else if (state is StaffListErrorState) {
-                          //   return ErrorWidget(state.message.toString());
-                          // }
-                          // ;
-                          // }
-                          // ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.45,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    primary: Colors.blue),
-                                child: Text('Process complete',
-                                    style: TextStyle(color: Colors.white)),
-                                onPressed: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => CheckoutOrderUi(
-                                            orderId: state.processDetail[0].id,
-                                          )));
-                                },
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -358,5 +546,65 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
         ),
       ),
     );
+  }
+
+  Future showInformationDialog(BuildContext context, List stafflist) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              content: Form(
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 1,
+                  width: MediaQuery.of(context).size.width * 7,
+                  child: Column(
+                    children: stafflist.map((e) {
+                      return CheckboxListTile(
+                          activeColor: AppTheme.colors.deepBlue,
+
+                          //font change
+                          title: new Text(
+                            e.username,
+                          ),
+                          value: selectData.indexOf(e) < 0 ? false : true,
+                          secondary: Container(
+                            height: 50,
+                            width: 50,
+                            child: Image.asset(
+                              'lib/images/logo_blue.png',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          onChanged: (bool val) {
+                            if (selectData.indexOf(e) < 0) {
+                              setState(() {
+                                selectData.add(e);
+                              });
+                            } else {
+                              setState(() {
+                                selectData
+                                    .removeWhere((element) => element == e);
+                              });
+                            }
+                            print(selectData);
+                          });
+                    }).toList(),
+                  ),
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Okay'),
+                  onPressed: () {
+                    // Do something like updating SharedPreferences or User Settings etc.
+
+                    Navigator.pop(context, selectData);
+                  },
+                ),
+              ],
+            );
+          });
+        });
   }
 }

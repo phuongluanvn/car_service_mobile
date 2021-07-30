@@ -21,12 +21,13 @@ class ManagerProfile extends StatelessWidget {
               child: SizedBox(
                 height: 115,
                 width: 115,
-                child: Stack(
-                  fit: StackFit.expand,
-                  overflow: Overflow.visible,
-                  children: [
-                    CircleAvatar(),
-                  ],
+                child: CircleAvatar(
+                  backgroundColor: AppTheme.colors.deepBlue,
+                  radius: 50,
+                  child: Icon(
+                    Icons.person,
+                    size: 70,
+                  ),
                 ),
               ),
             ),

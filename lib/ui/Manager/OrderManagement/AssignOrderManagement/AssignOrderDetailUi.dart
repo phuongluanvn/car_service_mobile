@@ -59,7 +59,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: SingleChildScrollView(
         child: Center(
           child: BlocBuilder<AssignOrderBloc, AssignOrderState>(
@@ -327,7 +327,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                               0.45,
                                           child: ElevatedButton(
                                             style: ElevatedButton.styleFrom(
-                                                primary: Colors.blue),
+                                                primary: AppTheme.colors.blue),
                                             child: Text('Checkin',
                                                 style: TextStyle(
                                                     color: Colors.white)),
@@ -400,7 +400,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                             child: Column(
                                               children: [
                                                 Text(
-                                                  'Thông tin nhân viên',
+                                                  'Nhân viên phụ trách',
                                                   style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight:
@@ -432,6 +432,10 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                   height: 10,
                                                 ),
                                                 ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            primary: AppTheme
+                                                                .colors.blue),
                                                     child:
                                                         Text('Chọn nhân viên'),
                                                     onPressed: () =>
@@ -463,7 +467,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                 0.6,
                                             child: ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                  primary: Colors.blue),
+                                                  primary:
+                                                      AppTheme.colors.blue),
                                               child: Text('Checking',
                                                   style: TextStyle(
                                                       color: Colors.white)),
@@ -530,49 +535,54 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
         builder: (context) {
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
-              content: Form(
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 1,
-                  width: MediaQuery.of(context).size.width * 7,
-                  child: Column(
-                    children: stafflist.map((e) {
-                      return CheckboxListTile(
-                          activeColor: AppTheme.colors.deepBlue,
+              content: SingleChildScrollView(
+                child: Form(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    child: Column(
+                      children: stafflist.map((e) {
+                        return CheckboxListTile(
+                            activeColor: AppTheme.colors.deepBlue,
 
-                          //font change
-                          title: new Text(
-                            e.username,
-                          ),
-                          value: selectData.indexOf(e) < 0 ? false : true,
-                          secondary: Container(
-                            height: 50,
-                            width: 50,
-                            child: Image.asset(
-                              'lib/images/logo_blue.png',
-                              fit: BoxFit.cover,
+                            //font change
+                            title: new Text(
+                              e.username,
                             ),
-                          ),
-                          onChanged: (bool val) {
-                            if (selectData.indexOf(e) < 0) {
-                              setState(() {
-                                selectData.add(e);
-                                _selectStaff = true;
-                              });
-                            } else {
-                              setState(() {
-                                selectData
-                                    .removeWhere((element) => element == e);
-                              });
-                            }
-                            print(selectData);
-                          });
-                    }).toList(),
+                            value: selectData.indexOf(e) < 0 ? false : true,
+                            secondary: Container(
+                              height: 50,
+                              width: 50,
+                              child: Image.asset(
+                                'lib/images/logo_blue.png',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            onChanged: (bool val) {
+                              if (selectData.indexOf(e) < 0) {
+                                setState(() {
+                                  selectData.add(e);
+                                  _selectStaff = true;
+                                });
+                              } else {
+                                setState(() {
+                                  selectData
+                                      .removeWhere((element) => element == e);
+                                });
+                              }
+                              print(selectData);
+                            });
+                      }).toList(),
+                    ),
                   ),
                 ),
               ),
               actions: <Widget>[
                 TextButton(
-                  child: Text('Okay'),
+                  child: Text(
+                    'Okay',
+                    style: TextStyle(color: AppTheme.colors.blue),
+                  ),
                   onPressed: () {
                     // Do something like updating SharedPreferences or User Settings etc.
 
