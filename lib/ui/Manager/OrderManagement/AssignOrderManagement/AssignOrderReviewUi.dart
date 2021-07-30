@@ -32,6 +32,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   bool _visible = false;
   List<StaffModel> _selection = [];
   List<StaffModel> selectData = [];
+  StaffModel _staffModel;
   bool _selectStaff = false;
 
   @override
@@ -40,7 +41,11 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     setState(() {
       _selection = widget.selectStaff;
-      print(_selection);
+      _selection
+          .asMap()
+          .map((key, value) => MapEntry(key, selectData.add(value)))
+          .values
+          .toList();
     });
     BlocProvider.of<AssignOrderBloc>(context)
         .add(DoAssignOrderDetailEvent(id: widget.userId));
@@ -405,7 +410,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                               ),
                                               ListView.builder(
                                                 shrinkWrap: true,
-                                                itemCount: _selection.length,
+                                                itemCount: selectData.length,
                                                 itemBuilder: (context, index) {
                                                   return Card(
                                                     child: Column(children: [
@@ -413,7 +418,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                         leading: Image.asset(
                                                             'lib/images/logo_blue.png'),
                                                         title: Text(
-                                                            _selection[index]
+                                                            selectData[index]
                                                                 .fullname),
                                                       ),
                                                     ]),
@@ -433,12 +438,9 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                   child: Text('Chọn nhân viên'),
                                                   onPressed: () => setState(() {
                                                         showInformationDialog(
-                                                                context,
-                                                                staffState
-                                                                    .staffList,
-                                                                _selection[0]
-                                                                    .username)
-                                                            .then((value) {
+                                                          context,
+                                                          staffState.staffList,
+                                                        ).then((value) {
                                                           setState(() {
                                                             selectData = value;
                                                             _visible = true;
@@ -537,8 +539,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   }
 
   Future showInformationDialog(
-      BuildContext context, List stafflist, String fullname) async {
-    print(fullname);
+      BuildContext context, List<StaffModel> stafflist) async {
     return showDialog(
         context: context,
         builder: (context) {
@@ -550,17 +551,21 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                   width: MediaQuery.of(context).size.width * 7,
                   child: Column(
                     children: stafflist.map((e) {
-                      print(e.fullname);
+                      selectData.map((ev) {
+                        if (ev.username == e.username) {
+                          _selectStaff = true;
+                        }
+                      }).toList();
                       return CheckboxListTile(
                           activeColor: AppTheme.colors.deepBlue,
                           //font change
                           title: new Text(
                             e.username,
                           ),
-                          value: (selectData.indexOf(e) < 0) &&
-                                  (fullname == e.username)
-                              ? true
-                              : false,
+                          value: ((selectData.indexOf(e) < 0) &&
+                                  (_selectStaff == true))
+                              ? false
+                              : true,
                           secondary: Container(
                             height: 50,
                             width: 50,
@@ -573,7 +578,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                             if (selectData.indexOf(e) < 0) {
                               setState(() {
                                 selectData.add(e);
-                                _selectStaff = true;
+                                // _selectStaff = true;
                               });
                             } else {
                               setState(() {
