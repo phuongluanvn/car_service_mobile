@@ -1,5 +1,6 @@
 import 'package:car_service/blocs/manager/booking/booking_cubit.dart';
 import 'package:car_service/blocs/manager/booking/booking_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingDetailUi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,7 +30,7 @@ class _VerifyBookingUiState extends State<VerifyBookingUi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: Center(
         child: BlocBuilder<VerifyBookingBloc, VerifyBookingState>(
           // ignore: missing_return

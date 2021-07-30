@@ -36,8 +36,8 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
   CreateOrderBloc _createOrderBloc;
   int _selectedTimeButton = 0;
 
-  final selectedColor = Colors.blue[700];
-  final unselectedColor = Colors.black;
+  final Color selectedColor = AppTheme.colors.lightblue;
+  final Color unselectedColor = Colors.black;
 
   @override
   void initState() {
@@ -120,7 +120,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
           }
         },
         padding: EdgeInsets.all(12),
-        color: Colors.blue,
+        color: AppTheme.colors.deepBlue,
         child: Text(
           'Tạo đơn hàng',
           style: TextStyle(color: Colors.white),
@@ -133,7 +133,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
         backgroundColor: AppTheme.colors.deepBlue,
         title: Text('Tạo đơn hàng'),
       ),
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -160,7 +160,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                           padding: EdgeInsets.symmetric(horizontal: 5),
                           child: Container(
                             decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: AppTheme.colors.white,
                                 borderRadius: BorderRadius.circular(5)),
                             padding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 0),
@@ -252,6 +252,14 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                                       (context, index) {
                                                     return Container(
                                                       child: Card(
+                                                        color: (_carId ==
+                                                                state
+                                                                    .vehicleLists[
+                                                                        index]
+                                                                    .id)
+                                                            ? AppTheme
+                                                                .colors.blue
+                                                            : Colors.white,
                                                         child: ListTile(
                                                           leading: CircleAvatar(
                                                             backgroundImage:
@@ -269,20 +277,36 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                                                             .vehicleLists[
                                                                                 index]
                                                                             .id)
-                                                                    ? Colors
-                                                                        .blue
-                                                                    : Colors
-                                                                        .grey),
+                                                                    ? AppTheme
+                                                                        .colors
+                                                                        .white
+                                                                    : AppTheme
+                                                                        .colors
+                                                                        .deepBlue),
                                                           ),
-                                                          subtitle: Text(state
-                                                                  .vehicleLists[
-                                                                      index]
-                                                                  .manufacturer +
-                                                              " - " +
-                                                              state
-                                                                  .vehicleLists[
-                                                                      index]
-                                                                  .model),
+                                                          subtitle: Text(
+                                                            state
+                                                                    .vehicleLists[
+                                                                        index]
+                                                                    .manufacturer +
+                                                                " - " +
+                                                                state
+                                                                    .vehicleLists[
+                                                                        index]
+                                                                    .model,
+                                                            style: TextStyle(
+                                                                color: (_carId ==
+                                                                        state
+                                                                            .vehicleLists[
+                                                                                index]
+                                                                            .id)
+                                                                    ? AppTheme
+                                                                        .colors
+                                                                        .white
+                                                                    : AppTheme
+                                                                        .colors
+                                                                        .deepBlue),
+                                                          ),
                                                           onTap: () {
                                                             setState(() {
                                                               _carId = state
@@ -338,7 +362,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                               EdgeInsets.symmetric(horizontal: 5, vertical: 20),
                           child: Container(
                             decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: AppTheme.colors.white,
                                 borderRadius: BorderRadius.circular(5)),
                             padding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 0),
@@ -418,8 +442,9 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                                                       .name,
                                                                   style: TextStyle(
                                                                       color: (_packageId == stateOfPackage.packageServiceLists[index].id)
-                                                                          ? Colors
-                                                                              .blue
+                                                                          ? AppTheme
+                                                                              .colors
+                                                                              .deepBlue
                                                                           : Colors
                                                                               .grey),
                                                                 ),
@@ -479,7 +504,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                           padding: const EdgeInsets.all(18.0),
                                           child: Container(
                                               decoration: BoxDecoration(
-                                                  color: Colors.white,
+                                                  color: AppTheme.colors.white,
                                                   borderRadius:
                                                       BorderRadius.circular(5)),
                                               child: InputDecorator(

@@ -47,7 +47,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: SingleChildScrollView(
         child: Center(
           child: BlocBuilder<VerifyBookingBloc, VerifyBookingState>(
@@ -66,7 +66,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: AppTheme.colors.white,
                               borderRadius: BorderRadius.circular(5)),
                           padding: EdgeInsets.symmetric(
                               horizontal: 10, vertical: 10),
@@ -309,7 +309,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                                 width: MediaQuery.of(context).size.width * 0.45,
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      primary: Colors.blue),
+                                      primary: AppTheme.colors.blue),
                                   child: Text('Accept',
                                       style: TextStyle(color: Colors.white)),
                                   onPressed: () {

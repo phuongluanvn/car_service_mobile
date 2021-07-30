@@ -150,7 +150,7 @@ class _NotificationUIState extends State<NotificationUI> {
         title: Text('Thông báo'),
         automaticallyImplyLeading: false,
       ),
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

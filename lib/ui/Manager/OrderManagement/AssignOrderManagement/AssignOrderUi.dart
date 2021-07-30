@@ -1,6 +1,7 @@
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderDetailUi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +27,7 @@ class _AssignOrderUiState extends State<AssignOrderUi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: Center(
         child: BlocBuilder<AssignOrderBloc, AssignOrderState>(
           // ignore: missing_return
@@ -43,33 +44,33 @@ class _AssignOrderUiState extends State<AssignOrderUi> {
                   // ignore: missing_return
                   itemBuilder: (context, index) {
                     // if (state.assignList[index].status == 'Accepted') {
-                      return Card(
-                          // child: (state.assignList[0].status == 'Checkin')
-                          //     ?
-                          child: Column(children: [
-                        ListTile(
-                          trailing: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.circle,
-                                  color: Colors.yellow,
-                                ),
-                                Text(state.assignList[index].status),
-                              ]),
-                          leading: FlutterLogo(),
-                          title:
-                              Text(state.assignList[index].vehicle.licensePlate),
-                          subtitle: Text(state.assignList[index].bookingTime),
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => AssignOrderDetailUi(
-                                    orderId: state.assignList[index].id)));
-                          },
-                        ),
-                      ])
-                          // : SizedBox(),
-                          );
+                    return Card(
+                        // child: (state.assignList[0].status == 'Checkin')
+                        //     ?
+                        child: Column(children: [
+                      ListTile(
+                        trailing: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Icon(
+                                Icons.circle,
+                                color: Colors.yellow,
+                              ),
+                              Text(state.assignList[index].status),
+                            ]),
+                        leading: FlutterLogo(),
+                        title:
+                            Text(state.assignList[index].vehicle.licensePlate),
+                        subtitle: Text(state.assignList[index].bookingTime),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => AssignOrderDetailUi(
+                                  orderId: state.assignList[index].id)));
+                        },
+                      ),
+                    ])
+                        // : SizedBox(),
+                        );
                     // } else {
                     //   return Center(
                     //     child: Text('Empty'),
