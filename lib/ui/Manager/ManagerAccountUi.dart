@@ -1,8 +1,11 @@
 import 'package:car_service/blocs/manager/booking/booking_bloc.dart';
 import 'package:car_service/blocs/manager/booking/booking_state.dart';
 import 'package:car_service/theme/app_theme.dart';
+import 'package:car_service/ui/LoginUi.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ManagerAccountUi extends StatefulWidget {
   // ManagerAccountUi() : super(key: key);
@@ -12,95 +15,212 @@ class ManagerAccountUi extends StatefulWidget {
 }
 
 class _ManagerAccountUiState extends State<ManagerAccountUi> {
+  String _fullName = '';
+  String _phoneNumber = '';
+  String _dateOfBirth = '';
+  String _status = '';
+  bool _isShown = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _getStringFromSharedPref();
+  }
+
+  _getStringFromSharedPref() async {
+    final prefs = await SharedPreferences.getInstance();
+    final fullname = prefs.getString('Fullname');
+    final phoneNumber = prefs.getString('PhoneNumber');
+    final dateOfBirth = prefs.getString('DateOfBirth');
+    final status = prefs.getString('Status');
+
+    setState(() {
+      _fullName = fullname;
+      _phoneNumber = phoneNumber;
+      _dateOfBirth = dateOfBirth;
+      _status = status;
+    });
+  }
+
+  _convertDate(dateInput) {
+    return formatDate(DateTime.parse(dateInput), [dd, '-', mm, '-', yyyy]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Thông tin tài khoản'),
+        title: Text('Thông tin cá nhân'),
       ),
       backgroundColor: Colors.blue[100],
-      body: Center(
-        child: BlocBuilder<VerifyBookingBloc, VerifyBookingState>(
-          // ignore: missing_return
-          builder: (context, state) {
-            if (state.detailStatus == BookingDetailStatus.init) {
-              return CircularProgressIndicator();
-            } else if (state.detailStatus == BookingDetailStatus.loading) {
-              return CircularProgressIndicator();
-            } else if (state.detailStatus == BookingDetailStatus.success) {
-              if (state.bookingDetail != null && state.bookingDetail.isNotEmpty)
-                return Center(
-                  child: Column(
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(vertical: 5),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: SizedBox(
+                height: 115,
+                width: 115,
+                child: Stack(
+                  fit: StackFit.expand,
+                  overflow: Overflow.visible,
+                  children: [
+                    CircleAvatar(),
+                    Positioned(
+                      right: -16,
+                      bottom: 0,
+                      child: SizedBox(
+                        height: 40,
+                        width: 40,
+                        child: OutlineButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                            side: BorderSide(color: Colors.white),
+                          ),
+                          color: Color(0xFFF5F6F9),
+                          onPressed: () {},
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+              child: Container(
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Họ tên:',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          _fullName,
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Điện thoại:',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          _phoneNumber,
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Ngày sinh:',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          _convertDate(_dateOfBirth),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Trạng thái:',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          _status == 'available'
+                              ? 'Đang hoạt động'
+                              : 'Không hoạt động',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              child: Container(
+                height: 50,
+                child: ElevatedButton(
+                  style:
+                      ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
+                  onPressed: _isShown == true ? () => _logout(context) : null,
+                  child: Row(
                     children: [
-                      SizedBox(height: 30),
-                      CircleAvatar(
-                        backgroundColor: AppTheme.colors.deepBlue,
-                        radius: 50,
-                        child: Icon(Icons.person, size: 70,),
-                      ),
-                      TextButton(
-                        onPressed: () {},
-                        child: Text('Change Avatar'),
-                      ),
-                      SizedBox(height: 30),
-                      ListTile(
-                        tileColor: Colors.white,
-                        leading: Icon(Icons.person),
-                        title: Text(state.bookingDetail[0].customer.fullname),
-                      ),
-                      ListTile(
-                        tileColor: Colors.white,
-                        leading: Icon(Icons.mail),
-                        title: Text(state.bookingDetail[0].customer.email),
-                      ),
-                      ListTile(
-                        tileColor: Colors.white,
-                        leading: Icon(Icons.phone),
-                        title:
-                            Text(state.bookingDetail[0].customer.phoneNumber),
-                      ),
-                      ListTile(
-                        tileColor: Colors.white,
-                        leading: Icon(Icons.place),
-                        title: Text(state.bookingDetail[0].customer.address),
-                      ),
-                      // ListTile(
-                      //   tileColor: Colors.white,
-                      //   leading: Icon(Icons.edit),
-                      //   title: TextFormField(
-                      //     initialValue: state.userDescription,
-                      //     decoration: InputDecoration.collapsed(
-                      //         hintText: state.isCurrentUser
-                      //             ? 'Say something about yourself'
-                      //             : 'This user hasn\'t updated their profile'),
-                      //     maxLines: null,
-                      //     readOnly: !state.isCurrentUser,
-                      //     toolbarOptions: ToolbarOptions(
-                      //       copy: state.isCurrentUser,
-                      //       cut: state.isCurrentUser,
-                      //       paste: state.isCurrentUser,
-                      //       selectAll: state.isCurrentUser,
-                      //     ),
-                      //     onChanged: (value) => context.read<ProfileBloc>().add(
-                      //         ProfileDescriptionChanged(description: value)),
-                      //   ),
-                      // ),
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: Text('Save Changes'),
-                      ),
+                      Expanded(child: Text('Đăng xuất')),
+                      Icon(Icons.arrow_forward_ios),
                     ],
                   ),
-                );
-              else
-                return Center(child: Text('Empty'));
-            } else if (state.detailStatus == BookingDetailStatus.error) {
-              return ErrorWidget(state.message.toString());
-            }
-          },
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  void _logout(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text('Xác nhận'),
+            content: Text('Bạn xác nhận muốn thoát ứng dụng?'),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                  onPressed: () {
+                    // hide the box
+                    setState(() {
+                      _isShown = false;
+                    });
+
+                    // Close the dialog
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginUi()));
+                  },
+                  child: Text('Có')),
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Không'))
+            ],
+          );
+        });
   }
 }

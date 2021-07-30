@@ -44,6 +44,7 @@ dependencies:
   sizer: ^2.0.13
   firebase_storage: 
   multi_image_picker:
+  date_format:
 
 dev_dependencies:
   flutter_test:
