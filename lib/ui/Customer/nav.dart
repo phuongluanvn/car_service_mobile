@@ -1,3 +1,4 @@
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/CarManagement/CustomerCarUI.dart';
 import 'package:car_service/ui/Customer/CustomerProfile.dart';
 import 'package:car_service/ui/Customer/NotificationUI.dart';
@@ -36,28 +37,28 @@ class _NavState extends State<Nav> {
           BottomNavigationBarItem(
             icon: Icon(
               Icons.description,
-              color: Colors.blue,
+              color: AppTheme.colors.deepBlue,
             ),
             label: 'Đơn hàng',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.drive_eta,
-              color: Colors.blue,
+              color: AppTheme.colors.deepBlue,
             ),
             label: 'Xe của tôi',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person,
-              color: Colors.blue,
+              color: AppTheme.colors.deepBlue,
             ),
             label: 'Thông tin',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.notifications,
-              color: Colors.blue,
+              color: AppTheme.colors.deepBlue,
             ),
             label: 'Thông báo',
             // backgroundColor: Colors.blue87,
@@ -68,7 +69,7 @@ class _NavState extends State<Nav> {
         selectedFontSize: 12.0,
         unselectedFontSize: 12.0,
         // fixedColor: Colors.blue,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: AppTheme.colors.deepBlue,
       ),
     );
   }

@@ -29,6 +29,9 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visible = false;
   List<StaffModel> _selection = [];
+  List<StaffModel> selectData = [];
+  bool _selectStaff = false;
+
   @override
   void initState() {
     super.initState();
@@ -264,6 +267,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                   ),
                                 ),
                               ),
+                              
                               // Padding(
                               //   padding: const EdgeInsets.symmetric(
                               //       vertical: 5, horizontal: 5),
@@ -420,21 +424,20 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                               ),
                                               ElevatedButton(
                                                   child: Text('Chọn nhân viên'),
-                                                  onPressed: () {}
-                                                  // setState(() {
-                                                  //   showInformationDialog(
-                                                  //           context,
-                                                  //           staffState
-                                                  //               .staffList)
-                                                  //       .then((value) {
-                                                  //     setState(() {
-                                                  //       selectData =
-                                                  //           value;
-                                                  //       _visible = true;
-                                                  //     });
-                                                  //   });
-                                                  // })
-                                                  ),
+                                                  onPressed: () => setState(() {
+                                                        showInformationDialog(
+                                                                context,
+                                                                staffState
+                                                                    .staffList,
+                                                                _selection[0]
+                                                                    .username)
+                                                            .then((value) {
+                                                          setState(() {
+                                                            selectData = value;
+                                                            _visible = true;
+                                                          });
+                                                        });
+                                                      })),
                                               Container(height: 10),
                                             ],
                                           ),
@@ -524,5 +527,71 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
         ),
       ),
     );
+  }
+
+  Future showInformationDialog(
+      BuildContext context, List stafflist, String fullname) async {
+    print(fullname);
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              content: Form(
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 1,
+                  width: MediaQuery.of(context).size.width * 7,
+                  child: Column(
+                    children: stafflist.map((e) {
+                      print(e.fullname);
+                      return CheckboxListTile(
+                          activeColor: AppTheme.colors.deepBlue,
+                          //font change
+                          title: new Text(
+                            e.username,
+                          ),
+                          value: 
+                          (selectData.indexOf(e) < 0) &&
+                          (fullname == e.username) ? true : false,
+                          secondary: Container(
+                            height: 50,
+                            width: 50,
+                            child: Image.asset(
+                              'lib/images/logo_blue.png',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          onChanged: (bool val) {
+                            if (selectData.indexOf(e) < 0) {
+                              setState(() {
+                                selectData.add(e);
+                                _selectStaff = true;
+                              });
+                            } else {
+                              setState(() {
+                                selectData
+                                    .removeWhere((element) => element == e);
+                              });
+                            }
+                            print('selectData');
+                            print(selectData);
+                          });
+                    }).toList(),
+                  ),
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Okay'),
+                  onPressed: () {
+                    // Do something like updating SharedPreferences or User Settings etc.
+
+                    Navigator.pop(context, selectData);
+                  },
+                ),
+              ],
+            );
+          });
+        });
   }
 }

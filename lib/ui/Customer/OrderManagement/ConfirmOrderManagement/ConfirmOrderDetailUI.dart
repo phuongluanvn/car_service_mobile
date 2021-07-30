@@ -1,6 +1,7 @@
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_event.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,6 +27,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
     return Scaffold(
       backgroundColor: Colors.blue[100],
       appBar: AppBar(
+        backgroundColor: AppTheme.colors.deepBlue,
         title: Text('Chi tiết đơn hàng'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),

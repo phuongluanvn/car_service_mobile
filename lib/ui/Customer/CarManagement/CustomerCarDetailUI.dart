@@ -1,6 +1,7 @@
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_event.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -82,8 +83,10 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue[100],
       appBar: AppBar(
           title: Text('Thông tin xe'),
+          backgroundColor: AppTheme.colors.deepBlue,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () => Navigator.pop(context),
@@ -114,115 +117,117 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                     image = Image.network(
                         'https://picsum.photos/400/200?image=1071');
                 }
-                return Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    children: <Widget>[
-                      image,
-                      Container(height: 18),
-                      TextFormField(
-                        initialValue: state.vehicleLists[0].manufacturer,
-                        keyboardType: TextInputType.text,
-                        autofocus: false,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.directions_car),
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintStyle: TextStyle(color: Colors.black54),
-                          // hintText: state.vehicleLists[0].taiKhoan,
-                          // text
-                          labelText: 'Hãng xe',
-                          contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      children: <Widget>[
+                        image,
+                        Container(height: 18),
+                        TextFormField(
+                          initialValue: state.vehicleLists[0].manufacturer,
+                          keyboardType: TextInputType.text,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.garage),
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintStyle: TextStyle(color: Colors.black54),
+                            // hintText: state.vehicleLists[0].taiKhoan,
+                            // text
+                            labelText: 'Hãng xe',
+                            contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
                         ),
-                      ),
-                      Container(height: 14),
-                      TextFormField(
-                        initialValue: state.vehicleLists[0].model,
-                        keyboardType: TextInputType.text,
-                        autofocus: false,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.phone),
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintStyle: TextStyle(color: Colors.black54),
-                          // hintText: state.vehicleLists[0].taiKhoan,
-                          // text
-                          labelText: 'Mẫu xe',
-                          contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                        Container(height: 14),
+                        TextFormField(
+                          initialValue: state.vehicleLists[0].model,
+                          keyboardType: TextInputType.text,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.time_to_leave),
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintStyle: TextStyle(color: Colors.black54),
+                            // hintText: state.vehicleLists[0].taiKhoan,
+                            // text
+                            labelText: 'Mẫu xe',
+                            contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
                         ),
-                      ),
-                      Container(height: 14),
-                      TextFormField(
-                        initialValue: state.vehicleLists[0].licensePlate,
-                        keyboardType: TextInputType.text,
-                        autofocus: false,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.phone),
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintStyle: TextStyle(color: Colors.black54),
-                          // hintText: state.vehicleLists[0].taiKhoan,
-                          // text
-                          labelText: 'Biển số',
-                          contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                        Container(height: 14),
+                        TextFormField(
+                          initialValue: state.vehicleLists[0].licensePlate,
+                          keyboardType: TextInputType.text,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.payment),
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintStyle: TextStyle(color: Colors.black54),
+                            // hintText: state.vehicleLists[0].taiKhoan,
+                            // text
+                            labelText: 'Biển số',
+                            contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
                         ),
-                      ),
-                      Container(height: 14),
-                      TextFormField(
-                        initialValue: state.vehicleLists[0].dateOfLastMaintenance,
-                        keyboardType: TextInputType.text,
-                        autofocus: false,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.phone),
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintStyle: TextStyle(color: Colors.black54),
-                          // hintText: state.vehicleLists[0].taiKhoan,
-                          // text
-                          labelText: 'Bảo dưỡng lần cuối',
-                          contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                        Container(height: 14),
+                        TextFormField(
+                          initialValue: state.vehicleLists[0].dateOfLastMaintenance,
+                          keyboardType: TextInputType.text,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.date_range),
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintStyle: TextStyle(color: Colors.black54),
+                            // hintText: state.vehicleLists[0].taiKhoan,
+                            // text
+                            labelText: 'Bảo dưỡng lần cuối',
+                            contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
                         ),
-                      ),
-                      Container(height: 14),
-                      TextFormField(
-                        initialValue: state.vehicleLists[0].millageCount.toString(),
-                        keyboardType: TextInputType.text,
-                        autofocus: false,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.phone),
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintStyle: TextStyle(color: Colors.black54),
-                          // hintText: state.vehicleLists[0].taiKhoan,
-                          // text
-                          labelText: 'Số km',
-                          contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                        Container(height: 14),
+                        TextFormField(
+                          initialValue: state.vehicleLists[0].millageCount.toString(),
+                          keyboardType: TextInputType.text,
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.av_timer),
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintStyle: TextStyle(color: Colors.black54),
+                            // hintText: state.vehicleLists[0].taiKhoan,
+                            // text
+                            labelText: 'Số km',
+                            contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
                         ),
-                      ),
-                      Container(height: 14),
-                      SizedBox(
-                        width: 150,
-                        height: 35,
-                        child: RaisedButton(
-                          child: Text('Lưu',
-                              style: TextStyle(color: Colors.white)),
-                          color: Theme.of(context).primaryColor,
-                          onPressed: () {
-                            _showSuccessUpdateDialog();
-                          },
-                        ),
-                      )
-                    ],
+                        Container(height: 14),
+                        SizedBox(
+                          width: 150,
+                          height: 35,
+                          child: RaisedButton(
+                            child: Text('Lưu',
+                                style: TextStyle(color: Colors.white)),
+                            color: Theme.of(context).primaryColor,
+                            onPressed: () {
+                              _showSuccessUpdateDialog();
+                            },
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 );
               } else

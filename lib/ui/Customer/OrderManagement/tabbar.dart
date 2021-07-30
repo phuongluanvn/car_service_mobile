@@ -1,4 +1,6 @@
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/OrderManagement/ConfirmOrderManagement/ConfirmOrderUI.dart';
+import 'package:car_service/ui/Customer/OrderManagement/CreateOrderManagement/CreateBookingOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderUI.dart';
 import 'package:flutter/material.dart';
 
@@ -28,19 +30,20 @@ class _TabOrderState extends State<TabOrderCustomer> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Order'),
+          backgroundColor: AppTheme.colors.deepBlue,
           automaticallyImplyLeading: false,
-          // actions: <Widget>[
-          //   Padding(
-          //     padding: EdgeInsets.only(right: 20),
-          //     child: GestureDetector(
-          //       onTap: () {
-          //         Navigator.of(context).push(
-          //             MaterialPageRoute(builder: (_) => ManagerAccountUi()));
-          //       },
-          //       child: Icon(Icons.create),
-          //     ),
-          //   )
-          // ],
+          actions: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(right: 20),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => CreateBookingOrderUI()));
+                },
+                child: Icon(Icons.add_box_outlined),
+              ),
+            )
+          ],
           bottom: TabBar(
             tabs: <Widget>[
               Tab(

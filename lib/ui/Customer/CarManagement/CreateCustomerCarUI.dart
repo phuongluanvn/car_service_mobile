@@ -6,6 +6,7 @@ import 'package:car_service/blocs/customer/customerCar/CreateCar_state.dart';
 import 'package:car_service/blocs/customer/manufacturers/Manufacturer_bloc.dart';
 import 'package:car_service/blocs/customer/manufacturers/Manufacturer_event.dart';
 import 'package:car_service/blocs/customer/manufacturers/Manufacturer_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/utils/model/ManufacturerModel.dart';
 import 'package:car_service/utils/repository/customer_repo.dart';
 import 'package:flutter/cupertino.dart';
@@ -192,6 +193,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Thêm mới xe'),
+        backgroundColor: AppTheme.colors.deepBlue
       ),
       backgroundColor: Colors.blue[100],
       body: BlocListener<CreateCarBloc, CreateCarState>(
