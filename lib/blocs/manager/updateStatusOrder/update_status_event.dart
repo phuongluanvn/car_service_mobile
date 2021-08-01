@@ -54,7 +54,8 @@ class UpdateStatusStartAndWorkingButtonPressed extends UpdateStatusOrderEvent {
   final String id;
   final List<StaffModel> listData;
   final String status;
+  final String workingStatus;
 
   UpdateStatusStartAndWorkingButtonPressed(
-      {this.id, this.listData, this.status});
+      {this.id, this.listData, this.status, this.workingStatus});
 }

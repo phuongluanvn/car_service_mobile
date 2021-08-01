@@ -470,11 +470,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                               if (statusState
                                                                       .status ==
                                                                   UpdateStatus
-                                                                      .updateStatusStartSuccess) {
-                                                                Navigator.pushNamed(
-                                                                    context,
-                                                                    '/manager');
-                                                              }
+                                                                      .updateStatusStartSuccess) {}
                                                             },
                                                             child: Row(
                                                               mainAxisAlignment:
@@ -508,7 +504,9 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                                           listData: assignStaffstate
                                                                               .listStaff,
                                                                           status:
-                                                                              processingStatus));
+                                                                              processingStatus,
+                                                                          workingStatus:
+                                                                              workingStatus));
                                                                       // updateStatusBloc.add(UpdateStatusWorkingButtonPress(
                                                                       //     listdata: assignStaffstate
                                                                       //         .listStaff,
@@ -521,6 +519,9 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                                       //         .id,
                                                                       //     status:
                                                                       //         processingStatus));
+                                                                      Navigator.pushNamed(
+                                                                          context,
+                                                                          '/manager');
                                                                     },
                                                                   ),
                                                                 ),
