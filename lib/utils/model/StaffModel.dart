@@ -1,4 +1,6 @@
-class StaffModel {
+import 'package:equatable/equatable.dart';
+
+class StaffModel extends Equatable {
   String username;
   String role;
   String fullname;
@@ -41,4 +43,7 @@ class StaffModel {
     data['status'] = this.status;
     return data;
   }
+
+  @override
+  List<Object> get props => [this.username];
 }

@@ -14,5 +14,6 @@ class DoProcessOrderDetailEvent extends ProcessOrderEvent {
   List<Object> get props => [email];
 }
 
-class DoListAssignStaffEvent extends ProcessOrderEvent{}
+class DoListAssignStaffEvent extends ProcessOrderEvent {}
+
 class ProcessOrderTabPressed extends ProcessOrderEvent {}

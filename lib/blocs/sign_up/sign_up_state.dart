@@ -10,10 +10,7 @@ enum SignUpStatus {
 class SignUpState extends Equatable {
   final SignUpStatus status;
   final String message;
-  SignUpState({
-    this.status: SignUpStatus.init, 
-    this.message: ''
-    });
+  SignUpState({this.status: SignUpStatus.init, this.message: ''});
 
   SignUpState copyWith({
     SignUpStatus status,
@@ -24,10 +21,7 @@ class SignUpState extends Equatable {
         message: message ?? this.message,
       );
   @override
-  List<Object> get props => [
-    status,
-    message
-  ];
+  List<Object> get props => [status, message];
 }
 
 // class SignUpInitState extends SignUpState {}

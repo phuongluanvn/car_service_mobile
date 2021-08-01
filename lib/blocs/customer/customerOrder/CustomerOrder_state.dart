@@ -11,7 +11,7 @@ enum CustomerOrderStatus {
   loadingOrderWithBookingStatus
 }
 
-enum CustomerOrderDetailStatus{
+enum CustomerOrderDetailStatus {
   init,
   loading,
   success,
@@ -26,10 +26,10 @@ class CustomerOrderState extends Equatable {
   final String message;
   const CustomerOrderState({
     this.status: CustomerOrderStatus.init,
-    this.detailStatus:CustomerOrderDetailStatus.init,
-    this.orderDetail:const [],
-    this.orderLists:const [],
-    this.message:'',
+    this.detailStatus: CustomerOrderDetailStatus.init,
+    this.orderDetail: const [],
+    this.orderLists: const [],
+    this.message: '',
   });
 
   CustomerOrderState copyWith({
@@ -41,10 +41,10 @@ class CustomerOrderState extends Equatable {
   }) =>
       CustomerOrderState(
         status: status ?? this.status,
-        detailStatus: detailStatus??this.detailStatus,
+        detailStatus: detailStatus ?? this.detailStatus,
         orderLists: orderLists ?? this.orderLists,
         orderDetail: orderDetail ?? this.orderDetail,
-        message: message??this.message,
+        message: message ?? this.message,
       );
   @override
   List<Object> get props => [

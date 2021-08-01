@@ -129,7 +129,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                           keyboardType: TextInputType.text,
                           autofocus: false,
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.garage),
+                            prefixIcon: Icon(Icons.mail),
                             filled: true,
                             fillColor: Colors.white,
                             hintStyle: TextStyle(color: Colors.black54),

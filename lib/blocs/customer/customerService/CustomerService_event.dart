@@ -7,5 +7,4 @@ abstract class CustomerServiceEvent extends Equatable {
 
 class DoServiceListEvent extends CustomerServiceEvent {}
 
-
 class GetServiceListPressed extends CustomerServiceEvent {}

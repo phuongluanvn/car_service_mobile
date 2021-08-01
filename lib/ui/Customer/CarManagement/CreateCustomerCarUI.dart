@@ -155,7 +155,8 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
     Future uploadImageToFirebase(BuildContext context) async {
       String fileName = path.basename(_image.path);
       FirebaseStorage storage = FirebaseStorage.instance;
-      Reference ref = storage.ref().child('mobile_customer/cars/add_new_car/$fileName');
+      Reference ref =
+          storage.ref().child('mobile_customer/cars/add_new_car/$fileName');
       UploadTask uploadTask = ref.putFile(_image);
       uploadTask.then((res) {
         res.ref.getDownloadURL();
@@ -192,9 +193,8 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Thêm mới xe'),
-        backgroundColor: AppTheme.colors.deepBlue
-      ),
+          title: Text('Thêm mới xe'),
+          backgroundColor: AppTheme.colors.deepBlue),
       backgroundColor: Colors.blue[100],
       body: BlocListener<CreateCarBloc, CreateCarState>(
           listener: (context, state) {
@@ -450,12 +450,12 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                       color: Colors.white24,
                       height: 150,
                       width: 300,
-                      child:  _image != null
-                      ? Image.file(
-                          _image,
-                          fit: BoxFit.fill,
-                        )
-                      : Icon(Icons.add_a_photo),
+                      child: _image != null
+                          ? Image.file(
+                              _image,
+                              fit: BoxFit.fill,
+                            )
+                          : Icon(Icons.add_a_photo),
                       alignment: Alignment.center,
                     ),
                     onTap: () {

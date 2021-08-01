@@ -166,7 +166,7 @@ class CustomerRepository {
               .map((orderDetail) =>
                   orderDetails.add(OrderDetailModel.fromJson(orderDetail)))
               .toList();
-              print('?????');
+          print('?????');
           return orderDetails;
         } else {
           res.body;
@@ -253,7 +253,7 @@ class CustomerRepository {
     List<ManufacturerModel> manufacturerLists = [];
 
     var res = await http.get(
-      Uri.parse( BASE_URL+ "Manufacturers"),
+      Uri.parse(BASE_URL + "Manufacturers"),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -274,9 +274,7 @@ class CustomerRepository {
   Future<List<String>> getListModelOfManufacturer(String namuName) async {
     List<String> modelOfManufacturer = [];
     var res = await http.get(
-      Uri.parse(
-          BASE_URL+"Manufacturers/" +
-              namuName),
+      Uri.parse(BASE_URL + "Manufacturers/" + namuName),
       headers: headers,
     );
     if (res.statusCode == 200) {

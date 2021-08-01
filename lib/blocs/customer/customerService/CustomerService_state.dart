@@ -14,8 +14,8 @@ class CustomerServiceState extends Equatable {
   final String message;
   const CustomerServiceState({
     this.status: CustomerServiceStatus.init,
-    this.serviceLists:const [],
-    this.message:'',
+    this.serviceLists: const [],
+    this.message: '',
   });
 
   CustomerServiceState copyWith({
@@ -26,7 +26,7 @@ class CustomerServiceState extends Equatable {
       CustomerServiceState(
         status: status ?? this.status,
         serviceLists: serviceLists ?? this.serviceLists,
-        message: message??this.message,
+        message: message ?? this.message,
       );
   @override
   List<Object> get props => [

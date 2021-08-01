@@ -310,7 +310,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       primary: AppTheme.colors.blue),
-                                  child: Text('Accept',
+                                  child: Text('Đồng ý',
                                       style: TextStyle(color: Colors.white)),
                                   onPressed: () {
                                     updateStatusBloc.add(
@@ -325,7 +325,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       primary: Colors.red),
-                                  child: Text('Deny',
+                                  child: Text('Từ chối',
                                       style: TextStyle(color: Colors.white)),
                                   onPressed: () {},
                                 ),

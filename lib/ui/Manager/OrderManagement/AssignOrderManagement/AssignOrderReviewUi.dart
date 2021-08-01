@@ -4,6 +4,9 @@ import 'dart:io';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
+
+import 'package:car_service/blocs/manager/cubit/assignorder_cubit.dart';
+import 'package:car_service/blocs/manager/cubit/assignorder_cubit_state.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
@@ -19,8 +22,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AssignOrderReviewUi extends StatefulWidget {
   final String userId;
-  final List<StaffModel> selectStaff;
-  AssignOrderReviewUi({@required this.userId, this.selectStaff});
+  
+  AssignOrderReviewUi({@required this.userId});
 
   @override
   _AssignOrderReviewUiState createState() => _AssignOrderReviewUiState();
@@ -34,19 +37,13 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   List<StaffModel> selectData = [];
   StaffModel _staffModel;
   bool _selectStaff = false;
-
+  AssignorderCubit assignCubit;
   @override
   void initState() {
     super.initState();
+    assignCubit = BlocProvider.of<AssignorderCubit>(context);
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
-    setState(() {
-      _selection = widget.selectStaff;
-      _selection
-          .asMap()
-          .map((key, value) => MapEntry(key, selectData.add(value)))
-          .values
-          .toList();
-    });
+    
     BlocProvider.of<AssignOrderBloc>(context)
         .add(DoAssignOrderDetailEvent(id: widget.userId));
     BlocProvider.of<ManageStaffBloc>(context).add(DoListStaffEvent());
@@ -408,21 +405,57 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                               SizedBox(
                                                 height: 20,
                                               ),
-                                              ListView.builder(
-                                                shrinkWrap: true,
-                                                itemCount: selectData.length,
-                                                itemBuilder: (context, index) {
-                                                  return Card(
-                                                    child: Column(children: [
-                                                      ListTile(
-                                                        leading: Image.asset(
-                                                            'lib/images/logo_blue.png'),
-                                                        title: Text(
-                                                            selectData[index]
-                                                                .fullname),
-                                                      ),
-                                                    ]),
-                                                  );
+                                              BlocBuilder<AssignorderCubit,
+                                                  AssignorderCubitState>(
+                                                builder: (context, state) {
+                                                  if (state.status ==
+                                                      AssignCubitStatus
+                                                          .loadingSuccess)
+                                                    return Column(
+                                                      children: [
+                                                        for (int i = 0;
+                                                            i <
+                                                                state.listStaff
+                                                                    .length;
+                                                            i++)
+                                                          Card(
+                                                            child: Column(
+                                                                children: [
+                                                                  ListTile(
+                                                                    leading: Image
+                                                                        .asset(
+                                                                            'lib/images/logo_blue.png'),
+                                                                    title: Text(state
+                                                                        .listStaff[
+                                                                            i]
+                                                                        .fullname),
+                                                                  ),
+                                                                ]),
+                                                          ),
+                                                      ],
+                                                    );
+                                                  else
+                                                    return SizedBox();
+                                                  // ListView.builder(
+                                                  //   shrinkWrap: true,
+                                                  //   itemCount: state.length,
+                                                  //   itemBuilder:
+                                                  //       (context, index) {
+                                                  //     return Card(
+                                                  //       child: Column(
+                                                  //           children: [
+                                                  //             ListTile(
+                                                  //               leading: Image
+                                                  //                   .asset(
+                                                  //                       'lib/images/logo_blue.png'),
+                                                  //               title: Text(
+                                                  //                   state[index]
+                                                  //                       .fullname),
+                                                  //             ),
+                                                  //           ]),
+                                                  //     );
+                                                  //   },
+                                                  // );
                                                 },
                                               ),
                                               // ),
@@ -440,12 +473,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                         showInformationDialog(
                                                           context,
                                                           staffState.staffList,
-                                                        ).then((value) {
-                                                          setState(() {
-                                                            selectData = value;
-                                                            _visible = true;
-                                                          });
-                                                        });
+                                                        );
                                                       })),
                                               Container(height: 10),
                                             ],
@@ -545,61 +573,100 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
         builder: (context) {
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
-              content: Form(
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 1,
-                  width: MediaQuery.of(context).size.width * 7,
-                  child: Column(
-                    children: stafflist.map((e) {
-                      selectData.map((ev) {
-                        if (ev.username == e.username) {
-                          _selectStaff = true;
-                        }
-                      }).toList();
-                      return CheckboxListTile(
-                          activeColor: AppTheme.colors.deepBlue,
-                          //font change
-                          title: new Text(
-                            e.username,
-                          ),
-                          value: ((selectData.indexOf(e) < 0) &&
-                                  (_selectStaff == true))
-                              ? false
-                              : true,
-                          secondary: Container(
-                            height: 50,
-                            width: 50,
-                            child: Image.asset(
-                              'lib/images/logo_blue.png',
-                              fit: BoxFit.cover,
+              content: SingleChildScrollView(
+                child: Form(
+                  child: Container(
+                    // height: MediaQuery.of(context).size.height * 0.7,
+                    // width: MediaQuery.of(context).size.width * 0.7,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.7,
+                            width: MediaQuery.of(context).size.width * 0.7,
+                            child: BlocBuilder<AssignorderCubit,
+                                AssignorderCubitState>(
+                              bloc: assignCubit,
+                              builder: (context, state) {
+                                print(state.listStaff.contains(stafflist[0]));
+                                print(state.listStaff[0].fullname);
+                                print(stafflist[0].fullname);
+                                return ListView.builder(
+                                    itemCount: stafflist.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return CheckboxListTile(
+                                        value: state.listStaff
+                                            .contains(stafflist[index]),
+                                        onChanged: (bool selected) {
+                                          if (selected == true) {
+                                            setState(() {
+                                              BlocProvider.of<AssignorderCubit>(
+                                                      context)
+                                                  .addItem(stafflist[index]);
+                                            });
+                                          } else {
+                                            setState(() {
+                                              BlocProvider.of<AssignorderCubit>(
+                                                      context)
+                                                  .removeItem(stafflist[index]);
+                                            });
+                                          }
+                                        },
+                                        title: Text(stafflist[index].username),
+                                      );
+                                    });
+                              },
                             ),
                           ),
-                          onChanged: (bool val) {
-                            if (selectData.indexOf(e) < 0) {
-                              setState(() {
-                                selectData.add(e);
-                                // _selectStaff = true;
-                              });
-                            } else {
-                              setState(() {
-                                selectData
-                                    .removeWhere((element) => element == e);
-                              });
-                            }
-                            print('selectData');
-                            print(selectData);
-                          });
-                    }).toList(),
+                        ],
+                        //  stafflist.map((e) {
+                        //   return CheckboxListTile(
+                        //       activeColor: AppTheme.colors.deepBlue,
+
+                        //       //font change
+                        //       title: new Text(
+                        //         e.username,
+                        //       ),
+                        //       value: selectData.indexOf(e) < 0 ? false : true,
+                        //       secondary: Container(
+                        //         height: 50,
+                        //         width: 50,
+                        //         child: Image.asset(
+                        //           'lib/images/logo_blue.png',
+                        //           fit: BoxFit.cover,
+                        //         ),
+                        //       ),
+                        //       onChanged: (bool val) {
+                        //         if (selectData.indexOf(e) < 0) {
+                        //           setState(() {
+                        //             selectData.add(e);
+                        //             _selectStaff = true;
+                        //           });
+                        //         } else {
+                        //           setState(() {
+                        //             selectData
+                        //                 .removeWhere((element) => element == e);
+                        //           });
+                        //         }
+                        //         print(selectData);
+                        //       });
+                        // }).toList(),
+                      ),
+                    ),
                   ),
                 ),
               ),
               actions: <Widget>[
                 TextButton(
-                  child: Text('Okay'),
+                  child: Text(
+                    'Okay',
+                    style: TextStyle(color: AppTheme.colors.blue),
+                  ),
                   onPressed: () {
                     // Do something like updating SharedPreferences or User Settings etc.
 
-                    Navigator.pop(context, selectData);
+                    Navigator.pop(context);
                   },
                 ),
               ],

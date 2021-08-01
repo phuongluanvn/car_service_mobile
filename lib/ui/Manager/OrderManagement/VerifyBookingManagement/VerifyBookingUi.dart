@@ -112,7 +112,7 @@ class _VerifyBookingUiState extends State<VerifyBookingUi> {
                 );
               else
                 return Center(
-                  child: Text('Empty'),
+                  child: Text('Hiện tại không có đơn'),
                 );
             } else if (state.status == BookingStatus.error) {
               return ErrorWidget(state.message.toString());

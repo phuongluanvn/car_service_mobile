@@ -62,7 +62,7 @@ class VerifyBookingBloc extends Bloc<VerifyBookingEvent, VerifyBookingState> {
         yield state.copyWith(
             detailStatus: BookingDetailStatus.error, message: e.toString());
       }
-    } 
+    }
     // else if (event is UpdateStatusButtonPressed) {
     //   // yield state.copyWith(detailStatus: BookingDetailStatus.loading);
     //   try {

@@ -103,6 +103,29 @@ class UpdateStatusOrderBloc
           message: e.toString(),
         );
       }
+    } else if (event is UpdateAbsentStatusButtonPressed) {
+      print('loading');
+      yield state.copyWith(status: UpdateStatus.loading);
+      try {
+        var data =
+            await _repo.updateStaffStatusOrder(event.username, event.status);
+        // String jsonsDataString = data.toString();
+        print(data);
+        // final jsonData = jsonDecode(jsonsDataString);
+        // print(jsonData);
+        if (data != null) {
+          yield state.copyWith(status: UpdateStatus.updateStatusAbsentSuccess);
+          print('Staff status updated');
+        } else {
+          yield state.copyWith(
+              status: UpdateStatus.error, message: 'Error Update');
+        }
+      } catch (e) {
+        yield state.copyWith(
+          status: UpdateStatus.error,
+          message: e.toString(),
+        );
+      }
     }
   }
 }

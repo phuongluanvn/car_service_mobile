@@ -292,6 +292,25 @@ class ManagerRepository {
     }
   }
 
+  updateStaffStatusOrder(String username, String status) async {
+    var body = {
+      "id": '$username',
+      "status": '$status',
+    };
+    var res = await http.put(
+      Uri.parse("https://carservicesystem.azurewebsites.net/api/employees"),
+      headers: headers,
+      body: json.encode(body),
+    );
+    if (res.statusCode != null) {
+      if (res.statusCode == 200) {
+        return res.body;
+      }
+    } else {
+      return null;
+    }
+  }
+
   Future<List<OrderDetailModel>> getOrderHistoryList() async {
     List<OrderDetailModel> finishList = [];
     List<OrderDetailModel> cancelList = [];

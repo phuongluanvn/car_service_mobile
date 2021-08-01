@@ -66,7 +66,7 @@ class CustomerOrderBloc extends Bloc<CustomerOrderEvent, CustomerOrderState> {
             detailStatus: CustomerOrderDetailStatus.error,
             message: e.toString());
       }
-    } else if (event is DoConfirmOrderEvent){
+    } else if (event is DoConfirmOrderEvent) {
       print('vào đi được chưa');
     }
   }

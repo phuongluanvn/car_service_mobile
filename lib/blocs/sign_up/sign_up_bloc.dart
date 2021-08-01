@@ -13,34 +13,32 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       : _repo = repo,
         super(SignUpState());
 
-
   @override
   Stream<SignUpState> mapEventToState(SignUpEvent event) async* {
     if (event is SignUpButtonPressed) {
       yield state.copyWith(status: SignUpStatus.loading);
-      try{
+      try {
         var data = await _repo.signUp(
-          event.user, event.name, event.email, event.phone, event.password);
-      String jsonsDataString = data.toString();
-      final jsonData = jsonDecode(jsonsDataString);
-      print(jsonData);
-      if (jsonData != null) {
-        // } else if (jsonData['maLoaiNguoiDung'] == 'NhanVien') {
-        //   pref.setString("token", data['token']);
-        //   pref.setInt("type", data['type']);
-        //   pref.setString("email", data['email']);
-        //   yield StaffLoginSuccessState();
-        // } else if (jsonData['maLoaiNguoiDung'] == 'KhachHang') {
-        //   pref.setString("token", data['token']);
-        //   pref.setInt("type", data['type']);
-        //   pref.setString("email", data['email']);
-        yield state.copyWith(status: SignUpStatus.signUpSuccess);
-      } else {
-        yield state.copyWith(
-          status: SignUpStatus.error,
-          message: 'Error SignUp');
-      }
-      }catch(e){
+            event.user, event.name, event.email, event.phone, event.password);
+        String jsonsDataString = data.toString();
+        final jsonData = jsonDecode(jsonsDataString);
+        print(jsonData);
+        if (jsonData != null) {
+          // } else if (jsonData['maLoaiNguoiDung'] == 'NhanVien') {
+          //   pref.setString("token", data['token']);
+          //   pref.setInt("type", data['type']);
+          //   pref.setString("email", data['email']);
+          //   yield StaffLoginSuccessState();
+          // } else if (jsonData['maLoaiNguoiDung'] == 'KhachHang') {
+          //   pref.setString("token", data['token']);
+          //   pref.setInt("type", data['type']);
+          //   pref.setString("email", data['email']);
+          yield state.copyWith(status: SignUpStatus.signUpSuccess);
+        } else {
+          yield state.copyWith(
+              status: SignUpStatus.error, message: 'Error SignUp');
+        }
+      } catch (e) {
         yield state.copyWith(
           status: SignUpStatus.error,
           message: e.toString(),

@@ -38,7 +38,7 @@ class _OrderHistoryUiState extends State<OrderHistoryUi> {
         backgroundColor: AppTheme.colors.deepBlue,
         title: Text('Lịch sử đơn hàng'),
       ),
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: Center(
         child: BlocBuilder<OrderHistoryBloc, OrderHistoryState>(
           // ignore: missing_return
@@ -116,7 +116,7 @@ class _OrderHistoryUiState extends State<OrderHistoryUi> {
                 );
               else
                 return Center(
-                  child: Text('Empty'),
+                  child: Text('Hiện tại không có đơn'),
                 );
             } else if (state.status == OrderHistoryStatus.error) {
               return ErrorWidget(state.message.toString());

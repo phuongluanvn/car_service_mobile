@@ -92,7 +92,7 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
                                 },
                               ),
                             ]));
-                          } 
+                          }
                         },
                       ),
                       // ),

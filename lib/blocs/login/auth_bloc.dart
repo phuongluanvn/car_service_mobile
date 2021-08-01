@@ -34,7 +34,6 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
 
       if (data != null) {
         if (data['role'] == 'manager') {
-
           var dataProfile = data['profile'];
           var enc = json.encode(dataProfile);
           var dec = json.decode(enc);
@@ -47,7 +46,6 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
 
           yield ManagerLoginSuccessState();
         } else if (data['role'] == 'staff') {
-
           var dataProfile = data['profile'];
           var enc = json.encode(dataProfile);
           var dec = json.decode(enc);
@@ -63,7 +61,7 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
           var dataProfile = data['profile'];
           var enc = json.encode(dataProfile);
           var dec = json.decode(enc);
-          
+
           pref.setString("Fullname", dec['Fullname']);
           pref.setInt("AccumulatedPoint", dec['AccumulatedPoint']);
           pref.setString("PhoneNumber", dec['PhoneNumber']);

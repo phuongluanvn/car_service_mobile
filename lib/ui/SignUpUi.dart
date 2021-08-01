@@ -66,8 +66,7 @@ class _SignUpUiState extends State<SignUpUi> {
       controller: fullname,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon:
-            Icon(Icons.face ,color: Color.fromRGBO(8, 56, 99, 1)),
+        prefixIcon: Icon(Icons.face, color: Color.fromRGBO(8, 56, 99, 1)),
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
@@ -119,7 +118,6 @@ class _SignUpUiState extends State<SignUpUi> {
         contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
-      
     );
 
     final confirmpass = TextFormField(

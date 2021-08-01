@@ -83,7 +83,7 @@ class _ProcessOrderUiState extends State<ProcessOrderUi> {
                 );
               else
                 return Center(
-                  child: Text('Empty'),
+                  child: Text('Hiện tại không có đơn'),
                 );
             } else if (state.status == ProcessStatus.error) {
               return ErrorWidget(state.message.toString());

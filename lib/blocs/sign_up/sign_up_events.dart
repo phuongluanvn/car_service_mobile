@@ -30,5 +30,6 @@ class SignUpButtonPressed extends SignUpEvent {
   final String email;
   final String password;
 
-  SignUpButtonPressed({this.user,this.name,this.email,this.phone,this.password});
+  SignUpButtonPressed(
+      {this.user, this.name, this.email, this.phone, this.password});
 }

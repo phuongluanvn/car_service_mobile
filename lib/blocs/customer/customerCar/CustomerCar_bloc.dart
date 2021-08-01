@@ -62,14 +62,13 @@ class CustomerCarBloc extends Bloc<CustomerCarEvent, CustomerCarState> {
       yield state.copyWith(withIdstatus: CustomerCarWithIdStatus.loading);
       try {
         final prefs = await SharedPreferences.getInstance();
-        
-          var carLists = await _repo.getCarListOfCustomer(event.vehicleId);
-          if (carLists != null) {
-            yield state.copyWith(
-                vehicleLists: carLists,
-                withIdstatus: CustomerCarWithIdStatus.loadedCarSuccess);
-          }
-        
+
+        var carLists = await _repo.getCarListOfCustomer(event.vehicleId);
+        if (carLists != null) {
+          yield state.copyWith(
+              vehicleLists: carLists,
+              withIdstatus: CustomerCarWithIdStatus.loadedCarSuccess);
+        }
       } catch (e) {
         yield state.copyWith(
           withIdstatus: CustomerCarWithIdStatus.error,

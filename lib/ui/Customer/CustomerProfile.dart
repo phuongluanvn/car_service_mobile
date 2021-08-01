@@ -176,5 +176,4 @@ class _CustomerProfileState extends State<CustomerProfile> {
           );
         });
   }
-
 }

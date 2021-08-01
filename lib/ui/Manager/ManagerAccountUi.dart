@@ -16,6 +16,7 @@ class ManagerAccountUi extends StatefulWidget {
 
 class _ManagerAccountUiState extends State<ManagerAccountUi> {
   String _fullName = '';
+  String _email = '';
   String _phoneNumber = '';
   String _dateOfBirth = '';
   String _status = '';
@@ -53,137 +54,111 @@ class _ManagerAccountUiState extends State<ManagerAccountUi> {
         backgroundColor: AppTheme.colors.deepBlue,
         title: Text('Thông tin cá nhân'),
       ),
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(vertical: 5),
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: SizedBox(
-                height: 115,
-                width: 115,
-                child: Stack(
-                  fit: StackFit.expand,
-                  overflow: Overflow.visible,
-                  children: [
-                    CircleAvatar(),
-                    Positioned(
-                      right: -16,
-                      bottom: 0,
-                      child: SizedBox(
-                        height: 40,
-                        width: 40,
-                        child: OutlineButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50),
-                            side: BorderSide(color: Colors.white),
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: SizedBox(
+                      height: 115,
+                      width: 115,
+                      child: Stack(
+                        fit: StackFit.expand,
+                        overflow: Overflow.visible,
+                        children: [
+                          CircleAvatar(
+                            child: Icon(Icons.person),
+                            backgroundColor: AppTheme.colors.deepBlue,
                           ),
-                          color: Color(0xFFF5F6F9),
-                          onPressed: () {},
-                        ),
+                        ],
                       ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 40),
-              child: Container(
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Họ tên:',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                        Text(
-                          _fullName,
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                      ],
                     ),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Điện thoại:',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                        Text(
-                          _phoneNumber,
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Ngày sinh:',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                        Text(
-                          _convertDate(_dateOfBirth),
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Trạng thái:',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                        Text(
-                          _status == 'available'
-                              ? 'Đang hoạt động'
-                              : 'Không hoạt động',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              child: Container(
-                height: 50,
-                child: ElevatedButton(
-                  style:
-                      ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
-                  onPressed: _isShown == true ? () => _logout(context) : null,
-                  child: Row(
-                    children: [
-                      Expanded(child: Text('Đăng xuất')),
-                      Icon(Icons.arrow_forward_ios),
-                    ],
                   ),
-                ),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: AppTheme.colors.white,
+                        borderRadius: BorderRadius.circular(5)),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          'Thông tin tài khoản',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.2,
+                              child: Text(
+                                'Họ tên:',
+                                style: TextStyle(fontSize: 16.0),
+                              ),
+                            ),
+                            Container(
+                              child: Text(
+                                _fullName,
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                            ),
+                          ],
+                        ),
+                        
+                        Container(height: 16),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              child: Text(
+                                'Số điện thoại:',
+                                style: TextStyle(fontSize: 16.0),
+                              ),
+                            ),
+                            Container(
+                              child: Text(
+                                _phoneNumber,
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(height: 16),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.2,
+                              child: Text(
+                                'Ngày sinh:',
+                                style: TextStyle(fontSize: 16.0),
+                              ),
+                            ),
+                            Container(
+                              child: Text(
+                                _convertDate(_dateOfBirth),
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

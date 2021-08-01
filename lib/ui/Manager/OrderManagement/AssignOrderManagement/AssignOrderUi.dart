@@ -80,7 +80,7 @@ class _AssignOrderUiState extends State<AssignOrderUi> {
                 );
               } else
                 return Center(
-                  child: Text('Empty'),
+                  child: Text('Hiện tại không có đơn'),
                 );
             } else if (state.status == AssignStatus.error) {
               return ErrorWidget(state.message.toString());

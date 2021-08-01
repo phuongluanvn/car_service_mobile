@@ -96,7 +96,10 @@ class _ManagerProfileState extends State<ManagerProfile> {
                 child: ElevatedButton(
                   style:
                       ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => OrderHistoryUi()));
+                  },
                   child: Row(
                     children: [
                       Expanded(child: Text('Lịch sử đơn hàng')),
@@ -106,23 +109,23 @@ class _ManagerProfileState extends State<ManagerProfile> {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              child: Container(
-                height: 50,
-                child: ElevatedButton(
-                  style:
-                      ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
-                  onPressed: () {},
-                  child: Row(
-                    children: [
-                      Expanded(child: Text('Đánh giá')),
-                      Icon(Icons.arrow_forward_ios),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            //   child: Container(
+            //     height: 50,
+            //     child: ElevatedButton(
+            //       style:
+            //           ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
+            //       onPressed: () {},
+            //       child: Row(
+            //         children: [
+            //           Expanded(child: Text('Đánh giá')),
+            //           Icon(Icons.arrow_forward_ios),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: Container(
