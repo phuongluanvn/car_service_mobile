@@ -47,7 +47,7 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
           )
         ],
       ),
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: Center(
         child: BlocBuilder<CustomerCarBloc, CustomerCarState>(
           // ignore: missing_return

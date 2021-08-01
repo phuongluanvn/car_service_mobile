@@ -83,7 +83,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       appBar: AppBar(
           title: Text('Thông tin xe'),
           backgroundColor: AppTheme.colors.deepBlue,
@@ -219,10 +219,11 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                         SizedBox(
                           width: 150,
                           height: 35,
-                          child: RaisedButton(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                                primary: AppTheme.colors.blue),
                             child: Text('Lưu',
                                 style: TextStyle(color: Colors.white)),
-                            color: Theme.of(context).primaryColor,
                             onPressed: () {
                               _showSuccessUpdateDialog();
                             },
