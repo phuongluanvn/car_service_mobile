@@ -293,7 +293,8 @@ class ManagerRepository {
 
   updateStaffStatusOrder(String username, String status) async {
     var body = {
-      "id": '$username',
+      "username": '$username',
+      "role": 'staff',
       "status": '$status',
     };
     var res = await http.put(
@@ -306,7 +307,7 @@ class ManagerRepository {
         return res.body;
       }
     } else {
-      return null;
+      return res.body;
     }
   }
 

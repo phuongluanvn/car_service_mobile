@@ -147,55 +147,41 @@ class _StaffDetailUiState extends State<StaffDetailUi> {
                                     style: TextStyle(fontSize: 15.0),
                                   ),
                                 ),
-                                BlocListener<UpdateStatusOrderBloc,
-                                    UpdateStatusOrderState>(
-                                  // ignore: missing_return
-                                  listener: (builder, statusState) {
-                                    if (statusState.status ==
-                                        UpdateStatus.updateStatusSuccess) {
-                                      Navigator.pushNamed(context, '/manager');
-                                    }
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.45,
-                                        child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              primary: AppTheme.colors.blue),
-                                          child: Text('Nghỉ phép',
-                                              style: TextStyle(
-                                                  color: Colors.white)),
-                                          onPressed: () {
-                                            updateStatusBloc.add(
-                                                UpdateAbsentStatusButtonPressed(
-                                                    username: state
-                                                        .staffList[0].username,
-                                                    status: absentStatus));
-                                          },
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.45,
-                                        child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              primary: Colors.red),
-                                          child: Text('Từ chối',
-                                              style: TextStyle(
-                                                  color: Colors.white)),
-                                          onPressed: () {},
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
                               ],
+                            ),
+                            BlocListener<UpdateStatusOrderBloc,
+                                UpdateStatusOrderState>(
+                              // ignore: missing_return
+                              listener: (builder, statusState) {
+                                if (statusState.status ==
+                                    UpdateStatus.updateStatusAbsentSuccess) {
+                                  Navigator.pushNamed(context, '/manager');
+                                }
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.45,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          primary: AppTheme.colors.blue),
+                                      child: Text('Nghỉ phép',
+                                          style:
+                                              TextStyle(color: Colors.white)),
+                                      onPressed: () {
+                                        updateStatusBloc.add(
+                                            UpdateAbsentStatusButtonPressed(
+                                                username: state
+                                                    .staffDetail[0].username,
+                                                status: absentStatus));
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),

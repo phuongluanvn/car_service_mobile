@@ -46,7 +46,22 @@ class _StaffUiState extends State<StaffUi> {
                 itemCount: state.staffList.length,
                 shrinkWrap: true,
                 // ignore: missing_return
+
                 itemBuilder: (context, index) {
+                  Color color;
+                  var status = state.staffList[index].status;
+                  switch (status) {
+                    case 'absent':
+                      color = Colors.red[600];
+                      break;
+                    case 'working':
+                      color = Colors.yellow[300];
+                      break;
+
+//con nhieu case nua lam sau
+                    default:
+                      color = Colors.lightGreenAccent;
+                  }
                   // if (state.assignList[index].status == 'Accepted') {
                   return Card(
                       // child: (state.assignList[0].status == 'Checkin')
@@ -58,7 +73,7 @@ class _StaffUiState extends State<StaffUi> {
                           children: <Widget>[
                             Icon(
                               Icons.circle,
-                              color: Colors.greenAccent[400],
+                              color: color,
                             ),
                             Text(state.staffList[index].status),
                           ]),

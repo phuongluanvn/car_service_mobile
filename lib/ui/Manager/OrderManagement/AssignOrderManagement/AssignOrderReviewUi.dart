@@ -22,7 +22,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AssignOrderReviewUi extends StatefulWidget {
   final String userId;
-  
+
   AssignOrderReviewUi({@required this.userId});
 
   @override
@@ -31,6 +31,7 @@ class AssignOrderReviewUi extends StatefulWidget {
 
 class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   final String processingStatus = 'Processing';
+  final String workingStatus = 'working';
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visible = false;
   List<StaffModel> _selection = [];
@@ -43,7 +44,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
     super.initState();
     assignCubit = BlocProvider.of<AssignorderCubit>(context);
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
-    
+
     BlocProvider.of<AssignOrderBloc>(context)
         .add(DoAssignOrderDetailEvent(id: widget.userId));
     BlocProvider.of<ManageStaffBloc>(context).add(DoListStaffEvent());
@@ -407,15 +408,17 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                               ),
                                               BlocBuilder<AssignorderCubit,
                                                   AssignorderCubitState>(
-                                                builder: (context, state) {
-                                                  if (state.status ==
+                                                builder: (context,
+                                                    assignStaffstate) {
+                                                  if (assignStaffstate.status ==
                                                       AssignCubitStatus
                                                           .loadingSuccess)
                                                     return Column(
                                                       children: [
                                                         for (int i = 0;
                                                             i <
-                                                                state.listStaff
+                                                                assignStaffstate
+                                                                    .listStaff
                                                                     .length;
                                                             i++)
                                                           Card(
@@ -425,13 +428,106 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                                     leading: Image
                                                                         .asset(
                                                                             'lib/images/logo_blue.png'),
-                                                                    title: Text(state
+                                                                    title: Text(assignStaffstate
                                                                         .listStaff[
                                                                             i]
                                                                         .fullname),
                                                                   ),
                                                                 ]),
                                                           ),
+                                                        SizedBox(
+                                                          height: 15,
+                                                        ),
+                                                        ElevatedButton(
+                                                            style:
+                                                                ElevatedButton
+                                                                    .styleFrom(
+                                                              primary: AppTheme
+                                                                  .colors.blue,
+                                                            ),
+                                                            child: Text(
+                                                                'Chọn nhân viên'),
+                                                            onPressed: () =>
+                                                                setState(() {
+                                                                  showInformationDialog(
+                                                                    context,
+                                                                    staffState
+                                                                        .staffList,
+                                                                  );
+                                                                })),
+                                                        SizedBox(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.45,
+                                                          child: BlocListener<
+                                                              UpdateStatusOrderBloc,
+                                                              UpdateStatusOrderState>(
+                                                            // ignore: missing_return
+                                                            listener: (builder,
+                                                                statusState) {
+                                                              if (statusState
+                                                                      .status ==
+                                                                  UpdateStatus
+                                                                      .updateStatusStartSuccess) {
+                                                                Navigator.pushNamed(
+                                                                    context,
+                                                                    '/manager');
+                                                              }
+                                                            },
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                SizedBox(
+                                                                  width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width *
+                                                                      0.45,
+                                                                  child:
+                                                                      ElevatedButton(
+                                                                    style: ElevatedButton.styleFrom(
+                                                                        primary: AppTheme
+                                                                            .colors
+                                                                            .blue),
+                                                                    child: Text(
+                                                                        'Start Process',
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.white)),
+                                                                    onPressed:
+                                                                        () {
+                                                                      updateStatusBloc.add(UpdateStatusStartAndWorkingButtonPressed(
+                                                                          id: state
+                                                                              .assignDetail[
+                                                                                  0]
+                                                                              .id,
+                                                                          listData: assignStaffstate
+                                                                              .listStaff,
+                                                                          status:
+                                                                              processingStatus));
+                                                                      // updateStatusBloc.add(UpdateStatusWorkingButtonPress(
+                                                                      //     listdata: assignStaffstate
+                                                                      //         .listStaff,
+                                                                      //     status:
+                                                                      //         processingStatus));
+                                                                      // updateStatusBloc.add(UpdateStatusStartButtonPressed(
+                                                                      //     id: state
+                                                                      //         .assignDetail[
+                                                                      //             0]
+                                                                      //         .id,
+                                                                      //     status:
+                                                                      //         processingStatus));
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
                                                       ],
                                                     );
                                                   else
@@ -462,76 +558,9 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                               SizedBox(
                                                 height: 10,
                                               ),
-                                              ElevatedButton(
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    primary:
-                                                        AppTheme.colors.blue,
-                                                  ),
-                                                  child: Text('Chọn nhân viên'),
-                                                  onPressed: () => setState(() {
-                                                        showInformationDialog(
-                                                          context,
-                                                          staffState.staffList,
-                                                        );
-                                                      })),
+
                                               Container(height: 10),
                                             ],
-                                          ),
-                                        ),
-
-                                        SizedBox(
-                                          height: 15,
-                                        ),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.45,
-                                          child: BlocListener<
-                                              UpdateStatusOrderBloc,
-                                              UpdateStatusOrderState>(
-                                            // ignore: missing_return
-                                            listener: (builder, statusState) {
-                                              if (statusState.status ==
-                                                  UpdateStatus
-                                                      .updateStatusStartSuccess) {
-                                                Navigator.pushNamed(
-                                                    context, '/manager');
-                                              }
-                                            },
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.45,
-                                                  child: ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                            primary: AppTheme
-                                                                .colors.blue),
-                                                    child: Text('Start Process',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white)),
-                                                    onPressed: () {
-                                                      updateStatusBloc.add(
-                                                          UpdateStatusStartButtonPressed(
-                                                              id: state
-                                                                  .assignDetail[
-                                                                      0]
-                                                                  .id,
-                                                              status:
-                                                                  processingStatus));
-                                                    },
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
                                           ),
                                         ),
 
