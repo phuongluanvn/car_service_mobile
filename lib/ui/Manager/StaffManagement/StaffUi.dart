@@ -64,7 +64,7 @@ class _StaffUiState extends State<StaffUi> {
                           ]),
                       leading: FlutterLogo(),
                       title: Text(state.staffList[index].fullname),
-                      subtitle: Text(state.staffList[index].status.toString()),
+                      subtitle: Text(state.staffList[index].role.toString()),
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (_) => StaffDetailUi(

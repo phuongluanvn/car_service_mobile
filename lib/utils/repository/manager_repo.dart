@@ -51,7 +51,6 @@ class ManagerRepository {
     );
     if (resStaff.statusCode == 200) {
       var dataProcessing = json.decode(resStaff.body);
-
       if (dataProcessing != null) {
         dataProcessing
             .map((order) => staffList.add(StaffModel.fromJson(order)))
