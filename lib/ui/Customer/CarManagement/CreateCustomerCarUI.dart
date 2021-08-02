@@ -175,12 +175,12 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
           print(_image);
           uploadImageToFirebase(context);
           // _showSuccessDialog();
-          // createCarBloc.add(CreateCarButtonPressed(
-          //   username: _username,
-          //   manufacturer: _selectManufacturerItem,
-          //   model: _selectModelOfManufacturerItem,
-          //   licensePlateNumber: licensePlateNumber.text,
-          // ));
+          createCarBloc.add(CreateCarButtonPressed(
+            username: _username,
+            manufacturer: _selectManufacturerItem,
+            model: _selectModelOfManufacturerItem,
+            licensePlateNumber: licensePlateNumber.text,
+          ));
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
@@ -195,7 +195,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
       appBar: AppBar(
           title: Text('Thêm mới xe'),
           backgroundColor: AppTheme.colors.deepBlue),
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: Center(
         child: BlocListener<CreateCarBloc, CreateCarState>(
             listener: (context, state) {
@@ -207,7 +207,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
               padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
               child: Container(
                 decoration: BoxDecoration(
-                    color: AppTheme.colors.white,
+                    // color: AppTheme.colors.white,
                     borderRadius: BorderRadius.circular(5)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: ListView(
@@ -338,7 +338,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                       height: 30,
                     ),
                     Visibility(
-                        visible: _visible,
+                        // visible: _visible,
                         child: Container(child:
                             BlocBuilder<ManufacturerBloc, ManufacturerState>(
                                 // ignore: missing_return
@@ -411,7 +411,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                       color: Colors.black,
                                       fontSize: 16,
                                     ),
-                                    hint: Text('Chọn mẫu xe'),
+                                    hint: modelState.modelOfManu != [] ? Text('Chọn mẫu xe') : Text('Không có mẫu xe cho hãng này'),
                                     items:
                                         modelState.modelOfManu.map((valueItem) {
                                       return DropdownMenuItem<String>(

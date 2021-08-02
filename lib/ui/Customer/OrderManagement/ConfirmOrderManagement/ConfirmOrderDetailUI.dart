@@ -52,7 +52,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                       cardInforOrder(
                           state.orderDetail[0].status,
                           state.orderDetail[0].bookingTime,
-                          state.orderDetail[0].checkinTime,
+                          state.orderDetail[0].bookingTime,
                           state.orderDetail[0].note),
                       cardInforService(
                           state.orderDetail[0].vehicle.model,

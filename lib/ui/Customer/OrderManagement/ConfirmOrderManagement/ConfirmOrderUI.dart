@@ -61,7 +61,7 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
                         itemBuilder: (context, index) {
                           assert(context != null);
                           if (state.orderLists[index].status ==
-                              'Waitting Confirm') {
+                              'Waiting Confirm') {
                             return Card(
                                 child: Column(children: [
                               ListTile(

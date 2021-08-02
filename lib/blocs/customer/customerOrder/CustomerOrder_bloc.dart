@@ -16,19 +16,29 @@ class CustomerOrderBloc extends Bloc<CustomerOrderEvent, CustomerOrderState> {
   @override
   Stream<CustomerOrderState> mapEventToState(CustomerOrderEvent event) async* {
     if (event is DoOrderListEvent) {
+      List<OrderModel> currentOrderList=[];
+      List<OrderModel> historyOrderList=[];
+
       yield state.copyWith(status: CustomerOrderStatus.loading);
       try {
         final prefs = await SharedPreferences.getInstance();
         final _username = prefs.getString('Username');
-        print(_username);
         if (_username != null) {
           var orderLists = await _repo.getOrderList(_username);
+          //lay curent
+          orderLists.map((order) =>{
+            if(order.status != 'Checkin'){
+              currentOrderList.add(order)
+            } else if(order.status == 'Finish'){
+              historyOrderList.add(order)
+            }
+          }).toList();
           if (orderLists != null) {
             yield state.copyWith(
                 orderLists: orderLists,
+                orderCurrentLists: currentOrderList,
+                orderHistoryLists: historyOrderList,
                 status: CustomerOrderStatus.loadedOrderSuccess);
-            print('List order');
-            print(orderLists);
           }
         } else {
           yield state.copyWith(

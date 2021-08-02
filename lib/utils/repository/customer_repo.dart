@@ -99,32 +99,6 @@ class CustomerRepository {
     }
   }
 
-  Future<List<VehicleModel>> getVehicleDetail(String vehicleId) async {
-    var res = await http.get(
-      Uri.parse(
-          'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=' +
-              vehicleId),
-      headers: headers,
-    );
-    if (res.statusCode == 200) {
-      var data = json.decode(res.body);
-      try {
-        if (data != null) {
-          List<VehicleModel> listdata = [];
-          data.forEach((element) {
-            Map<String, dynamic> map = element;
-            listdata.add(VehicleModel.fromJson(map));
-          });
-          return listdata;
-        } else {
-          print('No data');
-        }
-      } catch (e) {
-        print(e.toString());
-      }
-    }
-  }
-
   getOrderList(String username) async {
     List<OrderModel> orderLists = [];
     var res = await http.get(
@@ -154,19 +128,16 @@ class CustomerRepository {
       Uri.parse(BASE_URL + 'Orders/' + id),
       headers: headers,
     );
-    print(res.body);
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
       convertData.add(data);
       print(convertData);
       try {
         if (data != null) {
-          print('jịịịịịi');
           convertData
               .map((orderDetail) =>
                   orderDetails.add(OrderDetailModel.fromJson(orderDetail)))
               .toList();
-          print('?????');
           return orderDetails;
         } else {
           res.body;
