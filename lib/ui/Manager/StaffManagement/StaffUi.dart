@@ -77,7 +77,9 @@ class _StaffUiState extends State<StaffUi> {
                             ),
                             Text(state.staffList[index].status),
                           ]),
-                      leading: FlutterLogo(),
+                      leading: Image.asset(
+                        'lib/images/mechanic.png',
+                      ),
                       title: Text(state.staffList[index].fullname),
                       subtitle: Text(state.staffList[index].role.toString()),
                       onTap: () {

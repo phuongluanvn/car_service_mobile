@@ -290,6 +290,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                                   ),
                                 ),
                               ),
+                            
                             ],
                           ),
                         ),

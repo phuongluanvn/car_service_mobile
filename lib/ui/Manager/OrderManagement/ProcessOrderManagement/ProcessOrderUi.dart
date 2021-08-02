@@ -61,7 +61,7 @@ class _ProcessOrderUiState extends State<ProcessOrderUi> {
                               ),
                               Text(state.processList[index].status),
                             ]),
-                        leading: FlutterLogo(),
+                        leading: Image.asset('lib/images/order_small.png'),
                         title:
                             Text(state.processList[index].vehicle.licensePlate),
                         subtitle: Text(state.processList[index].bookingTime),

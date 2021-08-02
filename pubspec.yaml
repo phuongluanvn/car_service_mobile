@@ -42,7 +42,7 @@ dependencies:
   firebase_messaging:
   flutter_local_notifications:
   sizer: ^2.0.13
-  firebase_storage: 
+  firebase_storage:
   multi_image_picker:
   date_format:
 
@@ -65,7 +65,7 @@ flutter:
     - lib/images/logo_blue.png
     - lib/images/order.png
     - lib/images/order_small.png
-
+    - lib/images/mechanic.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

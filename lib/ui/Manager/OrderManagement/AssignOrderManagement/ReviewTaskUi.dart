@@ -125,7 +125,7 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                                 title: Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
-                                                          .spaceEvenly,
+                                                          .spaceBetween,
                                                   children: [
                                                     Text(e.name),
                                                     Text('${e.price}'),
@@ -145,18 +145,54 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                               );
                                             },
                                             body: SingleChildScrollView(
-                                              child:
-                                                  // Text('????')
-                                                  ListView(
-                                                shrinkWrap: true,
-                                                children: state.processDetail
-                                                    .map((service) {
-                                                  return ListTile(
-                                                    title: Text(service
-                                                        .orderDetails[0].name),
-                                                  );
-                                                }).toList(),
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 10,
+                                                    horizontal: 10),
+                                                child: TextFormField(
+                                                  maxLines: null,
+                                                  autofocus: false,
+                                                  decoration: InputDecoration(
+                                                    prefixIcon:
+                                                        Icon(Icons.search),
+                                                    filled: true,
+                                                    fillColor: Colors.white,
+                                                    hintStyle: TextStyle(
+                                                        color: Colors.black54),
+                                                    hintText:
+                                                        'Nhập tên phụ tùng',
+                                                    contentPadding:
+                                                        EdgeInsets.fromLTRB(
+                                                            20, 10, 20, 10),
+                                                    border: OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5)),
+                                                  ),
+                                                  onChanged: (event) {
+                                                    // createOrderBloc.add(
+                                                    //     DoCreateOrderDetailEvent(
+                                                    //         id: event));
+                                                    // customerCarBloc.add(
+                                                    //     DoCarListWithIdEvent(
+                                                    //         vehicleId: event));
+
+                                                    // print(event);
+                                                  },
+                                                  textInputAction:
+                                                      TextInputAction.search,
+                                                ),
                                               ),
+                                              //     ListView(
+                                              //   shrinkWrap: true,
+                                              //   children: state.processDetail
+                                              //       .map((service) {
+                                              //     return ListTile(
+                                              //       title: Text(service
+                                              //           .orderDetails[0].name),
+                                              //     );
+                                              //   }).toList(),
+                                              // ),
                                             ));
                                       },
                                     ).toList(),

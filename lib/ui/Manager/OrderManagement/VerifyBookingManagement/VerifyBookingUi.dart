@@ -58,7 +58,7 @@ class _VerifyBookingUiState extends State<VerifyBookingUi> {
                                       ),
                                       Text('Booked'),
                                     ]),
-                                leading: FlutterLogo(),
+                                leading: Image.asset('lib/images/order_small.png'),
                                 title: Text(state
                                     .bookingList[index].vehicle.licensePlate),
                                 subtitle:

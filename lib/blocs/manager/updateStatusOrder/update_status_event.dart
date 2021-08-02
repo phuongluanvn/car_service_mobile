@@ -59,3 +59,14 @@ class UpdateStatusStartAndWorkingButtonPressed extends UpdateStatusOrderEvent {
   UpdateStatusStartAndWorkingButtonPressed(
       {this.id, this.listData, this.status, this.workingStatus});
 }
+
+class UpdateStatusFinishAndAvailableButtonPressed
+    extends UpdateStatusOrderEvent {
+  final String id;
+  final List<StaffModel> listData;
+  final String status;
+  final String availableStatus;
+
+  UpdateStatusFinishAndAvailableButtonPressed(
+      {this.id, this.listData, this.status, this.availableStatus});
+}

@@ -65,8 +65,9 @@ class _OrderHistoryUiState extends State<OrderHistoryUi> {
                               ),
                               Text('Finished'),
                             ]),
-                        leading: FlutterLogo(),
-                        title: Text(state.historyList[index].customer.fullname),
+                        leading: Image.asset('lib/images/order_small.png'),
+                        title:
+                            Text(state.historyList[index].vehicle.licensePlate),
                         subtitle: Text(state.historyList[index].bookingTime),
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
