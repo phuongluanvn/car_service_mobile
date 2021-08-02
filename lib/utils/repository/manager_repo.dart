@@ -5,6 +5,7 @@ import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/ServiceModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:car_service/utils/model/TestOrderModel.dart';
+import 'package:car_service/utils/model/accessory_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -238,6 +239,27 @@ class ManagerRepository {
         return orderLists;
       } else {
         print('No order data');
+      }
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<AccessoryModel>> getAccessoryList() async {
+    List<AccessoryModel> accLists = [];
+    var res = await http.get(
+      Uri.parse("https://carservicesystem.azurewebsites.net/api/accessories"),
+      headers: headers,
+    );
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      if (data != null) {
+        data
+            .map((order) => accLists.add(AccessoryModel.fromJson(order)))
+            .toList();
+        return accLists;
+      } else {
+        print('No acc data');
       }
     } else {
       return null;

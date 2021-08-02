@@ -58,7 +58,8 @@ class _VerifyBookingUiState extends State<VerifyBookingUi> {
                                       ),
                                       Text('Booked'),
                                     ]),
-                                leading: Image.asset('lib/images/order_small.png'),
+                                leading:
+                                    Image.asset('lib/images/order_small.png'),
                                 title: Text(state
                                     .bookingList[index].vehicle.licensePlate),
                                 subtitle:

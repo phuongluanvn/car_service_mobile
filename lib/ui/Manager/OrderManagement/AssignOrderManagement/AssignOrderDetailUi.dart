@@ -543,7 +543,6 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                                       .assignDetail[
                                                                           0]
                                                                       .id,
-                                                                  
                                                                 ),
                                                               )));
                                                 },
