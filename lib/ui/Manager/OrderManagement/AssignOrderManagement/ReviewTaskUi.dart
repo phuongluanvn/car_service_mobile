@@ -1,5 +1,6 @@
 import 'package:car_service/blocs/manager/Accessories/accessory_bloc.dart';
 import 'package:car_service/blocs/manager/Accessories/accessory_event.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_state.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_events.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_state.dart';
@@ -12,9 +13,12 @@ import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/PackageServiceModel.dart';
+import 'package:car_service/utils/model/StaffModel.dart';
+import 'package:car_service/utils/model/accessory_model.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:sizer/sizer.dart';
 
 class ReviewTaskUi extends StatefulWidget {
@@ -149,95 +153,107 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                             },
                                             body: SingleChildScrollView(
                                               child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 10,
-                                                    horizontal: 10),
-                                                child:
-                                                    // state
-                                                    //             .processDetail[0]
-                                                    //             .orderDetails[0]
-                                                    //             .accessoryId ==
-                                                    //         null ||
-                                                    isHasData == true
-                                                        ? Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceEvenly,
-                                                            children: [
-                                                              Text(
-                                                                  state
-                                                                      .processDetail[
-                                                                          0]
-                                                                      .orderDetails[
-                                                                          0]
-                                                                      .name,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          16)),
-                                                              ElevatedButton(
-                                                                  style: ElevatedButton
-                                                                      .styleFrom(
-                                                                    primary: Colors
-                                                                        .white,
-                                                                    shadowColor:
-                                                                        Colors
-                                                                            .white,
-                                                                  ),
-                                                                  onPressed:
-                                                                      () {
-                                                                    setState(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 10,
+                                                      horizontal: 10),
+                                                  child:
+                                                      // state
+                                                      //             .processDetail[0]
+                                                      //             .orderDetails[0]
+                                                      //             .accessoryId ==
+                                                      //         null ||
+                                                      isHasData == true
+                                                          ? Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceEvenly,
+                                                              children: [
+                                                                Text(
+                                                                    state
+                                                                        .processDetail[
+                                                                            0]
+                                                                        .orderDetails[
+                                                                            0]
+                                                                        .name,
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            16)),
+                                                                ElevatedButton(
+                                                                    style: ElevatedButton
+                                                                        .styleFrom(
+                                                                      primary:
+                                                                          Colors
+                                                                              .white,
+                                                                      shadowColor:
+                                                                          Colors
+                                                                              .white,
+                                                                    ),
+                                                                    onPressed:
                                                                         () {
-                                                                      isHasData =
-                                                                          false;
-                                                                    });
-                                                                  },
-                                                                  child: Icon(
-                                                                    Icons.edit,
-                                                                    color: AppTheme
-                                                                        .colors
-                                                                        .blue,
-                                                                  ))
-                                                            ],
-                                                          )
-                                                        : TextFormField(
-                                                            maxLines: null,
-                                                            autofocus: false,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              prefixIcon: Icon(
-                                                                  Icons.search),
-                                                              filled: true,
-                                                              fillColor:
-                                                                  Colors.white,
-                                                              hintStyle: TextStyle(
-                                                                  color: Colors
-                                                                      .black54),
-                                                              hintText:
-                                                                  'Nhập tên phụ tùng',
-                                                              contentPadding:
-                                                                  EdgeInsets
-                                                                      .fromLTRB(
-                                                                          20,
-                                                                          10,
-                                                                          20,
-                                                                          10),
-                                                              border: OutlineInputBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              5)),
-                                                            ),
-                                                            onChanged: (event) {
-                                                              _accessoryBloc.add(
-                                                                  DoAccessoryDetailEvent(
-                                                                      name:
-                                                                          event));
-                                                            },
-                                                            textInputAction:
-                                                                TextInputAction
-                                                                    .search,
-                                                          ),
-                                              ),
+                                                                      setState(
+                                                                          () {
+                                                                        isHasData =
+                                                                            false;
+                                                                      });
+                                                                    },
+                                                                    child: Icon(
+                                                                      Icons
+                                                                          .edit,
+                                                                      color: AppTheme
+                                                                          .colors
+                                                                          .blue,
+                                                                    ))
+                                                              ],
+                                                            )
+                                                          : TypeAheadField<
+                                                                  AccessoryModel>(
+                                                              suggestionsCallback:(pattern) async {
+                                                              return await getAccessory(pattern);
+                                                              }
+                                                              itemBuilder:
+                                                                  itemBuilder,
+                                                              onSuggestionSelected:
+                                                                  onSuggestionSelected)
+                                                  // TextFoTyrmField(
+                                                  //     maxLines: null,
+                                                  //     autofocus: false,
+                                                  //     decoration:
+                                                  //         InputDecoration(
+                                                  //       prefixIcon: Icon(
+                                                  //           Icons.search),
+                                                  //       filled: true,
+                                                  //       fillColor:
+                                                  //           Colors.white,
+                                                  //       hintStyle: TextStyle(
+                                                  //           color: Colors
+                                                  //               .black54),
+                                                  //       hintText:
+                                                  //           'Nhập tên phụ tùng',
+                                                  //       contentPadding:
+                                                  //           EdgeInsets
+                                                  //               .fromLTRB(
+                                                  //                   20,
+                                                  //                   10,
+                                                  //                   20,
+                                                  //                   10),
+                                                  //       border: OutlineInputBorder(
+                                                  //           borderRadius:
+                                                  //               BorderRadius
+                                                  //                   .circular(
+                                                  //                       5)),
+                                                  //     ),
+                                                  //     onChanged: (event) {
+                                                  //       _accessoryBloc.add(
+                                                  //           DoAccessoryDetailEvent(
+                                                  //               name:
+                                                  //                   event));
+                                                  //     },
+                                                  //     textInputAction:
+                                                  //         TextInputAction
+                                                  //             .search,
+                                                  //   ),
+
+                                                  ),
                                               //     ListView(
                                               //   shrinkWrap: true,
                                               //   children: state.processDetail
@@ -370,5 +386,19 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
         ),
       ),
     );
+  }
+
+  static List<AccessoryModel> getAccessory(String query) {
+    List<AccessoryModel> list;
+    BlocListener<AccessoryBloc, AccessoryState>(
+      listener: (context, state) {
+        if (state.status == ListAccessoryStatus.success) {
+          list.addAll(state.accessoryList);
+        }
+      },
+      
+    );
+    
+    return list;
   }
 }

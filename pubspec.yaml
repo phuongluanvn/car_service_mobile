@@ -45,6 +45,7 @@ dependencies:
   firebase_storage:
   multi_image_picker:
   date_format:
+  flutter_typeahead: ^3.0.0-nullsafety.0
 
 dev_dependencies:
   flutter_test:
