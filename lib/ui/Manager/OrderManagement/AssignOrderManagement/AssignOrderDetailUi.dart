@@ -1,8 +1,8 @@
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
-import 'package:car_service/blocs/manager/cubit/assignorder_cubit.dart';
-import 'package:car_service/blocs/manager/cubit/assignorder_cubit_state.dart';
+import 'package:car_service/blocs/manager/assign_order_cubit/assignorder_cubit.dart';
+import 'package:car_service/blocs/manager/assign_order_cubit/assignorder_cubit_state.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';

@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
-import 'package:car_service/blocs/manager/cubit/assignorder_cubit_state.dart';
+import 'package:car_service/blocs/manager/assign_order_cubit/assignorder_cubit_state.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 
-class AssignorderCubit extends Cubit<AssignorderCubitState> {
-  AssignorderCubit() : super(AssignorderCubitState());
+class ProcessorderCubit extends Cubit<AssignorderCubitState> {
+  ProcessorderCubit() : super(AssignorderCubitState());
 
   onListChanged(List<StaffModel> listdata) {
     emit(state.copyWith(listStaff: listdata));

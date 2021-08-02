@@ -39,6 +39,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
   String _packageId;
   String _note;
   List<StaffModel> selectData = [];
+  List selectService = [];
 
   @override
   void initState() {
@@ -328,57 +329,49 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                           child: Column(
                             children: <Widget>[
                               Text(
-                                'Thông tin gói dịch vụ',
+                                'Cập nhật quy trình xử lí',
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.w600),
                               ),
                               Center(
-                                child: ExpansionPanelList.radio(
-                                  children: state.processDetail[0].orderDetails
-                                      .map<ExpansionPanelRadio>(
-                                    (e) {
-                                      return ExpansionPanelRadio(
-                                          value: e.name,
-                                          headerBuilder: (context, isExpanded) {
-                                            return RadioListTile(
-                                              title: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
-                                                  Text(e.name),
-                                                  Text('${e.price}'),
-                                                ],
-                                              ),
-                                              onChanged: (value) {
-                                                // setState(() {
-                                                //   _valueSelectedPackageService =
-                                                //       value;
-                                                //   _packageId = value;
-                                                //   _note = null;
-                                                // });
-                                              },
-                                              groupValue:
-                                                  _valueSelectedPackageService,
-                                              value: e.id,
-                                            );
-                                          },
-                                          body: SingleChildScrollView(
-                                            child:
-                                                // Text('????')
-                                                ListView(
-                                              shrinkWrap: true,
-                                              children: state.processDetail
-                                                  .map((service) {
-                                                return ListTile(
-                                                  title: Text(service
-                                                      .orderDetails[0].name),
-                                                );
-                                              }).toList(),
-                                            ),
-                                          ));
+                                child: Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.5,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                  child: ListView.builder(
+                                    itemCount: state
+                                        .processDetail[0].orderDetails.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return CheckboxListTile(
+                                        value: selectService.contains(state
+                                            .processDetail[0]
+                                            .orderDetails[index]),
+                                        onChanged: (bool selected) {
+                                          if (selected == true) {
+                                            setState(() {
+                                              selectService.add(state
+                                                  .processDetail[0]
+                                                  .orderDetails[index]);
+                                              // BlocProvider.of<
+                                              //             ProcessorderCubit>(
+                                              //         context)
+                                              //     .addItem(stafflist[index]);
+                                            });
+                                          } else {
+                                            setState(() {
+                                              selectService.remove(state
+                                                  .processDetail[0]
+                                                  .orderDetails[index]);
+                                            });
+                                          }
+                                        },
+                                        title: Text(state.processDetail[0]
+                                            .orderDetails[index].name),
+                                      );
                                     },
-                                  ).toList(),
+                                  ),
                                 ),
                               ),
                             ],
@@ -524,6 +517,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                                 builder: (_) => CheckoutOrderUi(
                                                       orderId: state
                                                           .processDetail[0].id,
+                                                      selectService: selectService,
                                                     )));
                                       },
                                     ),
