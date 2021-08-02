@@ -58,7 +58,7 @@ class _AssignOrderUiState extends State<AssignOrderUi> {
                               ),
                               Text(state.assignList[index].status),
                             ]),
-                        leading:Image.asset('lib/images/order_small.png'),
+                        leading: Image.asset('lib/images/order_small.png'),
                         title:
                             Text(state.assignList[index].vehicle.licensePlate),
                         subtitle: Text(state.assignList[index].bookingTime),

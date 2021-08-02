@@ -35,7 +35,7 @@ class AssignOrderBloc extends Bloc<AssignOrderEvent, AssignOrderState> {
           status: AssignStatus.error,
           message: e.toString(),
         );
-        ;
+        
       }
     } else if (event is DoAssignOrderDetailEvent) {
       yield state.copyWith(detailStatus: AssignDetailStatus.loading);

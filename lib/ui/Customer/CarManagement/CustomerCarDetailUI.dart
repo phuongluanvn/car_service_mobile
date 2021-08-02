@@ -221,7 +221,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                           height: 35,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                                                primary: AppTheme.colors.blue),
+                                primary: AppTheme.colors.blue),
                             child: Text('Lưu',
                                 style: TextStyle(color: Colors.white)),
                             onPressed: () {

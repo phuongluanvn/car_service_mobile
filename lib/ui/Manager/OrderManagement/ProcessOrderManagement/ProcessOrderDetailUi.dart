@@ -517,7 +517,8 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                                 builder: (_) => CheckoutOrderUi(
                                                       orderId: state
                                                           .processDetail[0].id,
-                                                      selectService: selectService,
+                                                      selectService:
+                                                          selectService,
                                                     )));
                                       },
                                     ),

@@ -114,7 +114,6 @@ class _ManagerAccountUiState extends State<ManagerAccountUi> {
                             ),
                           ],
                         ),
-                        
                         Container(height: 16),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.baseline,

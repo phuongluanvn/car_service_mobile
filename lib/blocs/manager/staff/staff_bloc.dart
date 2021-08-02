@@ -21,11 +21,11 @@ class ManageStaffBloc extends Bloc<ManageStaffEvent, ManageStaffState> {
       yield state.copyWith(status: StaffStatus.loading);
       try {
         var staffList = await _repo.getStaffList();
-        staffList.map((e) => {
-          if(e.role == 'staff') {
-            listTest.add(e)
-          }
-        }).toList();
+        staffList
+            .map((e) => {
+                  if (e.role == 'staff') {listTest.add(e)}
+                })
+            .toList();
         print(listTest);
         if (staffList != null) {
           yield state.copyWith(
