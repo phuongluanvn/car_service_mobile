@@ -9,6 +9,7 @@ import 'package:car_service/blocs/customer/customerService/CustomerService_bloc.
 import 'package:car_service/blocs/customer/manufacturers/Manufacturer_bloc.dart';
 import 'package:car_service/blocs/login/auth_bloc.dart';
 import 'package:car_service/blocs/login/auth_state.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_bloc.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
 import 'package:car_service/blocs/manager/booking/booking_bloc.dart';
 import 'package:car_service/blocs/manager/createOrder/createOrder_bloc.dart';
@@ -169,6 +170,8 @@ class _AuthState extends State<Auth> {
         BlocProvider(
             create: (context) =>
                 PackageServiceBloc(repo: CustomerRepository())),
+        BlocProvider(
+            create: (context) => AccessoryBloc(repo: ManagerRepository())),
         // BlocProvider(
         //     create: (context) =>
         //         BookingCubit(VerifyBookingInitState(), ManagerRepository())),

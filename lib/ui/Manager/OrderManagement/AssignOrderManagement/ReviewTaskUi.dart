@@ -1,3 +1,5 @@
+import 'package:car_service/blocs/manager/Accessories/accessory_bloc.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_event.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_events.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_state.dart';
@@ -36,7 +38,7 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
   String _packageId;
   String _note;
   bool isHasData = false;
-
+  AccessoryBloc _accessoryBloc;
   List selectedDetailsValue;
 
   @override
@@ -45,8 +47,7 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
     print('Order id is:' + widget.orderId);
     BlocProvider.of<ProcessOrderBloc>(context)
         .add(DoProcessOrderDetailEvent(email: widget.orderId));
-    // BlocProvider.of<PackageServiceBloc>(context)
-    //     .add(DoPackageServiceListEvent());
+    BlocProvider.of<AccessoryBloc>(context).add(DoListAccessories());
   }
 
   void onChanged(bool value) {
@@ -88,6 +89,7 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
+      backgroundColor: AppTheme.colors.lightblue,
       body: SingleChildScrollView(
         child: Container(
           child: BlocBuilder<ProcessOrderBloc, ProcessOrderState>(
@@ -150,94 +152,91 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                                 padding: EdgeInsets.symmetric(
                                                     vertical: 10,
                                                     horizontal: 10),
-                                                child: 
-                                                // state
-                                                //             .processDetail[0]
-                                                //             .orderDetails[0]
-                                                //             .accessoryId ==
-                                                //         null || 
-                                                        isHasData == true
-                                                    ? Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceEvenly,
-                                                        children: [
-                                                          Text(
-                                                              state
-                                                                  .processDetail[
-                                                                      0]
-                                                                  .orderDetails[
-                                                                      0]
-                                                                  .name,
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      16)),
-                                                          ElevatedButton(
-                                                              style:
-                                                                  ElevatedButton
+                                                child:
+                                                    // state
+                                                    //             .processDetail[0]
+                                                    //             .orderDetails[0]
+                                                    //             .accessoryId ==
+                                                    //         null ||
+                                                    isHasData == true
+                                                        ? Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceEvenly,
+                                                            children: [
+                                                              Text(
+                                                                  state
+                                                                      .processDetail[
+                                                                          0]
+                                                                      .orderDetails[
+                                                                          0]
+                                                                      .name,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          16)),
+                                                              ElevatedButton(
+                                                                  style: ElevatedButton
                                                                       .styleFrom(
-                                                                primary: Colors
-                                                                    .white,
-                                                                shadowColor:
-                                                                    Colors
+                                                                    primary: Colors
                                                                         .white,
-                                                              ),
-                                                              onPressed: () {
-                                                                setState(() {
-                                                                  isHasData = false;
-                                                                });
-                                                                
-                                                              },
-                                                              child: Icon(
-                                                                Icons.edit,
-                                                                color: AppTheme
-                                                                    .colors
-                                                                    .blue,
-                                                              ))
-                                                        ],
-                                                      )
-                                                    : TextFormField(
-                                                        maxLines: null,
-                                                        autofocus: false,
-                                                        decoration:
-                                                            InputDecoration(
-                                                          prefixIcon: Icon(
-                                                              Icons.search),
-                                                          filled: true,
-                                                          fillColor:
-                                                              Colors.white,
-                                                          hintStyle: TextStyle(
-                                                              color: Colors
-                                                                  .black54),
-                                                          hintText:
-                                                              'Nhập tên phụ tùng',
-                                                          contentPadding:
-                                                              EdgeInsets
-                                                                  .fromLTRB(
-                                                                      20,
-                                                                      10,
-                                                                      20,
-                                                                      10),
-                                                          border: OutlineInputBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5)),
-                                                        ),
-                                                        onChanged: (event) {
-                                                          // createOrderBloc.add(
-                                                          //     DoCreateOrderDetailEvent(
-                                                          //         id: event));
-                                                          // customerCarBloc.add(
-                                                          //     DoCarListWithIdEvent(
-                                                          //         vehicleId: event));
-
-                                                          // print(event);
-                                                        },
-                                                        textInputAction:
-                                                            TextInputAction
-                                                                .search,
-                                                      ),
+                                                                    shadowColor:
+                                                                        Colors
+                                                                            .white,
+                                                                  ),
+                                                                  onPressed:
+                                                                      () {
+                                                                    setState(
+                                                                        () {
+                                                                      isHasData =
+                                                                          false;
+                                                                    });
+                                                                  },
+                                                                  child: Icon(
+                                                                    Icons.edit,
+                                                                    color: AppTheme
+                                                                        .colors
+                                                                        .blue,
+                                                                  ))
+                                                            ],
+                                                          )
+                                                        : TextFormField(
+                                                            maxLines: null,
+                                                            autofocus: false,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              prefixIcon: Icon(
+                                                                  Icons.search),
+                                                              filled: true,
+                                                              fillColor:
+                                                                  Colors.white,
+                                                              hintStyle: TextStyle(
+                                                                  color: Colors
+                                                                      .black54),
+                                                              hintText:
+                                                                  'Nhập tên phụ tùng',
+                                                              contentPadding:
+                                                                  EdgeInsets
+                                                                      .fromLTRB(
+                                                                          20,
+                                                                          10,
+                                                                          20,
+                                                                          10),
+                                                              border: OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5)),
+                                                            ),
+                                                            onChanged: (event) {
+                                                              _accessoryBloc.add(
+                                                                  DoAccessoryDetailEvent(
+                                                                      name:
+                                                                          event));
+                                                            },
+                                                            textInputAction:
+                                                                TextInputAction
+                                                                    .search,
+                                                          ),
                                               ),
                                               //     ListView(
                                               //   shrinkWrap: true,

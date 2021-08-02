@@ -8,3 +8,10 @@ abstract class AccessoryEvent extends Equatable {
 }
 
 class DoListAccessories extends AccessoryEvent {}
+
+class DoAccessoryDetailEvent extends AccessoryEvent {
+  final String name;
+  DoAccessoryDetailEvent({this.name});
+  @override
+  List<Object> get props => [name];
+}

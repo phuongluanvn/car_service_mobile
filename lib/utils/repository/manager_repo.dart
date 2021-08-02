@@ -266,6 +266,33 @@ class ManagerRepository {
     }
   }
 
+  Future<List<AccessoryModel>> getAccessoryByName(String name) async {
+    List<AccessoryModel> listdata = [];
+    List convertData = [];
+
+    var res = await http.get(
+      Uri.parse(BASE_URL + '/accessories?searchValue=' + name),
+      headers: headers,
+    );
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      convertData.add(data); //thêm [] để dùng .map bêndưới
+
+      try {
+        if (data != null) {
+          convertData
+              .map((element) => listdata.add(AccessoryModel.fromJson(element)))
+              .toList();
+          return listdata;
+        } else {
+          print('No accessory order data');
+        }
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+  }
+
   Future<List<OrderDetailModel>> getVerifyOrderDetail(String id) async {
     List<OrderDetailModel> listdata = [];
     List convertData = [];

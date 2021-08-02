@@ -343,97 +343,77 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                             BlocBuilder<ManufacturerBloc, ManufacturerState>(
                                 // ignore: missing_return
                                 builder: (builder, modelState) {
-                          if (modelState.modelStatus ==
-                              ModelOfManufacturerStatus.init) {
-                            return Container(
-                              padding:
-                                  EdgeInsets.only(left: 15, right: 15, top: 5),
-                              color: Colors.white,
-                              child: Row(children: <Widget>[
-                                Expanded(
-                                  child: DropdownButtonHideUnderline(
-                                    child: ButtonTheme(
-                                      alignedDropdown: true,
-                                      child: DropdownButton<String>(
-                                        iconSize: 30,
-                                        icon: (null),
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                        ),
-                                        hint: Text('Chọn mẫu xe'),
-                                        items: [],
-                                      ),
+                      if (modelState.modelStatus ==
+                          ModelOfManufacturerStatus.init) {
+                        return Container(
+                          padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                          color: Colors.white,
+                          child: Row(children: <Widget>[
+                            Expanded(
+                              child: DropdownButtonHideUnderline(
+                                child: ButtonTheme(
+                                  alignedDropdown: true,
+                                  child: DropdownButton<String>(
+                                    iconSize: 30,
+                                    icon: (null),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
                                     ),
+                                    hint: Text('Chọn mẫu xe'),
+                                    items: [],
                                   ),
                                 ),
-                              ]),
-                            );
-                          } else if (modelState.modelStatus ==
-                              ModelOfManufacturerStatus.loading) {
-                            return Container(
-                              padding:
-                                  EdgeInsets.only(left: 15, right: 15, top: 5),
-                              color: Colors.white,
-                              child: Row(children: <Widget>[
-                                Expanded(
-                                  child: DropdownButtonHideUnderline(
-                                    child: ButtonTheme(
-                                      alignedDropdown: true,
-                                      child: DropdownButton<String>(
-                                        iconSize: 30,
-                                        icon: (null),
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                        ),
-                                        hint: Text('Chọn mẫu xe'),
-                                        items: [],
-                                      ),
+                              ),
+                            ),
+                          ]),
+                        );
+                      } else if (modelState.modelStatus ==
+                          ModelOfManufacturerStatus.loading) {
+                        return Container(
+                          padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                          color: Colors.white,
+                          child: Row(children: <Widget>[
+                            Expanded(
+                              child: DropdownButtonHideUnderline(
+                                child: ButtonTheme(
+                                  alignedDropdown: true,
+                                  child: DropdownButton<String>(
+                                    iconSize: 30,
+                                    icon: (null),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
                                     ),
+                                    hint: Text('Chọn mẫu xe'),
+                                    items: [],
                                   ),
                                 ),
-                              ]),
-                            );
-                          } else if (modelState.modelStatus ==
-                              ModelOfManufacturerStatus
-                                  .loadedModelOfManufacturerSuccess) {
-                            return Container(
-                              padding:
-                                  EdgeInsets.only(left: 15, right: 15, top: 5),
-                              color: Colors.white,
-                              child: Row(children: <Widget>[
-                                Expanded(
-                                  child: DropdownButtonHideUnderline(
-                                    child: ButtonTheme(
-                                      alignedDropdown: true,
-                                      child: DropdownButton<String>(
-                                        iconSize: 30,
-                                        icon: (null),
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                        ),
-                                        hint: Text('Chọn mẫu xe'),
-                                        items: modelState.modelOfManu
-                                            .map((valueItem) {
-                                          return DropdownMenuItem<String>(
-                                            child: Text(valueItem),
-                                            value: valueItem,
-                                          );
-                                        }).toList(),
-                                        onChanged: (newValue) {
-                                          setState(() {
-                                            //thông tin mẫu xe
-                                            this._selectModelOfManufacturerItem =
-                                                newValue;
-                                          });
-                                        },
-                                        value: _selectModelOfManufacturerItem,
-                                      ),
+                              ),
+                            ),
+                          ]),
+                        );
+                      } else if (modelState.modelStatus ==
+                          ModelOfManufacturerStatus
+                              .loadedModelOfManufacturerSuccess) {
+                        return Container(
+                          padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                          color: Colors.white,
+                          child: Row(children: <Widget>[
+                            Expanded(
+                              child: DropdownButtonHideUnderline(
+                                child: ButtonTheme(
+                                  alignedDropdown: true,
+                                  child: DropdownButton<String>(
+                                    iconSize: 30,
+                                    icon: (null),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
                                     ),
-<<<<<<< HEAD
-                                    hint: modelState.modelOfManu != [] ? Text('Chọn mẫu xe') : Text('Không có mẫu xe cho hãng này'),
+                                    hint: modelState.modelOfManu != []
+                                        ? Text('Chọn mẫu xe')
+                                        : Text('Không có mẫu xe cho hãng này'),
                                     items:
                                         modelState.modelOfManu.map((valueItem) {
                                       return DropdownMenuItem<String>(
@@ -449,14 +429,14 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                       });
                                     },
                                     value: _selectModelOfManufacturerItem,
-=======
->>>>>>> 6ed7daeea2283dda8f0b526e2ee5121571eb5230
                                   ),
                                 ),
-                              ]),
-                            );
-                          }
-                        }))),
+                              ),
+                            ),
+                          ]),
+                        );
+                      }
+                    }))),
                     SizedBox(
                       height: 20,
                     ),
