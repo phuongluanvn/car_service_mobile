@@ -207,13 +207,44 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                                             )
                                                           : TypeAheadField<
                                                                   AccessoryModel>(
-                                                              suggestionsCallback:(pattern) async {
-                                                              return await getAccessory(pattern);
-                                                              }
+                                                              suggestionsCallback:
+                                                                  // ignore: missing_return
+                                                                  (String
+                                                                      query) {
+                                                                List<AccessoryModel>
+                                                                    list;
+                                                                BlocListener<
+                                                                    AccessoryBloc,
+                                                                    AccessoryState>(
+                                                                  listener:
+                                                                      (context,
+                                                                          state) {
+                                                                    if (state
+                                                                            .status ==
+                                                                        ListAccessoryStatus
+                                                                            .success) {
+                                                                      list.addAll(
+                                                                          state
+                                                                              .accessoryList);
+                                                                    }
+                                                                  },
+                                                                );
+
+                                                                return list;
+                                                              },
                                                               itemBuilder:
-                                                                  itemBuilder,
+                                                                  (context,
+                                                                      suggestion) {
+                                                                final acc =
+                                                                    suggestion;
+                                                                print(
+                                                                    suggestion);
+                                                                return ListTile(
+                                                                    title: Text(
+                                                                        'acc.name'));
+                                                              },
                                                               onSuggestionSelected:
-                                                                  onSuggestionSelected)
+                                                                  onSuggestionSelected())
                                                   // TextFoTyrmField(
                                                   //     maxLines: null,
                                                   //     autofocus: false,
@@ -388,7 +419,7 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
     );
   }
 
-  static List<AccessoryModel> getAccessory(String query) {
+  List<AccessoryModel> getAccessory(String query) {
     List<AccessoryModel> list;
     BlocListener<AccessoryBloc, AccessoryState>(
       listener: (context, state) {
@@ -396,9 +427,10 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
           list.addAll(state.accessoryList);
         }
       },
-      
     );
-    
+
     return list;
   }
+
+  onSuggestionSelected() {}
 }

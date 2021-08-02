@@ -411,7 +411,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                       color: Colors.black,
                                       fontSize: 16,
                                     ),
-                                    hint: modelState.modelOfManu != []
+                                    hint: modelState.modelOfManu == []
                                         ? Text('Chọn mẫu xe')
                                         : Text('Không có mẫu xe cho hãng này'),
                                     items:
