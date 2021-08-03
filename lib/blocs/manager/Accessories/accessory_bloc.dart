@@ -35,8 +35,7 @@ class AccessoryBloc extends Bloc<AccessoryEvent, AccessoryState> {
           message: e.toString(),
         );
       }
-    } else
-     if (event is DoAccessoryDetailEvent) {
+    } else if (event is DoAccessoryDetailEvent) {
       yield state.copyWith(statusDetail: DoAccessoryDetailStatus.loading);
       try {
         List<AccessoryModel> data = await _repo.getAccessoryByName(event.name);

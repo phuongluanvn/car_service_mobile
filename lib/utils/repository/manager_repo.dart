@@ -321,6 +321,29 @@ class ManagerRepository {
     }
   }
 
+  updateCrewByName(String id, List selectName) async {
+    var body = {
+      "orderId": '$id',
+      "memberUsernameList": selectName,
+    };
+    var res = await http.put(
+      Uri.parse("https://carservicesystem.azurewebsites.net/api/crews"),
+      headers: headers,
+      body: json.encode(body),
+    );
+    if (res.statusCode != null) {
+      print('Have data 1');
+      print(res.statusCode);
+      if (res.statusCode == 200) {
+        print('Have data 2');
+        return res.body;
+      }
+    } else {
+      print('repo no crew');
+      return null;
+    }
+  }
+
   updateStatusOrder(String id, String status) async {
     var body = {
       "id": '$id',

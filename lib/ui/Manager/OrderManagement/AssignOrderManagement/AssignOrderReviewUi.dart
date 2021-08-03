@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:car_service/blocs/manager/CrewManagement/crew_bloc.dart';
+import 'package:car_service/blocs/manager/CrewManagement/crew_event.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
@@ -22,8 +24,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AssignOrderReviewUi extends StatefulWidget {
   final String userId;
-
-  AssignOrderReviewUi({@required this.userId});
+  final List selectCrewName;
+  AssignOrderReviewUi({@required this.userId, this.selectCrewName});
 
   @override
   _AssignOrderReviewUiState createState() => _AssignOrderReviewUiState();
@@ -39,12 +41,14 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   StaffModel _staffModel;
   bool _selectStaff = false;
   AssignorderCubit assignCubit;
+  CrewBloc crewBloc;
+  List selectCrewName = [];
   @override
   void initState() {
     super.initState();
     assignCubit = BlocProvider.of<AssignorderCubit>(context);
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
-
+    crewBloc = BlocProvider.of<CrewBloc>(context);
     BlocProvider.of<AssignOrderBloc>(context)
         .add(DoAssignOrderDetailEvent(id: widget.userId));
     BlocProvider.of<ManageStaffBloc>(context).add(DoListStaffEvent());
@@ -496,6 +500,13 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                                                 Colors.white)),
                                                                     onPressed:
                                                                         () {
+                                                                      crewBloc.add(UpdateCrewToListEvent(
+                                                                          id: state
+                                                                              .assignDetail[
+                                                                                  0]
+                                                                              .id,
+                                                                          listName:
+                                                                              widget.selectCrewName));
                                                                       updateStatusBloc.add(UpdateStatusStartAndWorkingButtonPressed(
                                                                           id: state
                                                                               .assignDetail[
@@ -601,107 +612,119 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
     return showDialog(
         context: context,
         builder: (context) {
-          return StatefulBuilder(builder: (context, setState) {
-            return AlertDialog(
-              content: SingleChildScrollView(
-                child: Form(
-                  child: Container(
-                    // height: MediaQuery.of(context).size.height * 0.7,
-                    // width: MediaQuery.of(context).size.width * 0.7,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.7,
-                            width: MediaQuery.of(context).size.width * 0.7,
-                            child: BlocBuilder<AssignorderCubit,
-                                AssignorderCubitState>(
-                              bloc: assignCubit,
-                              builder: (context, state) {
-                                print(state.listStaff.contains(stafflist[0]));
-                                print(state.listStaff[0].fullname);
-                                print(stafflist[0].fullname);
-                                return ListView.builder(
-                                    itemCount: stafflist.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return CheckboxListTile(
-                                        value: state.listStaff
-                                            .contains(stafflist[index]),
-                                        onChanged: (bool selected) {
-                                          if (selected == true) {
-                                            setState(() {
-                                              BlocProvider.of<AssignorderCubit>(
-                                                      context)
-                                                  .addItem(stafflist[index]);
-                                            });
-                                          } else {
-                                            setState(() {
-                                              BlocProvider.of<AssignorderCubit>(
-                                                      context)
-                                                  .removeItem(stafflist[index]);
-                                            });
-                                          }
-                                        },
-                                        title: Text(stafflist[index].username),
-                                      );
-                                    });
-                              },
+          return BlocProvider.value(
+            value: assignCubit,
+            child: StatefulBuilder(builder: (context, setState) {
+              return AlertDialog(
+                content: SingleChildScrollView(
+                  child: Form(
+                    child: Container(
+                      // height: MediaQuery.of(context).size.height * 0.7,
+                      // width: MediaQuery.of(context).size.width * 0.7,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Container(
+                              height: MediaQuery.of(context).size.height * 0.7,
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              child: BlocBuilder<AssignorderCubit,
+                                  AssignorderCubitState>(
+                                bloc: assignCubit,
+                                builder: (context, state) {
+                                  return ListView.builder(
+                                      itemCount: stafflist.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return CheckboxListTile(
+                                          value: state.listStaff
+                                              .contains(stafflist[index]),
+                                          onChanged: (bool selected) {
+                                            if (selected == true) {
+                                              setState(() {
+                                                BlocProvider.of<
+                                                            AssignorderCubit>(
+                                                        context)
+                                                    .addItem(stafflist[index]);
+                                                widget.selectCrewName.add(
+                                                    stafflist[index].username);
+                                                print('select crewname 3');
+                                                print(widget.selectCrewName);
+                                              });
+                                            } else {
+                                              setState(() {
+                                                BlocProvider.of<
+                                                            AssignorderCubit>(
+                                                        context)
+                                                    .removeItem(
+                                                        stafflist[index]);
+                                                widget.selectCrewName.remove(
+                                                    stafflist[index].username);
+                                                print('select crewname 4');
+                                                print(widget.selectCrewName);
+                                              });
+                                            }
+                                          },
+                                          title:
+                                              Text(stafflist[index].username),
+                                        );
+                                      });
+                                },
+                              ),
                             ),
-                          ),
-                        ],
-                        //  stafflist.map((e) {
-                        //   return CheckboxListTile(
-                        //       activeColor: AppTheme.colors.deepBlue,
+                          ],
+                          //  stafflist.map((e) {
+                          //   return CheckboxListTile(
+                          //       activeColor: AppTheme.colors.deepBlue,
 
-                        //       //font change
-                        //       title: new Text(
-                        //         e.username,
-                        //       ),
-                        //       value: selectData.indexOf(e) < 0 ? false : true,
-                        //       secondary: Container(
-                        //         height: 50,
-                        //         width: 50,
-                        //         child: Image.asset(
-                        //           'lib/images/logo_blue.png',
-                        //           fit: BoxFit.cover,
-                        //         ),
-                        //       ),
-                        //       onChanged: (bool val) {
-                        //         if (selectData.indexOf(e) < 0) {
-                        //           setState(() {
-                        //             selectData.add(e);
-                        //             _selectStaff = true;
-                        //           });
-                        //         } else {
-                        //           setState(() {
-                        //             selectData
-                        //                 .removeWhere((element) => element == e);
-                        //           });
-                        //         }
-                        //         print(selectData);
-                        //       });
-                        // }).toList(),
+                          //       //font change
+                          //       title: new Text(
+                          //         e.username,
+                          //       ),
+                          //       value: selectData.indexOf(e) < 0 ? false : true,
+                          //       secondary: Container(
+                          //         height: 50,
+                          //         width: 50,
+                          //         child: Image.asset(
+                          //           'lib/images/logo_blue.png',
+                          //           fit: BoxFit.cover,
+                          //         ),
+                          //       ),
+                          //       onChanged: (bool val) {
+                          //         if (selectData.indexOf(e) < 0) {
+                          //           setState(() {
+                          //             selectData.add(e);
+                          //             _selectStaff = true;
+                          //           });
+                          //         } else {
+                          //           setState(() {
+                          //             selectData
+                          //                 .removeWhere((element) => element == e);
+                          //           });
+                          //         }
+                          //         print(selectData);
+                          //       });
+                          // }).toList(),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: Text(
-                    'Okay',
-                    style: TextStyle(color: AppTheme.colors.blue),
-                  ),
-                  onPressed: () {
-                    // Do something like updating SharedPreferences or User Settings etc.
+                actions: <Widget>[
+                  TextButton(
+                    child: Text(
+                      'Okay',
+                      style: TextStyle(color: AppTheme.colors.blue),
+                    ),
+                    onPressed: () {
+                      // Do something like updating SharedPreferences or User Settings etc.
 
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            );
-          });
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              );
+            }),
+          );
         });
   }
 }

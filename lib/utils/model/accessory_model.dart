@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class AccessoryModel extends Equatable {
-  final String  id;
+  final String id;
   final String name;
   final int quantity;
   final int price;

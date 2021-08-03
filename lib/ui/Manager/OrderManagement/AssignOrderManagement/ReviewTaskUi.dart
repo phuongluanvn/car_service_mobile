@@ -64,28 +64,6 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
     });
   }
 
-  DataRow _getDataRow(result) {
-    return DataRow(
-      cells: <DataCell>[
-        DataCell(TextField(
-          decoration: InputDecoration(hintText: '1'),
-        )),
-        DataCell(TextField(
-          decoration: InputDecoration(hintText: '2'),
-        )),
-        DataCell(TextField(
-          decoration: InputDecoration(hintText: '2'),
-        )),
-      ],
-    );
-  }
-
-  void getDropDownItem() {
-    setState(() {
-      holder = selectItem;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,479 +77,284 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
       ),
       backgroundColor: AppTheme.colors.lightblue,
       body: SingleChildScrollView(
-        child: Container(
-          child: BlocBuilder<ProcessOrderBloc, ProcessOrderState>(
-            // ignore: missing_return
-            builder: (context, state) {
-              if (state.detailStatus == ProcessDetailStatus.init) {
-                return CircularProgressIndicator();
-              } else if (state.detailStatus == ProcessDetailStatus.loading) {
-                return CircularProgressIndicator();
-              } else if (state.detailStatus == ProcessDetailStatus.success) {
-                selectedValue = List.from(state.processDetail);
+        child: BlocBuilder<ProcessOrderBloc, ProcessOrderState>(
+          // ignore: missing_return
+          builder: (context, state) {
+            if (state.detailStatus == ProcessDetailStatus.init) {
+              return CircularProgressIndicator();
+            } else if (state.detailStatus == ProcessDetailStatus.loading) {
+              return CircularProgressIndicator();
+            } else if (state.detailStatus == ProcessDetailStatus.success) {
+              selectedValue = List.from(state.processDetail);
 
-                return Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  // child: SingleChildScrollView(
-                  child: Center(
-                    child: FittedBox(
-                      child: Row(
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width * 1,
-                            height: MediaQuery.of(context).size.height * 0.9,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(color: Colors.black26),
-                                borderRadius: BorderRadius.circular(5)),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 10),
-                            child: Column(
-                              children: [
-                                Center(
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: state
-                                        .processDetail[0].orderDetails.length,
-                                    itemBuilder: (context, index) {
-                                      return ExpansionTile(
-                                        title: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(state.processDetail[0]
-                                                .orderDetails[index].name),
-                                            Text(
-                                                '${state.processDetail[0].orderDetails[index].price}'),
-                                          ],
-                                        ),
-                                        children: [
-                                          Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 10, horizontal: 10),
-                                            child:
-                                                // state
-                                                //             .processDetail[0]
-                                                //             .orderDetails[0]
-                                                //             .accessoryId ==
-                                                //         null ||
-                                                // isHasData == true
-                                                //     ? Row(
-                                                //         mainAxisAlignment:
-                                                //             MainAxisAlignment
-                                                //                 .spaceEvenly,
-                                                //         children: [
-                                                //           Text(
-                                                //               state
-                                                //                   .processDetail[
-                                                //                       0]
-                                                //                   .orderDetails[
-                                                //                       0]
-                                                //                   .name,
-                                                //               style: TextStyle(
-                                                //                   fontSize:
-                                                //                       16)),
-                                                //           ElevatedButton(
-                                                //               style:
-                                                //                   ElevatedButton
-                                                //                       .styleFrom(
-                                                //                 primary: Colors
-                                                //                     .white,
-                                                //                 shadowColor:
-                                                //                     Colors
-                                                //                         .white,
-                                                //               ),
-                                                //               onPressed: () {
-                                                //                 setState(() {
-                                                //                   isHasData =
-                                                //                       false;
-                                                //                 });
-                                                //               },
-                                                //               child: Icon(
-                                                //                 Icons.edit,
-                                                //                 color: AppTheme
-                                                //                     .colors
-                                                //                     .blue,
-                                                //               ))
-                                                //         ],
-                                                //       )
-                                                //     :
-                                                BlocListener<AccessoryBloc,
-                                                    AccessoryState>(
-                                              listener: (context, state) {
-                                                if (state.status ==
-                                                    ListAccessoryStatus
-                                                        .success) {
-                                                  listAcc = state.accessoryList;
-                                                  print(listAcc);
-                                                  print('1111');
-                                                }
-                                                ;
-                                              },
-                                              child: TypeAheadFormField(
-                                                textFieldConfiguration:
-                                                    TextFieldConfiguration(
-                                                        controller: this
-                                                            ._typeAheadController,
-                                                        decoration: InputDecoration(
-                                                            labelText:
-                                                                'Nhập tên phụ tùng cần tìm')),
-                                                suggestionsCallback:
-                                                    (pattern) => listAcc.where(
-                                                        (element) => element
-                                                            .name
-                                                            .toLowerCase()
-                                                            .contains(pattern
-                                                                .toLowerCase())),
-                                                hideSuggestionsOnKeyboardHide:
-                                                    false,
-                                                itemBuilder: (context,
-                                                    AccessoryModel suggestion) {
-                                                  return ListTile(
-                                                    title:
-                                                        Text(suggestion.name),
-                                                  );
-                                                },
-                                                noItemsFoundBuilder:
-                                                    (context) => Center(
-                                                  child: Text('No item found'),
-                                                ),
-                                                onSuggestionSelected:
-                                                    (suggestion) {
-                                                  this
-                                                      ._typeAheadController
-                                                      .text = suggestion.name;
-                                                },
-                                                onSaved: (value) =>
-                                                    this._selectAccName = value,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                        // services.map((service) {
-                                        //   return ListTile(
-                                        //     title: Text(service.name),
-                                        //     trailing: Text('${service.price}'),
-                                        //   );
-                                        // }).toList(),
-                                      );
-                                    },
-                                  ),
-                                  // ExpansionPanelList(
-                                  //   expansionCallback: (int index, bool isExpanded) {
-                                  //     _visible = !isExPanded;
-                                  //   },
-                                  //   children: state
-                                  //       .processDetail[0].orderDetails
-                                  //       .map<ExpansionPanel>(
-                                  //     (e) {
-                                  //       return ExpansionPanel(
-                                  //         headerBuilder: (context, isExpanded) {
-                                  //           return ListTile(
-                                  //             title: Row(
-                                  //               mainAxisAlignment:
-                                  //                   MainAxisAlignment
-                                  //                       .spaceBetween,
-                                  //               children: [
-                                  //                 Text(e.name),
-                                  //                 Text('${e.price}'),
-                                  //               ],
-                                  //             ),
-                                  //           );
-                                  //         },
-                                  //         body: SingleChildScrollView(
-                                  //           child: Container(
-                                  //             padding: EdgeInsets.symmetric(
-                                  //                 vertical: 10, horizontal: 10),
-                                  //             child:
-                                  //                 // state
-                                  //                 //             .processDetail[0]
-                                  //                 //             .orderDetails[0]
-                                  //                 //             .accessoryId ==
-                                  //                 //         null ||
-                                  //                 isHasData == true
-                                  //                     ? Row(
-
-                                  //                         mainAxisAlignment:
-                                  //                             MainAxisAlignment
-                                  //                                 .spaceEvenly,
-                                  //                         children: [
-                                  //                           Text(
-                                  //                               state
-                                  //                                   .processDetail[
-                                  //                                       0]
-                                  //                                   .orderDetails[
-                                  //                                       0]
-                                  //                                   .name,
-                                  //                               style: TextStyle(
-                                  //                                   fontSize:
-                                  //                                       16)),
-                                  //                           ElevatedButton(
-                                  //                               style: ElevatedButton
-                                  //                                   .styleFrom(
-                                  //                                 primary: Colors
-                                  //                                     .white,
-                                  //                                 shadowColor:
-                                  //                                     Colors
-                                  //                                         .white,
-                                  //                               ),
-                                  //                               onPressed: () {
-                                  //                                 setState(() {
-                                  //                                   isHasData =
-                                  //                                       false;
-                                  //                                 });
-                                  //                               },
-                                  //                               child: Icon(
-                                  //                                 Icons.edit,
-                                  //                                 color: AppTheme
-                                  //                                     .colors
-                                  //                                     .blue,
-                                  //                               ))
-                                  //                         ],
-                                  //                       )
-                                  //                     // : BlocListener<
-                                  //                     //     AccessoryBloc,
-                                  //                     //     AccessoryState>(
-                                  //                     //     listener:
-                                  //                     //         (context, state) {
-                                  //                     //       if (state.status ==
-                                  //                     //           ListAccessoryStatus
-                                  //                     //               .success) {
-                                  //                     //         listAcc = state
-                                  //                     //             .accessoryList;
-                                  //                     //       }
-                                  //                     //     },
-                                  //                     //     child:
-                                  //                     : BlocListener<
-                                  //                         AccessoryBloc,
-                                  //                         AccessoryState>(
-                                  //                         listener:
-                                  //                             (context, state) {
-                                  //                           if (state.status ==
-                                  //                               ListAccessoryStatus
-                                  //                                   .success) {
-                                  //                             listAcc = state
-                                  //                                 .accessoryList;
-                                  //                           }
-                                  //                           ;
-                                  //                         },
-                                  //                         child:
-                                  //                             TypeAheadFormField(
-                                  //                           textFieldConfiguration: TextFieldConfiguration(
-                                  //                               controller: this
-                                  //                                   ._typeAheadController,
-                                  //                               decoration:
-                                  //                                   InputDecoration(
-                                  //                                       labelText:
-                                  //                                           'Nhập tên phụ tùng cần tìm')),
-                                  //                           suggestionsCallback: (pattern) =>
-                                  //                               listAcc.where((element) => element
-                                  //                                   .name
-                                  //                                   .toLowerCase()
-                                  //                                   .contains(
-                                  //                                       pattern
-                                  //                                           .toLowerCase())),
-                                  //                           hideSuggestionsOnKeyboardHide:
-                                  //                               false,
-                                  //                           itemBuilder: (context,
-                                  //                               AccessoryModel
-                                  //                                   suggestion) {
-                                  //                             return ListTile(
-                                  //                               title: Text(
-                                  //                                   suggestion
-                                  //                                       .name),
-                                  //                             );
-                                  //                           },
-                                  //                           noItemsFoundBuilder:
-                                  //                               (context) =>
-                                  //                                   Center(
-                                  //                             child: Text(
-                                  //                                 'No item found'),
-                                  //                           ),
-                                  //                           onSuggestionSelected:
-                                  //                               (suggestion) {
-                                  //                             this
-                                  //                                     ._typeAheadController
-                                  //                                     .text =
-                                  //                                 suggestion
-                                  //                                     .name;
-                                  //                           },
-                                  //                           onSaved: (value) =>
-                                  //                               this._selectAccName =
-                                  //                                   value,
-                                  //                         ),
-                                  //                       ),
-                                  //             // ),
-                                  //           ),
-                                  //           // TextFoTyrmField(
-                                  //           //     maxLines: null,
-                                  //           //     autofocus: false,
-                                  //           //     decoration:
-                                  //           //         InputDecoration(
-                                  //           //       prefixIcon: Icon(
-                                  //           //           Icons.search),
-                                  //           //       filled: true,
-                                  //           //       fillColor:
-                                  //           //           Colors.white,
-                                  //           //       hintStyle: TextStyle(
-                                  //           //           color: Colors
-                                  //           //               .black54),
-                                  //           //       hintText:
-                                  //           //           'Nhập tên phụ tùng',
-                                  //           //       contentPadding:
-                                  //           //           EdgeInsets
-                                  //           //               .fromLTRB(
-                                  //           //                   20,
-                                  //           //                   10,
-                                  //           //                   20,
-                                  //           //                   10),
-                                  //           //       border: OutlineInputBorder(
-                                  //           //           borderRadius:
-                                  //           //               BorderRadius
-                                  //           //                   .circular(
-                                  //           //                       5)),
-                                  //           //     ),
-                                  //           //     onChanged: (event) {
-                                  //           //       _accessoryBloc.add(
-                                  //           //           DoAccessoryDetailEvent(
-                                  //           //               name:
-                                  //           //                   event));
-                                  //           //     },
-                                  //           //     textInputAction:
-                                  //           //         TextInputAction
-                                  //           //             .search,
-                                  //           //   ),
-                                  //         ),
-                                  //         //     ListView(
-                                  //         //   shrinkWrap: true,
-                                  //         //   children: state.processDetail
-                                  //         //       .map((service) {
-                                  //         //     return ListTile(
-                                  //         //       title: Text(service
-                                  //         //           .orderDetails[0].name),
-                                  //         //     );
-                                  //         //   }).toList(),
-                                  //         // ),
-                                  //       );
-                                  //     },
-                                  //   ).toList(),
-                                  // ),
-                                ),
-                                const Divider(
-                                  color: Colors.black87,
-                                  height: 20,
-                                  thickness: 1,
-                                  indent: 10,
-                                  endIndent: 10,
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+              return Padding(
+                padding: const EdgeInsets.all(12.0),
+                // child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Center(
+                      child: FittedBox(
+                        child: Row(
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width * 1,
+                              height: MediaQuery.of(context).size.height * 0.5,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(color: Colors.black26),
+                                  borderRadius: BorderRadius.circular(5)),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 10),
+                              child: SingleChildScrollView(
+                                child: Column(
                                   children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.45,
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                            primary: Colors.blue),
-                                        child: Text('Lưu',
-                                            style:
-                                                TextStyle(color: Colors.white)),
-                                        onPressed: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      AssignOrderReviewUi(
-                                                        userId: widget.orderId,
-                                                      )));
-                                        },
+                                    Text(
+                                      'Cập nhật thông tin dịch vụ',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    Center(
+                                      child: Column(
+                                        children: [
+                                          for (int i = 0;
+                                              i <
+                                                  state.processDetail[0]
+                                                      .orderDetails.length;
+                                              i++)
+                                            Card(
+                                              child: Column(children: [
+                                                ExpansionTile(
+                                                  title: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(state
+                                                          .processDetail[0]
+                                                          .orderDetails[i]
+                                                          .name),
+                                                      Text(
+                                                          '${state.processDetail[0].orderDetails[i].price}'),
+                                                    ],
+                                                  ),
+                                                  children: [
+                                                    Container(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 10,
+                                                              horizontal: 10),
+                                                      child:
+                                                          // state
+                                                          //             .processDetail[0]
+                                                          //             .orderDetails[0]
+                                                          //             .accessoryId ==
+                                                          //         null ||
+                                                          // isHasData == true
+                                                          //     ? Row(
+                                                          //         mainAxisAlignment:
+                                                          //             MainAxisAlignment
+                                                          //                 .spaceEvenly,
+                                                          //         children: [
+                                                          //           Text(
+                                                          //               state
+                                                          //                   .processDetail[
+                                                          //                       0]
+                                                          //                   .orderDetails[
+                                                          //                       0]
+                                                          //                   .name,
+                                                          //               style: TextStyle(
+                                                          //                   fontSize:
+                                                          //                       16)),
+                                                          //           ElevatedButton(
+                                                          //               style:
+                                                          //                   ElevatedButton
+                                                          //                       .styleFrom(
+                                                          //                 primary: Colors
+                                                          //                     .white,
+                                                          //                 shadowColor:
+                                                          //                     Colors
+                                                          //                         .white,
+                                                          //               ),
+                                                          //               onPressed: () {
+                                                          //                 setState(() {
+                                                          //                   isHasData =
+                                                          //                       false;
+                                                          //                 });
+                                                          //               },
+                                                          //               child: Icon(
+                                                          //                 Icons.edit,
+                                                          //                 color: AppTheme
+                                                          //                     .colors
+                                                          //                     .blue,
+                                                          //               ))
+                                                          //         ],
+                                                          //       )
+                                                          //     :
+                                                          BlocBuilder<
+                                                              AccessoryBloc,
+                                                              AccessoryState>(
+                                                        // ignore: missing_return
+                                                        builder:
+                                                            // ignore: missing_return
+                                                            (context,
+                                                                accstate) {
+                                                          if (accstate.status ==
+                                                              ListAccessoryStatus
+                                                                  .init) {
+                                                            return CircularProgressIndicator();
+                                                          } else if (accstate
+                                                                  .status ==
+                                                              ListAccessoryStatus
+                                                                  .loading) {
+                                                            return CircularProgressIndicator();
+                                                          } else if (accstate
+                                                                  .status ==
+                                                              ListAccessoryStatus
+                                                                  .success) {
+                                                            return Column(
+                                                              children: [
+                                                                TypeAheadFormField(
+                                                                  textFieldConfiguration: TextFieldConfiguration(
+                                                                      controller:
+                                                                          this
+                                                                              ._typeAheadController,
+                                                                      decoration:
+                                                                          InputDecoration(
+                                                                              labelText: 'Nhập tên phụ tùng cần tìm')),
+                                                                  suggestionsCallback: (pattern) => accstate
+                                                                      .accessoryList
+                                                                      .where((element) => element
+                                                                          .name
+                                                                          .toLowerCase()
+                                                                          .contains(
+                                                                              pattern.toLowerCase())),
+                                                                  hideSuggestionsOnKeyboardHide:
+                                                                      false,
+                                                                  itemBuilder: (context,
+                                                                      AccessoryModel
+                                                                          suggestion) {
+                                                                    return ListTile(
+                                                                      title: Text(
+                                                                          suggestion
+                                                                              .name),
+                                                                    );
+                                                                  },
+                                                                  noItemsFoundBuilder:
+                                                                      (context) =>
+                                                                          Center(
+                                                                    child: Text(
+                                                                        'No item found'),
+                                                                  ),
+                                                                  onSuggestionSelected:
+                                                                      (suggestion) {
+                                                                    this._typeAheadController.text =
+                                                                        suggestion
+                                                                            .name;
+                                                                  },
+                                                                  onSaved: (value) =>
+                                                                      this._selectAccName =
+                                                                          value,
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceAround,
+                                                                  children: [
+                                                                    ElevatedButton(
+                                                                        style: ElevatedButton.styleFrom(
+                                                                            primary: AppTheme
+                                                                                .colors.blue),
+                                                                        onPressed:
+                                                                            () {},
+                                                                        child: Text(
+                                                                            'Cập nhật')),
+                                                                    ElevatedButton(
+                                                                        style: ElevatedButton.styleFrom(
+                                                                            primary: Colors
+                                                                                .red),
+                                                                        onPressed:
+                                                                            () {},
+                                                                        child: Text(
+                                                                            'Hủy bỏ')),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            );
+                                                          } else if (accstate
+                                                                  .status ==
+                                                              ListAccessoryStatus
+                                                                  .error) {
+                                                            return ErrorWidget(
+                                                                state.message
+                                                                    .toString());
+                                                          }
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ],
+                                                  // services.map((service) {
+                                                  //   return ListTile(
+                                                  //     title: Text(service.name),
+                                                  //     trailing: Text('${service.price}'),
+                                                  //   );
+                                                  // }).toList(),
+                                                ),
+                                              ]),
+                                            ),
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                          // Container(
-                          //   width: MediaQuery.of(context).size.width * 0.5,
-                          //   height: MediaQuery.of(context).size.height * 1,
-                          //   child: Column(
-                          //     children: [
-                          //       Center(
-                          //         child: ExpansionPanelList(
-                          //           children: state.processDetail[0].orderDetails
-                          //               .map<ExpansionPanelRadio>(
-                          //             (e) {
-                          //               return ExpansionPanelRadio(
-                          //                   value: e.name,
-                          //                   headerBuilder: (context, isExpanded) {
-                          //                     return RadioListTile(
-                          //                       title: Text(e.name),
-                          //                       onChanged: (value) {
-                          //                         setState(() {
-                          //                           _valueSelectedPackageService =
-                          //                               value;
-                          //                           _packageId = value;
-                          //                           _note = null;
-                          //                         });
-                          //                       },
-                          //                       controlAffinity:
-                          //                           ListTileControlAffinity
-                          //                               .leading,
-                          //                       groupValue:
-                          //                           _valueSelectedPackageService,
-                          //                       value: e.id,
-                          //                     );
-                          //                   },
-                          //                   body: SingleChildScrollView(
-                          //                     child: ListView(
-                          //                       shrinkWrap: true,
-                          //                       children: state
-                          //                           .processDetail[0].orderDetails
-                          //                           .map((service) {
-                          //                         return ListTile(
-                          //                           title: Text(service.name),
-                          //                         );
-                          //                       }).toList(),
-                          //                     ),
-                          //                   ));
-                          //               // );
-                          //             },
-                          //           ).toList(),
-                          //         ),
-                          //       ),
-                          //       const Divider(
-                          //         color: Colors.black87,
-                          //         height: 20,
-                          //         thickness: 1,
-                          //         indent: 10,
-                          //         endIndent: 10,
-                          //       ),
-                          //       SizedBox(
-                          //         height: 20,
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
+                    const Divider(
+                      color: Colors.black87,
+                      height: 20,
+                      thickness: 1,
+                      indent: 10,
+                      endIndent: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.45,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                primary: AppTheme.colors.blue),
+                            child: Text('Hoàn tất',
+                                style: TextStyle(color: Colors.white)),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              // Navigator.of(context).push(MaterialPageRoute(
+                              //     builder: (_) => AssignOrderReviewUi(
+                              //           userId: widget.orderId,
+                              //         )));
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
 
-                  // ),
-                  // ),
-                  // ),
-                );
-              } else if (state.detailStatus == ProcessDetailStatus.error) {
-                return ErrorWidget(state.message.toString());
-              }
-            },
-          ),
-          // ),
-          // ),
+                // ),
+                // ),
+                // ),
+              );
+            } else if (state.detailStatus == ProcessDetailStatus.error) {
+              return ErrorWidget(state.message.toString());
+            }
+          },
         ),
+        // ),
+        // ),
       ),
     );
   }
@@ -589,5 +372,4 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
   //   return list;
   // }
 
-  onSuggestionSelected() {}
 }

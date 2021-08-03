@@ -33,6 +33,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
   List<StaffModel> selectbackvalue = [];
   bool _selectStaff = false;
   AssignorderCubit assignCubit = AssignorderCubit();
+  List selectCrewName = [];
 
   @override
   void initState() {
@@ -543,6 +544,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                                       .assignDetail[
                                                                           0]
                                                                       .id,
+                                                                  selectCrewName:
+                                                                      selectCrewName,
                                                                 ),
                                                               )));
                                                 },
@@ -584,7 +587,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
 
   // ======================
 
-  Future showInformationDialog(BuildContext context, List stafflist) async {
+  Future showInformationDialog(
+      BuildContext context, List<StaffModel> stafflist) async {
     return showDialog(
         context: context,
         builder: (context) {
@@ -620,6 +624,10 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                             AssignorderCubit>(
                                                         context)
                                                     .addItem(stafflist[index]);
+                                                selectCrewName.add(
+                                                    stafflist[index].username);
+                                                print('select crew name 1');
+                                                print(selectCrewName);
                                               });
                                             } else {
                                               setState(() {
@@ -628,6 +636,10 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                         context)
                                                     .removeItem(
                                                         stafflist[index]);
+                                                selectCrewName.remove(
+                                                    stafflist[index].username);
+                                                print('select crew name 2');
+                                                print(selectCrewName);
                                               });
                                             }
                                           },
