@@ -322,11 +322,13 @@ class ManagerRepository {
   }
 
   updateCrewByName(String id, List selectName) async {
+    print('lololo');
+    print(selectName);
     var body = {
       "orderId": '$id',
       "memberUsernameList": selectName,
     };
-    var res = await http.put(
+    var res = await http.post(
       Uri.parse("https://carservicesystem.azurewebsites.net/api/crews"),
       headers: headers,
       body: json.encode(body),

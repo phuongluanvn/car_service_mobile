@@ -34,6 +34,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
   String _username;
 
   @override
+  // ignore: must_call_super
   void initState() {
     _getStringFromSharedPref();
     createCarBloc = BlocProvider.of<CreateCarBloc>(context);
@@ -142,12 +143,12 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
       controller: licensePlateNumber,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.departure_board_sharp),
+        prefixIcon: Icon(Icons.payment),
         filled: true,
         fillColor: Colors.white,
-        hintStyle: TextStyle(color: Colors.black),
+        hintStyle: TextStyle(fontWeight: FontWeight.w600),
         hintText: 'Biển số xe',
-        contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+        // contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         // border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
@@ -165,11 +166,10 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
     }
 
     final createCarButton = Padding(
-      padding: EdgeInsets.symmetric(vertical: 16),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
+      padding: EdgeInsets.only(left: 90, right: 90),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: AppTheme.colors.blue, fixedSize: Size(12, 10)),
         onPressed: () {
           print(_image.path);
           print(_image);
@@ -182,8 +182,6 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
             licensePlateNumber: licensePlateNumber.text,
           ));
         },
-        padding: EdgeInsets.all(12),
-        color: Colors.lightBlueAccent,
         child: Text(
           'Thêm xe',
           style: TextStyle(color: Colors.white),
@@ -240,7 +238,11 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                             color: Colors.black,
                                             fontSize: 16,
                                           ),
-                                          hint: Text('Chọn hãng xe'),
+                                          hint: Text(
+                                            'Chọn hãng xe',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600),
+                                          ),
                                           items: [],
                                         ),
                                       ),
@@ -270,7 +272,9 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                             color: Colors.black,
                                             fontSize: 16,
                                           ),
-                                          hint: Text('Chọn hãng xe'),
+                                          hint: Text('Chọn hãng xe',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600)),
                                           items: [],
                                         ),
                                       ),
@@ -300,7 +304,9 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                             color: Colors.black,
                                             fontSize: 16,
                                           ),
-                                          hint: Text('Chọn hãng xe'),
+                                          hint: Text('Chọn hãng xe',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold)),
                                           items: manufacturerState
                                               .manufacturerLists
                                               .map((valueManu) {
@@ -339,10 +345,12 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                     ),
                     Visibility(
                         // visible: _visible,
+
                         child: Container(child:
                             BlocBuilder<ManufacturerBloc, ManufacturerState>(
                                 // ignore: missing_return
                                 builder: (builder, modelState) {
+                      print(modelState);
                       if (modelState.modelStatus ==
                           ModelOfManufacturerStatus.init) {
                         return Container(
@@ -360,7 +368,9 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                       color: Colors.black,
                                       fontSize: 16,
                                     ),
-                                    hint: Text('Chọn mẫu xe'),
+                                    hint: Text('Chọn mẫu xe',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600)),
                                     items: [],
                                   ),
                                 ),
@@ -385,7 +395,9 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                       color: Colors.black,
                                       fontSize: 16,
                                     ),
-                                    hint: Text('Chọn mẫu xe'),
+                                    hint: Text('Chọn mẫu xe',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600)),
                                     items: [],
                                   ),
                                 ),
@@ -411,14 +423,18 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                       color: Colors.black,
                                       fontSize: 16,
                                     ),
-                                    hint: modelState.modelOfManu == []
-                                        ? Text('Chọn mẫu xe')
-                                        : Text('Không có mẫu xe cho hãng này'),
+                                    hint: modelState.modelOfManu != []
+                                        ? Text('Chọn mẫu xe',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600))
+                                        : Text('Không có mẫu xe cho hãng này',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600)),
                                     items:
                                         modelState.modelOfManu.map((valueItem) {
                                       return DropdownMenuItem<String>(
-                                        child: Text(valueItem),
-                                        value: valueItem,
+                                        child: Text(valueItem.name),
+                                        value: valueItem.name,
                                       );
                                     }).toList(),
                                     onChanged: (newValue) {
@@ -435,38 +451,71 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                             ),
                           ]),
                         );
+                      } else {
+                        return Text('');
                       }
                     }))),
                     SizedBox(
-                      height: 20,
+                      height: 30,
                     ),
                     licensePlateNumberText,
                     SizedBox(
-                      height: 20,
+                      height: 30,
                     ),
-                    Center(
-                      child: GestureDetector(
-                        child: Container(
-                          color: Colors.white24,
-                          height: 150,
-                          width: 300,
-                          child: _image != null
-                              ? Image.file(
-                                  _image,
-                                  fit: BoxFit.fill,
-                                )
-                              : Icon(Icons.add_a_photo),
-                          alignment: Alignment.center,
+
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white60,
+                            border: Border.all(color: Colors.black26),
+                            borderRadius: BorderRadius.circular(5)),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Hình ảnh xe (nếu có)',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Center(
+                              child: GestureDetector(
+                                child: Container(
+                                  color: Colors.white,
+                                  height: 150,
+                                  width: 300,
+                                  child: _image != null
+                                      ? Image.file(
+                                          _image,
+                                          fit: BoxFit.fill,
+                                        )
+                                      : Icon(Icons.add_a_photo),
+                                  alignment: Alignment.center,
+                                ),
+                                onTap: () {
+                                  _showPicker(context);
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                        onTap: () {
-                          _showPicker(context);
-                        },
                       ),
                     ),
-                    createCarButton,
+
                     SizedBox(
-                      height: 20,
+                      height: 30,
                     ),
+                    createCarButton,
                   ],
                 ),
               ),

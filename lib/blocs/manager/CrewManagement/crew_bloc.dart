@@ -18,6 +18,7 @@ class CrewBloc extends Bloc<CrewEvent, CrewState> {
     if (event is UpdateCrewToListEvent) {
       yield state.copyWith(updateStatus: DoUpdateStatus.loading);
       try {
+        // print(event.listName);
         var data = await _repo.updateCrewByName(event.id, event.listName);
         if (data != null) {
           print(data);

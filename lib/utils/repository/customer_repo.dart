@@ -72,6 +72,32 @@ class CustomerRepository {
     }
   }
 
+  getVehicleDetail(String vehicleId) async {
+    var res = await http.get(
+      Uri.parse(
+          'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=' +
+              vehicleId),
+      headers: headers,
+    );
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      try {
+        if (data != null) {
+          List<VehicleModel> listdata = [];
+          data.forEach((element) {
+            Map<String, dynamic> map = element;
+            listdata.add(VehicleModel.fromJson(map));
+          });
+          return listdata;
+        } else {
+          print('No data');
+        }
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+  }
+
   getCarListOfCustomer(String username) async {
     String message = '';
     List<VehicleModel> vehicleLists = [];
@@ -220,11 +246,11 @@ class CustomerRepository {
     }
   }
 
-  Future<List<ManufacturerModel>> getManufacturerList() async {
+  getManufacturerList() async {
     List<ManufacturerModel> manufacturerLists = [];
 
     var res = await http.get(
-      Uri.parse(BASE_URL + "Manufacturers"),
+      Uri.parse(BASE_URL + "manufacturers"),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -237,27 +263,29 @@ class CustomerRepository {
         return manufacturerLists;
       } else {
         print('No manufacturer data');
-        return null;
+        return res.body;
       }
     }
   }
 
-  Future<List<String>> getListModelOfManufacturer(String namuName) async {
-    List<String> modelOfManufacturer = [];
+  getListModelOfManufacturer(String namuName) async {
+    List<VehicleModels> modelOfManufacturer = [];
     var res = await http.get(
-      Uri.parse(BASE_URL + "Manufacturers/" + namuName),
+      Uri.parse(BASE_URL + "manufacturers/" + namuName),
       headers: headers,
     );
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
+      print(data);
       if (data != null) {
         data['vehicleModels']
-            .map((order) => modelOfManufacturer.add((order)))
+            .map((order) =>
+                modelOfManufacturer.add((VehicleModels.fromJson(order))))
             .toList();
         return modelOfManufacturer;
       } else {
         print('No manufacturer data');
-        return null;
+        return res.body;
       }
     }
   }

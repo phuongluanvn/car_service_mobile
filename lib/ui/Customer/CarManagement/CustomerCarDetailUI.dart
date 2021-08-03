@@ -19,6 +19,8 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
     super.initState();
     BlocProvider.of<CustomerCarBloc>(context)
         .add(DoCarDetailEvent(vehicleId: widget.id));
+    print(widget.id);
+
   }
 
   Image image;
@@ -229,10 +231,12 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                             },
                           ),
                         )
+                     
                       ],
                     ),
                   ),
                 );
+             
               } else
                 return Center(child: Text('Empty'));
             } else if (state.detailStatus == CustomerCarDetailStatus.error) {

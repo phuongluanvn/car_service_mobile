@@ -1,5 +1,4 @@
 import 'package:car_service/utils/model/ManufacturerModel.dart';
-import 'package:car_service/utils/model/ServiceModel.dart';
 import 'package:equatable/equatable.dart';
 
 enum ManufacturerStatus {
@@ -20,7 +19,7 @@ class ManufacturerState extends Equatable {
   final ManufacturerStatus status;
   final ModelOfManufacturerStatus modelStatus;
   final List<ManufacturerModel> manufacturerLists;
-  final List<String> modelOfManu;
+  final List<VehicleModels> modelOfManu;
   final String message;
   const ManufacturerState({
     this.status: ManufacturerStatus.init,
@@ -34,7 +33,7 @@ class ManufacturerState extends Equatable {
     ManufacturerStatus status,
     ModelOfManufacturerStatus modelStatus,
     List<ManufacturerModel> manufacturerLists,
-    List<String> modelOfManu,
+    List<VehicleModels> modelOfManu,
     String message,
   }) =>
       ManufacturerState(

@@ -500,6 +500,10 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                                                 Colors.white)),
                                                                     onPressed:
                                                                         () {
+                                                                          print(state
+                                                                              .assignDetail[
+                                                                                  0]
+                                                                              .id);
                                                                       crewBloc.add(UpdateCrewToListEvent(
                                                                           id: state
                                                                               .assignDetail[
@@ -507,17 +511,18 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                                               .id,
                                                                           listName:
                                                                               widget.selectCrewName));
-                                                                      updateStatusBloc.add(UpdateStatusStartAndWorkingButtonPressed(
-                                                                          id: state
-                                                                              .assignDetail[
-                                                                                  0]
-                                                                              .id,
-                                                                          listData: assignStaffstate
-                                                                              .listStaff,
-                                                                          status:
-                                                                              processingStatus,
-                                                                          workingStatus:
-                                                                              workingStatus));
+                                                                      // updateStatusBloc.add(UpdateStatusStartAndWorkingButtonPressed(
+                                                                      //     id: state
+                                                                      //         .assignDetail[
+                                                                      //             0]
+                                                                      //         .id,
+                                                                      //     listData: assignStaffstate
+                                                                      //         .listStaff,
+                                                                      //     status:
+                                                                      //         processingStatus,
+                                                                      //     workingStatus:
+                                                                      //         workingStatus)
+                                                                      //         );
                                                                       // updateStatusBloc.add(UpdateStatusWorkingButtonPress(
                                                                       //     listdata: assignStaffstate
                                                                       //         .listStaff,
@@ -530,9 +535,9 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                                       //         .id,
                                                                       //     status:
                                                                       //         processingStatus));
-                                                                      Navigator.pushNamed(
-                                                                          context,
-                                                                          '/manager');
+                                                                      // Navigator.pushNamed(
+                                                                      //     context,
+                                                                      //     '/manager');
                                                                     },
                                                                   ),
                                                                 ),

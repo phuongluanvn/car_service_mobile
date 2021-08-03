@@ -40,24 +40,24 @@ class CustomerCarBloc extends Bloc<CustomerCarEvent, CustomerCarState> {
         );
       }
     } else if (event is DoCarDetailEvent) {
-      // yield state.copyWith(detailStatus: CustomerCarDetailStatus.loading);
-      // try {
-      //   List<VehicleModel> data = await _repo.getVehicleDetail(event.vehicleId);
-      //   if (data != null) {
-      //     yield state.copyWith(
-      //       detailStatus: CustomerCarDetailStatus.success,
-      //       vehicleDetail: data,
-      //     );
-      //   } else {
-      //     yield state.copyWith(
-      //       detailStatus: CustomerCarDetailStatus.error,
-      //       message: 'Error load car detail - customer car bloc',
-      //     );
-      //   }
-      // } catch (e) {
-      //   yield state.copyWith(
-      //       detailStatus: CustomerCarDetailStatus.error, message: e.toString());
-      // }
+      yield state.copyWith(detailStatus: CustomerCarDetailStatus.loading);
+      try {
+        List<VehicleModel> data = await _repo.getVehicleDetail(event.vehicleId);
+        if (data != null) {
+          yield state.copyWith(
+            detailStatus: CustomerCarDetailStatus.success,
+            vehicleDetail: data,
+          );
+        } else {
+          yield state.copyWith(
+            detailStatus: CustomerCarDetailStatus.error,
+            message: 'Error load car detail - customer car bloc',
+          );
+        }
+      } catch (e) {
+        yield state.copyWith(
+            detailStatus: CustomerCarDetailStatus.error, message: e.toString());
+      }
     } else if (event is DoCarListWithIdEvent) {
       yield state.copyWith(withIdstatus: CustomerCarWithIdStatus.loading);
       try {

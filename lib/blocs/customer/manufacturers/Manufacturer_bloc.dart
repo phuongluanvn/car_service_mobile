@@ -20,13 +20,11 @@ class ManufacturerBloc extends Bloc<ManufacturerEvent, ManufacturerState> {
           yield state.copyWith(
               manufacturerLists: manufacturerLists,
               status: ManufacturerStatus.loadedManufacturerSuccess);
-          print('manufacturer in bloc');
         } else {
           yield state.copyWith(
             status: ManufacturerStatus.error,
             message: 'Error manufacturer',
           );
-          print('no manufacturer data');
         }
       } catch (e) {
         yield state.copyWith(
@@ -38,7 +36,6 @@ class ManufacturerBloc extends Bloc<ManufacturerEvent, ManufacturerState> {
       yield state.copyWith(modelStatus: ModelOfManufacturerStatus.loading);
       try {
         var data = await _repo.getListModelOfManufacturer(event.manuName);
-        print('Model');
         print(data);
         if (data != null) {
           yield state.copyWith(
