@@ -41,7 +41,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
   String _valueSelectedPackageService;
   bool _valueCheckbox = false;
   CreateBookingBloc _createBookingBloc;
-  int _selectedTimeButton = 0;
+  String _selectedTimeButton;
   File _image;
   List<Asset> images = List<Asset>();
   String _error = 'Selectionner une image';
@@ -99,20 +99,20 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
     return OutlineButton(
       onPressed: () {
         setState(() {
-          _selectedTimeButton = index;
+          _selectedTimeButton = text;
           // print(_selectedDay.day.toString() + text);
         });
       },
       child: Text(
         text,
         style: TextStyle(
-            color: (_selectedTimeButton == index)
+            color: (_selectedTimeButton == text)
                 ? Colors.blueAccent
                 : Colors.blueGrey),
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       borderSide: BorderSide(
-          color: (_selectedTimeButton == index)
+          color: (_selectedTimeButton == text)
               ? Colors.blueAccent
               : Colors.blueGrey),
     );
@@ -262,6 +262,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                           state
                                               .vehicleLists[index].licensePlate,
                                           style: TextStyle(
+                                            fontSize: 15,
                                               color: (_carId ==
                                                       state.vehicleLists[index]
                                                           .id)
@@ -287,7 +288,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                           top: 12,
                                           left: 12,
                                           right: 12,
-                                          bottom: 45),
+                                          bottom: 40),
                                     );
                                   },
                                 );
@@ -697,6 +698,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                         serviceId: _packageId,
                         note: null,
                         timeBooking: _selectedDay.toIso8601String(),
+                        imageUrl: null
                       ));
                     } else if (_packageId == null) {
                       _createBookingBloc.add(CreateBookingButtonPressed(
@@ -704,6 +706,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                         serviceId: null,
                         note: _note,
                         timeBooking: _selectedDay.toIso8601String(),
+                        imageUrl: null
                       ));
                     }
                   },

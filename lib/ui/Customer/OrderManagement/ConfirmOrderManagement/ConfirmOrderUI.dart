@@ -1,6 +1,7 @@
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_event.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/OrderManagement/ConfirmOrderManagement/ConfirmOrderDetailUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CreateOrderManagement/CreateBookingOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderDetailUI.dart';
@@ -28,7 +29,7 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: Center(
         child: BlocBuilder<CustomerOrderBloc, CustomerOrderState>(
           // ignore: missing_return
@@ -39,65 +40,72 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
               return CircularProgressIndicator();
             } else if (state.status == CustomerOrderStatus.loadedOrderSuccess) {
               if (state.orderLists != null && state.orderLists.isNotEmpty)
-                return Column(
-                  children: [
-                    Divider(),
-                    Text(
-                      'Đơn cần xác nhận',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        // color: Colors.white,
+                        border: Border.all(color: Colors.black26),
+                        borderRadius: BorderRadius.circular(5)),
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Đơn cần phản hồi',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: state.orderLists.length,
+                            shrinkWrap: true,
+                            // ignore: missing_return
+                            itemBuilder: (context, index) {
+                              assert(context != null);
+                              if (state.orderLists[index].status ==
+                                  'Đợi phản hồi') {
+                                return Card(
+                                    child: Column(children: [
+                                  ListTile(
+                                    trailing: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.circle,
+                                            color: Colors.orangeAccent,
+                                          ),
+                                          Text(
+                                            state.orderLists[index].status,
+                                            style: TextStyle(
+                                                color: Colors.orangeAccent),
+                                          ),
+                                        ]),
+                                    leading: Image.asset(
+                                        'lib/images/order_small.png'),
+                                    title: Text(state.orderLists[index].vehicle
+                                        .licensePlate),
+                                    subtitle: Text(state.orderLists[index]
+                                        .vehicle.manufacturer),
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (_) =>
+                                                  ConfirmOrderDetailUi(
+                                                      orderId: state
+                                                          .orderLists[index]
+                                                          .id)));
+                                    },
+                                  ),
+                                ]));
+                              }
+                            },
+                          ),
+                          // ),
+                        ),
+                      ],
                     ),
-                    Divider(
-                      thickness: 2,
-                      endIndent: 20,
-                      indent: 20,
-                      color: Colors.black,
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: state.orderLists.length,
-                        shrinkWrap: true,
-                        // ignore: missing_return
-                        itemBuilder: (context, index) {
-                          assert(context != null);
-                          if (state.orderLists[index].status ==
-                              'Waiting Confirm') {
-                            return Card(
-                                child: Column(children: [
-                              ListTile(
-                                trailing: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.circle,
-                                        color: Colors.orangeAccent,
-                                      ),
-                                      Text(
-                                        state.orderLists[index].status,
-                                        style: TextStyle(
-                                            color: Colors.orangeAccent),
-                                      ),
-                                    ]),
-                                leading:
-                                    Image.asset('lib/images/order_small.png'),
-                                title: Text(state
-                                    .orderLists[index].vehicle.licensePlate),
-                                subtitle: Text(state
-                                    .orderLists[index].vehicle.manufacturer),
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => ConfirmOrderDetailUi(
-                                          orderId:
-                                              state.orderLists[index].id)));
-                                },
-                              ),
-                            ]));
-                          }
-                        },
-                      ),
-                      // ),
-                    ),
-                  ],
+                  ),
                 );
               else
                 return Center(

@@ -16,6 +16,8 @@ class ConfirmOrderDetailUi extends StatefulWidget {
 class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
   @override
   bool _visibleByDenied = false;
+  bool textButton = true;
+
   void initState() {
     super.initState();
     BlocProvider.of<CustomerOrderBloc>(context)
@@ -25,7 +27,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
         title: Text('Chi tiết đơn hàng'),
@@ -52,41 +54,83 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                       cardInforOrder(
                           state.orderDetail[0].status,
                           state.orderDetail[0].bookingTime,
-                          state.orderDetail[0].bookingTime,
-                          state.orderDetail[0].note),
+                          state.orderDetail[0].checkinTime != null
+                              ? state.orderDetail[0].checkinTime
+                              : 'Chưa nhận xe',
+                          state.orderDetail[0].note != null
+                              ? state.orderDetail[0].checkinTime
+                              : 'Không có ghi chú'),
                       cardInforService(
-                          state.orderDetail[0].vehicle.model,
-                          state.orderDetail[0].vehicle.model,
-                          state.orderDetail[0].vehicle.licensePlate),
+                          state.orderDetail[0].orderDetails[0].name,
+                          state.orderDetail[0].orderDetails[0].name,
+                          state.orderDetail[0].orderDetails[0].price
+                              .toString()),
                       cardInforCar(
                           state.orderDetail[0].vehicle.manufacturer,
                           state.orderDetail[0].vehicle.model,
                           state.orderDetail[0].vehicle.licensePlate),
-                      ListTile(
-                        leading: RaisedButton(
-                          child: Text('Đồng ý',
-                              style: TextStyle(color: Colors.white)),
-                          color: Theme.of(context).primaryColor,
-                          onPressed: () {
-                            _visibleByDenied = false;
-                          },
-                        ),
-                        trailing: RaisedButton(
-                          child: Text('Từ chối',
-                              style: TextStyle(color: Colors.white)),
-                          color: Theme.of(context).errorColor,
-                          onPressed: () {
-                            _visibleByDenied = true;
-                            print('object');
-                          },
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Visibility(
+                          visible: _visibleByDenied,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: TextField(
+                              onChanged: (noteValue) {
+                                setState(() {
+                                  // _packageId = null;
+                                  // _note = noteValue;
+                                });
+                              },
+                              maxLines: 3,
+                              decoration: InputDecoration.collapsed(
+                                  hintText: 'Lý do từ chối'),
+                            ),
+                          ),
                         ),
                       ),
-                      Visibility(visible: _visibleByDenied, child: Text('data'))
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.45,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: AppTheme.colors.blue),
+                              child: Text(textButton ? 'Đồng ý' : 'Xác nhận',
+                                  style: TextStyle(color: Colors.white)),
+                              onPressed: () {
+
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.45,
+                            child: ElevatedButton(
+                              style:
+                                  ElevatedButton.styleFrom(primary: Colors.red),
+                              child: Text('Từ chối',
+                                  style: TextStyle(color: Colors.white)),
+                              onPressed: () {
+                                setState(() {
+                                  _visibleByDenied = !_visibleByDenied;
+                                  textButton = !textButton;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 );
               else
-                return Center(child: Text('Empty'));
+                return Center(child: Text('Không có chi tiết đơn hàng'));
             } else if (state.detailStatus == CustomerOrderDetailStatus.error) {
               return ErrorWidget(state.message.toString());
             }

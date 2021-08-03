@@ -1,6 +1,7 @@
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_event.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CreateOrderManagement/CreateBookingOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderDetailUI.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: Center(
         child: BlocBuilder<CustomerOrderBloc, CustomerOrderState>(
           // ignore: missing_return
@@ -65,37 +66,36 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                               Color color;
                               var status = state.orderLists[index].status;
                               switch (status) {
-                                case 'Booked':
+                                case 'Đợi xác nhận':
                                   color = Colors.orange[600];
                                   break;
-                                case 'Accepted':
+                                case 'Đã xác nhận':
                                   color = Colors.green[200];
                                   break;
-                                case 'Checkin':
+                                case 'Đã nhận xe':
                                   color = Colors.blue[400];
                                   break;
-                                case 'Checking':
+                                case 'Kiểm tra':
                                   color = Colors.blue[700];
                                   break;
-                                case 'Waiting confirm':
+                                case 'Đợi phản hồi':
                                   color = Colors.orange;
                                   break;
-                                case 'Confirmed':
+                                case 'Được phản hồi':
                                   color = Colors.teal[300];
                                   break;
-                                case 'Denied':
+                                case 'Từ chối':
                                   color = Colors.red[600];
                                   break;
-                                case 'Working':
+                                case 'Đang xử lý':
                                   color = Colors.green[300];
                                   break;
-                                case 'Complete':
+                                case 'Hoàn thành':
                                   color = Colors.green[600];
                                   break;
-                                case 'Cancle':
+                                case 'Hủy đơn':
                                   color = Colors.red;
                                   break;
-//con nhieu case nua lam sau
                                 default:
                                   color = Colors.black;
                               }

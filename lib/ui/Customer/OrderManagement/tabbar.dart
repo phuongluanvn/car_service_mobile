@@ -29,7 +29,7 @@ class _TabOrderState extends State<TabOrderCustomer> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Order'),
+          title: Text('Đơn hàng'),
           backgroundColor: AppTheme.colors.deepBlue,
           automaticallyImplyLeading: false,
           actions: <Widget>[
@@ -50,7 +50,7 @@ class _TabOrderState extends State<TabOrderCustomer> {
                 text: 'Đơn hàng hiện tại',
               ),
               Tab(
-                text: 'Cần xác nhận',
+                text: 'Đơn đợi phản hồi',
               ),
             ],
           ),

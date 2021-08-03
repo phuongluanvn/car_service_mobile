@@ -40,11 +40,12 @@ class CreateBookingButtonPressed extends CreateBookingEvent {
   final String serviceId;
   final String note;
   final String timeBooking;
+  final String imageUrl;
 
   // final String imageUrl;
 
   CreateBookingButtonPressed(
-      {this.carId, this.serviceId, this.note, this.timeBooking});
+      {this.carId, this.serviceId, this.note, this.timeBooking, this.imageUrl});
 }
 
 // class OpenImagePicker extends CreateBookingEvent {

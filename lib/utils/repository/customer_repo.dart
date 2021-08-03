@@ -25,13 +25,15 @@ class CustomerRepository {
 // }'
 
   createNewBooking(String vehicleId, String packageId, String note,
-      String bookingTime) async {
+      String bookingTime, String imageUrl) async {
     var body = {
-      "vehicleId": '$vehicleId',
+      "vehicleId": vehicleId,
       "packageId": packageId,
-      "note": '$note',
-      "bookingTime": '$bookingTime'
+      "note": note,
+      "bookingTime": bookingTime,
+      "imageurl": imageUrl
     };
+    print(json.encode(body));
     var res = await http.post(
       Uri.parse(BASE_URL + "orders"),
       headers: headers,
@@ -44,7 +46,7 @@ class CustomerRepository {
         return res.body;
       }
     } else {
-      return null;
+      return res.body;
     }
   }
 
