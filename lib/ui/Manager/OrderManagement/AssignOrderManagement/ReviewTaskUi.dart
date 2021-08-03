@@ -15,6 +15,7 @@ import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/PackageServiceModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:car_service/utils/model/accessory_model.dart';
+import 'package:car_service/utils/repository/manager_repo.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,6 +45,9 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
   bool isHasData = false;
   AccessoryBloc _accessoryBloc;
   List selectedDetailsValue;
+  List<AccessoryModel> listAcc;
+  final TextEditingController _typeAheadController = TextEditingController();
+  String _selectAccName;
 
   @override
   void initState() {
@@ -115,190 +119,343 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                         children: [
                           Container(
                             width: MediaQuery.of(context).size.width * 1,
-                            height: MediaQuery.of(context).size.height * 1,
+                            height: MediaQuery.of(context).size.height * 0.9,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(color: Colors.black26),
+                                borderRadius: BorderRadius.circular(5)),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 10),
                             child: Column(
                               children: [
                                 Center(
-                                  child: ExpansionPanelList.radio(
-                                    children: state
-                                        .processDetail[0].orderDetails
-                                        .map<ExpansionPanelRadio>(
-                                      (e) {
-                                        return ExpansionPanelRadio(
-                                            value: e.name,
-                                            headerBuilder:
-                                                (context, isExpanded) {
-                                              return RadioListTile(
-                                                title: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(e.name),
-                                                    Text('${e.price}'),
-                                                  ],
-                                                ),
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    _valueSelectedPackageService =
-                                                        value;
-                                                    _packageId = value;
-                                                    _note = null;
-                                                  });
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: state
+                                        .processDetail[0].orderDetails.length,
+                                    itemBuilder: (context, index) {
+                                      return ExpansionTile(
+                                        title: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(state.processDetail[0]
+                                                .orderDetails[index].name),
+                                            Text(
+                                                '${state.processDetail[0].orderDetails[index].price}'),
+                                          ],
+                                        ),
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10, horizontal: 10),
+                                            child:
+                                                // state
+                                                //             .processDetail[0]
+                                                //             .orderDetails[0]
+                                                //             .accessoryId ==
+                                                //         null ||
+                                                // isHasData == true
+                                                //     ? Row(
+                                                //         mainAxisAlignment:
+                                                //             MainAxisAlignment
+                                                //                 .spaceEvenly,
+                                                //         children: [
+                                                //           Text(
+                                                //               state
+                                                //                   .processDetail[
+                                                //                       0]
+                                                //                   .orderDetails[
+                                                //                       0]
+                                                //                   .name,
+                                                //               style: TextStyle(
+                                                //                   fontSize:
+                                                //                       16)),
+                                                //           ElevatedButton(
+                                                //               style:
+                                                //                   ElevatedButton
+                                                //                       .styleFrom(
+                                                //                 primary: Colors
+                                                //                     .white,
+                                                //                 shadowColor:
+                                                //                     Colors
+                                                //                         .white,
+                                                //               ),
+                                                //               onPressed: () {
+                                                //                 setState(() {
+                                                //                   isHasData =
+                                                //                       false;
+                                                //                 });
+                                                //               },
+                                                //               child: Icon(
+                                                //                 Icons.edit,
+                                                //                 color: AppTheme
+                                                //                     .colors
+                                                //                     .blue,
+                                                //               ))
+                                                //         ],
+                                                //       )
+                                                //     :
+                                                BlocListener<AccessoryBloc,
+                                                    AccessoryState>(
+                                              listener: (context, state) {
+                                                if (state.status ==
+                                                    ListAccessoryStatus
+                                                        .success) {
+                                                  listAcc = state.accessoryList;
+                                                  print(listAcc);
+                                                  print('1111');
+                                                }
+                                                ;
+                                              },
+                                              child: TypeAheadFormField(
+                                                textFieldConfiguration:
+                                                    TextFieldConfiguration(
+                                                        controller: this
+                                                            ._typeAheadController,
+                                                        decoration: InputDecoration(
+                                                            labelText:
+                                                                'Nhập tên phụ tùng cần tìm')),
+                                                suggestionsCallback:
+                                                    (pattern) => listAcc.where(
+                                                        (element) => element
+                                                            .name
+                                                            .toLowerCase()
+                                                            .contains(pattern
+                                                                .toLowerCase())),
+                                                hideSuggestionsOnKeyboardHide:
+                                                    false,
+                                                itemBuilder: (context,
+                                                    AccessoryModel suggestion) {
+                                                  return ListTile(
+                                                    title:
+                                                        Text(suggestion.name),
+                                                  );
                                                 },
-                                                groupValue:
-                                                    _valueSelectedPackageService,
-                                                value: e.id,
-                                              );
-                                            },
-                                            body: SingleChildScrollView(
-                                              child: Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 10,
-                                                      horizontal: 10),
-                                                  child:
-                                                      // state
-                                                      //             .processDetail[0]
-                                                      //             .orderDetails[0]
-                                                      //             .accessoryId ==
-                                                      //         null ||
-                                                      isHasData == true
-                                                          ? Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceEvenly,
-                                                              children: [
-                                                                Text(
-                                                                    state
-                                                                        .processDetail[
-                                                                            0]
-                                                                        .orderDetails[
-                                                                            0]
-                                                                        .name,
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            16)),
-                                                                ElevatedButton(
-                                                                    style: ElevatedButton
-                                                                        .styleFrom(
-                                                                      primary:
-                                                                          Colors
-                                                                              .white,
-                                                                      shadowColor:
-                                                                          Colors
-                                                                              .white,
-                                                                    ),
-                                                                    onPressed:
-                                                                        () {
-                                                                      setState(
-                                                                          () {
-                                                                        isHasData =
-                                                                            false;
-                                                                      });
-                                                                    },
-                                                                    child: Icon(
-                                                                      Icons
-                                                                          .edit,
-                                                                      color: AppTheme
-                                                                          .colors
-                                                                          .blue,
-                                                                    ))
-                                                              ],
-                                                            )
-                                                          : TypeAheadField<
-                                                                  AccessoryModel>(
-                                                              suggestionsCallback:
-                                                                  // ignore: missing_return
-                                                                  (String
-                                                                      query) {
-                                                                List<AccessoryModel>
-                                                                    list;
-                                                                BlocListener<
-                                                                    AccessoryBloc,
-                                                                    AccessoryState>(
-                                                                  listener:
-                                                                      (context,
-                                                                          state) {
-                                                                    if (state
-                                                                            .status ==
-                                                                        ListAccessoryStatus
-                                                                            .success) {
-                                                                      list.addAll(
-                                                                          state
-                                                                              .accessoryList);
-                                                                    }
-                                                                  },
-                                                                );
-
-                                                                return list;
-                                                              },
-                                                              itemBuilder:
-                                                                  (context,
-                                                                      suggestion) {
-                                                                final acc =
-                                                                    suggestion;
-                                                                print(
-                                                                    suggestion);
-                                                                return ListTile(
-                                                                    title: Text(
-                                                                        'acc.name'));
-                                                              },
-                                                              onSuggestionSelected:
-                                                                  onSuggestionSelected())
-                                                  // TextFoTyrmField(
-                                                  //     maxLines: null,
-                                                  //     autofocus: false,
-                                                  //     decoration:
-                                                  //         InputDecoration(
-                                                  //       prefixIcon: Icon(
-                                                  //           Icons.search),
-                                                  //       filled: true,
-                                                  //       fillColor:
-                                                  //           Colors.white,
-                                                  //       hintStyle: TextStyle(
-                                                  //           color: Colors
-                                                  //               .black54),
-                                                  //       hintText:
-                                                  //           'Nhập tên phụ tùng',
-                                                  //       contentPadding:
-                                                  //           EdgeInsets
-                                                  //               .fromLTRB(
-                                                  //                   20,
-                                                  //                   10,
-                                                  //                   20,
-                                                  //                   10),
-                                                  //       border: OutlineInputBorder(
-                                                  //           borderRadius:
-                                                  //               BorderRadius
-                                                  //                   .circular(
-                                                  //                       5)),
-                                                  //     ),
-                                                  //     onChanged: (event) {
-                                                  //       _accessoryBloc.add(
-                                                  //           DoAccessoryDetailEvent(
-                                                  //               name:
-                                                  //                   event));
-                                                  //     },
-                                                  //     textInputAction:
-                                                  //         TextInputAction
-                                                  //             .search,
-                                                  //   ),
-
-                                                  ),
-                                              //     ListView(
-                                              //   shrinkWrap: true,
-                                              //   children: state.processDetail
-                                              //       .map((service) {
-                                              //     return ListTile(
-                                              //       title: Text(service
-                                              //           .orderDetails[0].name),
-                                              //     );
-                                              //   }).toList(),
-                                              // ),
-                                            ));
-                                      },
-                                    ).toList(),
+                                                noItemsFoundBuilder:
+                                                    (context) => Center(
+                                                  child: Text('No item found'),
+                                                ),
+                                                onSuggestionSelected:
+                                                    (suggestion) {
+                                                  this
+                                                      ._typeAheadController
+                                                      .text = suggestion.name;
+                                                },
+                                                onSaved: (value) =>
+                                                    this._selectAccName = value,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                        // services.map((service) {
+                                        //   return ListTile(
+                                        //     title: Text(service.name),
+                                        //     trailing: Text('${service.price}'),
+                                        //   );
+                                        // }).toList(),
+                                      );
+                                    },
                                   ),
+                                  // ExpansionPanelList(
+                                  //   expansionCallback: (int index, bool isExpanded) {
+                                  //     _visible = !isExPanded;
+                                  //   },
+                                  //   children: state
+                                  //       .processDetail[0].orderDetails
+                                  //       .map<ExpansionPanel>(
+                                  //     (e) {
+                                  //       return ExpansionPanel(
+                                  //         headerBuilder: (context, isExpanded) {
+                                  //           return ListTile(
+                                  //             title: Row(
+                                  //               mainAxisAlignment:
+                                  //                   MainAxisAlignment
+                                  //                       .spaceBetween,
+                                  //               children: [
+                                  //                 Text(e.name),
+                                  //                 Text('${e.price}'),
+                                  //               ],
+                                  //             ),
+                                  //           );
+                                  //         },
+                                  //         body: SingleChildScrollView(
+                                  //           child: Container(
+                                  //             padding: EdgeInsets.symmetric(
+                                  //                 vertical: 10, horizontal: 10),
+                                  //             child:
+                                  //                 // state
+                                  //                 //             .processDetail[0]
+                                  //                 //             .orderDetails[0]
+                                  //                 //             .accessoryId ==
+                                  //                 //         null ||
+                                  //                 isHasData == true
+                                  //                     ? Row(
+
+                                  //                         mainAxisAlignment:
+                                  //                             MainAxisAlignment
+                                  //                                 .spaceEvenly,
+                                  //                         children: [
+                                  //                           Text(
+                                  //                               state
+                                  //                                   .processDetail[
+                                  //                                       0]
+                                  //                                   .orderDetails[
+                                  //                                       0]
+                                  //                                   .name,
+                                  //                               style: TextStyle(
+                                  //                                   fontSize:
+                                  //                                       16)),
+                                  //                           ElevatedButton(
+                                  //                               style: ElevatedButton
+                                  //                                   .styleFrom(
+                                  //                                 primary: Colors
+                                  //                                     .white,
+                                  //                                 shadowColor:
+                                  //                                     Colors
+                                  //                                         .white,
+                                  //                               ),
+                                  //                               onPressed: () {
+                                  //                                 setState(() {
+                                  //                                   isHasData =
+                                  //                                       false;
+                                  //                                 });
+                                  //                               },
+                                  //                               child: Icon(
+                                  //                                 Icons.edit,
+                                  //                                 color: AppTheme
+                                  //                                     .colors
+                                  //                                     .blue,
+                                  //                               ))
+                                  //                         ],
+                                  //                       )
+                                  //                     // : BlocListener<
+                                  //                     //     AccessoryBloc,
+                                  //                     //     AccessoryState>(
+                                  //                     //     listener:
+                                  //                     //         (context, state) {
+                                  //                     //       if (state.status ==
+                                  //                     //           ListAccessoryStatus
+                                  //                     //               .success) {
+                                  //                     //         listAcc = state
+                                  //                     //             .accessoryList;
+                                  //                     //       }
+                                  //                     //     },
+                                  //                     //     child:
+                                  //                     : BlocListener<
+                                  //                         AccessoryBloc,
+                                  //                         AccessoryState>(
+                                  //                         listener:
+                                  //                             (context, state) {
+                                  //                           if (state.status ==
+                                  //                               ListAccessoryStatus
+                                  //                                   .success) {
+                                  //                             listAcc = state
+                                  //                                 .accessoryList;
+                                  //                           }
+                                  //                           ;
+                                  //                         },
+                                  //                         child:
+                                  //                             TypeAheadFormField(
+                                  //                           textFieldConfiguration: TextFieldConfiguration(
+                                  //                               controller: this
+                                  //                                   ._typeAheadController,
+                                  //                               decoration:
+                                  //                                   InputDecoration(
+                                  //                                       labelText:
+                                  //                                           'Nhập tên phụ tùng cần tìm')),
+                                  //                           suggestionsCallback: (pattern) =>
+                                  //                               listAcc.where((element) => element
+                                  //                                   .name
+                                  //                                   .toLowerCase()
+                                  //                                   .contains(
+                                  //                                       pattern
+                                  //                                           .toLowerCase())),
+                                  //                           hideSuggestionsOnKeyboardHide:
+                                  //                               false,
+                                  //                           itemBuilder: (context,
+                                  //                               AccessoryModel
+                                  //                                   suggestion) {
+                                  //                             return ListTile(
+                                  //                               title: Text(
+                                  //                                   suggestion
+                                  //                                       .name),
+                                  //                             );
+                                  //                           },
+                                  //                           noItemsFoundBuilder:
+                                  //                               (context) =>
+                                  //                                   Center(
+                                  //                             child: Text(
+                                  //                                 'No item found'),
+                                  //                           ),
+                                  //                           onSuggestionSelected:
+                                  //                               (suggestion) {
+                                  //                             this
+                                  //                                     ._typeAheadController
+                                  //                                     .text =
+                                  //                                 suggestion
+                                  //                                     .name;
+                                  //                           },
+                                  //                           onSaved: (value) =>
+                                  //                               this._selectAccName =
+                                  //                                   value,
+                                  //                         ),
+                                  //                       ),
+                                  //             // ),
+                                  //           ),
+                                  //           // TextFoTyrmField(
+                                  //           //     maxLines: null,
+                                  //           //     autofocus: false,
+                                  //           //     decoration:
+                                  //           //         InputDecoration(
+                                  //           //       prefixIcon: Icon(
+                                  //           //           Icons.search),
+                                  //           //       filled: true,
+                                  //           //       fillColor:
+                                  //           //           Colors.white,
+                                  //           //       hintStyle: TextStyle(
+                                  //           //           color: Colors
+                                  //           //               .black54),
+                                  //           //       hintText:
+                                  //           //           'Nhập tên phụ tùng',
+                                  //           //       contentPadding:
+                                  //           //           EdgeInsets
+                                  //           //               .fromLTRB(
+                                  //           //                   20,
+                                  //           //                   10,
+                                  //           //                   20,
+                                  //           //                   10),
+                                  //           //       border: OutlineInputBorder(
+                                  //           //           borderRadius:
+                                  //           //               BorderRadius
+                                  //           //                   .circular(
+                                  //           //                       5)),
+                                  //           //     ),
+                                  //           //     onChanged: (event) {
+                                  //           //       _accessoryBloc.add(
+                                  //           //           DoAccessoryDetailEvent(
+                                  //           //               name:
+                                  //           //                   event));
+                                  //           //     },
+                                  //           //     textInputAction:
+                                  //           //         TextInputAction
+                                  //           //             .search,
+                                  //           //   ),
+                                  //         ),
+                                  //         //     ListView(
+                                  //         //   shrinkWrap: true,
+                                  //         //   children: state.processDetail
+                                  //         //       .map((service) {
+                                  //         //     return ListTile(
+                                  //         //       title: Text(service
+                                  //         //           .orderDetails[0].name),
+                                  //         //     );
+                                  //         //   }).toList(),
+                                  //         // ),
+                                  //       );
+                                  //     },
+                                  //   ).toList(),
+                                  // ),
                                 ),
                                 const Divider(
                                   color: Colors.black87,
@@ -419,18 +576,18 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
     );
   }
 
-  List<AccessoryModel> getAccessory(String query) {
-    List<AccessoryModel> list;
-    BlocListener<AccessoryBloc, AccessoryState>(
-      listener: (context, state) {
-        if (state.status == ListAccessoryStatus.success) {
-          list.addAll(state.accessoryList);
-        }
-      },
-    );
+  // List<AccessoryModel> getAccessory(String query) {
+  //   List<AccessoryModel> list;
+  //   BlocListener<AccessoryBloc, AccessoryState>(
+  //     listener: (context, state) {
+  //       if (state.status == ListAccessoryStatus.success) {
+  //         list.addAll(state.accessoryList);
+  //       }
+  //     },
+  //   );
 
-    return list;
-  }
+  //   return list;
+  // }
 
   onSuggestionSelected() {}
 }
