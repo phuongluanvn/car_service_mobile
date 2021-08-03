@@ -26,7 +26,7 @@ class CheckoutOrderUi extends StatefulWidget {
 }
 
 class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
-  final String processingStatus = 'Finish';
+  final String processingStatus = 'Hoàn thành';
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visible = false;
   bool checkedValue = false;
@@ -53,7 +53,7 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Processing Orrder Detail'),
+        title: Text('Quản lý đơn hàng'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -184,7 +184,7 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                                         child: ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                               primary: AppTheme.colors.blue),
-                                          child: Text('Finish',
+                                          child: Text('Hoàn tất',
                                               style: TextStyle(
                                                   color: Colors.white)),
                                           onPressed: () {

@@ -6,6 +6,7 @@ import 'package:car_service/blocs/manager/orderHistory/orderHistory_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/OrderHistory/OrderHistoryDetailUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingDetailUi.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -68,7 +69,9 @@ class _OrderHistoryUiState extends State<OrderHistoryUi> {
                         leading: Image.asset('lib/images/order_small.png'),
                         title:
                             Text(state.historyList[index].vehicle.licensePlate),
-                        subtitle: Text(state.historyList[index].bookingTime),
+                        subtitle: Text(
+                          _convertDate(state.historyList[index].createdTime),
+                        ),
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (_) => OrderHistoryDetailUi(
@@ -126,5 +129,9 @@ class _OrderHistoryUiState extends State<OrderHistoryUi> {
         ),
       ),
     );
+  }
+
+  _convertDate(dateInput) {
+    return formatDate(DateTime.parse(dateInput), [dd, '-', mm, '-', yyyy]);
   }
 }

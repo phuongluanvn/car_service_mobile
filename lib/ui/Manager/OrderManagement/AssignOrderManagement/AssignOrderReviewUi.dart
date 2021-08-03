@@ -32,7 +32,7 @@ class AssignOrderReviewUi extends StatefulWidget {
 }
 
 class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
-  final String processingStatus = 'Processing';
+  final String processingStatus = 'Đang xử lí';
   final String workingStatus = 'working';
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visible = false;
@@ -105,7 +105,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                     width:
                                         MediaQuery.of(context).size.width * 0.2,
                                     child: Text(
-                                      'Fullname:',
+                                      'Họ tên:',
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                   ),
@@ -147,7 +147,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                     width:
                                         MediaQuery.of(context).size.width * 0.3,
                                     child: Text(
-                                      'Booking Time:',
+                                      'Thời gian nhận xe:',
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                   ),
@@ -160,26 +160,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                 ],
                               ),
                               Container(height: 16),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.baseline,
-                                textBaseline: TextBaseline.alphabetic,
-                                children: [
-                                  Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.2,
-                                    child: Text(
-                                      'Status:',
-                                      style: TextStyle(fontSize: 16.0),
-                                    ),
-                                  ),
-                                  Container(
-                                    child: Text(
-                                      state.assignDetail[0].status,
-                                      style: TextStyle(fontSize: 15.0),
-                                    ),
-                                  ),
-                                ],
-                              ),
+
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 20, horizontal: 5),
@@ -319,7 +300,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                           primary: AppTheme.colors.blue),
-                                      child: Text('Review Task',
+                                      child: Text('Dịch vụ',
                                           style:
                                               TextStyle(color: Colors.white)),
                                       onPressed: () {
@@ -338,7 +319,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                           primary: AppTheme.colors.blue),
-                                      child: Text('Send Confirm',
+                                      child: Text('Gửi xác nhận',
                                           style:
                                               TextStyle(color: Colors.white)),
                                       onPressed: () {
@@ -460,6 +441,9 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                                   );
                                                                 })),
                                                         SizedBox(
+                                                          height: 20,
+                                                        ),
+                                                        SizedBox(
                                                           width: MediaQuery.of(
                                                                       context)
                                                                   .size
@@ -494,16 +478,16 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                                             .colors
                                                                             .blue),
                                                                     child: Text(
-                                                                        'Start Process',
+                                                                        'Bắt đầu',
                                                                         style: TextStyle(
                                                                             color:
                                                                                 Colors.white)),
                                                                     onPressed:
                                                                         () {
-                                                                          print(state
-                                                                              .assignDetail[
-                                                                                  0]
-                                                                              .id);
+                                                                      print(state
+                                                                          .assignDetail[
+                                                                              0]
+                                                                          .id);
                                                                       crewBloc.add(UpdateCrewToListEvent(
                                                                           id: state
                                                                               .assignDetail[
@@ -511,33 +495,21 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                                               .id,
                                                                           listName:
                                                                               widget.selectCrewName));
-                                                                      // updateStatusBloc.add(UpdateStatusStartAndWorkingButtonPressed(
-                                                                      //     id: state
-                                                                      //         .assignDetail[
-                                                                      //             0]
-                                                                      //         .id,
-                                                                      //     listData: assignStaffstate
-                                                                      //         .listStaff,
-                                                                      //     status:
-                                                                      //         processingStatus,
-                                                                      //     workingStatus:
-                                                                      //         workingStatus)
-                                                                      //         );
-                                                                      // updateStatusBloc.add(UpdateStatusWorkingButtonPress(
-                                                                      //     listdata: assignStaffstate
-                                                                      //         .listStaff,
-                                                                      //     status:
-                                                                      //         processingStatus));
-                                                                      // updateStatusBloc.add(UpdateStatusStartButtonPressed(
-                                                                      //     id: state
-                                                                      //         .assignDetail[
-                                                                      //             0]
-                                                                      //         .id,
-                                                                      //     status:
-                                                                      //         processingStatus));
-                                                                      // Navigator.pushNamed(
-                                                                      //     context,
-                                                                      //     '/manager');
+                                                                      updateStatusBloc.add(UpdateStatusStartAndWorkingButtonPressed(
+                                                                          id: state
+                                                                              .assignDetail[
+                                                                                  0]
+                                                                              .id,
+                                                                          listData: assignStaffstate
+                                                                              .listStaff,
+                                                                          status:
+                                                                              processingStatus,
+                                                                          workingStatus:
+                                                                              workingStatus));
+
+                                                                      Navigator.pushNamed(
+                                                                          context,
+                                                                          '/manager');
                                                                     },
                                                                   ),
                                                                 ),
@@ -572,9 +544,6 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                 },
                                               ),
                                               // ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
 
                                               Container(height: 10),
                                             ],
@@ -629,8 +598,13 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
+                            Text(
+                              'Chọn nhân viên',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600),
+                            ),
                             Container(
-                              height: MediaQuery.of(context).size.height * 0.7,
+                              height: MediaQuery.of(context).size.height * 0.3,
                               width: MediaQuery.of(context).size.width * 0.7,
                               child: BlocBuilder<AssignorderCubit,
                                   AssignorderCubitState>(
@@ -670,7 +644,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                             }
                                           },
                                           title:
-                                              Text(stafflist[index].username),
+                                              Text(stafflist[index].fullname),
                                         );
                                       });
                                 },

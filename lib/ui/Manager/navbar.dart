@@ -66,7 +66,7 @@ class _NavBarState extends State<NavBar> {
         currentIndex: _selectedIndex,
         selectedItemColor: AppTheme.colors.deepBlue,
         onTap: _onItemTap,
-        selectedFontSize: 12.0,
+        selectedFontSize: 14.0,
         unselectedFontSize: 12.0,
       ),
     );

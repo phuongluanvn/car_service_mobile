@@ -149,6 +149,9 @@ class _StaffDetailUiState extends State<StaffDetailUi> {
                                 ),
                               ],
                             ),
+                            SizedBox(
+                              height: 20,
+                            ),
                             BlocListener<UpdateStatusOrderBloc,
                                 UpdateStatusOrderState>(
                               // ignore: missing_return

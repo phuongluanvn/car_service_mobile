@@ -336,7 +336,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                               Center(
                                 child: Container(
                                   height:
-                                      MediaQuery.of(context).size.height * 0.5,
+                                      MediaQuery.of(context).size.height * 0.4,
                                   width:
                                       MediaQuery.of(context).size.width * 0.8,
                                   child: ListView.builder(
@@ -508,7 +508,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                           primary: AppTheme.colors.blue),
-                                      child: Text('Process complete',
+                                      child: Text('Hoàn tất xử lí',
                                           style:
                                               TextStyle(color: Colors.white)),
                                       onPressed: () {
@@ -551,8 +551,8 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
             return AlertDialog(
               content: Form(
                 child: Container(
-                  height: MediaQuery.of(context).size.height * 1,
-                  width: MediaQuery.of(context).size.width * 7,
+                  height: MediaQuery.of(context).size.height * 0.45,
+                  width: MediaQuery.of(context).size.width * 0.7,
                   child: Column(
                     children: stafflist.map((e) {
                       return CheckboxListTile(
@@ -560,7 +560,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
 
                           //font change
                           title: new Text(
-                            e.username,
+                            e.fullname,
                           ),
                           value: selectData.indexOf(e) < 0 ? false : true,
                           secondary: Container(
@@ -590,7 +590,10 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
               ),
               actions: <Widget>[
                 TextButton(
-                  child: Text('Okay'),
+                  child: Text(
+                    'Xác nhận',
+                    style: TextStyle(color: AppTheme.colors.deepBlue),
+                  ),
                   onPressed: () {
                     // Do something like updating SharedPreferences or User Settings etc.
 

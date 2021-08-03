@@ -53,8 +53,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
 
   @override
   Widget build(BuildContext context) {
-    final String checkinStatus = 'Checkin';
-    final String checkingStatus = 'Checking';
+    final String checkinStatus = 'Đã nhận xe';
+    final String checkingStatus = 'Kiểm tra';
     return BlocProvider(
       create: (context) => assignCubit,
       child: Scaffold(
@@ -109,7 +109,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                       width: MediaQuery.of(context).size.width *
                                           0.2,
                                       child: Text(
-                                        'Fullname:',
+                                        'Họ tên:',
                                         style: TextStyle(fontSize: 16.0),
                                       ),
                                     ),
@@ -153,7 +153,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                       width: MediaQuery.of(context).size.width *
                                           0.3,
                                       child: Text(
-                                        'Booking Time:',
+                                        'Thời gian đặt lịch:',
                                         style: TextStyle(fontSize: 16.0),
                                       ),
                                     ),
@@ -166,27 +166,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                   ],
                                 ),
                                 Container(height: 16),
-                                Row(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.baseline,
-                                  textBaseline: TextBaseline.alphabetic,
-                                  children: [
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.2,
-                                      child: Text(
-                                        'Status:',
-                                        style: TextStyle(fontSize: 16.0),
-                                      ),
-                                    ),
-                                    Container(
-                                      child: Text(
-                                        state.assignDetail[0].status,
-                                        style: TextStyle(fontSize: 15.0),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 20, horizontal: 5),
@@ -350,7 +330,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                               style: ElevatedButton.styleFrom(
                                                   primary:
                                                       AppTheme.colors.blue),
-                                              child: Text('Checkin',
+                                              child: Text('Nhận xe',
                                                   style: TextStyle(
                                                       color: Colors.white)),
                                               onPressed: () {
@@ -519,7 +499,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                 style: ElevatedButton.styleFrom(
                                                     primary:
                                                         AppTheme.colors.blue),
-                                                child: Text('Checking',
+                                                child: Text('Kiểm tra xe',
                                                     style: TextStyle(
                                                         color: Colors.white)),
                                                 onPressed: () {
@@ -604,8 +584,13 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
+                            Text(
+                              'Chọn nhân viên',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600),
+                            ),
                             Container(
-                              height: MediaQuery.of(context).size.height * 0.7,
+                              height: MediaQuery.of(context).size.height * 0.5,
                               width: MediaQuery.of(context).size.width * 0.7,
                               child: BlocBuilder<AssignorderCubit,
                                   AssignorderCubitState>(
@@ -644,7 +629,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                             }
                                           },
                                           title:
-                                              Text(stafflist[index].username),
+                                              Text(stafflist[index].fullname),
                                         );
                                       });
                                 },
@@ -691,7 +676,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                 actions: <Widget>[
                   TextButton(
                     child: Text(
-                      'Okay',
+                      'Xác nhận',
                       style: TextStyle(color: AppTheme.colors.blue),
                     ),
                     onPressed: () {

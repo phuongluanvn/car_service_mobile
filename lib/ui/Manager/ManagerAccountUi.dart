@@ -52,7 +52,7 @@ class _ManagerAccountUiState extends State<ManagerAccountUi> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Thông tin cá nhân'),
+        title: Text('Thông tin tài khoản'),
       ),
       backgroundColor: AppTheme.colors.lightblue,
       body: SingleChildScrollView(
@@ -64,7 +64,7 @@ class _ManagerAccountUiState extends State<ManagerAccountUi> {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 40),
                     child: SizedBox(
                       height: 115,
                       width: 115,
@@ -82,77 +82,30 @@ class _ManagerAccountUiState extends State<ManagerAccountUi> {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                        color: AppTheme.colors.white,
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(5)),
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     child: Column(
                       children: <Widget>[
-                        Text(
-                          'Thông tin tài khoản',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
                         SizedBox(
                           height: 10,
                         ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.2,
-                              child: Text(
-                                'Họ tên:',
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                _fullName,
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                            ),
-                          ],
+                        ListTile(
+                          tileColor: Colors.white,
+                          leading: Icon(Icons.person),
+                          title: Text(_fullName),
                         ),
                         Container(height: 16),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.3,
-                              child: Text(
-                                'Số điện thoại:',
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                _phoneNumber,
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                            ),
-                          ],
+                        ListTile(
+                          tileColor: Colors.white,
+                          leading: Icon(Icons.phone),
+                          title: Text(_phoneNumber),
                         ),
                         Container(height: 16),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.2,
-                              child: Text(
-                                'Ngày sinh:',
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                _convertDate(_dateOfBirth),
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                            ),
-                          ],
+                        ListTile(
+                          tileColor: Colors.white,
+                          leading: Icon(Icons.email),
+                          title: Text(_phoneNumber),
                         ),
                       ],
                     ),
@@ -165,7 +118,7 @@ class _ManagerAccountUiState extends State<ManagerAccountUi> {
       ),
     );
   }
-
+ 
   void _logout(BuildContext context) {
     showDialog(
         context: context,

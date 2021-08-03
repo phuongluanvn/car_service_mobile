@@ -1,6 +1,9 @@
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_event.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
+import 'package:car_service/blocs/customer/customerOrder/CreateBooking_bloc.dart';
+import 'package:car_service/blocs/customer/customerOrder/CreateBooking_event.dart';
+import 'package:car_service/blocs/customer/customerOrder/CreateBooking_state.dart';
 import 'package:car_service/blocs/manager/createOrder/createOrder_bloc.dart';
 import 'package:car_service/blocs/manager/createOrder/createOrder_state.dart';
 import 'package:car_service/blocs/manager/createOrder/createOrder_event.dart';
@@ -8,6 +11,7 @@ import 'package:car_service/blocs/packageService/PackageService_bloc.dart';
 import 'package:car_service/blocs/packageService/PackageService_event.dart';
 import 'package:car_service/blocs/packageService/PackageService_state.dart';
 import 'package:car_service/theme/app_theme.dart';
+import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/utils/model/CustomerModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,15 +39,17 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
   bool _valueCheckbox = false;
   CreateOrderBloc _createOrderBloc;
   int _selectedTimeButton = 0;
+  DateTime _focusedDay = DateTime.now();
 
   final Color selectedColor = AppTheme.colors.lightblue;
   final Color unselectedColor = Colors.black;
-
+  CreateBookingBloc _createBookingBloc;
   @override
   void initState() {
     BlocProvider.of<PackageServiceBloc>(context)
         .add(DoPackageServiceListEvent());
     createOrderBloc = BlocProvider.of<CreateOrderBloc>(context);
+    _createBookingBloc = BlocProvider.of<CreateBookingBloc>(context);
     customerCarBloc = BlocProvider.of<CustomerCarBloc>(context);
 
     super.initState();
@@ -59,11 +65,11 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
       maxLines: null,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.email),
+        prefixIcon: Icon(Icons.person),
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black),
-        hintText: 'Tài khoản',
+        hintText: 'Tìm kiếm tài khoản',
         contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
       ),
@@ -76,11 +82,21 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
       textInputAction: TextInputAction.search,
     );
 
-    final createOrderButton = Padding(
-      padding: EdgeInsets.symmetric(vertical: 16),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
+    final createOrderButton =
+        BlocListener<CreateBookingBloc, CreateBookingState>(
+      listener: (context, state) {
+        if (state.status == CreateBookingStatus.createBookingOrderSuccess) {
+          // Navigator.pop(context);
+          Navigator.pop(
+            context,
+            new MaterialPageRoute(builder: (context) => ManagerMain()),
+          );
+        }
+      },
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.blue, // background
+          onPrimary: Colors.white, // foreground
         ),
         onPressed: () {
           if (_carId == null) {
@@ -104,27 +120,22 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                   );
                 });
           } else if (_note == null) {
-            createOrderBloc.add(CreateOrderButtonPressed(
+            _createBookingBloc.add(CreateBookingButtonPressed(
               carId: _carId,
               serviceId: _packageId,
               note: null,
-              timeBooking: _timeCurrenBooking.toIso8601String(),
+              timeBooking: _focusedDay.toIso8601String(),
             ));
           } else if (_packageId == null) {
-            createOrderBloc.add(CreateOrderButtonPressed(
+            _createBookingBloc.add(CreateBookingButtonPressed(
               carId: _carId,
               serviceId: null,
               note: _note,
-              timeBooking: _timeCurrenBooking.toIso8601String(),
+              timeBooking: _focusedDay.toIso8601String(),
             ));
           }
         },
-        padding: EdgeInsets.all(12),
-        color: AppTheme.colors.deepBlue,
-        child: Text(
-          'Tạo đơn hàng',
-          style: TextStyle(color: Colors.white),
-        ),
+        child: Text('Xác nhận'),
       ),
     );
 
@@ -169,30 +180,103 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                 SizedBox(
                                   height: 20,
                                 ),
-                                Row(
-                                  children: [
-                                    Text('Họ Tên:'),
-                                    Text(listload[0].fullname),
-                                  ],
+                                Text(
+                                  'Thông tin khách hàng',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                SizedBox(
+                                  height: 10,
                                 ),
                                 Row(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
+                                  textBaseline: TextBaseline.alphabetic,
                                   children: [
-                                    Text('Email:'),
-                                    Text(listload[0].email),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2,
+                                      child: Text(
+                                        'Họ tên:',
+                                        style: TextStyle(fontSize: 16.0),
+                                      ),
+                                    ),
+                                    Container(
+                                      child: Text(
+                                        listload[0].fullname,
+                                        style: TextStyle(fontSize: 15.0),
+                                      ),
+                                    ),
                                   ],
                                 ),
+                                Container(height: 16),
                                 Row(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
+                                  textBaseline: TextBaseline.alphabetic,
                                   children: [
-                                    Text('SĐT:'),
-                                    Text(listload[0].phoneNumber),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2,
+                                      child: Text(
+                                        'Email:',
+                                        style: TextStyle(fontSize: 16.0),
+                                      ),
+                                    ),
+                                    Container(
+                                      child: Text(
+                                        listload[0].email,
+                                        style: TextStyle(fontSize: 15.0),
+                                      ),
+                                    ),
                                   ],
                                 ),
+                                Container(height: 16),
                                 Row(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
+                                  textBaseline: TextBaseline.alphabetic,
                                   children: [
-                                    Text('Địa chỉ:'),
-                                    Text(listload[0].address),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.3,
+                                      child: Text(
+                                        'Số điện thoại:',
+                                        style: TextStyle(fontSize: 16.0),
+                                      ),
+                                    ),
+                                    Container(
+                                      child: Text(
+                                        listload[0].phoneNumber,
+                                        style: TextStyle(fontSize: 15.0),
+                                      ),
+                                    ),
                                   ],
                                 ),
+                                Container(height: 16),
+                                Row(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
+                                  textBaseline: TextBaseline.alphabetic,
+                                  children: [
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2,
+                                      child: Text(
+                                        'Địa chỉ:',
+                                        style: TextStyle(fontSize: 16.0),
+                                      ),
+                                    ),
+                                    Container(
+                                      child: Text(
+                                        listload[0].address,
+                                        style: TextStyle(fontSize: 15.0),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Container(height: 16),
                                 Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 0, vertical: 25),
@@ -526,9 +610,6 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                                 ),
                                               )),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
                                       ),
                                     ],
                                   ),

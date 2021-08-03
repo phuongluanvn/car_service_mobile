@@ -146,17 +146,17 @@ class ManagerRepository {
 
     var resAccepted = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/orders?status=Accepted"),
+          "https://carservicesystem.azurewebsites.net/api/orders?status=Đã xác nhận"),
       headers: headers,
     );
     var resCheckin = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/orders?status=Checkin"),
+          "https://carservicesystem.azurewebsites.net/api/orders?status=Đã nhận xe"),
       headers: headers,
     );
     var resChecking = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/orders?status=Checking"),
+          "https://carservicesystem.azurewebsites.net/api/orders?status=Kiểm tra"),
       headers: headers,
     );
     if (resAccepted.statusCode == 200 &&
@@ -200,7 +200,7 @@ class ManagerRepository {
 
     var resProcessing = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Processing"),
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Đang xử lí"),
       headers: headers,
     );
     if (resProcessing.statusCode == 200) {
@@ -227,7 +227,7 @@ class ManagerRepository {
     List<OrderDetailModel> orderLists = [];
     var res = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Booked"),
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Đợi xác nhận"),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -385,18 +385,50 @@ class ManagerRepository {
     }
   }
 
+  updateAccIdToOrder(String orderId, String detailId, String svId, String accId,
+      int quantity, int price) async {
+    var body = {
+      "id": '$orderId',
+      "orderDetails": [
+        {
+          "id": '$detailId',
+          "serviceId": '$svId',
+          "accessoryId": '$accId',
+          "quantity": '$quantity',
+          "price": '$price'
+        }
+      ]
+    };
+    var res = await http.put(
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/orders/details"),
+      headers: headers,
+      body: json.encode(body),
+    );
+    if (res.statusCode != null) {
+      print(res.statusCode);
+      if (res.statusCode == 200) {
+        print('repo 200');
+        return res.body;
+      }
+    } else {
+      print('cannot update acc');
+      return res.body;
+    }
+  }
+
   Future<List<OrderDetailModel>> getOrderHistoryList() async {
     List<OrderDetailModel> finishList = [];
     List<OrderDetailModel> cancelList = [];
 
     var resAccepted = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Finish"),
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Hoàn thành"),
       headers: headers,
     );
     var resCheckin = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Cancel"),
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Từ chối"),
       headers: headers,
     );
 

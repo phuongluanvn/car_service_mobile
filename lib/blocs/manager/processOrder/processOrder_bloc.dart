@@ -58,6 +58,29 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
         yield state.copyWith(
             detailStatus: ProcessDetailStatus.error, message: e.toString());
       }
+    } else if (event is UpdateAccesIdToOrder) {
+      yield state.copyWith(updateAccIdStatus: UpdateAccIdStatus.loading);
+      try {
+        var data = await _repo.updateAccIdToOrder(event.orderId, event.detailId,
+            event.serviceId, event.accId, event.quantity, event.price);
+        // String jsonsDataString = data.toString();
+        print('lololo');
+        print(data);
+        // final jsonData = jsonDecode(jsonsDataString);
+        // print(jsonData);
+        if (data != null) {
+          yield state.copyWith(updateAccIdStatus: UpdateAccIdStatus.success);
+          print('AccId updated');
+        } else {
+          yield state.copyWith(
+            updateAccIdStatus: UpdateAccIdStatus.error,
+            message: 'Error',
+          );
+        }
+      } catch (e) {
+        yield state.copyWith(
+            updateAccIdStatus: UpdateAccIdStatus.error, message: e.toString());
+      }
     }
   }
 }

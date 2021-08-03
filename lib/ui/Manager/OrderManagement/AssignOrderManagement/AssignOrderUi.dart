@@ -3,6 +3,7 @@ import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderDetailUi.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -61,7 +62,9 @@ class _AssignOrderUiState extends State<AssignOrderUi> {
                         leading: Image.asset('lib/images/order_small.png'),
                         title:
                             Text(state.assignList[index].vehicle.licensePlate),
-                        subtitle: Text(state.assignList[index].bookingTime),
+                        subtitle: Text(
+                          _convertDate(state.assignList[index].bookingTime),
+                        ),
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (_) => AssignOrderDetailUi(
@@ -89,5 +92,9 @@ class _AssignOrderUiState extends State<AssignOrderUi> {
         ),
       ),
     );
+  }
+
+  _convertDate(dateInput) {
+    return formatDate(DateTime.parse(dateInput), [dd, '-', mm, '-', yyyy]);
   }
 }

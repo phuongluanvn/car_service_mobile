@@ -168,8 +168,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
     final createCarButton = Padding(
       padding: EdgeInsets.only(left: 90, right: 90),
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            primary: AppTheme.colors.blue, fixedSize: Size(12, 10)),
+        style: ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
         onPressed: () {
           print(_image.path);
           print(_image);

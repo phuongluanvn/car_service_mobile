@@ -38,23 +38,20 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
   String holder = '';
   List results = [1, 2, 3, 4, 5];
   List<OrderDetailModel> selectedValue;
-  String _selectedValueDetail;
-  String _valueSelectedPackageService;
-  String _packageId;
-  String _note;
   bool isHasData = false;
   AccessoryBloc _accessoryBloc;
   List selectedDetailsValue;
   List<AccessoryModel> listAcc;
   final TextEditingController _typeAheadController = TextEditingController();
   String _selectAccName;
-
+  ProcessOrderBloc processBloc;
   @override
   void initState() {
     super.initState();
+    processBloc = BlocProvider.of<ProcessOrderBloc>(context);
+    processBloc.add(DoProcessOrderDetailEvent(email: widget.orderId));
     print('Order id is:' + widget.orderId);
-    BlocProvider.of<ProcessOrderBloc>(context)
-        .add(DoProcessOrderDetailEvent(email: widget.orderId));
+
     BlocProvider.of<AccessoryBloc>(context).add(DoListAccessories());
   }
 
@@ -144,56 +141,9 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                                           EdgeInsets.symmetric(
                                                               vertical: 10,
                                                               horizontal: 10),
-                                                      child:
-                                                          // state
-                                                          //             .processDetail[0]
-                                                          //             .orderDetails[0]
-                                                          //             .accessoryId ==
-                                                          //         null ||
-                                                          // isHasData == true
-                                                          //     ? Row(
-                                                          //         mainAxisAlignment:
-                                                          //             MainAxisAlignment
-                                                          //                 .spaceEvenly,
-                                                          //         children: [
-                                                          //           Text(
-                                                          //               state
-                                                          //                   .processDetail[
-                                                          //                       0]
-                                                          //                   .orderDetails[
-                                                          //                       0]
-                                                          //                   .name,
-                                                          //               style: TextStyle(
-                                                          //                   fontSize:
-                                                          //                       16)),
-                                                          //           ElevatedButton(
-                                                          //               style:
-                                                          //                   ElevatedButton
-                                                          //                       .styleFrom(
-                                                          //                 primary: Colors
-                                                          //                     .white,
-                                                          //                 shadowColor:
-                                                          //                     Colors
-                                                          //                         .white,
-                                                          //               ),
-                                                          //               onPressed: () {
-                                                          //                 setState(() {
-                                                          //                   isHasData =
-                                                          //                       false;
-                                                          //                 });
-                                                          //               },
-                                                          //               child: Icon(
-                                                          //                 Icons.edit,
-                                                          //                 color: AppTheme
-                                                          //                     .colors
-                                                          //                     .blue,
-                                                          //               ))
-                                                          //         ],
-                                                          //       )
-                                                          //     :
-                                                          BlocBuilder<
-                                                              AccessoryBloc,
-                                                              AccessoryState>(
+                                                      child: BlocBuilder<
+                                                          AccessoryBloc,
+                                                          AccessoryState>(
                                                         // ignore: missing_return
                                                         builder:
                                                             // ignore: missing_return
@@ -266,7 +216,20 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                                                             primary: AppTheme
                                                                                 .colors.blue),
                                                                         onPressed:
-                                                                            () {},
+                                                                            () {
+                                                                          processBloc
+                                                                              .add(
+                                                                            UpdateAccesIdToOrder(
+                                                                                orderId: widget.orderId,
+                                                                                detailId: state.processDetail[0].orderDetails[i].id,
+                                                                                accId: _typeAheadController.text,
+                                                                                serviceId: state.processDetail[0].orderDetails[i].serviceId,
+                                                                                quantity: 1,
+                                                                                price: state.processDetail[0].orderDetails[i].price),
+                                                                          );
+                                                                          print(
+                                                                              _typeAheadController.text);
+                                                                        },
                                                                         child: Text(
                                                                             'Cập nhật')),
                                                                     ElevatedButton(
