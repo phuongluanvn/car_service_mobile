@@ -333,11 +333,14 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.w600),
                               ),
+                              SizedBox(
+                                height: 15,
+                              ),
                               Center(
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.4,
-                                  width:
+                                child: LimitedBox(
+                                  maxHeight:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                  maxWidth:
                                       MediaQuery.of(context).size.width * 0.8,
                                   child: ListView.builder(
                                     itemCount: state

@@ -170,12 +170,12 @@ class Package {
 class OrderDetails {
   String id;
   String serviceId;
-  Null accessoryId;
+  String accessoryId;
   String name;
   int price;
   bool isIncurred;
   bool isFinished;
-  Null timeFinished;
+  DateTime timeFinished;
 
   OrderDetails(
       {this.id,

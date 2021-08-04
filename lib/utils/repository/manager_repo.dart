@@ -200,7 +200,7 @@ class ManagerRepository {
 
     var resProcessing = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Đang xử lí"),
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Đang tiến hành"),
       headers: headers,
     );
     if (resProcessing.statusCode == 200) {
@@ -394,8 +394,8 @@ class ManagerRepository {
           "id": '$detailId',
           "serviceId": '$svId',
           "accessoryId": '$accId',
-          "quantity": '$quantity',
-          "price": '$price'
+          "quantity": quantity,
+          "price": price
         }
       ]
     };

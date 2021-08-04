@@ -53,10 +53,10 @@ class _TabManagerState extends State<TabManager> {
                 text: 'Chờ duyệt',
               ),
               Tab(
-                text: 'Chờ xử lý',
+                text: 'Chờ xử lí',
               ),
               Tab(
-                text: 'Đang xử lý',
+                text: 'Đang tiến hành',
               )
             ],
           ),

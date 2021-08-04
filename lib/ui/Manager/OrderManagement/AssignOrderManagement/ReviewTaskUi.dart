@@ -43,6 +43,8 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
   List selectedDetailsValue;
   List<AccessoryModel> listAcc;
   final TextEditingController _typeAheadController = TextEditingController();
+  final TextEditingController _typeAheadController2 = TextEditingController();
+  String _accId;
   String _selectAccName;
   ProcessOrderBloc processBloc;
   @override
@@ -83,7 +85,11 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
               return CircularProgressIndicator();
             } else if (state.detailStatus == ProcessDetailStatus.success) {
               selectedValue = List.from(state.processDetail);
-
+              if (state.processDetail[0].orderDetails[0].accessoryId != null) {
+                isHasData = true;
+                _selectAccName =
+                    state.processDetail[0].orderDetails[0].accessoryId;
+              }
               return Padding(
                 padding: const EdgeInsets.all(12.0),
                 // child: SingleChildScrollView(
@@ -164,82 +170,100 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                                                   .success) {
                                                             return Column(
                                                               children: [
-                                                                TypeAheadFormField(
-                                                                  textFieldConfiguration: TextFieldConfiguration(
-                                                                      controller:
-                                                                          this
+                                                                // isHasData
+                                                                //     ? Row(
+                                                                //         children: [
+                                                                //           Text(_selectAccName ??
+                                                                //               'default'),
+                                                                //           ElevatedButton(
+                                                                //               onPressed: () {
+                                                                //                 setState(() {
+                                                                //                   isHasData = false;
+                                                                //                 });
+                                                                //               },
+                                                                //               child: Icon(Icons.edit))
+                                                                //         ],
+                                                                //       )
+                                                                //     :
+                                                                Column(
+                                                                  children: [
+                                                                    TypeAheadFormField(
+                                                                      enabled: isHasData
+                                                                          ? false
+                                                                          : true,
+                                                                      textFieldConfiguration: TextFieldConfiguration(
+                                                                          controller: this
                                                                               ._typeAheadController,
-                                                                      decoration:
-                                                                          InputDecoration(
-                                                                              labelText: 'Nhập tên phụ tùng cần tìm')),
-                                                                  suggestionsCallback: (pattern) => accstate
-                                                                      .accessoryList
-                                                                      .where((element) => element
+                                                                          decoration:
+                                                                              InputDecoration(labelText: isHasData ? state.processDetail[0].orderDetails[i].accessoryId : 'Nhập tên phụ tùng')),
+                                                                      suggestionsCallback: (pattern) => accstate.accessoryList.where((element) => element
                                                                           .name
                                                                           .toLowerCase()
                                                                           .contains(
                                                                               pattern.toLowerCase())),
-                                                                  hideSuggestionsOnKeyboardHide:
-                                                                      false,
-                                                                  itemBuilder: (context,
-                                                                      AccessoryModel
-                                                                          suggestion) {
-                                                                    return ListTile(
-                                                                      title: Text(
-                                                                          suggestion
-                                                                              .name),
-                                                                    );
-                                                                  },
-                                                                  noItemsFoundBuilder:
-                                                                      (context) =>
-                                                                          Center(
-                                                                    child: Text(
-                                                                        'No item found'),
-                                                                  ),
-                                                                  onSuggestionSelected:
-                                                                      (suggestion) {
-                                                                    this._typeAheadController.text =
-                                                                        suggestion
-                                                                            .name;
-                                                                  },
-                                                                  onSaved: (value) =>
-                                                                      this._selectAccName =
-                                                                          value,
-                                                                ),
-                                                                Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceAround,
-                                                                  children: [
-                                                                    ElevatedButton(
-                                                                        style: ElevatedButton.styleFrom(
-                                                                            primary: AppTheme
-                                                                                .colors.blue),
-                                                                        onPressed:
-                                                                            () {
-                                                                          processBloc
-                                                                              .add(
-                                                                            UpdateAccesIdToOrder(
-                                                                                orderId: widget.orderId,
-                                                                                detailId: state.processDetail[0].orderDetails[i].id,
-                                                                                accId: _typeAheadController.text,
-                                                                                serviceId: state.processDetail[0].orderDetails[i].serviceId,
-                                                                                quantity: 1,
-                                                                                price: state.processDetail[0].orderDetails[i].price),
-                                                                          );
-                                                                          print(
-                                                                              _typeAheadController.text);
-                                                                        },
+                                                                      hideSuggestionsOnKeyboardHide:
+                                                                          false,
+                                                                      itemBuilder:
+                                                                          (context,
+                                                                              AccessoryModel suggestion) {
+                                                                        return ListTile(
+                                                                          title:
+                                                                              Text(suggestion.name),
+                                                                        );
+                                                                      },
+                                                                      noItemsFoundBuilder:
+                                                                          (context) =>
+                                                                              Center(
                                                                         child: Text(
-                                                                            'Cập nhật')),
-                                                                    ElevatedButton(
-                                                                        style: ElevatedButton.styleFrom(
-                                                                            primary: Colors
-                                                                                .red),
-                                                                        onPressed:
-                                                                            () {},
-                                                                        child: Text(
-                                                                            'Hủy bỏ')),
+                                                                            'No item found'),
+                                                                      ),
+                                                                      onSuggestionSelected:
+                                                                          (suggestion) {
+                                                                        this._typeAheadController.text =
+                                                                            suggestion.name;
+                                                                        _accId =
+                                                                            suggestion.id;
+                                                                      },
+                                                                      onSaved: (value) =>
+                                                                          this._selectAccName =
+                                                                              value,
+                                                                    ),
+                                                                    Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceAround,
+                                                                      children: [
+                                                                        BlocListener<
+                                                                            ProcessOrderBloc,
+                                                                            ProcessOrderState>(
+                                                                          listener:
+                                                                              (context, pstate) {
+                                                                            if (pstate.updateAccIdStatus ==
+                                                                                UpdateAccIdStatus.success) {
+                                                                              isHasData = true;
+                                                                              setState(() {
+                                                                                _selectAccName = _typeAheadController.text;
+                                                                              });
+                                                                            }
+                                                                            // TODO: implement listener
+                                                                          },
+                                                                          child: ElevatedButton(
+                                                                              style: ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
+                                                                              onPressed: () {
+                                                                                processBloc.add(
+                                                                                  UpdateAccesIdToOrder(orderId: widget.orderId, detailId: state.processDetail[0].orderDetails[i].id, accId: _accId, serviceId: state.processDetail[0].orderDetails[i].serviceId, quantity: 1, price: state.processDetail[0].orderDetails[i].price),
+                                                                                );
+                                                                                print(_accId);
+                                                                              },
+                                                                              child: Text('Cập nhật')),
+                                                                        ),
+                                                                        ElevatedButton(
+                                                                            style:
+                                                                                ElevatedButton.styleFrom(primary: Colors.red),
+                                                                            onPressed: () {},
+                                                                            child: Text('Hủy bỏ')),
+                                                                      ],
+                                                                    ),
                                                                   ],
                                                                 ),
                                                               ],
