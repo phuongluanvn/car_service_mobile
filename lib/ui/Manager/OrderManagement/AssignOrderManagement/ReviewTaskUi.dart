@@ -11,6 +11,7 @@ import 'package:car_service/blocs/packageService/PackageService_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
+import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/ExpansionList.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/PackageServiceModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
@@ -38,7 +39,7 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
   String holder = '';
   List results = [1, 2, 3, 4, 5];
   List<OrderDetailModel> selectedValue;
-  bool isHasData = false;
+  bool isEditTextField = false;
   AccessoryBloc _accessoryBloc;
   List selectedDetailsValue;
   List<AccessoryModel> listAcc;
@@ -76,20 +77,22 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
       ),
       backgroundColor: AppTheme.colors.lightblue,
       body: SingleChildScrollView(
-        child: BlocBuilder<ProcessOrderBloc, ProcessOrderState>(
+        child: BlocConsumer<ProcessOrderBloc, ProcessOrderState>(
           // ignore: missing_return
+          listener: (context, state) {
+            if (state.updateAccIdStatus == UpdateAccIdStatus.success) {
+              processBloc.add(DoProcessOrderDetailEvent(email: widget.orderId));
+            }
+          },
           builder: (context, state) {
-            if (state.detailStatus == ProcessDetailStatus.init) {
+            if (state.detailStatus == ProcessDetailStatus.init ||
+                state.detailStatus == ProcessDetailStatus.loading ||
+                state.updateAccIdStatus == UpdateAccIdStatus.loading) {
               return CircularProgressIndicator();
-            } else if (state.detailStatus == ProcessDetailStatus.loading) {
-              return CircularProgressIndicator();
-            } else if (state.detailStatus == ProcessDetailStatus.success) {
+            } else if (state.detailStatus == ProcessDetailStatus.success ||
+                state.updateAccIdStatus == UpdateAccIdStatus.success) {
               selectedValue = List.from(state.processDetail);
-              if (state.processDetail[0].orderDetails[0].accessoryId != null) {
-                isHasData = true;
-                _selectAccName =
-                    state.processDetail[0].orderDetails[0].accessoryId;
-              }
+
               return Padding(
                 padding: const EdgeInsets.all(12.0),
                 // child: SingleChildScrollView(
@@ -125,169 +128,9 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                                   state.processDetail[0]
                                                       .orderDetails.length;
                                               i++)
-                                            Card(
-                                              child: Column(children: [
-                                                ExpansionTile(
-                                                  title: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(state
-                                                          .processDetail[0]
-                                                          .orderDetails[i]
-                                                          .name),
-                                                      Text(
-                                                          '${state.processDetail[0].orderDetails[i].price}'),
-                                                    ],
-                                                  ),
-                                                  children: [
-                                                    Container(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              vertical: 10,
-                                                              horizontal: 10),
-                                                      child: BlocBuilder<
-                                                          AccessoryBloc,
-                                                          AccessoryState>(
-                                                        // ignore: missing_return
-                                                        builder:
-                                                            // ignore: missing_return
-                                                            (context,
-                                                                accstate) {
-                                                          if (accstate.status ==
-                                                              ListAccessoryStatus
-                                                                  .init) {
-                                                            return CircularProgressIndicator();
-                                                          } else if (accstate
-                                                                  .status ==
-                                                              ListAccessoryStatus
-                                                                  .loading) {
-                                                            return CircularProgressIndicator();
-                                                          } else if (accstate
-                                                                  .status ==
-                                                              ListAccessoryStatus
-                                                                  .success) {
-                                                            return Column(
-                                                              children: [
-                                                                // isHasData
-                                                                //     ? Row(
-                                                                //         children: [
-                                                                //           Text(_selectAccName ??
-                                                                //               'default'),
-                                                                //           ElevatedButton(
-                                                                //               onPressed: () {
-                                                                //                 setState(() {
-                                                                //                   isHasData = false;
-                                                                //                 });
-                                                                //               },
-                                                                //               child: Icon(Icons.edit))
-                                                                //         ],
-                                                                //       )
-                                                                //     :
-                                                                Column(
-                                                                  children: [
-                                                                    TypeAheadFormField(
-                                                                      enabled: isHasData
-                                                                          ? false
-                                                                          : true,
-                                                                      textFieldConfiguration: TextFieldConfiguration(
-                                                                          controller: this
-                                                                              ._typeAheadController,
-                                                                          decoration:
-                                                                              InputDecoration(labelText: isHasData ? state.processDetail[0].orderDetails[i].accessoryId : 'Nhập tên phụ tùng')),
-                                                                      suggestionsCallback: (pattern) => accstate.accessoryList.where((element) => element
-                                                                          .name
-                                                                          .toLowerCase()
-                                                                          .contains(
-                                                                              pattern.toLowerCase())),
-                                                                      hideSuggestionsOnKeyboardHide:
-                                                                          false,
-                                                                      itemBuilder:
-                                                                          (context,
-                                                                              AccessoryModel suggestion) {
-                                                                        return ListTile(
-                                                                          title:
-                                                                              Text(suggestion.name),
-                                                                        );
-                                                                      },
-                                                                      noItemsFoundBuilder:
-                                                                          (context) =>
-                                                                              Center(
-                                                                        child: Text(
-                                                                            'No item found'),
-                                                                      ),
-                                                                      onSuggestionSelected:
-                                                                          (suggestion) {
-                                                                        this._typeAheadController.text =
-                                                                            suggestion.name;
-                                                                        _accId =
-                                                                            suggestion.id;
-                                                                      },
-                                                                      onSaved: (value) =>
-                                                                          this._selectAccName =
-                                                                              value,
-                                                                    ),
-                                                                    Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .spaceAround,
-                                                                      children: [
-                                                                        BlocListener<
-                                                                            ProcessOrderBloc,
-                                                                            ProcessOrderState>(
-                                                                          listener:
-                                                                              (context, pstate) {
-                                                                            if (pstate.updateAccIdStatus ==
-                                                                                UpdateAccIdStatus.success) {
-                                                                              isHasData = true;
-                                                                              setState(() {
-                                                                                _selectAccName = _typeAheadController.text;
-                                                                              });
-                                                                            }
-                                                                            // TODO: implement listener
-                                                                          },
-                                                                          child: ElevatedButton(
-                                                                              style: ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
-                                                                              onPressed: () {
-                                                                                processBloc.add(
-                                                                                  UpdateAccesIdToOrder(orderId: widget.orderId, detailId: state.processDetail[0].orderDetails[i].id, accId: _accId, serviceId: state.processDetail[0].orderDetails[i].serviceId, quantity: 1, price: state.processDetail[0].orderDetails[i].price),
-                                                                                );
-                                                                                print(_accId);
-                                                                              },
-                                                                              child: Text('Cập nhật')),
-                                                                        ),
-                                                                        ElevatedButton(
-                                                                            style:
-                                                                                ElevatedButton.styleFrom(primary: Colors.red),
-                                                                            onPressed: () {},
-                                                                            child: Text('Hủy bỏ')),
-                                                                      ],
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ],
-                                                            );
-                                                          } else if (accstate
-                                                                  .status ==
-                                                              ListAccessoryStatus
-                                                                  .error) {
-                                                            return ErrorWidget(
-                                                                state.message
-                                                                    .toString());
-                                                          }
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ],
-                                                  // services.map((service) {
-                                                  //   return ListTile(
-                                                  //     title: Text(service.name),
-                                                  //     trailing: Text('${service.price}'),
-                                                  //   );
-                                                  // }).toList(),
-                                                ),
-                                              ]),
+                                            ExpansionList(
+                                              index: i,
+                                              orderId: widget.orderId,
                                             ),
                                         ],
                                       ),
@@ -337,7 +180,8 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
               );
             } else if (state.detailStatus == ProcessDetailStatus.error) {
               return ErrorWidget(state.message.toString());
-            }
+            } else
+              return SizedBox();
           },
         ),
         // ),

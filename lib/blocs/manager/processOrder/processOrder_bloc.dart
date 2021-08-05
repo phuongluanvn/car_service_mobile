@@ -22,7 +22,9 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
         var assignList = await _repo.getProcessOrderList();
         if (assignList != null) {
           yield state.copyWith(
-              processList: assignList, status: ProcessStatus.processSuccess);
+            processList: assignList,
+            status: ProcessStatus.processSuccess,
+          );
           print('dada');
         } else {
           yield state.copyWith(
@@ -45,6 +47,7 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
             await _repo.getVerifyOrderDetail(event.email);
         if (data != null) {
           yield state.copyWith(
+            updateAccIdStatus: UpdateAccIdStatus.init,
             detailStatus: ProcessDetailStatus.success,
             processDetail: data,
           );
@@ -59,17 +62,17 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
             detailStatus: ProcessDetailStatus.error, message: e.toString());
       }
     } else if (event is UpdateAccesIdToOrder) {
-      yield state.copyWith(updateAccIdStatus: UpdateAccIdStatus.loading);
+      yield state.copyWith(
+        updateAccIdStatus: UpdateAccIdStatus.loading,
+      );
       try {
         var data = await _repo.updateAccIdToOrder(event.orderId, event.detailId,
             event.serviceId, event.accId, event.quantity, event.price);
-        // String jsonsDataString = data.toString();
-        print('lololo');
-        print(data);
-        // final jsonData = jsonDecode(jsonsDataString);
-        // print(jsonData);
+
         if (data != null) {
-          yield state.copyWith(updateAccIdStatus: UpdateAccIdStatus.success);
+          yield state.copyWith(
+            updateAccIdStatus: UpdateAccIdStatus.success,
+          );
           print('AccId updated');
         } else {
           yield state.copyWith(

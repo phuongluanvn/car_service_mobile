@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 
 abstract class ProcessOrderEvent extends Equatable {
   @override
@@ -9,7 +10,7 @@ class DoListProcessOrderEvent extends ProcessOrderEvent {}
 
 class DoProcessOrderDetailEvent extends ProcessOrderEvent {
   final String email;
-  DoProcessOrderDetailEvent({this.email});
+  DoProcessOrderDetailEvent({@required this.email});
   @override
   List<Object> get props => [email];
 }

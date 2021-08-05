@@ -6,7 +6,7 @@ enum ProcessStatus {
   init,
   loading,
   processSuccess,
-  processDetailSuccess,
+  
   assignStaffSuccess,
   error,
 }
