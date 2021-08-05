@@ -170,9 +170,9 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
         onPressed: () {
-          print(_image.path);
-          print(_image);
-          uploadImageToFirebase(context);
+          // print(_image.path);
+          // print(_image);
+          // uploadImageToFirebase(context);
           // _showSuccessDialog();
           createCarBloc.add(CreateCarButtonPressed(
             username: _username,
@@ -197,7 +197,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
         child: BlocListener<CreateCarBloc, CreateCarState>(
             listener: (context, state) {
               if (state.status == CreateCarStatus.createCarSuccess) {
-                Navigator.pushNamed(context, '/customer');
+                _showSuccessCreateCarDialog();
               }
             },
             child: Padding(
@@ -521,5 +521,27 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
             )),
       ),
     );
+  }
+
+  _showSuccessCreateCarDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              'Thông báo!',
+              style: TextStyle(color: Colors.greenAccent),
+            ),
+            content: Text('Bạn đã thêm mới xe thành công!'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.pushNamed(context, '/customer');
+                  },
+                  child: Text('Đồng ý'))
+            ],
+          );
+        });
   }
 }

@@ -19,7 +19,7 @@ class AccessoryBloc extends Bloc<AccessoryEvent, AccessoryState> {
       try {
         var data = await _repo.getAccessoryList();
         if (data != null) {
-          print(data);
+          // print(data);
           yield state.copyWith(
               accessoryList: data, status: ListAccessoryStatus.success);
         } else {
