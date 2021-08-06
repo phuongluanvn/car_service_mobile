@@ -100,6 +100,25 @@ class CustomerRepository {
     }
   }
 
+  deleteVehicle(String vehicleId) async {
+    print(vehicleId);
+    print("hihihihi");
+    var res = await http.delete(
+      Uri.parse(BASE_URL + "vehicles?id=" + vehicleId),
+      headers: headers,
+    );
+    print(res.body);
+    if (res.statusCode != null) {
+      if (res.statusCode == 200) {
+        return res.body;
+      } else if (res.statusCode == 404) {
+        return res.body;
+      }
+    } else {
+      return res.body;
+    }
+  }
+
   getCarListOfCustomer(String username) async {
     String message = '';
     List<VehicleModel> vehicleLists = [];
@@ -153,9 +172,10 @@ class CustomerRepository {
     List convertData = [];
     print(id);
     var res = await http.get(
-      Uri.parse(BASE_URL + 'Orders/' + id),
+      Uri.parse(BASE_URL + 'orders/' + id),
       headers: headers,
     );
+    print(res.body);
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
       convertData.add(data);

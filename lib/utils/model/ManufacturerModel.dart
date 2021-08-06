@@ -1,7 +1,7 @@
 class ManufacturerModel {
   String id;
   String name;
-  Null imageUrl;
+  String imageUrl;
   List<VehicleModels> vehicleModels;
 
   ManufacturerModel({this.id, this.name, this.imageUrl, this.vehicleModels});
@@ -34,7 +34,7 @@ class ManufacturerModel {
 class VehicleModels {
   String id;
   String name;
-  Null imageUrl;
+  String imageUrl;
 
   VehicleModels({this.id, this.name, this.imageUrl});
 

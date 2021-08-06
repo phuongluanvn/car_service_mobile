@@ -4,6 +4,7 @@ import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dar
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CreateOrderManagement/CreateBookingOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderDetailUI.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -117,9 +118,11 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                                   leading:
                                       Image.asset('lib/images/order_small.png'),
                                   title: Text(state
-                                      .orderLists[index].vehicle.licensePlate),
-                                  subtitle: Text(state
-                                      .orderLists[index].vehicle.manufacturer),
+                                      .orderLists[index].vehicle.licensePlate,
+                                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+                                  subtitle: Text(_convertDate(
+                                      state.orderLists[index].bookingTime),
+                                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),),
                                   onTap: () {
                                     print(state.orderLists[index].id);
                                     Navigator.of(context).push(
@@ -159,5 +162,10 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
       //   backgroundColor: Colors.blue[600],
       // ),
     );
+  }
+
+  _convertDate(dateInput) {
+    return formatDate(
+        DateTime.parse(dateInput), [dd, '-', mm, '-', yyyy, ' ', hh, ':', mm]);
   }
 }

@@ -43,4 +43,13 @@ class UpdateAccesIdToOrder extends ProcessOrderEvent {
       [orderId, detailId, serviceId, accId, quantity, price];
 }
 
+class UpdateTest extends ProcessOrderEvent {
+  final List acc;
+  final String orderId;
+
+  UpdateTest({this.orderId, this.acc});
+  @override
+  List<Object> get props => [acc];
+}
+
 class ProcessOrderTabPressed extends ProcessOrderEvent {}

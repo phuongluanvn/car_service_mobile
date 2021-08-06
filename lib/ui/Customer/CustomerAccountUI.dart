@@ -48,7 +48,7 @@ class _CustomerAccountUiState extends State<CustomerAccountUi> {
         backgroundColor: AppTheme.colors.deepBlue,
         title: Text('Thông tin cá nhân'),
       ),
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(vertical: 5),
         child: Column(

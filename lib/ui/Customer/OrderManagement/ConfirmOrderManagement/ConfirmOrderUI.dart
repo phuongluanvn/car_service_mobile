@@ -39,7 +39,7 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
             } else if (state.status == CustomerOrderStatus.loading) {
               return CircularProgressIndicator();
             } else if (state.status == CustomerOrderStatus.loadedOrderSuccess) {
-              if (state.orderLists != null && state.orderLists.isNotEmpty)
+              if (state.orderCurrentLists != null && state.orderCurrentLists.isNotEmpty)
                 return Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
@@ -58,12 +58,12 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
                         ),
                         Expanded(
                           child: ListView.builder(
-                            itemCount: state.orderLists.length,
+                            itemCount: state.orderCurrentLists.length,
                             shrinkWrap: true,
                             // ignore: missing_return
                             itemBuilder: (context, index) {
                               assert(context != null);
-                              if (state.orderLists[index].status ==
+                              if (state.orderCurrentLists[index].status ==
                                   'Đợi phản hồi') {
                                 return Card(
                                     child: Column(children: [
@@ -76,16 +76,16 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
                                             color: Colors.orangeAccent,
                                           ),
                                           Text(
-                                            state.orderLists[index].status,
+                                            state.orderCurrentLists[index].status,
                                             style: TextStyle(
                                                 color: Colors.orangeAccent),
                                           ),
                                         ]),
                                     leading: Image.asset(
                                         'lib/images/order_small.png'),
-                                    title: Text(state.orderLists[index].vehicle
+                                    title: Text(state.orderCurrentLists[index].vehicle
                                         .licensePlate),
-                                    subtitle: Text(state.orderLists[index]
+                                    subtitle: Text(state.orderCurrentLists[index]
                                         .vehicle.manufacturer),
                                     onTap: () {
                                       Navigator.of(context).push(
@@ -93,7 +93,7 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
                                               builder: (_) =>
                                                   ConfirmOrderDetailUi(
                                                       orderId: state
-                                                          .orderLists[index]
+                                                          .orderCurrentLists[index]
                                                           .id)));
                                     },
                                   ),
@@ -109,7 +109,7 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
                 );
               else
                 return Center(
-                  child: Text('Empty'),
+                  child: Text('Hiện tại không có đơn'),
                 );
             } else if (state.status == CustomerOrderStatus.error) {
               return ErrorWidget(state.message.toString());

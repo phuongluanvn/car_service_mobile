@@ -16,7 +16,7 @@ class CustomerOrderBloc extends Bloc<CustomerOrderEvent, CustomerOrderState> {
   @override
   Stream<CustomerOrderState> mapEventToState(CustomerOrderEvent event) async* {
     if (event is DoOrderListEvent) {
-      List<OrderModel> currentOrderList = [];
+      List<OrderModel> confirmOrderList = [];
       List<OrderModel> historyOrderList = [];
 
       yield state.copyWith(status: CustomerOrderStatus.loading);
@@ -28,16 +28,18 @@ class CustomerOrderBloc extends Bloc<CustomerOrderEvent, CustomerOrderState> {
           //lay curent
           orderLists
               .map((order) => {
-                    if (order.status != 'Checkin')
-                      {currentOrderList.add(order)}
-                    else if (order.status == 'Finish')
+                    if (order.status == 'Đợi phản hồi')
+                      {confirmOrderList.add(order)}
+                    else if (order.status == 'Hoàn thành' ||
+                        order.status != 'Hủy đơn' ||
+                        order.status != 'Từ chối')
                       {historyOrderList.add(order)}
                   })
               .toList();
           if (orderLists != null) {
             yield state.copyWith(
                 orderLists: orderLists,
-                orderCurrentLists: currentOrderList,
+                orderCurrentLists: confirmOrderList,
                 orderHistoryLists: historyOrderList,
                 status: CustomerOrderStatus.loadedOrderSuccess);
           }

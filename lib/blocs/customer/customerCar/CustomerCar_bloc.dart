@@ -75,6 +75,38 @@ class CustomerCarBloc extends Bloc<CustomerCarEvent, CustomerCarState> {
           message: e.toString(),
         );
       }
+    } else if (event is DoDelCarEvent) {
+      yield state.copyWith(deleteStatus: CustomerCarDeleteStatus.loading);
+      try {
+        var data = await _repo.deleteVehicle(event.vehicleId);
+        if (data != null) {
+          yield state.copyWith(
+              message: data,
+              deleteStatus: CustomerCarDeleteStatus.deleteDetailSuccess);
+        }
+      } catch (e) {
+        yield state.copyWith(
+          deleteStatus: CustomerCarDeleteStatus.error,
+          message: e.toString(),
+        );
+      }
+    } else if (event is DoUpdateInfoCarEvent) {
+      // yield state.copyWith(withIdstatus: CustomerCarWithIdStatus.loading);
+      // try {
+      //   final prefs = await SharedPreferences.getInstance();
+
+      //   var carLists = await _repo.getCarListOfCustomer(event.vehicleId);
+      //   if (carLists != null) {
+      //     yield state.copyWith(
+      //         vehicleLists: carLists,
+      //         withIdstatus: CustomerCarWithIdStatus.loadedCarSuccess);
+      //   }
+      // } catch (e) {
+      //   yield state.copyWith(
+      //     withIdstatus: CustomerCarWithIdStatus.error,
+      //     message: e.toString(),
+      //   );
+      // }
     }
   }
 }
