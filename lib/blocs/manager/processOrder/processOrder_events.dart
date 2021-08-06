@@ -17,6 +17,13 @@ class DoProcessOrderDetailEvent extends ProcessOrderEvent {
 
 class DoListAssignStaffEvent extends ProcessOrderEvent {}
 
+class UpdateFinishedTaskOrderEvent extends ProcessOrderEvent {
+  final List selectedTaskId;
+  UpdateFinishedTaskOrderEvent({this.selectedTaskId});
+  @override
+  List<Object> get props => [selectedTaskId];
+}
+
 class UpdateAccesIdToOrder extends ProcessOrderEvent {
   final String orderId;
   final String detailId;

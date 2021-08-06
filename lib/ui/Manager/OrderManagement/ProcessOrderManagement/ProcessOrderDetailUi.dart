@@ -40,11 +40,11 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
   String _note;
   List<StaffModel> selectData = [];
   List selectService = [];
-
+  ProcessOrderBloc processOrderBloc;
   @override
   void initState() {
     super.initState();
-
+    processOrderBloc = BlocProvider.of<ProcessOrderBloc>(context);
     BlocProvider.of<ProcessOrderBloc>(context)
         .add(DoProcessOrderDetailEvent(email: widget.orderId));
     BlocProvider.of<ManageStaffBloc>(context).add(DoListStaffEvent());
@@ -377,6 +377,15 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                   ),
                                 ),
                               ),
+                              ElevatedButton(
+                                  onPressed: () {
+                                    processOrderBloc.add(
+                                        UpdateFinishedTaskOrderEvent(
+                                            selectedTaskId: selectService));
+
+                                    // print(selectService[0].name);
+                                  },
+                                  child: Text('Cập nhật')),
                             ],
                           ),
                         ),

@@ -365,6 +365,26 @@ class ManagerRepository {
     }
   }
 
+  updateStatusTask(String id) async {
+    print(id);
+    var body = {"id": '"$id"', "isFinished": true};
+    print(body);
+    var res = await http.put(
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/orders/details/status"),
+      headers: headers,
+      body: body,
+    );
+    if (res.statusCode != null) {
+      print(res.statusCode);
+      if (res.statusCode == 200) {
+        return res.body;
+      }
+    } else {
+      return res.body;
+    }
+  }
+
   updateStaffStatusOrder(String username, String status) async {
     var body = {
       "username": '$username',

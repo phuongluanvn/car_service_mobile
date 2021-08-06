@@ -25,10 +25,18 @@ enum UpdateAccIdStatus {
   error,
 }
 
+enum UpdateFinishIdStatus {
+  init,
+  loading,
+  success,
+  error,
+}
+
 class ProcessOrderState extends Equatable {
   final ProcessStatus status;
   final ProcessDetailStatus detailStatus;
   final UpdateAccIdStatus updateAccIdStatus;
+  final UpdateFinishIdStatus updateFinishIdStatus;
   final List<OrderDetailModel> processList;
   final List<OrderDetailModel> processDetail;
   final List<StaffModel> assignStaff;
@@ -37,6 +45,7 @@ class ProcessOrderState extends Equatable {
     this.status: ProcessStatus.init,
     this.detailStatus: ProcessDetailStatus.init,
     this.updateAccIdStatus: UpdateAccIdStatus.init,
+    this.updateFinishIdStatus: UpdateFinishIdStatus.init,
     this.processDetail: const [],
     this.processList: const [],
     this.assignStaff: const [],
@@ -47,6 +56,7 @@ class ProcessOrderState extends Equatable {
     ProcessStatus status,
     ProcessDetailStatus detailStatus,
     UpdateAccIdStatus updateAccIdStatus,
+    UpdateFinishIdStatus updateFinishIdStatus,
     List<OrderDetailModel> processList,
     List<OrderDetailModel> processDetail,
     List<StaffModel> assignStaff,
@@ -56,6 +66,7 @@ class ProcessOrderState extends Equatable {
         status: status ?? this.status,
         detailStatus: detailStatus ?? this.detailStatus,
         updateAccIdStatus: updateAccIdStatus ?? this.updateAccIdStatus,
+        updateFinishIdStatus: updateFinishIdStatus ?? this.updateFinishIdStatus,
         processList: processList ?? this.processList,
         processDetail: processDetail ?? this.processDetail,
         assignStaff: assignStaff ?? this.assignStaff,
@@ -66,6 +77,7 @@ class ProcessOrderState extends Equatable {
         status,
         detailStatus,
         updateAccIdStatus,
+        updateFinishIdStatus,
         processList,
         processDetail,
         assignStaff,
