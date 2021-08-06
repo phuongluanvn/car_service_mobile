@@ -122,7 +122,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
       style: ElevatedButton.styleFrom(
         primary: Colors.white,
         onPrimary: Colors.white,
-        fixedSize: Size(80, 20),
+        // fixedSize: Size(80, 20),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         side: BorderSide(
             width: 2,

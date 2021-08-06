@@ -61,8 +61,7 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
         yield state.copyWith(
             detailStatus: ProcessDetailStatus.error, message: e.toString());
       }
-    } 
-    else if (event is UpdateAccesIdToOrder) {
+    } else if (event is UpdateAccesIdToOrder) {
       yield state.copyWith(
         updateAccIdStatus: UpdateAccIdStatus.loading,
       );
@@ -85,33 +84,36 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
         yield state.copyWith(
             updateAccIdStatus: UpdateAccIdStatus.error, message: e.toString());
       }
-    } else if (event is UpdateFinishedTaskOrderEvent) {
-      yield state.copyWith(
-        updateFinishIdStatus: UpdateFinishIdStatus.loading,
-      );
-      try {
-        for (int i = 0; i <= event.selectedTaskId.length; i++) {
-          var data = await _repo.updateStatusTask(event.selectedTaskId[i].id);
+    } 
+    // else if (event is UpdateFinishedTaskOrderEvent) {
+    //   yield state.copyWith(
+    //     updateFinishIdStatus: UpdateFinishIdStatus.loading,
+    //   );
+    //   try {
+    //     // for (int i = 0; i <= event.selectedTaskId.length; i++) {
+    //     var data =
+    //         await _repo.updateStatusTask(event.selectedTaskId, event.selected);
 
-          if (data != null) {
-            print('task event');
-            yield state.copyWith(
-              updateFinishIdStatus: UpdateFinishIdStatus.success,
-            );
-            print('Task updated');
-          } else {
-            yield state.copyWith(
-              updateFinishIdStatus: UpdateFinishIdStatus.error,
-              message: 'Error',
-            );
-          }
-        }
-        ;
-      } catch (e) {
-        yield state.copyWith(
-            updateFinishIdStatus: UpdateFinishIdStatus.error,
-            message: e.toString());
-      }
-    }
+    //     if (data != null) {
+    //       print('task event');
+    //       DoProcessOrderDetailEvent(email: event.orderId);
+    //       yield state.copyWith(
+    //         updateFinishIdStatus: UpdateFinishIdStatus.success,
+    //       );
+    //       print('Task updated');
+    //     } else {
+    //       yield state.copyWith(
+    //         updateFinishIdStatus: UpdateFinishIdStatus.error,
+    //         message: 'Error',
+    //       );
+    //       // }
+    //     }
+    //     ;
+    //   } catch (e) {
+    //     yield state.copyWith(
+    //         updateFinishIdStatus: UpdateFinishIdStatus.error,
+    //         message: e.toString());
+    //   }
+    // }
   }
 }

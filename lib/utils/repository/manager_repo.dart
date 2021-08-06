@@ -365,20 +365,19 @@ class ManagerRepository {
     }
   }
 
-  updateStatusTask(String id) async {
+  updateStatusTask(String id, bool selected) async {
     print(id);
-    var body = {"id": '$id', "isFinished": true};
+    var body = {"id": '$id', "isFinished": selected};
     var res = await http.put(
-      Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/orders/details/status"),
-      headers: headers,
-      body: json.encode([body])
-    );
+        Uri.parse(
+            "https://carservicesystem.azurewebsites.net/api/orders/details/status"),
+        headers: headers,
+        body: json.encode([body]));
     if (res.statusCode != null) {
       print(res.statusCode);
       if (res.statusCode == 200) {
         return res.body;
-      } 
+      }
     } else {
       return res.body;
     }

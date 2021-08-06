@@ -17,12 +17,14 @@ class DoProcessOrderDetailEvent extends ProcessOrderEvent {
 
 class DoListAssignStaffEvent extends ProcessOrderEvent {}
 
-class UpdateFinishedTaskOrderEvent extends ProcessOrderEvent {
-  final List selectedTaskId;
-  UpdateFinishedTaskOrderEvent({this.selectedTaskId});
-  @override
-  List<Object> get props => [selectedTaskId];
-}
+// class UpdateFinishedTaskOrderEvent extends ProcessOrderEvent {
+//   final String selectedTaskId;
+//   final bool selected;
+//   final String orderId;
+//   UpdateFinishedTaskOrderEvent({this.selectedTaskId,this.selected,this.orderId});
+//   @override
+//   List<Object> get props => [selectedTaskId,selected, orderId];
+// }
 
 class UpdateAccesIdToOrder extends ProcessOrderEvent {
   final String orderId;

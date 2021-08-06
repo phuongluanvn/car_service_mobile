@@ -18,6 +18,7 @@ import 'package:car_service/blocs/manager/booking/booking_bloc.dart';
 import 'package:car_service/blocs/manager/createOrder/createOrder_bloc.dart';
 import 'package:car_service/blocs/manager/orderHistory/orderHistory_bloc.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
+import 'package:car_service/blocs/manager/processOrder/updateFinishTask_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
@@ -167,6 +168,9 @@ class _AuthState extends State<Auth> {
             create: (context) => CreateOrderBloc(repo: ManagerRepository())),
         BlocProvider(
             create: (context) => ProcessOrderBloc(repo: ManagerRepository())),
+        BlocProvider(
+            create: (context) =>
+                UpdateFinishTaskBloc(repo: ManagerRepository())),
         BlocProvider(
             create: (context) => OrderHistoryBloc(repo: ManagerRepository())),
         BlocProvider(
