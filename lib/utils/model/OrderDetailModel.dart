@@ -175,7 +175,7 @@ class OrderDetails {
   int price;
   bool isIncurred;
   bool isFinished;
-  DateTime timeFinished;
+  String timeFinished;
 
   OrderDetails(
       {this.id,

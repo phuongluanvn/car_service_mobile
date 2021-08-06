@@ -1,36 +1,31 @@
-import 'package:car_service/utils/model/VehicleModel.dart';
 import 'package:equatable/equatable.dart';
-import '../../../utils/model/CarModel.dart';
 
-enum CarDeleteStatus { init, loading, error, deleteDetailSuccess }
-
-enum CustomerCarUpdateDetailStatus {
+enum UpdateCarStatus {
   init,
   loading,
   error,
   updateDetailSuccess,
 }
 
-class DeleteCarState extends Equatable {
-  final CarDeleteStatus deleteStatus;
+class UpdateCarState extends Equatable {
+  final UpdateCarStatus updateStatus;
   final String message;
-  const DeleteCarState({
-    this.deleteStatus: CarDeleteStatus.init,
+  const UpdateCarState({
+    this.updateStatus: UpdateCarStatus.init,
     this.message: '',
   });
 
-  DeleteCarState copyWith({
-     CarDeleteStatus deleteStatus,
+  UpdateCarState copyWith({
+    UpdateCarStatus updateStatus,
     String message,
   }) =>
-      DeleteCarState(
-       
-        deleteStatus: deleteStatus ?? this.deleteStatus,
+      UpdateCarState(
+        updateStatus: updateStatus ?? this.updateStatus,
         message: message ?? this.message,
       );
   @override
   List<Object> get props => [
-        deleteStatus,
+        updateStatus,
         message,
       ];
 }

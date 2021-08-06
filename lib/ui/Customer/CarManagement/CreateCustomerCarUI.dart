@@ -170,10 +170,6 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
         onPressed: () {
-          // print(_image.path);
-          // print(_image);
-          // uploadImageToFirebase(context);
-          // _showSuccessDialog();
           createCarBloc.add(CreateCarButtonPressed(
             username: _username,
             manufacturer: _selectManufacturerItem,
@@ -212,6 +208,59 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                   padding: EdgeInsets.only(left: 24, right: 24),
                   children: <Widget>[
                     // manufacturerText,
+
+                    //    Padding(
+                    //   padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                    //   child: Container(
+                    //     decoration: BoxDecoration(
+                    //         color: Colors.white60,
+                    //         border: Border.all(color: Colors.black26),
+                    //         borderRadius: BorderRadius.circular(5)),
+                    //     padding:
+                    //         EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                    //     child: Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.center,
+                    //       children: [
+                    //         Align(
+                    //           alignment: Alignment.centerLeft,
+                    //           child: Text(
+                    //             'Hình ảnh xe (nếu có)',
+                    //             style: TextStyle(
+                    //               fontSize: 14,
+                    //               fontWeight: FontWeight.w600,
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         SizedBox(
+                    //           height: 10,
+                    //         ),
+                    //         Center(
+                    //           child: GestureDetector(
+                    //             child: Container(
+                    //               color: Colors.white,
+                    //               height: 150,
+                    //               width: 300,
+                    //               child: _image != null
+                    //                   ? Image.file(
+                    //                       _image,
+                    //                       fit: BoxFit.fill,
+                    //                     )
+                    //                   : Icon(Icons.add_a_photo),
+                    //               alignment: Alignment.center,
+                    //             ),
+                    //             onTap: () {
+                    //               _showPicker(context);
+                    //             },
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                    Image.network('https://picsum.photos/400/200?image=1070'),
+                    SizedBox(
+                      height: 30,
+                    ),
                     Center(
                       child: BlocBuilder<ManufacturerBloc, ManufacturerState>(
                         // ignore: missing_return
@@ -317,6 +366,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                           onChanged: (newValue) {
                                             setState(() {
                                               //thông tin hãng xe
+
                                               this._selectManufacturerItem =
                                                   newValue;
                                               _visible = !_visible;
@@ -462,58 +512,6 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                       height: 30,
                     ),
 
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white60,
-                            border: Border.all(color: Colors.black26),
-                            borderRadius: BorderRadius.circular(5)),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'Hình ảnh xe (nếu có)',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Center(
-                              child: GestureDetector(
-                                child: Container(
-                                  color: Colors.white,
-                                  height: 150,
-                                  width: 300,
-                                  child: _image != null
-                                      ? Image.file(
-                                          _image,
-                                          fit: BoxFit.fill,
-                                        )
-                                      : Icon(Icons.add_a_photo),
-                                  alignment: Alignment.center,
-                                ),
-                                onTap: () {
-                                  _showPicker(context);
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(
-                      height: 30,
-                    ),
                     createCarButton,
                   ],
                 ),

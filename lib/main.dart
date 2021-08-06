@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:car_service/blocs/customer/customerCar/CreateCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/DelCar_bloc.dart';
+import 'package:car_service/blocs/customer/customerCar/UpdateCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CreateBooking_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
 import 'package:car_service/blocs/customer/customerService/CustomerService_bloc.dart';
@@ -157,6 +158,8 @@ class _AuthState extends State<Auth> {
             create: (context) => ManufacturerBloc(repo: CustomerRepository())),
         BlocProvider(
             create: (context) => DeleteCarBloc(repo: CustomerRepository())),
+        BlocProvider(
+            create: (context) => UpdateCarBloc(repo: CustomerRepository())),
         BlocProvider(
             create: (context) =>
                 CustomerServiceBloc(repo: CustomerRepository())),

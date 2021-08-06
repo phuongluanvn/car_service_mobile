@@ -74,29 +74,58 @@ class CustomerRepository {
     }
   }
 
+  updateVehicle(String id, String manufacturer, String model,
+      String licensePlateNumber, DateTime dateOfLastMaintenance, int millageCount) async {
+    var body = {
+      "id": id,
+      "manufacturer": manufacturer,
+      "model": model,
+      "licensePlate": licensePlateNumber,
+      "dateOfLastMaintenance": dateOfLastMaintenance,
+      "millageCount": millageCount
+    };
+    var res = await http.post(
+      Uri.parse(BASE_URL + "vehicles"),
+      headers: headers,
+      body: json.encode(body),
+    );
+    if (res.statusCode != null) {
+      if (res.statusCode == 200) {
+        return res.body;
+      } else if (res.statusCode == 404) {
+        return res.body;
+      }
+    } else {
+      return null;
+    }
+  }
+
   getVehicleDetail(String vehicleId) async {
+    List convertData = [];
+    List<VehicleModel> detailVehicle = [];
     var res = await http.get(
-      Uri.parse(
-          'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=' +
-              vehicleId),
+      Uri.parse(BASE_URL + 'vehicles/' + vehicleId),
       headers: headers,
     );
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
+      convertData.add(data);
+      print(convertData);
       try {
         if (data != null) {
-          List<VehicleModel> listdata = [];
-          data.forEach((element) {
-            Map<String, dynamic> map = element;
-            listdata.add(VehicleModel.fromJson(map));
-          });
-          return listdata;
+          convertData
+              .map((vehicleDetail) =>
+                  detailVehicle.add(VehicleModel.fromJson(vehicleDetail)))
+              .toList();
+          return detailVehicle;
         } else {
-          print('No data');
+          res.body;
         }
       } catch (e) {
-        print(e.toString());
+        res.body;
       }
+    } else {
+      res.body;
     }
   }
 
