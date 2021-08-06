@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
+import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
+import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_events.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_state.dart';
@@ -41,17 +44,23 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
   List selectService = [];
   ProcessOrderBloc processOrderBloc;
   UpdateFinishTaskBloc updateFinishBloc;
+  AssignOrderBloc _assignOrderBloc;
+
   @override
   void initState() {
     super.initState();
     _orderId = widget.orderId;
     updateFinishBloc = BlocProvider.of<UpdateFinishTaskBloc>(context);
     processOrderBloc = BlocProvider.of<ProcessOrderBloc>(context);
+    _assignOrderBloc = BlocProvider.of<AssignOrderBloc>(context);
+
     BlocProvider.of<UpdateFinishTaskBloc>(context)
         .add(DoTaskrDetailEvent(id: widget.orderId));
     BlocProvider.of<ProcessOrderBloc>(context)
         .add(DoProcessOrderDetailEvent(email: widget.orderId));
     BlocProvider.of<ManageStaffBloc>(context).add(DoListStaffEvent());
+    BlocProvider.of<AssignOrderBloc>(context).add(DoAssignOrderDetailEvent(id: widget.orderId));
+
   }
 
   void getDropDownItem() {
@@ -324,130 +333,134 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                           indent: 10,
                           endIndent: 10,
                         ),
-                        BlocConsumer<UpdateFinishTaskBloc,
+                        BlocListener<UpdateFinishTaskBloc,
                             UpdateFinishTaskState>(
                           listener: (context, sstate) {
+                            // if (sstate.updateFinishIdStatus ==
+                            //     UpdateFinishIdStatus.loading) {
+                            //   return CircularProgressIndicator();
+                            // } else 
                             if (sstate.updateFinishIdStatus ==
-                                UpdateFinishIdStatus.loading) {
-                              return CircularProgressIndicator();
-                            } else if (sstate.updateFinishIdStatus ==
                                 // ignore: unrelated_type_equality_checks
                                 UpdateFinishIdStatus.success) {
-                              print(sstate);
+                              _assignOrderBloc.add(DoAssignOrderDetailEvent(id: widget.orderId));
                             }
                           },
-                          // ignore: missing_return
-                          builder: (context, pstate) {
-                            if (pstate.taskDetailStatus ==
-                                TaskDetailStatus.init) {
-                              return CircularProgressIndicator();
-                            } else if (pstate.taskDetailStatus ==
-                                TaskDetailStatus.loading) {
-                              return CircularProgressIndicator();
-                            } else if (pstate.taskDetailStatus ==
-                                    // ignore: unrelated_type_equality_checks
-                                    TaskDetailStatus.success ||
-                                pstate.updateFinishIdStatus ==
-                                    UpdateFinishIdStatus.success) {
-                              return Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(5)),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 10),
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      'Cập nhật quy trình xử lí',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    SizedBox(
-                                      height: 15,
-                                    ),
-                                    Center(
-                                      child: LimitedBox(
-                                        maxHeight:
-                                            MediaQuery.of(context).size.width *
-                                                0.5,
-                                        maxWidth:
-                                            MediaQuery.of(context).size.width *
-                                                0.8,
-                                        child: ListView.builder(
-                                          itemCount: pstate.taskDetail[0]
-                                              .orderDetails.length,
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            return CheckboxListTile(
-                                              value: pstate
-                                                      .taskDetail[0]
-                                                      .orderDetails[index]
-                                                      .isFinished ==
-                                                  true,
-                                              onChanged: (bool selected) {
-                                                if (selected == true) {
-                                                  setState(() {
-                                                    updateFinishBloc.add(
-                                                        UpdateFinishedTaskOrderEvent(
-                                                            orderId:
-                                                                widget.orderId,
-                                                            selectedTaskId: pstate
-                                                                .taskDetail[0]
-                                                                .orderDetails[
-                                                                    index]
-                                                                .id,
-                                                            selected: true));
-                                                    // selectService.add(state
-                                                    //     .processDetail[0]
-                                                    //     .orderDetails[index]);
-                                                    // BlocProvider.of<
-                                                    //             ProcessorderCubit>(
-                                                    //         context)
-                                                    //     .addItem(stafflist[index]);
-                                                  });
-                                                } else {
-                                                  setState(() {
-                                                    updateFinishBloc.add(
-                                                        UpdateFinishedTaskOrderEvent(
-                                                            orderId:
-                                                                widget.orderId,
-                                                            selectedTaskId: pstate
-                                                                .taskDetail[0]
-                                                                .orderDetails[
-                                                                    index]
-                                                                .id,
-                                                            selected: false));
-                                                    // selectService.remove(state
-                                                    //     .processDetail[0]
-                                                    //     .orderDetails[index]);
-                                                  });
-                                                }
-                                              },
-                                              title: Text(pstate.taskDetail[0]
-                                                  .orderDetails[index].name),
-                                            );
-                                          },
+                          child: BlocBuilder<AssignOrderBloc,
+                            AssignOrderState>(
+                            // ignore: missing_return
+                            builder: (context, pstate) {
+                              if (pstate.detailStatus ==
+                                  AssignDetailStatus.init) {
+                                return CircularProgressIndicator();
+                              } else if (pstate.detailStatus ==
+                                  AssignDetailStatus.loading) {
+                                return CircularProgressIndicator();
+                              } else if (pstate.detailStatus ==
+                                      // ignore: unrelated_type_equality_checks
+                                      AssignDetailStatus.success ) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        'Cập nhật quy trình xử lí',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      SizedBox(
+                                        height: 15,
+                                      ),
+                                      Center(
+                                        child: LimitedBox(
+                                          maxHeight: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.5,
+                                          maxWidth: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.8,
+                                          child: ListView.builder(
+                                            itemCount: pstate.assignDetail[0]
+                                                .orderDetails.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return CheckboxListTile(
+                                                value: pstate
+                                                        .assignDetail[0]
+                                                        .orderDetails[index]
+                                                        .isFinished ==
+                                                    true,
+                                                onChanged: (bool selected) {
+                                                  if (selected == true) {
+                                                    setState(() {
+                                                      updateFinishBloc.add(
+                                                          UpdateFinishedTaskOrderEvent(
+                                                              orderId: widget
+                                                                  .orderId,
+                                                              selectedTaskId: pstate
+                                                                  .assignDetail[0]
+                                                                  .orderDetails[
+                                                                      index]
+                                                                  .id,
+                                                              selected: true));
+                                                      // selectService.add(state
+                                                      //     .processDetail[0]
+                                                      //     .orderDetails[index]);
+                                                      // BlocProvider.of<
+                                                      //             ProcessorderCubit>(
+                                                      //         context)
+                                                      //     .addItem(stafflist[index]);
+                                                    });
+                                                  } else {
+                                                    setState(() {
+                                                      updateFinishBloc.add(
+                                                          UpdateFinishedTaskOrderEvent(
+                                                              orderId: widget
+                                                                  .orderId,
+                                                              selectedTaskId: pstate
+                                                                  .assignDetail[0]
+                                                                  .orderDetails[
+                                                                      index]
+                                                                  .id,
+                                                              selected: false));
+                                                      // selectService.remove(state
+                                                      //     .processDetail[0]
+                                                      //     .orderDetails[index]);
+                                                    });
+                                                  }
+                                                },
+                                                title: Text(pstate.assignDetail[0]
+                                                    .orderDetails[index].name),
+                                              );
+                                            },
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          // processOrderBloc.add(
-                                          //     UpdateFinishedTaskOrderEvent(
-                                          //         selectedTaskId: selectService));
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            // processOrderBloc.add(
+                                            //     UpdateFinishedTaskOrderEvent(
+                                            //         selectedTaskId: selectService));
 
-                                          // print(selectService[0].name);
-                                        },
-                                        child: Text('Cập nhật')),
-                                  ],
-                                ),
-                              );
-                            } else if (pstate.taskDetailStatus ==
-                                TaskDetailStatus.error) {
-                              return ErrorWidget(pstate.message.toString());
-                            }
-                          },
+                                            // print(selectService[0].name);
+                                          },
+                                          child: Text('Cập nhật')),
+                                    ],
+                                  ),
+                                );
+                              } else if (pstate.detailStatus ==
+                                  AssignDetailStatus.error) {
+                                return ErrorWidget(pstate.message.toString());
+                              }
+                            },
+                          ),
                         ),
                         Container(height: 16),
                         Divider(

@@ -6,6 +6,7 @@ import 'package:car_service/ui/Customer/CarManagement/CreateCustomerCarUI.dart';
 import 'package:car_service/ui/Customer/CarManagement/CustomerCarDetailUI.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:search_widget/search_widget.dart';
 
 class CustomerCarUi extends StatefulWidget {
   @override
@@ -101,4 +102,10 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
       // ),
     );
   }
+
+  // Widget _buildSearch() => SearchWidget(
+  //   dataList: dataList, 
+  //   popupListItemBuilder: popupListItemBuilder, 
+  //   selectedItemBuilder: selectedItemBuilder, 
+  //   queryBuilder: queryBuilder)
 }

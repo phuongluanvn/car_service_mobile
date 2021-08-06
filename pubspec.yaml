@@ -47,6 +47,7 @@ dependencies:
   date_format:
   flutter_typeahead: ^3.2.0
   date_time_picker:
+  search_widget: 
 
 dev_dependencies:
   flutter_test:
