@@ -489,10 +489,8 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                                               0]
                                                                           .id);
                                                                       crewBloc.add(UpdateCrewToListEvent(
-                                                                          id: state
-                                                                              .assignDetail[
-                                                                                  0]
-                                                                              .id,
+                                                                          id: widget
+                                                                              .userId,
                                                                           listName:
                                                                               widget.selectCrewName));
                                                                       updateStatusBloc.add(UpdateStatusStartAndWorkingButtonPressed(

@@ -123,7 +123,10 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                     Center(
                                       child: Column(
                                         children: [
-                                          for (int i = 0;i <state.processDetail[0].orderDetails.length;
+                                          for (int i = 0;
+                                              i <
+                                                  state.processDetail[0]
+                                                      .orderDetails.length;
                                               i++)
                                             ExpansionList(
                                               index: i,

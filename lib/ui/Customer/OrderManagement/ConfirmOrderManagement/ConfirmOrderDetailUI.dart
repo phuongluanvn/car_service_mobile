@@ -104,9 +104,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                                   primary: AppTheme.colors.blue),
                               child: Text(textButton ? 'Đồng ý' : 'Xác nhận',
                                   style: TextStyle(color: Colors.white)),
-                              onPressed: () {
-
-                              },
+                              onPressed: () {},
                             ),
                           ),
                           SizedBox(

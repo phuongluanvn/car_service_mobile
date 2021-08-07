@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
+import 'package:car_service/blocs/manager/assign_order_cubit/assignorder_cubit.dart';
+import 'package:car_service/blocs/manager/assign_order_cubit/assignorder_cubit_state.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_events.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_state.dart';
@@ -14,6 +16,7 @@ import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/ProcessOrderManagement/CheckoutOrderUi.dart';
+import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,15 +44,18 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
   String _orderId;
   String _note;
   List<StaffModel> selectData = [];
+  List selectCrew = [];
   List selectService = [];
   ProcessOrderBloc processOrderBloc;
   UpdateFinishTaskBloc updateFinishBloc;
   AssignOrderBloc _assignOrderBloc;
+  AssignorderCubit assignCubit = AssignorderCubit();
 
   @override
   void initState() {
     super.initState();
     _orderId = widget.orderId;
+    // assignCubit = BlocProvider.of<AssignorderCubit>(context);
     updateFinishBloc = BlocProvider.of<UpdateFinishTaskBloc>(context);
     processOrderBloc = BlocProvider.of<ProcessOrderBloc>(context);
     _assignOrderBloc = BlocProvider.of<AssignOrderBloc>(context);
@@ -59,8 +65,8 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
     BlocProvider.of<ProcessOrderBloc>(context)
         .add(DoProcessOrderDetailEvent(email: widget.orderId));
     BlocProvider.of<ManageStaffBloc>(context).add(DoListStaffEvent());
-    BlocProvider.of<AssignOrderBloc>(context).add(DoAssignOrderDetailEvent(id: widget.orderId));
-
+    BlocProvider.of<AssignOrderBloc>(context)
+        .add(DoAssignOrderDetailEvent(id: widget.orderId));
   }
 
   void getDropDownItem() {
@@ -92,7 +98,9 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                 return CircularProgressIndicator();
               } else if (state.detailStatus == ProcessDetailStatus.success) {
                 if (state.processDetail != null &&
-                    state.processDetail.isNotEmpty)
+                    state.processDetail.isNotEmpty) {
+                  selectCrew = state.processDetail[0].crew.members;
+
                   return Padding(
                     padding: EdgeInsets.all(12.0),
                     child: Column(
@@ -339,15 +347,15 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                             // if (sstate.updateFinishIdStatus ==
                             //     UpdateFinishIdStatus.loading) {
                             //   return CircularProgressIndicator();
-                            // } else 
+                            // } else
                             if (sstate.updateFinishIdStatus ==
                                 // ignore: unrelated_type_equality_checks
                                 UpdateFinishIdStatus.success) {
-                              _assignOrderBloc.add(DoAssignOrderDetailEvent(id: widget.orderId));
+                              _assignOrderBloc.add(
+                                  DoAssignOrderDetailEvent(id: widget.orderId));
                             }
                           },
-                          child: BlocBuilder<AssignOrderBloc,
-                            AssignOrderState>(
+                          child: BlocBuilder<AssignOrderBloc, AssignOrderState>(
                             // ignore: missing_return
                             builder: (context, pstate) {
                               if (pstate.detailStatus ==
@@ -357,8 +365,8 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                   AssignDetailStatus.loading) {
                                 return CircularProgressIndicator();
                               } else if (pstate.detailStatus ==
-                                      // ignore: unrelated_type_equality_checks
-                                      AssignDetailStatus.success ) {
+                                  // ignore: unrelated_type_equality_checks
+                                  AssignDetailStatus.success) {
                                 return Container(
                                   decoration: BoxDecoration(
                                       color: Colors.white,
@@ -405,7 +413,8 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                                               orderId: widget
                                                                   .orderId,
                                                               selectedTaskId: pstate
-                                                                  .assignDetail[0]
+                                                                  .assignDetail[
+                                                                      0]
                                                                   .orderDetails[
                                                                       index]
                                                                   .id,
@@ -425,7 +434,8 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                                               orderId: widget
                                                                   .orderId,
                                                               selectedTaskId: pstate
-                                                                  .assignDetail[0]
+                                                                  .assignDetail[
+                                                                      0]
                                                                   .orderDetails[
                                                                       index]
                                                                   .id,
@@ -436,22 +446,24 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                                     });
                                                   }
                                                 },
-                                                title: Text(pstate.assignDetail[0]
-                                                    .orderDetails[index].name),
+                                                title: Text(pstate
+                                                    .assignDetail[0]
+                                                    .orderDetails[index]
+                                                    .name),
                                               );
                                             },
                                           ),
                                         ),
                                       ),
-                                      ElevatedButton(
-                                          onPressed: () {
-                                            // processOrderBloc.add(
-                                            //     UpdateFinishedTaskOrderEvent(
-                                            //         selectedTaskId: selectService));
+                                      // ElevatedButton(
+                                      //     onPressed: () {
+                                      //       // processOrderBloc.add(
+                                      //       //     UpdateFinishedTaskOrderEvent(
+                                      //       //         selectedTaskId: selectService));
 
-                                            // print(selectService[0].name);
-                                          },
-                                          child: Text('Cập nhật')),
+                                      //       // print(selectService[0].name);
+                                      //     },
+                                      //     child: Text('Cập nhật')),
                                     ],
                                   ),
                                 );
@@ -524,16 +536,22 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                               ),
                                               ListView.builder(
                                                 shrinkWrap: true,
-                                                itemCount: selectData.length,
+                                                itemCount: state
+                                                    .processDetail[0]
+                                                    .crew
+                                                    .members
+                                                    .length,
                                                 itemBuilder: (context, index) {
                                                   return Card(
                                                     child: Column(children: [
                                                       ListTile(
                                                         leading: Image.asset(
                                                             'lib/images/logo_blue.png'),
-                                                        title: Text(
-                                                            selectData[index]
-                                                                .fullname),
+                                                        title: Text(state
+                                                            .processDetail[0]
+                                                            .crew
+                                                            .members[index]
+                                                            .fullname),
                                                       ),
                                                     ]),
                                                   );
@@ -616,7 +634,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                       ],
                     ),
                   );
-                else
+                } else
                   return Center(child: Text('Empty'));
               } else if (state.detailStatus == ProcessStatus.error) {
                 return ErrorWidget(state.message.toString());
@@ -628,48 +646,107 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
     );
   }
 
-  Future showInformationDialog(BuildContext context, List stafflist) async {
+  Future showInformationDialog(
+      BuildContext context, List<StaffModel> stafflist) async {
     return showDialog(
         context: context,
         builder: (context) {
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
-              content: Form(
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.45,
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  child: Column(
-                    children: stafflist.map((e) {
-                      return CheckboxListTile(
-                          activeColor: AppTheme.colors.deepBlue,
+              content: SingleChildScrollView(
+                child: Form(
+                  child: Container(
+                    // height: MediaQuery.of(context).size.height * 0.7,
+                    // width: MediaQuery.of(context).size.width * 0.7,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text(
+                            'Chọn nhân viên',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.5,
+                            width: MediaQuery.of(context).size.width * 0.7,
+                            child:
+                                // BlocBuilder<AssignorderCubit,
+                                //     AssignorderCubitState>(
+                                //   builder: (context, state) {
+                                //     return
+                                ListView.builder(
+                                    itemCount: stafflist.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return CheckboxListTile(
+                                        value: selectCrew[index]
+                                            .fullname
+                                            .contains(
+                                                stafflist[index].fullname),
+                                        onChanged: (bool selected) {
+                                          if (selected == true) {
+                                            setState(() {
+                                              BlocProvider.of<AssignorderCubit>(
+                                                      context)
+                                                  .addItem(stafflist[index]);
+                                              // selectCrewName.add(
+                                              //     stafflist[index].username);
+                                              // print('select crew name 1');
+                                              // print(selectCrewName);
+                                            });
+                                          } else {
+                                            setState(() {
+                                              BlocProvider.of<AssignorderCubit>(
+                                                      context)
+                                                  .removeItem(stafflist[index]);
+                                              // selectCrewName.remove(
+                                              //     stafflist[index].username);
+                                              // print('select crew name 2');
+                                              // print(selectCrewName);
+                                            });
+                                          }
+                                        },
+                                        title: Text(stafflist[index].fullname),
+                                      );
+                                    }),
+                            //   },
+                            // ),
+                          ),
+                        ],
+                        //  stafflist.map((e) {
+                        //   return CheckboxListTile(
+                        //       activeColor: AppTheme.colors.deepBlue,
 
-                          //font change
-                          title: new Text(
-                            e.fullname,
-                          ),
-                          value: selectData.indexOf(e) < 0 ? false : true,
-                          secondary: Container(
-                            height: 50,
-                            width: 50,
-                            child: Image.asset(
-                              'lib/images/logo_blue.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          onChanged: (bool val) {
-                            if (selectData.indexOf(e) < 0) {
-                              setState(() {
-                                selectData.add(e);
-                              });
-                            } else {
-                              setState(() {
-                                selectData
-                                    .removeWhere((element) => element == e);
-                              });
-                            }
-                            print(selectData);
-                          });
-                    }).toList(),
+                        //       //font change
+                        //       title: new Text(
+                        //         e.username,
+                        //       ),
+                        //       value: selectData.indexOf(e) < 0 ? false : true,
+                        //       secondary: Container(
+                        //         height: 50,
+                        //         width: 50,
+                        //         child: Image.asset(
+                        //           'lib/images/logo_blue.png',
+                        //           fit: BoxFit.cover,
+                        //         ),
+                        //       ),
+                        //       onChanged: (bool val) {
+                        //         if (selectData.indexOf(e) < 0) {
+                        //           setState(() {
+                        //             selectData.add(e);
+                        //             _selectStaff = true;
+                        //           });
+                        //         } else {
+                        //           setState(() {
+                        //             selectData
+                        //                 .removeWhere((element) => element == e);
+                        //           });
+                        //         }
+                        //         print(selectData);
+                        //       });
+                        // }).toList(),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -677,12 +754,12 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                 TextButton(
                   child: Text(
                     'Xác nhận',
-                    style: TextStyle(color: AppTheme.colors.deepBlue),
+                    style: TextStyle(color: AppTheme.colors.blue),
                   ),
                   onPressed: () {
                     // Do something like updating SharedPreferences or User Settings etc.
 
-                    Navigator.pop(context, selectData);
+                    Navigator.pop(context);
                   },
                 ),
               ],

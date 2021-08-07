@@ -84,7 +84,7 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
         yield state.copyWith(
             updateAccIdStatus: UpdateAccIdStatus.error, message: e.toString());
       }
-    } 
+    }
     // else if (event is UpdateFinishedTaskOrderEvent) {
     //   yield state.copyWith(
     //     updateFinishIdStatus: UpdateFinishIdStatus.loading,

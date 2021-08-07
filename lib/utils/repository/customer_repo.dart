@@ -74,8 +74,13 @@ class CustomerRepository {
     }
   }
 
-  updateVehicle(String id, String manufacturer, String model,
-      String licensePlateNumber, DateTime dateOfLastMaintenance, int millageCount) async {
+  updateVehicle(
+      String id,
+      String manufacturer,
+      String model,
+      String licensePlateNumber,
+      DateTime dateOfLastMaintenance,
+      int millageCount) async {
     var body = {
       "id": id,
       "manufacturer": manufacturer,

@@ -20,11 +20,10 @@ class DeleteCarState extends Equatable {
   });
 
   DeleteCarState copyWith({
-     CarDeleteStatus deleteStatus,
+    CarDeleteStatus deleteStatus,
     String message,
   }) =>
       DeleteCarState(
-       
         deleteStatus: deleteStatus ?? this.deleteStatus,
         message: message ?? this.message,
       );

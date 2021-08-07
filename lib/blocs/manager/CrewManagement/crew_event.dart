@@ -19,7 +19,7 @@ class DoCrewDetailEvent extends CrewEvent {
 class UpdateCrewToListEvent extends CrewEvent {
   final String id;
   final List listName;
-  UpdateCrewToListEvent({this.id,this.listName});
+  UpdateCrewToListEvent({this.id, this.listName});
   @override
   List<Object> get props => [id, listName];
 }

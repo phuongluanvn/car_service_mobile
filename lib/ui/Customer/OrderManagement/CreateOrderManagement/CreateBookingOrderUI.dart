@@ -694,13 +694,14 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                             );
                           });
                     } else if (_note == null) {
-                      _createBookingBloc.add(CreateBookingButtonPressed(
-                          carId: _carId,
-                          serviceId: _packageId,
-                          note: null,
-                          timeBooking: _timeSelected,
-                          imageUrl: null),
-                          );
+                      _createBookingBloc.add(
+                        CreateBookingButtonPressed(
+                            carId: _carId,
+                            serviceId: _packageId,
+                            note: null,
+                            timeBooking: _timeSelected,
+                            imageUrl: null),
+                      );
                     } else if (_packageId == null) {
                       _createBookingBloc.add(CreateBookingButtonPressed(
                           carId: _carId,

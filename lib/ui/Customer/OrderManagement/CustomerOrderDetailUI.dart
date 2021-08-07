@@ -93,15 +93,21 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                       cardInforOrder(
                           state.orderDetail[0].status,
                           state.orderDetail[0].bookingTime,
-                          state.orderDetail[0].checkinTime != null ? _convertDate(state.orderDetail[0].checkinTime) : 'Chưa nhận xe',
-                          state.orderDetail[0].note!= null ? state.orderDetail[0].note : 'Không có ghi chú'),
+                          state.orderDetail[0].checkinTime != null
+                              ? _convertDate(state.orderDetail[0].checkinTime)
+                              : 'Chưa nhận xe',
+                          state.orderDetail[0].note != null
+                              ? state.orderDetail[0].note
+                              : 'Không có ghi chú'),
                       cardInforService(
                           state.orderDetail[0].vehicle.model,
                           state.orderDetail[0].vehicle.model,
                           state.orderDetail[0].vehicle.licensePlate,
                           state.orderDetail[0].orderDetails,
                           state.orderDetail[0].note == null ? false : true,
-                          state.orderDetail[0].note!= null ? state.orderDetail[0].note : 'Không có ghi chú',
+                          state.orderDetail[0].note != null
+                              ? state.orderDetail[0].note
+                              : 'Không có ghi chú',
                           state.orderDetail[0].package.price.toString()),
                       cardInforCar(
                           state.orderDetail[0].vehicle.manufacturer,
@@ -208,9 +214,14 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
     );
   }
 
-  Widget cardInforService(String servicePackageName, String serviceName,
-      String price, List services, bool serviceType, String note, String totalPrice) {
-
+  Widget cardInforService(
+      String servicePackageName,
+      String serviceName,
+      String price,
+      List services,
+      bool serviceType,
+      String note,
+      String totalPrice) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       child: Container(
@@ -266,7 +277,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
     );
   }
 
-    _convertDate(dateInput) {
+  _convertDate(dateInput) {
     return formatDate(
         DateTime.parse(dateInput), [dd, '-', mm, '-', yyyy, ' ', hh, ':', nn]);
   }
