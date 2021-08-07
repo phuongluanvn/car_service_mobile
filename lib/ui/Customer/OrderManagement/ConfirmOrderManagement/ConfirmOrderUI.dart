@@ -39,7 +39,8 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
             } else if (state.status == CustomerOrderStatus.loading) {
               return CircularProgressIndicator();
             } else if (state.status == CustomerOrderStatus.loadedOrderSuccess) {
-              if (state.orderCurrentLists != null && state.orderCurrentLists.isNotEmpty)
+              if (state.orderCurrentLists != null &&
+                  state.orderCurrentLists.isNotEmpty)
                 return Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
@@ -76,24 +77,28 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
                                             color: Colors.orangeAccent,
                                           ),
                                           Text(
-                                            state.orderCurrentLists[index].status,
+                                            state.orderCurrentLists[index]
+                                                .status,
                                             style: TextStyle(
                                                 color: Colors.orangeAccent),
                                           ),
                                         ]),
                                     leading: Image.asset(
                                         'lib/images/order_small.png'),
-                                    title: Text(state.orderCurrentLists[index].vehicle
-                                        .licensePlate),
-                                    subtitle: Text(state.orderCurrentLists[index]
-                                        .vehicle.manufacturer),
+                                    title: Text(state.orderCurrentLists[index]
+                                        .vehicle.licensePlate),
+                                    subtitle: Text(state
+                                        .orderCurrentLists[index]
+                                        .vehicle
+                                        .manufacturer),
                                     onTap: () {
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (_) =>
                                                   ConfirmOrderDetailUi(
                                                       orderId: state
-                                                          .orderCurrentLists[index]
+                                                          .orderCurrentLists[
+                                                              index]
                                                           .id)));
                                     },
                                   ),

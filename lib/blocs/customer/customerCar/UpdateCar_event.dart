@@ -21,4 +21,3 @@ class UpdateCarButtonPressed extends UpdateCarEvent {
       this.dateOfLastMaintenance,
       this.millageCount});
 }
-

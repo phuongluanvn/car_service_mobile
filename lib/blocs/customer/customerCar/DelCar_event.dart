@@ -11,4 +11,3 @@ class DoDeleteCarEvent extends DeleteCarEvent {
   @override
   List<Object> get props => [vehicleId];
 }
-

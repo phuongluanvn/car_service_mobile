@@ -104,8 +104,8 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
   }
 
   // Widget _buildSearch() => SearchWidget(
-  //   dataList: dataList, 
-  //   popupListItemBuilder: popupListItemBuilder, 
-  //   selectedItemBuilder: selectedItemBuilder, 
+  //   dataList: dataList,
+  //   popupListItemBuilder: popupListItemBuilder,
+  //   selectedItemBuilder: selectedItemBuilder,
   //   queryBuilder: queryBuilder)
 }

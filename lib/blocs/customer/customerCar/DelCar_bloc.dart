@@ -17,14 +17,13 @@ class DeleteCarBloc extends Bloc<DeleteCarEvent, DeleteCarState> {
 
   @override
   Stream<DeleteCarState> mapEventToState(DeleteCarEvent event) async* {
-     if (event is DoDeleteCarEvent) {
+    if (event is DoDeleteCarEvent) {
       yield state.copyWith(deleteStatus: CarDeleteStatus.loading);
       try {
         var data = await _repo.deleteVehicle(event.vehicleId);
         if (data != null) {
           yield state.copyWith(
-              message: data,
-              deleteStatus: CarDeleteStatus.deleteDetailSuccess);
+              message: data, deleteStatus: CarDeleteStatus.deleteDetailSuccess);
         }
       } catch (e) {
         yield state.copyWith(

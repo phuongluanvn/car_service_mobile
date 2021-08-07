@@ -1,31 +1,36 @@
 class OrderDetailModel {
   String id;
-  String note;
+  Null note;
   String status;
+  Null imageUrl;
   String createdTime;
   String bookingTime;
-  String checkinTime;
+  Null checkinTime;
   Customer customer;
   Vehicle vehicle;
   Package package;
+  Crew crew;
   List<OrderDetails> orderDetails;
 
   OrderDetailModel(
       {this.id,
       this.note,
       this.status,
+      this.imageUrl,
       this.createdTime,
       this.bookingTime,
       this.checkinTime,
       this.customer,
       this.vehicle,
       this.package,
+      this.crew,
       this.orderDetails});
 
   OrderDetailModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     note = json['note'];
     status = json['status'];
+    imageUrl = json['imageUrl'];
     createdTime = json['createdTime'];
     bookingTime = json['bookingTime'];
     checkinTime = json['checkinTime'];
@@ -36,6 +41,7 @@ class OrderDetailModel {
         json['vehicle'] != null ? new Vehicle.fromJson(json['vehicle']) : null;
     package =
         json['package'] != null ? new Package.fromJson(json['package']) : null;
+    crew = json['crew'] != null ? new Crew.fromJson(json['crew']) : null;
     if (json['orderDetails'] != null) {
       orderDetails = new List<OrderDetails>();
       json['orderDetails'].forEach((v) {
@@ -49,6 +55,7 @@ class OrderDetailModel {
     data['id'] = this.id;
     data['note'] = this.note;
     data['status'] = this.status;
+    data['imageUrl'] = this.imageUrl;
     data['createdTime'] = this.createdTime;
     data['bookingTime'] = this.bookingTime;
     data['checkinTime'] = this.checkinTime;
@@ -60,6 +67,9 @@ class OrderDetailModel {
     }
     if (this.package != null) {
       data['package'] = this.package.toJson();
+    }
+    if (this.crew != null) {
+      data['crew'] = this.crew.toJson();
     }
     if (this.orderDetails != null) {
       data['orderDetails'] = this.orderDetails.map((v) => v.toJson()).toList();
@@ -110,6 +120,7 @@ class Vehicle {
   String manufacturer;
   String model;
   String licensePlate;
+  Null imageUrl;
   Null dateOfLastMaintenance;
   int millageCount;
 
@@ -118,6 +129,7 @@ class Vehicle {
       this.manufacturer,
       this.model,
       this.licensePlate,
+      this.imageUrl,
       this.dateOfLastMaintenance,
       this.millageCount});
 
@@ -126,6 +138,7 @@ class Vehicle {
     manufacturer = json['manufacturer'];
     model = json['model'];
     licensePlate = json['licensePlate'];
+    imageUrl = json['imageUrl'];
     dateOfLastMaintenance = json['dateOfLastMaintenance'];
     millageCount = json['millageCount'];
   }
@@ -136,6 +149,7 @@ class Vehicle {
     data['manufacturer'] = this.manufacturer;
     data['model'] = this.model;
     data['licensePlate'] = this.licensePlate;
+    data['imageUrl'] = this.imageUrl;
     data['dateOfLastMaintenance'] = this.dateOfLastMaintenance;
     data['millageCount'] = this.millageCount;
     return data;
@@ -147,14 +161,16 @@ class Package {
   String name;
   String description;
   int price;
+  Null services;
 
-  Package({this.id, this.name, this.description, this.price});
+  Package({this.id, this.name, this.description, this.price, this.services});
 
   Package.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     description = json['description'];
     price = json['price'];
+    services = json['services'];
   }
 
   Map<String, dynamic> toJson() {
@@ -163,6 +179,84 @@ class Package {
     data['name'] = this.name;
     data['description'] = this.description;
     data['price'] = this.price;
+    data['services'] = this.services;
+    return data;
+  }
+}
+
+class Crew {
+  String id;
+  String timeAssigned;
+  Null timeFinished;
+  List<Members> members;
+
+  Crew({this.id, this.timeAssigned, this.timeFinished, this.members});
+
+  Crew.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    timeAssigned = json['timeAssigned'];
+    timeFinished = json['timeFinished'];
+    if (json['members'] != null) {
+      members = new List<Members>();
+      json['members'].forEach((v) {
+        members.add(new Members.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['timeAssigned'] = this.timeAssigned;
+    data['timeFinished'] = this.timeFinished;
+    if (this.members != null) {
+      data['members'] = this.members.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Members {
+  String username;
+  String role;
+  String fullname;
+  String phoneNumber;
+  String email;
+  String address;
+  String dateOfBirth;
+  String status;
+
+  Members(
+      {this.username,
+      this.role,
+      this.fullname,
+      this.phoneNumber,
+      this.email,
+      this.address,
+      this.dateOfBirth,
+      this.status});
+
+  Members.fromJson(Map<String, dynamic> json) {
+    username = json['username'];
+    role = json['role'];
+    fullname = json['fullname'];
+    phoneNumber = json['phoneNumber'];
+    email = json['email'];
+    address = json['address'];
+    dateOfBirth = json['dateOfBirth'];
+    status = json['status'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['username'] = this.username;
+    data['role'] = this.role;
+    data['fullname'] = this.fullname;
+    data['phoneNumber'] = this.phoneNumber;
+    data['email'] = this.email;
+    data['address'] = this.address;
+    data['dateOfBirth'] = this.dateOfBirth;
+    data['status'] = this.status;
     return data;
   }
 }
@@ -172,6 +266,7 @@ class OrderDetails {
   String serviceId;
   String accessoryId;
   String name;
+  int quantity;
   int price;
   bool isIncurred;
   bool isFinished;
@@ -182,6 +277,7 @@ class OrderDetails {
       this.serviceId,
       this.accessoryId,
       this.name,
+      this.quantity,
       this.price,
       this.isIncurred,
       this.isFinished,
@@ -192,6 +288,7 @@ class OrderDetails {
     serviceId = json['serviceId'];
     accessoryId = json['accessoryId'];
     name = json['name'];
+    quantity = json['quantity'];
     price = json['price'];
     isIncurred = json['isIncurred'];
     isFinished = json['isFinished'];
@@ -204,6 +301,7 @@ class OrderDetails {
     data['serviceId'] = this.serviceId;
     data['accessoryId'] = this.accessoryId;
     data['name'] = this.name;
+    data['quantity'] = this.quantity;
     data['price'] = this.price;
     data['isIncurred'] = this.isIncurred;
     data['isFinished'] = this.isFinished;

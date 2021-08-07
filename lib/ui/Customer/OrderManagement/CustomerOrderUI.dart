@@ -117,12 +117,19 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                                       ]),
                                   leading:
                                       Image.asset('lib/images/order_small.png'),
-                                  title: Text(state
-                                      .orderLists[index].vehicle.licensePlate,
-                                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
-                                  subtitle: Text(_convertDate(
-                                      state.orderLists[index].bookingTime),
-                                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),),
+                                  title: Text(
+                                      state.orderLists[index].vehicle
+                                          .licensePlate,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black)),
+                                  subtitle: Text(
+                                    _convertDate(
+                                        state.orderLists[index].bookingTime),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                  ),
                                   onTap: () {
                                     print(state.orderLists[index].id);
                                     Navigator.of(context).push(

@@ -118,7 +118,7 @@ class _ManagerAccountUiState extends State<ManagerAccountUi> {
       ),
     );
   }
- 
+
   void _logout(BuildContext context) {
     showDialog(
         context: context,

@@ -17,8 +17,8 @@ class CreateBookingBloc extends Bloc<CreateBookingEvent, CreateBookingState> {
     if (event is CreateBookingButtonPressed) {
       yield state.copyWith(status: CreateBookingStatus.loading);
       try {
-        var data = await _repo.createNewBooking(
-            event.carId, event.serviceId, event.note, event.timeBooking, event.imageUrl);
+        var data = await _repo.createNewBooking(event.carId, event.serviceId,
+            event.note, event.timeBooking, event.imageUrl);
         // String jsonsDataString = data.toString();
         print(data);
         // final jsonData = jsonDecode(jsonsDataString);

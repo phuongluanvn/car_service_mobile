@@ -63,8 +63,8 @@ class CustomerCarState extends Equatable {
   CustomerCarState copyWith({
     CustomerCarStatus status,
     final CustomerCarWithIdStatus withIdstatus,
-     CustomerCarDeleteStatus deleteStatus,
-     CustomerCarUpdateDetailStatus updateDetailStatus,
+    CustomerCarDeleteStatus deleteStatus,
+    CustomerCarUpdateDetailStatus updateDetailStatus,
     CustomerCarDetailStatus detailStatus,
     List<VehicleModel> vehicleDetail,
     List<VehicleModel> vehicleLists,

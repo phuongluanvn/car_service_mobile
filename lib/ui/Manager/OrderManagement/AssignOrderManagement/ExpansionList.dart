@@ -154,30 +154,30 @@ class _ExpansionListState extends State<ExpansionList> {
                                               setState(() {
                                                 isEditTextField = false;
                                               });
-                                              processBloc.add(UpdateTest(orderId: widget.orderId, acc: state
-                                                  .processDetail[0].orderDetails));
-                                              // processBloc.add(
-                                              //   UpdateAccesIdToOrder(
-                                              //       orderId: widget.orderId,
-                                              //       detailId: state
-                                              //           .processDetail[0]
-                                              //           .orderDetails[
-                                              //               widget.index]
-                                              //           .id,
-                                              //       accId: _accId,
-                                              //       serviceId: state
-                                              //           .processDetail[0]
-                                              //           .orderDetails[
-                                              //               widget.index]
-                                              //           .serviceId,
-                                              //       quantity: 1,
-                                              //       price: state
-                                              //           .processDetail[0]
-                                              //           .orderDetails[
-                                              //               widget.index]
-                                              //           .price),
-                                              // );
-                                              // print(_accId);
+                                              // processBloc.add(UpdateTest(orderId: widget.orderId, acc: state
+                                              //     .processDetail[0].orderDetails));
+                                              processBloc.add(
+                                                UpdateAccesIdToOrder(
+                                                    orderId: widget.orderId,
+                                                    detailId: state
+                                                        .processDetail[0]
+                                                        .orderDetails[
+                                                            widget.index]
+                                                        .id,
+                                                    accId: _accId,
+                                                    serviceId: state
+                                                        .processDetail[0]
+                                                        .orderDetails[
+                                                            widget.index]
+                                                        .serviceId,
+                                                    quantity: 1,
+                                                    price: state
+                                                        .processDetail[0]
+                                                        .orderDetails[
+                                                            widget.index]
+                                                        .price),
+                                              );
+                                              print(_accId);
                                             },
                                             child: Text('Cập nhật')),
                                       ],

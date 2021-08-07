@@ -221,7 +221,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                           ),
                         );
                         var modelOfManu = TextFormField(
-                           onChanged: (newModel) {
+                          onChanged: (newModel) {
                             _model = newModel;
                           },
                           initialValue: state.vehicleDetail[0].model,
@@ -241,7 +241,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                           ),
                         );
                         var licenNumber = TextFormField(
-                           onChanged: (newPlace) {
+                          onChanged: (newPlace) {
                             _licensePlate = newPlace;
                           },
                           initialValue: state.vehicleDetail[0].licensePlate,
@@ -261,7 +261,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                           ),
                         );
                         var repairTime = TextFormField(
-                           onChanged: (newManu) {
+                          onChanged: (newManu) {
                             _dateOfLastMaintenance = DateTime.parse(newManu);
                           },
                           initialValue:
@@ -282,7 +282,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                           ),
                         );
                         var kilometer = TextFormField(
-                           onChanged: (km) {
+                          onChanged: (km) {
                             _millageCount = km;
                           },
                           initialValue:
