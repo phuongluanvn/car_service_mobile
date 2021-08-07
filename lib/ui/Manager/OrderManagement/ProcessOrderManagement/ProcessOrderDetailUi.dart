@@ -675,11 +675,16 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                 //   builder: (context, state) {
                                 //     return
                                 ListView.builder(
-                                    itemCount:  stafflist.length,
+                                    itemCount: stafflist.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return CheckboxListTile(
-                                        value: selectCrew.indexWhere((element) => element.username == stafflist[index].username) >= 0,
+                                        value: selectCrew.indexWhere(
+                                                (element) =>
+                                                    element.username ==
+                                                    stafflist[index]
+                                                        .username) >=
+                                            0,
                                         onChanged: (bool selected) {
                                           if (selected == true) {
                                             setState(() {
@@ -705,7 +710,6 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                         },
                                         title: Text(stafflist[index].fullname),
                                       );
-                                   
                                     }),
                             //   },
                             // ),

@@ -81,7 +81,7 @@ class OrderDetailModel extends Equatable{
 
   @override
   // TODO: implement props
-  List<Object> get props => throw UnimplementedError();
+  List<Object> get props => [];
 }
 
 class Customer extends Equatable{
@@ -122,14 +122,14 @@ class Customer extends Equatable{
 
   @override
   // TODO: implement props
-  List<Object> get props => throw UnimplementedError();
+  List<Object> get props => [];
 }
 
 class Vehicle extends Equatable{
   
   @override
   // TODO: implement props
-  List<Object> get props => throw UnimplementedError();
+  List<Object> get props => [];
 String id;
   String manufacturer;
   String model;
@@ -199,7 +199,7 @@ class Package extends Equatable{
 
   @override
   // TODO: implement props
-  List<Object> get props => throw UnimplementedError();
+  List<Object> get props => [];
 }
 
 class Crew extends Equatable{
@@ -235,7 +235,7 @@ class Crew extends Equatable{
 
   @override
   // TODO: implement props
-  List<Object> get props => throw UnimplementedError();
+  List<Object> get props => [];
 }
 
 class Members extends Equatable{
@@ -337,5 +337,5 @@ class OrderDetails extends Equatable{
 
   @override
   // TODO: implement props
-  List<Object> get props => throw UnimplementedError();
+  List<Object> get props => [];
 }
