@@ -1,11 +1,13 @@
-class OrderDetailModel {
+import 'package:equatable/equatable.dart';
+
+class OrderDetailModel extends Equatable{
   String id;
-  Null note;
+  String note;
   String status;
-  Null imageUrl;
+  String imageUrl;
   String createdTime;
   String bookingTime;
-  Null checkinTime;
+  String checkinTime;
   Customer customer;
   Vehicle vehicle;
   Package package;
@@ -76,9 +78,13 @@ class OrderDetailModel {
     }
     return data;
   }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => throw UnimplementedError();
 }
 
-class Customer {
+class Customer extends Equatable{
   String username;
   String email;
   String fullname;
@@ -113,10 +119,18 @@ class Customer {
     data['accumulatedPoint'] = this.accumulatedPoint;
     return data;
   }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => throw UnimplementedError();
 }
 
-class Vehicle {
-  String id;
+class Vehicle extends Equatable{
+  
+  @override
+  // TODO: implement props
+  List<Object> get props => throw UnimplementedError();
+String id;
   String manufacturer;
   String model;
   String licensePlate;
@@ -156,7 +170,7 @@ class Vehicle {
   }
 }
 
-class Package {
+class Package extends Equatable{
   String id;
   String name;
   String description;
@@ -182,9 +196,13 @@ class Package {
     data['services'] = this.services;
     return data;
   }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => throw UnimplementedError();
 }
 
-class Crew {
+class Crew extends Equatable{
   String id;
   String timeAssigned;
   Null timeFinished;
@@ -214,9 +232,13 @@ class Crew {
     }
     return data;
   }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => throw UnimplementedError();
 }
 
-class Members {
+class Members extends Equatable{
   String username;
   String role;
   String fullname;
@@ -259,9 +281,13 @@ class Members {
     data['status'] = this.status;
     return data;
   }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [this.fullname];
 }
 
-class OrderDetails {
+class OrderDetails extends Equatable{
   String id;
   String serviceId;
   String accessoryId;
@@ -308,4 +334,8 @@ class OrderDetails {
     data['timeFinished'] = this.timeFinished;
     return data;
   }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => throw UnimplementedError();
 }
