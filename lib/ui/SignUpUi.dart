@@ -91,6 +91,21 @@ class _SignUpUiState extends State<SignUpUi> {
       ),
     );
 
+   final address = TextField(
+      controller: email,
+      keyboardType: TextInputType.emailAddress,
+      autofocus: false,
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.email, color: Color.fromRGBO(8, 56, 99, 1)),
+        filled: true,
+        fillColor: Colors.white,
+        hintStyle: TextStyle(color: Colors.black54),
+        hintText: 'Địa chỉ',
+        contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+
     final phone = TextField(
       controller: phoneNumber,
       autofocus: false,
@@ -151,10 +166,10 @@ class _SignUpUiState extends State<SignUpUi> {
           // ),
           onPressed: () {
             signUpBloc.add(SignUpButtonPressed(
-                user: username.text,
-                name: fullname.text,
+                username: username.text,
+                fullname: fullname.text,
                 email: email.text,
-                phone: phoneNumber.text,
+                phoneNumber: phoneNumber.text,
                 password: password.text));
           },
           style:
@@ -220,6 +235,10 @@ class _SignUpUiState extends State<SignUpUi> {
               height: 20,
             ),
             phone,
+            SizedBox(
+              height: 20,
+            ),
+            address,
             SizedBox(
               height: 20,
             ),

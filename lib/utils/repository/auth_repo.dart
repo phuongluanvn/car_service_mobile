@@ -9,6 +9,8 @@ class AuthRepository {
     'Accept': 'application/json'
   };
 
+  String BASE_URL = "https://carservicesystem.azurewebsites.net/api/";
+
   login(String username, String password) async {
     FirebaseMessaging _message = FirebaseMessaging.instance;
     String token = await _message.getToken();
@@ -50,29 +52,24 @@ class AuthRepository {
 //   "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNob253YW5nIiwicm9sZSI6ImN1c3RvbWVyIiwibmJmIjoxNjI0ODQ4NDU4LCJleHAiOjE2MjQ4NTIwNTgsImlhdCI6MTYyNDg0ODQ1OH0.eTitfG3IZoOhtUikOUQisY76s5QzpW7G5jVEHu3exFk"
 // }
 
-  signUp(String user, String name, String email, String phone,
-      String password) async {
+  signUp(String username, String password, String email, String fullname,
+      String phoneNumber, String address) async {
     final body = jsonEncode({
-      "taiKhoan": '${user}',
-      "hoTen": '${name}',
-      "email": '${email}',
-      "soDt": '${phone}',
-      "matKhau": '${password}',
-      "maLoaiNguoiDung": 'KhachHang',
-      "maNhom": "GP01",
+      "username": username,
+      "password": password,
+      "email": email,
+      "fullname": fullname,
+      "phoneNumber": phoneNumber,
+      "address": address
     });
 
-    var res = await http.post(
-        Uri.parse(
-            "https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/DangKy"),
-        headers: headers,
-        body: body);
+    var res = await http.post(Uri.parse(BASE_URL + "customers"),
+        headers: headers, body: body);
     final data = (res.body);
-    print(data);
     if (data != null) {
       return data;
     } else {
-      return null;
+      return res.body;
     }
   }
 }

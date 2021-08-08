@@ -100,15 +100,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
               } else if (state.detailStatus == ProcessDetailStatus.success) {
                 if (state.processDetail != null &&
                     state.processDetail.isNotEmpty) {
-                  selectCrew.add(state.processDetail[0].crew.members);
-                  // for (int i = 0;
-                  //     i <= state.processDetail[0].crew.members.length;
-                  //     i++) {
-                  //   selectCrewName
-                  //       .add(state.processDetail[0].crew.members[i].username);
-                    print('selectCrewName is');
-                    print(selectCrewName);
-                  // }
+                  selectCrew = state.processDetail[0].crew.members;
                   return Padding(
                     padding: EdgeInsets.all(12.0),
                     child: Column(
@@ -550,6 +542,29 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                                     .members
                                                     .length,
                                                 itemBuilder: (context, index) {
+                                                  // state.processDetail[0].crew
+                                                  //     .members
+                                                  //     .map((e) => selectCrewName
+                                                  //         .add(e.fullname))
+                                                  //     .toList();
+                                                  print(selectCrewName);
+                                                  // for (int i = 0;
+                                                  //     i <=
+                                                  //         state
+                                                  //             .processDetail[0]
+                                                  //             .crew
+                                                  //             .members
+                                                  //             .length;
+                                                  //     i++) {
+                                                  //   selectCrewName.add(state
+                                                  //       .processDetail[0]
+                                                  //       .crew
+                                                  //       .members[i]
+                                                  //       .username);
+                                                  //   print('selectCrewName is');
+                                                  //   print(state.processDetail[0]
+                                                  //       .crew.members.length);
+                                                  // }
                                                   return Card(
                                                     child: Column(children: [
                                                       ListTile(
@@ -694,25 +709,26 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                                         .username) >=
                                             0,
                                         onChanged: (bool selected) {
-                                          if (selected == true) {
+                                          if (selected) {
                                             setState(() {
                                               // BlocProvider.of<AssignorderCubit>(
                                               //         context)
                                               //     .addItem(stafflist[index]);
-                                              selectCrew.add(
+                                              selectCrew[index].add(stafflist[index]);
+                                              selectCrewName.add(
                                                   stafflist[index].username);
                                               print('select crew name 1');
-                                              print(selectCrew);
+                                              print(selectCrewName);
                                             });
                                           } else {
                                             setState(() {
                                               // BlocProvider.of<AssignorderCubit>(
                                               //         context)
                                               //     .removeItem(stafflist[index]);
-                                              selectCrew.remove(
+                                              selectCrewName.remove(
                                                   stafflist[index].username);
                                               print('select crew name 2');
-                                              print(selectCrew);
+                                              print(selectCrewName);
                                             });
                                           }
                                         },

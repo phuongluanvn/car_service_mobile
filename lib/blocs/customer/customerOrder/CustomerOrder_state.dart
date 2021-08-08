@@ -26,6 +26,9 @@ class CustomerOrderState extends Equatable {
   final List<OrderModel> orderLists;
   final List<OrderModel> orderCurrentLists;
   final List<OrderModel> orderHistoryLists;
+  final List<OrderModel> orderProcessingLists;
+  final List<OrderModel> orderCheckingLists;
+  final List<OrderModel> orderWaitingConfirmLists;
 
   final List<OrderDetailModel> orderDetail;
   final String message;
@@ -36,6 +39,9 @@ class CustomerOrderState extends Equatable {
     this.orderLists: const [],
     this.orderCurrentLists: const [],
     this.orderHistoryLists: const [],
+    this.orderProcessingLists: const [],
+    this.orderCheckingLists: const [],
+    this.orderWaitingConfirmLists: const [],
     this.message: '',
   });
 
@@ -45,6 +51,9 @@ class CustomerOrderState extends Equatable {
     List<OrderModel> orderLists,
     List<OrderModel> orderCurrentLists,
     List<OrderModel> orderHistoryLists,
+    List<OrderModel> orderProcessingLists,
+    List<OrderModel> orderCheckingLists,
+    List<OrderModel> orderWaitingConfirmLists,
     List<OrderDetailModel> orderDetail,
     String message,
   }) =>
@@ -54,6 +63,10 @@ class CustomerOrderState extends Equatable {
         orderLists: orderLists ?? this.orderLists,
         orderCurrentLists: orderCurrentLists ?? this.orderCurrentLists,
         orderHistoryLists: orderHistoryLists ?? this.orderHistoryLists,
+        orderProcessingLists: orderProcessingLists ?? this.orderProcessingLists,
+        orderCheckingLists: orderCheckingLists ?? this.orderCheckingLists,
+        orderWaitingConfirmLists:
+            orderWaitingConfirmLists ?? this.orderWaitingConfirmLists,
         orderDetail: orderDetail ?? this.orderDetail,
         message: message ?? this.message,
       );
@@ -64,6 +77,9 @@ class CustomerOrderState extends Equatable {
         orderLists,
         orderCurrentLists,
         orderHistoryLists,
+        orderProcessingLists,
+        orderCheckingLists,
+        orderWaitingConfirmLists,
         orderDetail,
         message,
       ];

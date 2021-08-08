@@ -6,6 +6,7 @@ import 'package:car_service/ui/Customer/OrderManagement/CreateOrderManagement/Cr
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderDetailUI.dart';
 import 'package:car_service/utils/model/OrderModel.dart';
 import 'package:date_format/date_format.dart';
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,6 +18,7 @@ class CustomerOrderUi extends StatefulWidget {
 class _CustomerOrderUiState extends State<CustomerOrderUi> {
   TextEditingController _textEditingController = TextEditingController();
   List<OrderModel> vehicleListsOnSearch = [];
+  DateTime _selectedDay;
 
   @override
   void initState() {
@@ -55,30 +57,31 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                     child: Column(
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              color: Colors.grey.shade200,
-                              borderRadius: BorderRadius.circular(30)),
-                          child: TextField(
-                            controller: _textEditingController,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                contentPadding: EdgeInsets.all(15),
-                                hintText: 'Tìm kiếm'),
-                            onChanged: (value) {
-                              setState(() {
-                                vehicleListsOnSearch = state.orderLists
-                                    .where((element) => element
-                                        .vehicle.licensePlate
-                                        .toLowerCase()
-                                        .contains(value.toLowerCase()))
-                                    .toList();
-                              });
-                            },
-                          ),
-                        ),
+                        // Container(
+                        //   decoration: BoxDecoration(
+                        //       color: Colors.grey.shade200,
+                        //       borderRadius: BorderRadius.circular(30)),
+                        //   child: TextField(
+                        //     controller: _textEditingController,
+                        //     decoration: InputDecoration(
+                        //         border: InputBorder.none,
+                        //         errorBorder: InputBorder.none,
+                        //         focusedBorder: InputBorder.none,
+                        //         contentPadding: EdgeInsets.all(15),
+                        //         hintText: 'Tìm kiếm'),
+                        //     onChanged: (value) {
+                        //       setState(() {
+                        //         vehicleListsOnSearch = state.orderLists
+                        //             .where((element) => element
+                        //                 .vehicle.licensePlate
+                        //                 .toLowerCase()
+                        //                 .contains(value.toLowerCase()))
+                        //             .toList();
+                        //       });
+                        //     },
+                        //   ),
+                        // ),
+                        
                         Text(
                           'Thông tin đơn hàng',
                           style: TextStyle(

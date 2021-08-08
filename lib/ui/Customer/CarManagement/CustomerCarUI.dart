@@ -61,37 +61,39 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
               return CircularProgressIndicator();
             } else if (state.status == CustomerCarStatus.loadedCarSuccess) {
               if (state.vehicleLists != null && state.vehicleLists.isNotEmpty)
-                return Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
-                          borderRadius: BorderRadius.circular(30)),
-                      child: TextField(
-                        controller: _textEditingController,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            contentPadding: EdgeInsets.all(15),
-                            hintText: 'Tìm kiếm'),
-                        onChanged: (value) {
-                          setState(() {
-                            vehicleListsOnSearch = state.vehicleLists
-                                .where((element) => element.licensePlate
-                                    .toLowerCase()
-                                    .contains(value.toLowerCase()))
-                                .toList();
-                          });
-                        },
-                      ),
-                    ),
-                    _textEditingController.text.isNotEmpty &&
-                            vehicleListsOnSearch.isEmpty
-                        ? Center(
-                            child: Text('Không tìm thấy xe'),
-                          )
-                        : Center(
+                return 
+                // Column(
+                  // children: [
+                    // Container(
+                    //   decoration: BoxDecoration(
+                    //       color: Colors.grey.shade200,
+                    //       borderRadius: BorderRadius.circular(30)),
+                    //   child: TextField(
+                    //     controller: _textEditingController,
+                    //     decoration: InputDecoration(
+                    //         border: InputBorder.none,
+                    //         errorBorder: InputBorder.none,
+                    //         focusedBorder: InputBorder.none,
+                    //         contentPadding: EdgeInsets.all(15),
+                    //         hintText: 'Tìm kiếm'),
+                    //     onChanged: (value) {
+                    //       setState(() {
+                    //         vehicleListsOnSearch = state.vehicleLists
+                    //             .where((element) => element.licensePlate
+                    //                 .toLowerCase()
+                    //                 .contains(value.toLowerCase()))
+                    //             .toList();
+                    //       });
+                    //     },
+                    //   ),
+                    // ),
+                    // _textEditingController.text.isNotEmpty &&
+                    //         vehicleListsOnSearch.isEmpty
+                    //     ? Center(
+                    //         child: Text('Không tìm thấy xe'),
+                    //       )
+                    //     : 
+                        Center(
                           child: ListView.builder(
                               itemCount: _textEditingController.text.isNotEmpty
                                   ? vehicleListsOnSearch.length
@@ -130,9 +132,9 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
                                 );
                               },
                             ),
-                        ),
-                  ],
-                );
+                        );
+                //   ],
+                // );
               else
                 return Center(
                   child: Text('Không có thông tin xe'),
