@@ -101,6 +101,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                 if (state.processDetail != null &&
                     state.processDetail.isNotEmpty) {
                   selectCrew = state.processDetail[0].crew.members;
+                  
                   return Padding(
                     padding: EdgeInsets.all(12.0),
                     child: Column(
@@ -547,7 +548,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                                   //     .map((e) => selectCrewName
                                                   //         .add(e.fullname))
                                                   //     .toList();
-                                                  print(selectCrewName);
+                                                  // print(selectCrewName);
                                                   // for (int i = 0;
                                                   //     i <=
                                                   //         state
@@ -674,6 +675,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
     return showDialog(
         context: context,
         builder: (context) {
+          
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
               content: SingleChildScrollView(
@@ -714,7 +716,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                               // BlocProvider.of<AssignorderCubit>(
                                               //         context)
                                               //     .addItem(stafflist[index]);
-                                              selectCrew[index].add(stafflist[index]);
+                                              selectCrew.add(stafflist[index]);
                                               selectCrewName.add(
                                                   stafflist[index].username);
                                               print('select crew name 1');
@@ -727,6 +729,8 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                               //     .removeItem(stafflist[index]);
                                               selectCrewName.remove(
                                                   stafflist[index].username);
+                                              selectCrew
+                                                  .remove(stafflist[index]);
                                               print('select crew name 2');
                                               print(selectCrewName);
                                             });
