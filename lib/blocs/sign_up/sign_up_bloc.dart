@@ -19,7 +19,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       yield state.copyWith(status: SignUpStatus.loading);
       try {
         var data = await _repo.signUp(
-            event.user, event.name, event.email, event.phone, event.password);
+            event.username, event.password, event.email, event.phoneNumber, event.fullname, event.address);
         String jsonsDataString = data.toString();
         final jsonData = jsonDecode(jsonsDataString);
         print(jsonData);

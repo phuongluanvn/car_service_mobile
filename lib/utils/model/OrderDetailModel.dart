@@ -1,3 +1,4 @@
+import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:equatable/equatable.dart';
 
 class OrderDetailModel extends Equatable{
@@ -206,7 +207,7 @@ class Crew extends Equatable{
   String id;
   String timeAssigned;
   Null timeFinished;
-  List<Members> members;
+  List<StaffModel> members;
 
   Crew({this.id, this.timeAssigned, this.timeFinished, this.members});
 
@@ -215,9 +216,9 @@ class Crew extends Equatable{
     timeAssigned = json['timeAssigned'];
     timeFinished = json['timeFinished'];
     if (json['members'] != null) {
-      members = new List<Members>();
+      members = new List<StaffModel>();
       json['members'].forEach((v) {
-        members.add(new Members.fromJson(v));
+        members.add(new StaffModel.fromJson(v));
       });
     }
   }

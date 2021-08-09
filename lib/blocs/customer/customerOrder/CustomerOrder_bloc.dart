@@ -18,6 +18,9 @@ class CustomerOrderBloc extends Bloc<CustomerOrderEvent, CustomerOrderState> {
     if (event is DoOrderListEvent) {
       List<OrderModel> confirmOrderList = [];
       List<OrderModel> historyOrderList = [];
+      List<OrderModel> checkingOrderList = [];
+      List<OrderModel> processingOrderList = [];
+      List<OrderModel> waittingConfirmOrderList = [];
 
       yield state.copyWith(status: CustomerOrderStatus.loading);
       try {
@@ -31,9 +34,15 @@ class CustomerOrderBloc extends Bloc<CustomerOrderEvent, CustomerOrderState> {
                     if (order.status == 'Đợi phản hồi')
                       {confirmOrderList.add(order)}
                     else if (order.status == 'Hoàn thành' ||
-                        order.status != 'Hủy đơn' ||
-                        order.status != 'Từ chối')
+                        order.status == 'Hủy đơn' ||
+                        order.status == 'Từ chối')
                       {historyOrderList.add(order)}
+                    else if (order.status == 'Kiểm tra')
+                      {checkingOrderList.add(order)}
+                    else if (order.status == 'Đang tiến hành')
+                      {processingOrderList.add(order)}
+                    else if (order.status == 'Đợi xác nhận')
+                      {waittingConfirmOrderList.add(order)}
                   })
               .toList();
           if (orderLists != null) {
@@ -41,6 +50,9 @@ class CustomerOrderBloc extends Bloc<CustomerOrderEvent, CustomerOrderState> {
                 orderLists: orderLists,
                 orderCurrentLists: confirmOrderList,
                 orderHistoryLists: historyOrderList,
+                orderCheckingLists: checkingOrderList,
+                orderProcessingLists: processingOrderList,
+                orderWaitingConfirmLists: waittingConfirmOrderList,
                 status: CustomerOrderStatus.loadedOrderSuccess);
           }
         } else {

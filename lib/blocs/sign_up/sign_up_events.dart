@@ -24,12 +24,13 @@ class SignUpPasswordChanged extends SignUpEvent {
 }
 
 class SignUpButtonPressed extends SignUpEvent {
-  final String user;
-  final String name;
-  final String phone;
-  final String email;
+  final String username;
   final String password;
+  final String phoneNumber;
+  final String email;
+  final String address;
+  final String fullname;
 
   SignUpButtonPressed(
-      {this.user, this.name, this.email, this.phone, this.password});
+      {this.username, this.password, this.email, this.phoneNumber, this.address, this.fullname});
 }
