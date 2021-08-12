@@ -26,34 +26,34 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
 
   _changeColorStt(status) {
     switch (status) {
-      case 'Booked':
+      case 'Đợi xác nhận':
         color = Colors.orange[600];
         break;
-      case 'Accepted':
+      case 'Đã xác nhận':
         color = Colors.green[200];
         break;
-      case 'Checkin':
+      case 'Đã nhận xe':
         color = Colors.blue[400];
         break;
-      case 'Checking':
+      case 'Kiểm tra':
         color = Colors.blue[700];
         break;
-      case 'Waiting confirm':
+      case 'Đợi phản hồi':
         color = Colors.orange;
         break;
-      case 'Confirmed':
+      case 'Đã phản hồi':
         color = Colors.teal[300];
         break;
-      case 'Denied':
+      case 'Từ chối':
         color = Colors.red[600];
         break;
-      case 'Working':
+      case 'Đang tiến hành':
         color = Colors.green[300];
         break;
-      case 'Complete':
+      case 'Hoàn thành':
         color = Colors.green[600];
         break;
-      case 'Cancle':
+      case 'Hủy':
         color = Colors.red;
         break;
 //con nhieu case nua lam sau
@@ -280,5 +280,9 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
   _convertDate(dateInput) {
     return formatDate(
         DateTime.parse(dateInput), [dd, '-', mm, '-', yyyy, ' ', hh, ':', nn]);
+  }
+
+  _countPriceService() {
+    
   }
 }

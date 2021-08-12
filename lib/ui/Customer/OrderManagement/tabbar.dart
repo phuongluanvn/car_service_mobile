@@ -15,11 +15,12 @@ class TabOrderCustomer extends StatefulWidget {
 class _TabOrderState extends State<TabOrderCustomer> {
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = <Widget>[
-    CustomerOrderUi(),
-    ConfirmOrderUI(),
+    WaitingConfirmOrderUI(),
+    WaitingConfirmOrderUI(),
     CheckingOrderUI(),
     ProcessingOrderUI(),
-    WaitingConfirmOrderUI()
+    ConfirmOrderUI(),
+    CustomerOrderUi(),
   ];
 
   void _onItemTap(int index) {
@@ -31,7 +32,7 @@ class _TabOrderState extends State<TabOrderCustomer> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 6,
       child: Scaffold(
         appBar: AppBar(
           title: Text('Đơn hàng'),
@@ -53,10 +54,10 @@ class _TabOrderState extends State<TabOrderCustomer> {
             isScrollable: true,
             tabs: <Widget>[
               Tab(
-                text: 'Tất cả đơn hàng',
+                text: 'Đợi xác nhận',
               ),
               Tab(
-                text: 'Đợi phản hồi',
+                text: 'Đã xác nhận',
               ),
               Tab(
                 text: 'Kiểm tra',
@@ -65,7 +66,10 @@ class _TabOrderState extends State<TabOrderCustomer> {
                 text: 'Đang tiến hành',
               ),
               Tab(
-                text: 'Đợi xác nhận',
+                text: 'Đợi phản hồi',
+              ),
+              Tab(
+                text: 'Tất cả đơn hàng',
               ),
             ],
           ),
@@ -76,6 +80,4 @@ class _TabOrderState extends State<TabOrderCustomer> {
       ),
     );
   }
-
-
 }

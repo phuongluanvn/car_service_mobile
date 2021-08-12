@@ -30,50 +30,50 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
       yield LoginLoadingState();
       var res = await repo.login(event.email, event.password);
       var data = json.decode(res);
-      print(data);
+      print(res);
 
-      if (data != null) {
-        if (data['role'] == 'manager') {
-          var dataProfile = data['profile'];
-          var enc = json.encode(dataProfile);
-          var dec = json.decode(enc);
+      // if (data != null) {
+      //   if (data['role'] == 'manager') {
+      //     var dataProfile = data['profile'];
+      //     var enc = json.encode(dataProfile);
+      //     var dec = json.decode(enc);
 
-          pref.setString("Fullname", dec['Fullname']);
-          pref.setString("PhoneNumber", dec['PhoneNumber']);
-          pref.setString("DateOfBirth", dec['DateOfBirth']);
-          pref.setString("Status", dec['Status']);
-          pref.setString("Username", data['username']);
+      //     pref.setString("Fullname", dec['Fullname']);
+      //     pref.setString("PhoneNumber", dec['PhoneNumber']);
+      //     pref.setString("DateOfBirth", dec['DateOfBirth']);
+      //     pref.setString("Status", dec['Status']);
+      //     pref.setString("Username", data['username']);
 
-          yield ManagerLoginSuccessState();
-        } else if (data['role'] == 'staff') {
-          var dataProfile = data['profile'];
-          var enc = json.encode(dataProfile);
-          var dec = json.decode(enc);
+      //     yield ManagerLoginSuccessState();
+      //   } else if (data['role'] == 'staff') {
+      //     var dataProfile = data['profile'];
+      //     var enc = json.encode(dataProfile);
+      //     var dec = json.decode(enc);
 
-          pref.setString("Fullname", dec['Fullname']);
-          pref.setString("PhoneNumber", dec['PhoneNumber']);
-          pref.setString("DateOfBirth", dec['DateOfBirth']);
-          pref.setString("Status", dec['Status']);
-          pref.setString("Username", data['username']);
+      //     pref.setString("Fullname", dec['Fullname']);
+      //     pref.setString("PhoneNumber", dec['PhoneNumber']);
+      //     pref.setString("DateOfBirth", dec['DateOfBirth']);
+      //     pref.setString("Status", dec['Status']);
+      //     pref.setString("Username", data['username']);
 
-          yield StaffLoginSuccessState();
-        } else if (data['role'] == 'customer') {
-          var dataProfile = data['profile'];
-          var enc = json.encode(dataProfile);
-          var dec = json.decode(enc);
+      //     yield StaffLoginSuccessState();
+      //   } else if (data['role'] == 'customer') {
+      //     var dataProfile = data['profile'];
+      //     var enc = json.encode(dataProfile);
+      //     var dec = json.decode(enc);
 
-          pref.setString("Fullname", dec['Fullname']);
-          pref.setInt("AccumulatedPoint", dec['AccumulatedPoint']);
-          pref.setString("PhoneNumber", dec['PhoneNumber']);
-          pref.setString("Address", dec['Address']);
-          pref.setString("Email", dec['Email']);
-          pref.setString("Username", data['username']);
+      //     pref.setString("Fullname", dec['Fullname']);
+      //     pref.setInt("AccumulatedPoint", dec['AccumulatedPoint']);
+      //     pref.setString("PhoneNumber", dec['PhoneNumber']);
+      //     pref.setString("Address", dec['Address']);
+      //     pref.setString("Email", dec['Email']);
+      //     pref.setString("Username", data['username']);
 
-          yield CustomerLoginSuccessState();
-        } else {
-          yield LoginErrorState(message: "Auth Error");
-        }
-      }
+      //     yield CustomerLoginSuccessState();
+      //   } else {
+      //     yield LoginErrorState(message: "Auth Error");
+      //   }
+      // }
     }
   }
 }

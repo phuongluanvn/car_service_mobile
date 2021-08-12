@@ -296,7 +296,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                             hintStyle: TextStyle(color: Colors.black54),
                             // hintText: state.vehicleDetail[0].taiKhoan,
                             // text
-                            labelText: 'Số km',
+                            labelText: 'Số km ghi nhận gần nhất',
                             contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)),
