@@ -117,8 +117,29 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                     Text(
                                       'Cập nhật thông tin dịch vụ',
                                       style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600),
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w800),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Text(
+                                          'Tên dịch vụ',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        Text(
+                                          'Giá tiền',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ],
                                     ),
                                     Center(
                                       child: Column(
