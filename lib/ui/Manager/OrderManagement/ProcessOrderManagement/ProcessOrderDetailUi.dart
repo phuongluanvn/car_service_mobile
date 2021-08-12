@@ -44,7 +44,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
   String _orderId;
   String _note;
   List<StaffModel> selectData = [];
-  List selectCrew = [];
+  List<StaffModel> selectCrew = [];
   List selectService = [];
   List<String> selectCrewName = [];
   ProcessOrderBloc processOrderBloc;
@@ -101,7 +101,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                 if (state.processDetail != null &&
                     state.processDetail.isNotEmpty) {
                   selectCrew = state.processDetail[0].crew.members;
-                  
+                  print(selectCrew);
                   return Padding(
                     padding: EdgeInsets.all(12.0),
                     child: Column(
@@ -301,37 +301,6 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                   ),
                                 ),
                               ),
-                              // Padding(
-                              //   padding: const EdgeInsets.symmetric(
-                              //       vertical: 5, horizontal: 5),
-                              //   child: Container(
-                              //     decoration: BoxDecoration(
-                              //         border: Border.all(color: Colors.black26),
-                              //         borderRadius: BorderRadius.circular(5)),
-                              //     padding: EdgeInsets.symmetric(
-                              //         horizontal: 5, vertical: 10),
-                              //     child: Column(
-                              //       children: [
-                              //         Text(
-                              //           'Thông tin gói dịch vụ',
-                              //           style: TextStyle(
-                              //               fontSize: 16,
-                              //               fontWeight: FontWeight.w600),
-                              //         ),
-                              //         ListView(
-                              //           shrinkWrap: true,
-                              //           children: state
-                              //               .bookingDetail[0].orderDetails
-                              //               .map((service) {
-                              //             return ListTile(
-                              //               title: Text(service.name),
-                              //             );
-                              //           }).toList(),
-                              //         ),
-                              //       ],
-                              //     ),
-                              //   ),
-                              // ),
                             ],
                           ),
                         ),
@@ -456,6 +425,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                           ),
                                         ),
                                       ),
+                                      
                                       // ElevatedButton(
                                       //     onPressed: () {
                                       //       // processOrderBloc.add(
@@ -596,7 +566,13 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                                         showInformationDialog(
                                                                 context,
                                                                 staffState
-                                                                    .staffList)
+                                                                    .staffList,
+                                                                state
+                                                                    .processDetail[
+                                                                        0]
+                                                                    .crew
+                                                                    .id,
+                                                                widget.orderId)
                                                             .then((value) {
                                                           setState(() {
                                                             selectData = value;
@@ -670,12 +646,11 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
     );
   }
 
-  Future showInformationDialog(
-      BuildContext context, List<StaffModel> stafflist) async {
+  Future showInformationDialog(BuildContext context, List<StaffModel> stafflist,
+      String crewId, String orderId) async {
     return showDialog(
         context: context,
         builder: (context) {
-          
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
               content: SingleChildScrollView(
@@ -717,22 +692,22 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                               //         context)
                                               //     .addItem(stafflist[index]);
                                               selectCrew.add(stafflist[index]);
-                                              selectCrewName.add(
-                                                  stafflist[index].username);
-                                              print('select crew name 1');
-                                              print(selectCrewName);
+                                              // selectCrewName.add(
+                                              //     stafflist[index].username);
+                                              // print('select crew name 1');
+                                              // print(selectCrew);
                                             });
                                           } else {
                                             setState(() {
                                               // BlocProvider.of<AssignorderCubit>(
                                               //         context)
                                               //     .removeItem(stafflist[index]);
-                                              selectCrewName.remove(
-                                                  stafflist[index].username);
+                                              // selectCrewName.remove(
+                                              //     stafflist[index].username);
                                               selectCrew
                                                   .remove(stafflist[index]);
                                               print('select crew name 2');
-                                              print(selectCrewName);
+                                              print(selectCrew);
                                             });
                                           }
                                         },
@@ -787,6 +762,10 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                     style: TextStyle(color: AppTheme.colors.blue),
                   ),
                   onPressed: () {
+                    processOrderBloc.add(UpdateSelectCrewEvent(
+                        crewId: crewId,
+                        selectCrew: selectCrew,
+                        orderId: orderId));
                     // Do something like updating SharedPreferences or User Settings etc.
 
                     Navigator.pop(context);
@@ -797,4 +776,5 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
           });
         });
   }
+
 }

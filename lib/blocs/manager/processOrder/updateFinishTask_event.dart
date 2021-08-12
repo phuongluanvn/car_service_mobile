@@ -13,6 +13,8 @@ class DoTaskrDetailEvent extends UpdateFinishTaskEvent {
   List<Object> get props => [id];
 }
 
+
+
 class UpdateFinishedTaskOrderEvent extends UpdateFinishTaskEvent {
   final String selectedTaskId;
   final bool selected;

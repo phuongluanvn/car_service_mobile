@@ -365,6 +365,46 @@ class ManagerRepository {
     }
   }
 
+  deleteItemById(String detailId) async {
+    var res = await http.delete(
+      Uri.parse(
+          'https://carservicesystem.azurewebsites.net/api/orders/details?orderDetailId=' +
+              detailId),
+      headers: headers,
+    );
+    if (res.statusCode != null) {
+      print(res.statusCode);
+      if (res.statusCode == 200) {
+        return res.body;
+      }
+    } else {
+      return res.body;
+    }
+  }
+
+  updateSelectedCrew(String crewid, List<StaffModel> selectedCrew) async {
+    // print(crewid);
+    List<String> listName = List.generate(
+        selectedCrew.length, (index) => selectedCrew[index].username);
+    print('listname:');
+    // print(listName);
+    var body = {"id": '$crewid', "memberUsernameList": listName};
+    var res = await http.put(
+      Uri.parse("https://carservicesystem.azurewebsites.net/api/crews/members"),
+      headers: headers,
+      body: json.encode(body),
+    );
+    print(json.encode(body));
+    if (res.statusCode != null) {
+      print(res.statusCode);
+      if (res.statusCode == 200) {
+        return res.body;
+      }
+    } else {
+      return res.body;
+    }
+  }
+
   updateStatusTask(String id, bool selected) async {
     print(id);
     var body = {"id": '$id', "isFinished": selected};
@@ -505,28 +545,4 @@ class ManagerRepository {
       }
     }
   }
-
-  //   createNewOrder(String cusId, String packageId, String note,
-  //     String bookingTime) async {
-  //   var body = {
-  //     "vehicleId": '$cusId',
-  //     "packageId": null,
-  //     "note": '$note',
-  //     "bookingTime": '$bookingTime'
-  //   };
-  //   var res = await http.post(
-  //     Uri.parse(BASE_URL + "Orders"),
-  //     headers: headers,
-  //     body: json.encode(body),
-  //   );
-  //   if (res.statusCode != null) {
-  //     if (res.statusCode == 200) {
-  //       return res.body;
-  //     } else if (res.statusCode == 404) {
-  //       return res.body;
-  //     }
-  //   } else {
-  //     return null;
-  //   }
-  // }
 }

@@ -689,7 +689,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                 actions: <Widget>[
                   TextButton(
                     child: Text(
-                      'Okay',
+                      'Xác nhận',
                       style: TextStyle(color: AppTheme.colors.blue),
                     ),
                     onPressed: () {

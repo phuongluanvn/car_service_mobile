@@ -25,24 +25,25 @@ enum UpdateAccIdStatus {
   error,
 }
 
-// enum UpdateFinishIdStatus {
-//   init,
-//   loading,
-//   success,
-//   error,
-// }
+enum UpdateCrewStatus {
+  init,
+  loading,
+  success,
+  error,
+}
 
 class ProcessOrderState extends Equatable {
   final ProcessStatus status;
   final ProcessDetailStatus detailStatus;
   final UpdateAccIdStatus updateAccIdStatus;
-  // final UpdateFinishIdStatus updateFinishIdStatus;
+  final UpdateCrewStatus updateCrewStatus;
   final List<OrderDetailModel> processList;
   final List<OrderDetailModel> processDetail;
   final List<StaffModel> assignStaff;
   final String message;
   const ProcessOrderState({
     this.status: ProcessStatus.init,
+    this.updateCrewStatus: UpdateCrewStatus.init,
     this.detailStatus: ProcessDetailStatus.init,
     this.updateAccIdStatus: UpdateAccIdStatus.init,
     // this.updateFinishIdStatus: UpdateFinishIdStatus.init,
@@ -56,7 +57,7 @@ class ProcessOrderState extends Equatable {
     ProcessStatus status,
     ProcessDetailStatus detailStatus,
     UpdateAccIdStatus updateAccIdStatus,
-    // UpdateFinishIdStatus updateFinishIdStatus,
+    UpdateCrewStatus updateCrewStatus,
     List<OrderDetailModel> processList,
     List<OrderDetailModel> processDetail,
     List<StaffModel> assignStaff,
@@ -66,6 +67,7 @@ class ProcessOrderState extends Equatable {
         status: status ?? this.status,
         detailStatus: detailStatus ?? this.detailStatus,
         updateAccIdStatus: updateAccIdStatus ?? this.updateAccIdStatus,
+        updateCrewStatus: updateCrewStatus?? this.updateCrewStatus,
         // updateFinishIdStatus: updateFinishIdStatus ?? this.updateFinishIdStatus,
         processList: processList ?? this.processList,
         processDetail: processDetail ?? this.processDetail,
@@ -77,6 +79,7 @@ class ProcessOrderState extends Equatable {
         status,
         detailStatus,
         updateAccIdStatus,
+        updateCrewStatus,
         // updateFinishIdStatus,
         processList,
         processDetail,

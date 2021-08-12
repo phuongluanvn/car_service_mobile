@@ -4,6 +4,9 @@ import 'package:car_service/blocs/manager/Accessories/accessory_state.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_events.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_state.dart';
+import 'package:car_service/blocs/manager/updateItem/updateItem_bloc.dart';
+import 'package:car_service/blocs/manager/updateItem/updateItem_state.dart';
+import 'package:car_service/blocs/manager/updateItem/updateItem_event.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/utils/model/accessory_model.dart';
 import 'package:flutter/material.dart';
@@ -25,9 +28,11 @@ class _ExpansionListState extends State<ExpansionList> {
   String _selectAccName;
   String _accId;
   ProcessOrderBloc processBloc;
+  UpdateItemBloc updateItemBloc;
   @override
   void initState() {
     super.initState();
+    updateItemBloc = BlocProvider.of<UpdateItemBloc>(context);
     processBloc = BlocProvider.of<ProcessOrderBloc>(context);
     BlocProvider.of<AccessoryBloc>(context).add(DoListAccessories());
   }
@@ -39,12 +44,24 @@ class _ExpansionListState extends State<ExpansionList> {
         if (state.detailStatus == ProcessDetailStatus.success) {
           return Slidable(
             secondaryActions: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Colors.redAccent),
-                child: Icon(Icons.delete),
-                onPressed: () {
-                  processBloc.add(event);
+              BlocListener<UpdateItemBloc, UpdateItemState>(
+                listener: (context, state) {
+                  if (state.deleteStatus ==
+                      // ignore: unrelated_type_equality_checks
+                      DeleteByIdStatus.success) {
+                    processBloc
+                        .add(DoProcessOrderDetailEvent(email: widget.orderId));
+                  }
                 },
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(primary: Colors.redAccent),
+                  child: Icon(Icons.delete),
+                  onPressed: () {
+                    updateItemBloc.add(DeleteServiceByIdEvent(
+                        detailId: state
+                            .processDetail[0].orderDetails[widget.index].id));
+                  },
+                ),
               ),
             ],
             actionPane: SlidableDrawerActionPane(),
@@ -84,7 +101,7 @@ class _ExpansionListState extends State<ExpansionList> {
                                         isEditTextField == false
                                     ? Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
+                                            MainAxisAlignment.spaceEvenly,
                                         children: [
                                           Text(accstate.accessoryList
                                                       .indexWhere((element) =>
@@ -104,14 +121,22 @@ class _ExpansionListState extends State<ExpansionList> {
                                                               widget.index]
                                                           .accessoryId)
                                                   .name
-                                              : 'default'),
+                                              : 'Hiện tại không có phụ tùng'),
                                           ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                shadowColor: Colors.white,
+                                                primary: Colors.white,
+                                                elevation: 0,
+                                              ),
                                               onPressed: () {
                                                 setState(() {
                                                   isEditTextField = true;
                                                 });
                                               },
-                                              child: Icon(Icons.edit))
+                                              child: Icon(
+                                                Icons.edit,
+                                                color: AppTheme.colors.blue,
+                                              ))
                                         ],
                                       )
                                     : Column(

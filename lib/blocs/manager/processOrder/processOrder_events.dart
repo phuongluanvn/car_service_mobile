@@ -1,3 +1,4 @@
+import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
@@ -13,6 +14,15 @@ class DoProcessOrderDetailEvent extends ProcessOrderEvent {
   DoProcessOrderDetailEvent({@required this.email});
   @override
   List<Object> get props => [email];
+}
+
+class UpdateSelectCrewEvent extends ProcessOrderEvent {
+  final String orderId;
+  final String crewId;
+  final List<StaffModel> selectCrew;
+  UpdateSelectCrewEvent({@required this.crewId, this.selectCrew, this.orderId});
+  @override
+  List<Object> get props => [crewId, selectCrew];
 }
 
 class DoListAssignStaffEvent extends ProcessOrderEvent {}

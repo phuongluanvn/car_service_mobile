@@ -14,8 +14,6 @@ class AuthRepository {
   login(String username, String password) async {
     FirebaseMessaging _message = FirebaseMessaging.instance;
     String token = await _message.getToken();
-    print("token ne");
-    print(token);
     final body = jsonEncode({
       "username": '${username}',
       "password": '${password}',
@@ -26,12 +24,12 @@ class AuthRepository {
         Uri.parse('https://carservicesystem.azurewebsites.net/api/Users'),
         headers: headers,
         body: body);
-    print(body);
+    print(res.statusCode);
     if (res.statusCode != null) {
       if (res.statusCode == 200) {
         return res.body;
       } else if (res.statusCode == 404) {
-        return res.body;
+        return res;
       }
     } else {
       return res.body;

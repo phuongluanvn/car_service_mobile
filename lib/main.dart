@@ -21,6 +21,7 @@ import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
 import 'package:car_service/blocs/manager/processOrder/updateFinishTask_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
+import 'package:car_service/blocs/manager/updateItem/updateItem_bloc.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
 import 'package:car_service/blocs/packageService/PackageService_bloc.dart';
 import 'package:car_service/blocs/sign_up/sign_up_bloc.dart';
@@ -139,8 +140,7 @@ class _AuthState extends State<Auth> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-            create: (context) => AuthBloc(LoginInitState(), AuthRepository())),
+        BlocProvider(create: (context) => AuthBloc(repo: AuthRepository())),
         BlocProvider(create: (context) => SignUpBloc(repo: AuthRepository())),
         BlocProvider(
             create: (context) => VerifyBookingBloc(repo: ManagerRepository())),
@@ -184,6 +184,8 @@ class _AuthState extends State<Auth> {
         BlocProvider(create: (context) => CrewBloc(repo: ManagerRepository())),
         BlocProvider(
             create: (context) => AccessoryBloc(repo: ManagerRepository())),
+        BlocProvider(
+            create: (context) => UpdateItemBloc(repo: ManagerRepository())),
         // BlocProvider(
         //     create: (context) =>
         //         BookingCubit(VerifyBookingInitState(), ManagerRepository())),
