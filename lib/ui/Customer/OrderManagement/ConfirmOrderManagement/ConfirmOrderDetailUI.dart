@@ -1,7 +1,11 @@
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_event.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dart';
+import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
+import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.dart';
+import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
 import 'package:car_service/theme/app_theme.dart';
+import 'package:car_service/ui/Customer/OrderManagement/tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,12 +18,15 @@ class ConfirmOrderDetailUi extends StatefulWidget {
 }
 
 class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
-  @override
+  UpdateStatusOrderBloc updateStatusBloc;
   bool _visibleByDenied = false;
   bool textButton = true;
+  String acceptStatus = 'Đã phản hồi';
 
+  @override
   void initState() {
     super.initState();
+    updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     BlocProvider.of<CustomerOrderBloc>(context)
         .add(DoOrderDetailEvent(id: widget.orderId));
   }
@@ -94,36 +101,55 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                           ),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.45,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: AppTheme.colors.blue),
-                              child: Text(textButton ? 'Đồng ý' : 'Xác nhận',
-                                  style: TextStyle(color: Colors.white)),
-                              onPressed: () {},
+                      BlocListener<UpdateStatusOrderBloc,
+                          UpdateStatusOrderState>(
+                        listener: (builder, statusState) {
+                          if (statusState.status ==
+                              UpdateStatus.updateStatusSuccess) {
+                            Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              TabOrderCustomer()),
+                                    );
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.45,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: AppTheme.colors.blue),
+                                child: Text(textButton ? 'Đồng ý' : 'Xác nhận',
+                                    style: TextStyle(color: Colors.white)),
+                                onPressed: () {
+                                  updateStatusBloc.add(
+                                      UpdateStatusButtonPressed(
+                                          id: state.orderDetail[0].id,
+                                          status: acceptStatus));
+                                },
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.45,
-                            child: ElevatedButton(
-                              style:
-                                  ElevatedButton.styleFrom(primary: Colors.red),
-                              child: Text('Từ chối',
-                                  style: TextStyle(color: Colors.white)),
-                              onPressed: () {
-                                setState(() {
-                                  _visibleByDenied = !_visibleByDenied;
-                                  textButton = !textButton;
-                                });
-                              },
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.45,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.red),
+                                child: Text('Từ chối',
+                                    style: TextStyle(color: Colors.white)),
+                                onPressed: () {
+                                  setState(() {
+                                    _visibleByDenied = !_visibleByDenied;
+                                    textButton = !textButton;
+                                  });
+                                },
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 );

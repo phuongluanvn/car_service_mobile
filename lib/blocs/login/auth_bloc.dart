@@ -82,7 +82,7 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
         }
       } catch (e) {
         yield state.copyWith(
-            status: LoginStatus.error, message: res.toString());
+            status: LoginStatus.error, message: res.body ? res.body.toString() : e.toString());
       }
     }
   }

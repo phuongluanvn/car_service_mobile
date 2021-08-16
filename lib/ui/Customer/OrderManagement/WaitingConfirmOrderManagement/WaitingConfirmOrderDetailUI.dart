@@ -10,10 +10,12 @@ class WaitingConfirmOrderDetailUi extends StatefulWidget {
   WaitingConfirmOrderDetailUi({@required this.orderId});
 
   @override
-  _WaitingConfirmOrderDetailUiState createState() => _WaitingConfirmOrderDetailUiState();
+  _WaitingConfirmOrderDetailUiState createState() =>
+      _WaitingConfirmOrderDetailUiState();
 }
 
-class _WaitingConfirmOrderDetailUiState extends State<WaitingConfirmOrderDetailUi> {
+class _WaitingConfirmOrderDetailUiState
+    extends State<WaitingConfirmOrderDetailUi> {
   @override
   bool _visibleByDenied = false;
   bool textButton = true;
@@ -94,36 +96,61 @@ class _WaitingConfirmOrderDetailUiState extends State<WaitingConfirmOrderDetailU
                           ),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.45,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        child: ElevatedButton(
+                          style: textButton
+                              ? ElevatedButton.styleFrom(primary: Colors.red)
+                              : ElevatedButton.styleFrom(
                                   primary: AppTheme.colors.blue),
-                              child: Text(textButton ? 'Đồng ý' : 'Xác nhận',
-                                  style: TextStyle(color: Colors.white)),
-                              onPressed: () {},
-                            ),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.45,
-                            child: ElevatedButton(
-                              style:
-                                  ElevatedButton.styleFrom(primary: Colors.red),
-                              child: Text('Từ chối',
-                                  style: TextStyle(color: Colors.white)),
-                              onPressed: () {
-                                setState(() {
-                                  _visibleByDenied = !_visibleByDenied;
-                                  textButton = !textButton;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
+                          child: Text(textButton ? 'Hủy đơn' : 'Xác nhận',
+                              style: TextStyle(color: Colors.white)),
+                          onPressed: () {
+                            if (textButton == false) {
+                              print('????');
+                              setState(() {
+                                // _visibleByDenied = !_visibleByDenied;
+                                // textButton = !textButton;
+                              });
+                            } else {
+                              setState(() {
+                                _visibleByDenied = !_visibleByDenied;
+                                textButton = !textButton;
+                              });
+                            }
+                          },
+                        ),
                       ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      //   children: [
+                      //     SizedBox(
+                      //       width: MediaQuery.of(context).size.width * 0.45,
+                      //       child: ElevatedButton(
+                      //         style: ElevatedButton.styleFrom(
+                      //             primary: AppTheme.colors.blue),
+                      //         child: Text(textButton ? 'Đồng ý' : 'Xác nhận',
+                      //             style: TextStyle(color: Colors.white)),
+                      //         onPressed: () {},
+                      //       ),
+                      //     ),
+                      //     SizedBox(
+                      //       width: MediaQuery.of(context).size.width * 0.45,
+                      //       child: ElevatedButton(
+                      //         style:
+                      //             ElevatedButton.styleFrom(primary: Colors.red),
+                      //         child: Text('Từ chối',
+                      //             style: TextStyle(color: Colors.white)),
+                      //         onPressed: () {
+                      //           setState(() {
+                      //             _visibleByDenied = !_visibleByDenied;
+                      //             textButton = !textButton;
+                      //           });
+                      //         },
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 );

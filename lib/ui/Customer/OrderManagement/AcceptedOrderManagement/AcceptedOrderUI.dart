@@ -9,12 +9,12 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CheckingOrderUI extends StatefulWidget {
+class AcceptedOrderUI extends StatefulWidget {
   @override
-  _CheckingOrderUIState createState() => _CheckingOrderUIState();
+  _AcceptedOrderUIState createState() => _AcceptedOrderUIState();
 }
 
-class _CheckingOrderUIState extends State<CheckingOrderUI> {
+class _AcceptedOrderUIState extends State<AcceptedOrderUI> {
   @override
   void initState() {
     super.initState();
@@ -40,8 +40,8 @@ class _CheckingOrderUIState extends State<CheckingOrderUI> {
             } else if (state.status == CustomerOrderStatus.loading) {
               return CircularProgressIndicator();
             } else if (state.status == CustomerOrderStatus.loadedOrderSuccess) {
-              if (state.orderCheckingLists != null &&
-                  state.orderCheckingLists.isNotEmpty)
+              if (state.orderAcceptedLists != null &&
+                  state.orderAcceptedLists.isNotEmpty)
                 return Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
@@ -60,13 +60,13 @@ class _CheckingOrderUIState extends State<CheckingOrderUI> {
                         // ),
                         Expanded(
                           child: ListView.builder(
-                            itemCount: state.orderCheckingLists.length,
+                            itemCount: state.orderAcceptedLists.length,
                             shrinkWrap: true,
                             // ignore: missing_return
                             itemBuilder: (context, index) {
                               assert(context != null);
-                              if (state.orderCheckingLists[index].status ==
-                                  'Kiểm tra') {
+                              if (state.orderAcceptedLists[index].status ==
+                                  'Đã xác nhận') {
                                 return Card(
                                     child: Column(children: [
                                   ListTile(
@@ -78,7 +78,7 @@ class _CheckingOrderUIState extends State<CheckingOrderUI> {
                                             color: Colors.orangeAccent,
                                           ),
                                           Text(
-                                            state.orderCheckingLists[index]
+                                            state.orderAcceptedLists[index]
                                                 .status,
                                             style: TextStyle(
                                                 color: Colors.orangeAccent),
@@ -86,11 +86,11 @@ class _CheckingOrderUIState extends State<CheckingOrderUI> {
                                         ]),
                                     leading: Image.asset(
                                         'lib/images/order_small.png'),
-                                    title: Text(state.orderCheckingLists[index]
+                                    title: Text(state.orderAcceptedLists[index]
                                         .vehicle.licensePlate),
                                     subtitle: Text(
                                       _convertDate(state
-                                          .orderCheckingLists[index]
+                                          .orderAcceptedLists[index]
                                           .bookingTime),
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -102,7 +102,7 @@ class _CheckingOrderUIState extends State<CheckingOrderUI> {
                                               builder: (_) =>
                                                   CustomerOrderDetailUi(
                                                       orderId: state
-                                                          .orderCheckingLists[
+                                                          .orderAcceptedLists[
                                                               index]
                                                           .id)));
                                     },

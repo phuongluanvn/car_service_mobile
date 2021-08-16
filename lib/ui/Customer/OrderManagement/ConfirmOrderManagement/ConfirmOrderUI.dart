@@ -5,6 +5,7 @@ import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/OrderManagement/ConfirmOrderManagement/ConfirmOrderDetailUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CreateOrderManagement/CreateBookingOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderDetailUI.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -87,10 +88,14 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
                                         'lib/images/order_small.png'),
                                     title: Text(state.orderCurrentLists[index]
                                         .vehicle.licensePlate),
-                                    subtitle: Text(state
-                                        .orderCurrentLists[index]
-                                        .vehicle
-                                        .manufacturer),
+                                    subtitle: Text(
+                                      _convertDate(state
+                                          .orderCurrentLists[index]
+                                          .bookingTime),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
+                                    ),
                                     onTap: () {
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
@@ -123,5 +128,10 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
         ),
       ), //thêm mới xe
     );
+  }
+
+  _convertDate(dateInput) {
+    return formatDate(DateTime.parse(dateInput),
+        [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
   }
 }

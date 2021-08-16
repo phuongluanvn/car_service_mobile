@@ -1,4 +1,5 @@
 import 'package:car_service/theme/app_theme.dart';
+import 'package:car_service/ui/Customer/OrderManagement/AcceptedOrderManagement/AcceptedOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CheckingOrdermanagement/CheckingOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/ConfirmOrderManagement/ConfirmOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CreateOrderManagement/CreateBookingOrderUI.dart';
@@ -16,7 +17,7 @@ class _TabOrderState extends State<TabOrderCustomer> {
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = <Widget>[
     WaitingConfirmOrderUI(),
-    WaitingConfirmOrderUI(),
+    AcceptedOrderUI(),
     CheckingOrderUI(),
     ProcessingOrderUI(),
     ConfirmOrderUI(),

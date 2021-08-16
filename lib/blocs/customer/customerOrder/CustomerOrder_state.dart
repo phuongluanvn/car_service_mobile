@@ -29,6 +29,7 @@ class CustomerOrderState extends Equatable {
   final List<OrderModel> orderProcessingLists;
   final List<OrderModel> orderCheckingLists;
   final List<OrderModel> orderWaitingConfirmLists;
+  final List<OrderModel> orderAcceptedLists;
 
   final List<OrderDetailModel> orderDetail;
   final String message;
@@ -42,6 +43,7 @@ class CustomerOrderState extends Equatable {
     this.orderProcessingLists: const [],
     this.orderCheckingLists: const [],
     this.orderWaitingConfirmLists: const [],
+    this.orderAcceptedLists: const [],
     this.message: '',
   });
 
@@ -54,6 +56,7 @@ class CustomerOrderState extends Equatable {
     List<OrderModel> orderProcessingLists,
     List<OrderModel> orderCheckingLists,
     List<OrderModel> orderWaitingConfirmLists,
+    List<OrderModel> orderAcceptedLists,
     List<OrderDetailModel> orderDetail,
     String message,
   }) =>
@@ -67,6 +70,7 @@ class CustomerOrderState extends Equatable {
         orderCheckingLists: orderCheckingLists ?? this.orderCheckingLists,
         orderWaitingConfirmLists:
             orderWaitingConfirmLists ?? this.orderWaitingConfirmLists,
+        orderAcceptedLists: orderAcceptedLists ?? this.orderAcceptedLists,
         orderDetail: orderDetail ?? this.orderDetail,
         message: message ?? this.message,
       );
@@ -79,6 +83,7 @@ class CustomerOrderState extends Equatable {
         orderHistoryLists,
         orderProcessingLists,
         orderCheckingLists,
+        orderAcceptedLists,
         orderWaitingConfirmLists,
         orderDetail,
         message,

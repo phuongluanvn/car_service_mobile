@@ -16,10 +16,11 @@ import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/tabbar.dart';
 import 'package:date_format/date_format.dart';
-import 'package:date_time_picker/date_time_picker.dart';
+// import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'dart:async';
@@ -116,11 +117,13 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
         text,
         style: TextStyle(
             color: (_selectedTimeButton == text)
-                ? AppTheme.colors.deepBlue
-                : Colors.blueGrey),
+                ? AppTheme.colors.white
+                : AppTheme.colors.blue),
       ),
       style: ElevatedButton.styleFrom(
-        primary: Colors.white,
+        primary: (_selectedTimeButton == text)
+            ? AppTheme.colors.blue
+            : AppTheme.colors.white,
         onPrimary: Colors.white,
         // fixedSize: Size(80, 20),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -199,6 +202,21 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
         });
   }
 
+  _convertMoney(double money) {
+    MoneyFormatter fmf = new MoneyFormatter(
+        amount: money,
+        settings: MoneyFormatterSettings(
+          symbol: 'VND',
+          thousandSeparator: '.',
+          decimalSeparator: ',',
+          symbolAndNumberSeparator: ' ',
+          fractionDigits: 0,
+          // compactFormatType: CompactFormatType.sort
+        ));
+    print(fmf.output.symbolOnRight);
+    return fmf.output.symbolOnRight.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -260,12 +278,16 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                     crossAxisCount:
                                         2, // Số item trên một hàng ngang
                                     crossAxisSpacing:
-                                        0, // Khoảng cách giữa các item trong hàng ngang
+                                        5, // Khoảng cách giữa các item trong hàng ngang
                                     mainAxisSpacing: 0,
                                     // Khoảng cách giữa các hàng (giữa các item trong cột dọc)
                                   ),
                                   itemBuilder: (context, index) {
                                     return Card(
+                                      color: (_carId ==
+                                              state.vehicleLists[index].id)
+                                          ? AppTheme.colors.blue
+                                          : Colors.white,
                                       child: ListTile(
                                         leading: CircleAvatar(
                                           backgroundImage: AssetImage(
@@ -280,13 +302,22 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                               color: (_carId ==
                                                       state.vehicleLists[index]
                                                           .id)
-                                                  ? Colors.blue
-                                                  : Colors.grey),
+                                                  ? AppTheme.colors.white
+                                                  : AppTheme.colors.deepBlue),
                                         ),
-                                        subtitle: Text(state.vehicleLists[index]
-                                                .manufacturer +
-                                            " - " +
-                                            state.vehicleLists[index].model),
+                                        subtitle: Text(
+                                            state.vehicleLists[index]
+                                                    .manufacturer +
+                                                " - " +
+                                                state.vehicleLists[index].model,
+                                            style: TextStyle(
+                                                color: (_carId ==
+                                                        state
+                                                            .vehicleLists[index]
+                                                            .id)
+                                                    ? AppTheme.colors.white
+                                                    : AppTheme
+                                                        .colors.deepBlue)),
                                         onTap: () {
                                           setState(() {
                                             _carId =
@@ -299,9 +330,9 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                           borderRadius:
                                               BorderRadius.circular(20)),
                                       margin: EdgeInsets.only(
-                                          top: 12,
-                                          left: 12,
-                                          right: 12,
+                                          top: 0,
+                                          left: 2,
+                                          right: 2,
                                           bottom: 40),
                                     );
                                   },
@@ -403,8 +434,9 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                                                             .grey),
                                                               ),
                                                               trailing: Text(
-                                                                e.price
-                                                                    .toString(),
+                                                                _convertMoney(e
+                                                                    .price
+                                                                    .toDouble()),
                                                                 style: TextStyle(
                                                                     color: (_valueSelectedPackageService ==
                                                                             e
@@ -439,9 +471,10 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                                                           .name),
                                                                   trailing:
                                                                       Text(
-                                                                    service
-                                                                        .price
-                                                                        .toString(),
+                                                                    _convertMoney(
+                                                                        service
+                                                                            .price
+                                                                            .toDouble()),
                                                                   ),
                                                                 );
                                                               }).toList(),
@@ -554,33 +587,6 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      // DateTimePicker(
-                      //   type: DateTimePickerType.dateTimeSeparate,
-                      //   dateMask: 'dd/MM/yyyy',
-                      //   initialValue: DateTime.now().toString(),
-                      //   firstDate: DateTime(2000),
-                      //   lastDate: DateTime(2100),
-                      //   icon: Icon(Icons.event),
-                      //   dateLabelText: 'Ngày',
-                      //   timeLabelText: "Giờ",
-                      //   selectableDayPredicate: (date) {
-                      //     // Disable weekend days to select from the calendar
-                      //     if (date.weekday == 6 || date.weekday == 7) {
-                      //       return false;
-                      //     }
-
-                      //     return true;
-                      //   },
-                      //   onChanged: (val) {
-                      //     _selectedDay = DateTime.parse(val);
-                      //     print(_selectedDay);
-                      //   },
-                      //   validator: (val) {
-                      //     print(val);
-                      //     return null;
-                      //   },
-                      //   onSaved: (val) => print(val),
-                      // ),
                       Container(
                         child: TableCalendar(
                           firstDay: DateTime.utc(2020),
@@ -652,14 +658,42 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
               // Divider(),
               BlocListener<CreateBookingBloc, CreateBookingState>(
                 listener: (context, state) {
+                  // if(state.status ==
+                  //     CreateBookingStatus.loading){
+                  //       showDialog(
+                  //       context: context,
+                  //       builder: (BuildContext ctx) {
+                  //         return Cir
+                  //       });
+                  //     }
+                  // else 
                   if (state.status ==
                       CreateBookingStatus.createBookingOrderSuccess) {
                     // Navigator.pop(context);
-                    Navigator.pop(
-                      context,
-                      new MaterialPageRoute(
-                          builder: (context) => TabOrderCustomer()),
-                    );
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext ctx) {
+                          return AlertDialog(
+                            title: Text(
+                              'Thông báo!',
+                              style: TextStyle(color: Colors.greenAccent),
+                            ),
+                            content: Text('Đặt lịch dịch vụ thành công!'),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    // Close the dialog
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              TabOrderCustomer()),
+                                    );
+                                  },
+                                  child: Text('Đồng ý'))
+                            ],
+                          );
+                        });
                   }
                 },
                 child: ElevatedButton(
@@ -668,6 +702,30 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                     onPrimary: Colors.white, // foreground
                   ),
                   onPressed: () {
+                    // showDialog(
+                    //     context: context,
+                    //     builder: (BuildContext ctx) {
+                    //       return AlertDialog(
+                    //         title: Text(
+                    //           'Thông báo!',
+                    //           style: TextStyle(color: Colors.greenAccent),
+                    //         ),
+                    //         content: Text('Đặt lịch dịch vụ thành công!'),
+                    //         actions: [
+                    //           TextButton(
+                    //               onPressed: () {
+                    //                 // Close the dialog
+                    //                 Navigator.push(
+                    //                   context,
+                    //                   MaterialPageRoute(
+                    //                       builder: (context) =>
+                    //                           TabOrderCustomer()),
+                    //                 );
+                    //               },
+                    //               child: Text('Đồng ý'))
+                    //         ],
+                    //       );
+                    //     });
                     _timeSelected =
                         _convertDate(_selectedDay.toString()).toString() +
                             'T' +

@@ -5,6 +5,8 @@ import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/OrderManagement/ConfirmOrderManagement/ConfirmOrderDetailUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CreateOrderManagement/CreateBookingOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderDetailUI.dart';
+import 'package:car_service/ui/Customer/OrderManagement/WaitingConfirmOrderManagement/WaitingConfirmOrderDetailUI.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -64,7 +66,8 @@ class _WaitingConfirmOrderUIState extends State<WaitingConfirmOrderUI> {
                             // ignore: missing_return
                             itemBuilder: (context, index) {
                               assert(context != null);
-                              if (state.orderWaitingConfirmLists[index].status ==
+                              if (state
+                                      .orderWaitingConfirmLists[index].status ==
                                   'Đợi xác nhận') {
                                 return Card(
                                     child: Column(children: [
@@ -77,7 +80,8 @@ class _WaitingConfirmOrderUIState extends State<WaitingConfirmOrderUI> {
                                             color: Colors.orangeAccent,
                                           ),
                                           Text(
-                                            state.orderWaitingConfirmLists[index]
+                                            state
+                                                .orderWaitingConfirmLists[index]
                                                 .status,
                                             style: TextStyle(
                                                 color: Colors.orangeAccent),
@@ -85,21 +89,25 @@ class _WaitingConfirmOrderUIState extends State<WaitingConfirmOrderUI> {
                                         ]),
                                     leading: Image.asset(
                                         'lib/images/order_small.png'),
-                                    title: Text(state.orderWaitingConfirmLists[index]
-                                        .vehicle.licensePlate),
-                                    subtitle: Text(state
+                                    title: Text(state
                                         .orderWaitingConfirmLists[index]
                                         .vehicle
-                                        .manufacturer),
+                                        .licensePlate),
+                                    subtitle: Text(
+                                      _convertDate(
+                                          state.orderWaitingConfirmLists[index].bookingTime),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
+                                    ),
                                     onTap: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (_) =>
-                                                  CustomerOrderDetailUi(
-                                                      orderId: state
-                                                          .orderWaitingConfirmLists[
-                                                              index]
-                                                          .id)));
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (_) =>
+                                              WaitingConfirmOrderDetailUi(
+                                                  orderId: state
+                                                      .orderWaitingConfirmLists[
+                                                          index]
+                                                      .id)));
                                     },
                                   ),
                                 ]));
@@ -123,5 +131,10 @@ class _WaitingConfirmOrderUIState extends State<WaitingConfirmOrderUI> {
         ),
       ), //thêm mới xe
     );
+  }
+
+  _convertDate(dateInput) {
+    return formatDate(DateTime.parse(dateInput),
+        [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
   }
 }
