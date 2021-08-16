@@ -8,6 +8,7 @@ import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.d
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
 import 'package:car_service/theme/app_theme.dart';
+import 'package:car_service/ui/Customer/CustomerMainUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/tabbar.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
@@ -118,11 +119,11 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                           UpdateStatusOrderState>(
                         listener: (builder, statusState) {
                           if (statusState.status ==
-                              UpdateStatus.updateStatusSuccess) {
+                              UpdateStatus.updateStatusConfirmAcceptedSuccess) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => TabOrderCustomer()),
+                                  builder: (context) => CustomerHome()),
                             );
                           }
                         },
@@ -138,7 +139,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                                     style: TextStyle(color: Colors.white)),
                                 onPressed: () {
                                   updateStatusBloc.add(
-                                      UpdateStatusButtonPressed(
+                                      UpdateStatusConfirmAcceptedButtonPressed(
                                           id: state.orderDetail[0].id,
                                           status: acceptStatus));
                                 },
@@ -299,7 +300,8 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                                                   element.id ==
                                                   service.accessoryId)
                                               .name),
-                                              trailing: Image.network(accState.accessoryList
+                                          trailing: Image.network(accState
+                                              .accessoryList
                                               .firstWhere((element) =>
                                                   element.id ==
                                                   service.accessoryId)

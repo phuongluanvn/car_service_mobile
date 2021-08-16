@@ -78,3 +78,10 @@ class UpdateStatusSendConfirmButtonPressed extends UpdateStatusOrderEvent {
 
   UpdateStatusSendConfirmButtonPressed({this.id, this.status});
 }
+
+class UpdateStatusConfirmAcceptedButtonPressed extends UpdateStatusOrderEvent {
+  final String id;
+  final String status;
+
+  UpdateStatusConfirmAcceptedButtonPressed({this.id, this.status});
+}

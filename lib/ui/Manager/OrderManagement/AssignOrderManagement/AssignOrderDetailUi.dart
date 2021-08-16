@@ -14,6 +14,7 @@ import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -154,15 +155,16 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                   children: [
                                     Container(
                                       width: MediaQuery.of(context).size.width *
-                                          0.3,
+                                          0.36,
                                       child: Text(
-                                        'Thời gian đặt lịch:',
+                                        'Thời gian xác nhận:',
                                         style: TextStyle(fontSize: 16.0),
                                       ),
                                     ),
                                     Container(
                                       child: Text(
-                                        state.assignDetail[0].bookingTime,
+                                        _convertDate(
+                                            state.assignDetail[0].bookingTime),
                                         style: TextStyle(fontSize: 15.0),
                                       ),
                                     ),
@@ -698,5 +700,10 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
             }),
           );
         });
+  }
+
+  _convertDate(dateInput) {
+    return formatDate(DateTime.parse(dateInput),
+        [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
   }
 }

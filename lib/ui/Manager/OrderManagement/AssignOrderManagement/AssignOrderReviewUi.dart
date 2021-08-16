@@ -20,6 +20,7 @@ import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/ReviewTaskUi.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -87,8 +88,6 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                   selectCrew = state.assignDetail[0].crew.members;
                   if (state.assignDetail[0].status == 'Đợi phản hồi') {
                     _visible = true;
-                  } else {
-                    _visible = false;
                   }
                   print(_visible);
                   return Padding(
@@ -158,8 +157,8 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                 textBaseline: TextBaseline.alphabetic,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.3,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.35,
                                     child: Text(
                                       'Thời gian nhận xe:',
                                       style: TextStyle(fontSize: 16.0),
@@ -167,7 +166,8 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                   ),
                                   Container(
                                     child: Text(
-                                      state.assignDetail[0].bookingTime,
+                                      _convertDate(
+                                          state.assignDetail[0].bookingTime),
                                       style: TextStyle(fontSize: 15.0),
                                     ),
                                   ),
@@ -338,13 +338,11 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                       listener: (builder, statusState) {
                                         if (statusState.status ==
                                             UpdateStatus
-                                                .updateStatusCheckinSuccess) {
+                                                .updateStatusWaitConfirmSuccess) {
                                           setState(() {
                                             _visible = true;
                                           });
-                                        } else if (statusState.status ==
-                                            UpdateStatus
-                                                .updateStatusCheckingSuccess) {}
+                                        }
                                       },
                                       child: SizedBox(
                                         width:
@@ -606,7 +604,6 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                             .then((value) {
                                                           setState(() {
                                                             selectData = value;
-                                                            _visible = true;
                                                           });
                                                         });
                                                       })),
@@ -846,5 +843,10 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
             );
           });
         });
+  }
+
+  _convertDate(dateInput) {
+    return formatDate(DateTime.parse(dateInput),
+        [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
   }
 }

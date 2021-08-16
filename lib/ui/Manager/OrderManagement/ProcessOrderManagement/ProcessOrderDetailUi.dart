@@ -18,6 +18,7 @@ import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/Ass
 import 'package:car_service/ui/Manager/OrderManagement/ProcessOrderManagement/CheckoutOrderUi.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -130,7 +131,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                     width:
                                         MediaQuery.of(context).size.width * 0.2,
                                     child: Text(
-                                      'Fullname:',
+                                      'Họ tên:',
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                   ),
@@ -172,13 +173,14 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                     width:
                                         MediaQuery.of(context).size.width * 0.3,
                                     child: Text(
-                                      'Booking Time:',
+                                      'Thời gian bắt đầu sửa chữa:',
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                   ),
                                   Container(
                                     child: Text(
-                                      state.processDetail[0].bookingTime,
+                                      _convertDate(
+                                          state.processDetail[0].bookingTime),
                                       style: TextStyle(fontSize: 15.0),
                                     ),
                                   ),
@@ -425,7 +427,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                           ),
                                         ),
                                       ),
-                                      
+
                                       // ElevatedButton(
                                       //     onPressed: () {
                                       //       // processOrderBloc.add(
@@ -646,6 +648,11 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
     );
   }
 
+  _convertDate(dateInput) {
+    return formatDate(DateTime.parse(dateInput),
+        [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
+  }
+
   Future showInformationDialog(BuildContext context, List<StaffModel> stafflist,
       String crewId, String orderId) async {
     return showDialog(
@@ -776,5 +783,4 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
           });
         });
   }
-
 }

@@ -126,6 +126,7 @@ class _VerifyBookingUiState extends State<VerifyBookingUi> {
   }
 
   _convertDate(dateInput) {
-    return formatDate(DateTime.parse(dateInput), [dd, '-', mm, '-', yyyy]);
+    return formatDate(DateTime.parse(dateInput),
+        [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
   }
 }

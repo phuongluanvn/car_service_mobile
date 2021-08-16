@@ -95,6 +95,7 @@ class _AssignOrderUiState extends State<AssignOrderUi> {
   }
 
   _convertDate(dateInput) {
-    return formatDate(DateTime.parse(dateInput), [dd, '-', mm, '-', yyyy]);
+    return formatDate(DateTime.parse(dateInput),
+        [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
   }
 }
