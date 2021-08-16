@@ -9,6 +9,7 @@ enum UpdateStatus {
   updateStatusCheckingSuccess,
   updateStatusAbsentSuccess,
   updateStatusWorkingSuccess,
+  updateStatusWaitConfirmSuccess,
   error,
 }
 

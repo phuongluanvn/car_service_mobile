@@ -41,6 +41,27 @@ class UpdateItemBloc extends Bloc<UpdateItemEvent, UpdateItemState> {
         yield state.copyWith(
             deleteStatus: DeleteByIdStatus.error, message: e.toString());
       }
+    }if (event is DoListServices) {
+      yield state.copyWith(listServiceStatus: ListServiceStatus.loading);
+      try {
+        var data = await _repo.getServiceList();
+        if (data != null) {
+          // print(data);
+          yield state.copyWith(
+              listServices: data, listServiceStatus: ListServiceStatus.success);
+        } else {
+          yield state.copyWith(
+            listServiceStatus: ListServiceStatus.error,
+            message: 'Assin Error',
+          );
+          print('no data');
+        }
+      } catch (e) {
+        yield state.copyWith(
+          listServiceStatus: ListServiceStatus.error,
+          message: e.toString(),
+        );
+      }
     }
   }
 }

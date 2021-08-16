@@ -1,3 +1,5 @@
+import 'package:car_service/blocs/manager/CrewManagement/crew_bloc.dart';
+import 'package:car_service/blocs/manager/CrewManagement/crew_event.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
@@ -34,11 +36,12 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
   bool _selectStaff = false;
   AssignorderCubit assignCubit = AssignorderCubit();
   List selectCrewName = [];
+  CrewBloc crewBloc;
 
   @override
   void initState() {
     super.initState();
-
+    crewBloc = BlocProvider.of<CrewBloc>(context);
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     BlocProvider.of<AssignOrderBloc>(context)
         .add(DoAssignOrderDetailEvent(id: widget.orderId));
@@ -503,6 +506,11 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                     style: TextStyle(
                                                         color: Colors.white)),
                                                 onPressed: () {
+                                                  crewBloc.add(
+                                                      UpdateCrewToListEvent(
+                                                          id: widget.orderId,
+                                                          listName:
+                                                              selectCrewName));
                                                   updateStatusBloc.add(
                                                       UpdateStatusCheckingButtonPressed(
                                                           id: state
@@ -511,23 +519,23 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                           status:
                                                               checkingStatus));
                                                   // getDropDownItem,
-                                                  Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                          builder: (_) =>
-                                                              BlocProvider
-                                                                  .value(
-                                                                value:
-                                                                    assignCubit,
-                                                                child:
-                                                                    AssignOrderReviewUi(
-                                                                  userId: state
-                                                                      .assignDetail[
-                                                                          0]
-                                                                      .id,
-                                                                  selectCrewName:
-                                                                      selectCrewName,
-                                                                ),
-                                                              )));
+                                                  // Navigator.of(context).push(
+                                                  //     MaterialPageRoute(
+                                                  //         builder: (_) =>
+                                                  //             BlocProvider
+                                                  //                 .value(
+                                                  //               value:
+                                                  //                   assignCubit,
+                                                  //               child:
+                                                  //                   AssignOrderReviewUi(
+                                                  //                 userId: state
+                                                  //                     .assignDetail[
+                                                  //                         0]
+                                                  //                     .id,
+                                                  //               ),
+                                                  //             )));
+                                                  Navigator.pushNamed(
+                                                      context, '/manager');
                                                 },
                                               ),
                                             ),

@@ -17,3 +17,5 @@ class DeleteServiceByIdEvent extends UpdateItemEvent {
   List<Object> get props => [detailId];
 }
 
+class DoListServices extends UpdateItemEvent {}
+

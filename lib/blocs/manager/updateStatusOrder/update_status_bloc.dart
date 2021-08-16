@@ -70,7 +70,7 @@ class UpdateStatusOrderBloc
         // print(jsonData);
         if (data != null) {
           yield state.copyWith(status: UpdateStatus.updateStatusCheckinSuccess);
-          print('Start Success');
+          print('Checkin Success');
         } else {
           yield state.copyWith(
               status: UpdateStatus.error, message: 'Error Update');
@@ -94,7 +94,7 @@ class UpdateStatusOrderBloc
         if (data != null) {
           yield state.copyWith(
               status: UpdateStatus.updateStatusCheckingSuccess);
-          print('Start Success');
+          print('Checking Success');
         } else {
           yield state.copyWith(
               status: UpdateStatus.error, message: 'Error Update');
@@ -176,6 +176,30 @@ class UpdateStatusOrderBloc
         if (data != null && data2 != null) {
           yield state.copyWith(status: UpdateStatus.updateStatusStartSuccess);
           print('Start Success');
+        } else {
+          yield state.copyWith(
+              status: UpdateStatus.error, message: 'Error Update');
+        }
+      } catch (e) {
+        yield state.copyWith(
+          status: UpdateStatus.error,
+          message: e.toString(),
+        );
+      }
+    } else if (event is UpdateStatusSendConfirmButtonPressed) {
+      print('loading');
+      yield state.copyWith(status: UpdateStatus.loading);
+      try {
+        var data = await _repo.updateStatusOrder(event.id, event.status);
+
+        // String jsonsDataString = data.toString();
+        print(data);
+        // final jsonData = jsonDecode(jsonsDataString);
+        // print(jsonData);
+        if (data != null) {
+          yield state.copyWith(
+              status: UpdateStatus.updateStatusCheckingSuccess);
+          print('Send confirm Success');
         } else {
           yield state.copyWith(
               status: UpdateStatus.error, message: 'Error Update');

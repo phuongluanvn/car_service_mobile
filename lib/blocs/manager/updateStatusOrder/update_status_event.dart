@@ -70,3 +70,11 @@ class UpdateStatusFinishAndAvailableButtonPressed
   UpdateStatusFinishAndAvailableButtonPressed(
       {this.id, this.listData, this.status, this.availableStatus});
 }
+
+
+class UpdateStatusSendConfirmButtonPressed extends UpdateStatusOrderEvent {
+  final String id;
+  final String status;
+
+  UpdateStatusSendConfirmButtonPressed({this.id, this.status});
+}

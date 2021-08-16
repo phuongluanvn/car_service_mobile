@@ -95,7 +95,9 @@ class _ExpansionListState extends State<ExpansionList> {
                               ListAccessoryStatus.success) {
                             return Column(
                               children: [
-                                state.processDetail[0].orderDetails[0]
+                                state
+                                                .processDetail[0]
+                                                .orderDetails[widget.index]
                                                 .accessoryId !=
                                             null &&
                                         isEditTextField == false
@@ -166,7 +168,8 @@ class _ExpansionListState extends State<ExpansionList> {
                                             },
                                             noItemsFoundBuilder: (context) =>
                                                 Center(
-                                              child: Text('No item found'),
+                                              child: Text(
+                                                  'Không tìm thấy phụ tùng'),
                                             ),
                                             onSuggestionSelected: (suggestion) {
                                               this._typeAheadController.text =

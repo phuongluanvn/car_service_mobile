@@ -9,6 +9,8 @@ import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
 
 import 'package:car_service/blocs/manager/assign_order_cubit/assignorder_cubit.dart';
 import 'package:car_service/blocs/manager/assign_order_cubit/assignorder_cubit_state.dart';
+import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
+import 'package:car_service/blocs/manager/processOrder/processOrder_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
@@ -24,8 +26,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AssignOrderReviewUi extends StatefulWidget {
   final String userId;
-  final List selectCrewName;
-  AssignOrderReviewUi({@required this.userId, this.selectCrewName});
+
+  AssignOrderReviewUi({@required this.userId});
 
   @override
   _AssignOrderReviewUiState createState() => _AssignOrderReviewUiState();
@@ -40,13 +42,16 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   List<StaffModel> selectData = [];
   StaffModel _staffModel;
   bool _selectStaff = false;
-  AssignorderCubit assignCubit;
+  // AssignorderCubit assignCubit;
   CrewBloc crewBloc;
   List selectCrewName = [];
+  List<StaffModel> selectCrew = [];
+  ProcessOrderBloc processOrderBloc;
   @override
   void initState() {
     super.initState();
-    assignCubit = BlocProvider.of<AssignorderCubit>(context);
+    processOrderBloc = BlocProvider.of<ProcessOrderBloc>(context);
+    // assignCubit = BlocProvider.of<AssignorderCubit>(context);
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     crewBloc = BlocProvider.of<CrewBloc>(context);
     BlocProvider.of<AssignOrderBloc>(context)
@@ -56,6 +61,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
 
   @override
   Widget build(BuildContext context) {
+    final String sendConfirmStatus = 'Đợi phản hồi';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
@@ -76,7 +82,15 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
               } else if (state.detailStatus == AssignDetailStatus.loading) {
                 return CircularProgressIndicator();
               } else if (state.detailStatus == AssignDetailStatus.success) {
-                if (state.assignDetail != null && state.assignDetail.isNotEmpty)
+                if (state.assignDetail != null &&
+                    state.assignDetail.isNotEmpty) {
+                  selectCrew = state.assignDetail[0].crew.members;
+                  if (state.assignDetail[0].status == 'Đợi phản hồi') {
+                    _visible = true;
+                  } else {
+                    _visible = false;
+                  }
+                  print(_visible);
                   return Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Column(
@@ -289,45 +303,97 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                               //     ),
                               //   ),
                               // ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                textBaseline: TextBaseline.alphabetic,
-                                children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.4,
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          primary: AppTheme.colors.blue),
-                                      child: Text('Dịch vụ',
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                                builder: (_) => ReviewTaskUi(
-                                                      orderId: state
-                                                          .assignDetail[0].id,
-                                                    )));
-                                      },
+                              Container(
+                                width: MediaQuery.of(context).size.width * 1,
+                                padding: EdgeInsets.all(10),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.065,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            primary: AppTheme.colors.blue),
+                                        child: Text('Dịch vụ',
+                                            style:
+                                                TextStyle(color: Colors.white)),
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                                  builder: (_) => ReviewTaskUi(
+                                                        orderId: state
+                                                            .assignDetail[0].id,
+                                                      )));
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.4,
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          primary: AppTheme.colors.blue),
-                                      child: Text('Gửi xác nhận',
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                      onPressed: () {
-                                        setState(() {});
+                                    BlocListener<UpdateStatusOrderBloc,
+                                        UpdateStatusOrderState>(
+                                      // ignore: missing_return
+                                      listener: (builder, statusState) {
+                                        if (statusState.status ==
+                                            UpdateStatus
+                                                .updateStatusCheckinSuccess) {
+                                          setState(() {
+                                            _visible = true;
+                                          });
+                                        } else if (statusState.status ==
+                                            UpdateStatus
+                                                .updateStatusCheckingSuccess) {}
                                       },
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.4,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.065,
+                                        child: _visible
+                                            ? Container(
+                                                decoration: BoxDecoration(
+                                                    color:
+                                                        AppTheme.colors.white,
+                                                    border: Border.all(
+                                                        width: 2,
+                                                        color: AppTheme
+                                                            .colors.deepBlue),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5)),
+                                                child: Center(
+                                                  child: Text(
+                                                    'Đợi phản hồi',
+                                                    style: TextStyle(
+                                                        color: AppTheme
+                                                            .colors.deepBlue),
+                                                  ),
+                                                ))
+                                            : ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    primary:
+                                                        AppTheme.colors.blue),
+                                                child: Text('Gửi xác nhận',
+                                                    style: TextStyle(
+                                                        color: Colors.white)),
+                                                onPressed: () {
+                                                  updateStatusBloc.add(
+                                                      UpdateStatusSendConfirmButtonPressed(
+                                                          id: state
+                                                              .assignDetail[0]
+                                                              .id,
+                                                          status:
+                                                              sendConfirmStatus));
+                                                },
+                                              ),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -391,159 +457,231 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                               SizedBox(
                                                 height: 20,
                                               ),
-                                              BlocBuilder<AssignorderCubit,
-                                                  AssignorderCubitState>(
-                                                builder: (context,
-                                                    assignStaffstate) {
-                                                  if (assignStaffstate.status ==
-                                                      AssignCubitStatus
-                                                          .loadingSuccess)
-                                                    return Column(
-                                                      children: [
-                                                        for (int i = 0;
-                                                            i <
-                                                                assignStaffstate
-                                                                    .listStaff
-                                                                    .length;
-                                                            i++)
-                                                          Card(
-                                                            child: Column(
-                                                                children: [
-                                                                  ListTile(
-                                                                    leading: Image
-                                                                        .asset(
-                                                                            'lib/images/logo_blue.png'),
-                                                                    title: Text(assignStaffstate
-                                                                        .listStaff[
-                                                                            i]
-                                                                        .fullname),
-                                                                  ),
-                                                                ]),
-                                                          ),
-                                                        SizedBox(
-                                                          height: 15,
-                                                        ),
-                                                        ElevatedButton(
-                                                            style:
-                                                                ElevatedButton
-                                                                    .styleFrom(
-                                                              primary: AppTheme
-                                                                  .colors.blue,
-                                                            ),
-                                                            child: Text(
-                                                                'Chọn nhân viên'),
-                                                            onPressed: () =>
-                                                                setState(() {
-                                                                  showInformationDialog(
-                                                                    context,
-                                                                    staffState
-                                                                        .staffList,
-                                                                  );
-                                                                })),
-                                                        SizedBox(
-                                                          height: 20,
-                                                        ),
-                                                        SizedBox(
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.45,
-                                                          child: BlocListener<
-                                                              UpdateStatusOrderBloc,
-                                                              UpdateStatusOrderState>(
-                                                            // ignore: missing_return
-                                                            listener: (builder,
-                                                                statusState) {
-                                                              if (statusState
-                                                                      .status ==
-                                                                  UpdateStatus
-                                                                      .updateStatusStartSuccess) {}
-                                                            },
-                                                            child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                SizedBox(
-                                                                  width: MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width *
-                                                                      0.45,
-                                                                  child:
-                                                                      ElevatedButton(
-                                                                    style: ElevatedButton.styleFrom(
-                                                                        primary: AppTheme
-                                                                            .colors
-                                                                            .blue),
-                                                                    child: Text(
-                                                                        'Bắt đầu',
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.white)),
-                                                                    onPressed:
-                                                                        () {
-                                                                      print(state
-                                                                          .assignDetail[
-                                                                              0]
-                                                                          .id);
-                                                                      crewBloc.add(UpdateCrewToListEvent(
-                                                                          id: widget
-                                                                              .userId,
-                                                                          listName:
-                                                                              widget.selectCrewName));
-                                                                      updateStatusBloc.add(UpdateStatusStartAndWorkingButtonPressed(
-                                                                          id: state
-                                                                              .assignDetail[
-                                                                                  0]
-                                                                              .id,
-                                                                          listData: assignStaffstate
-                                                                              .listStaff,
-                                                                          status:
-                                                                              processingStatus,
-                                                                          workingStatus:
-                                                                              workingStatus));
+                                              // BlocBuilder<AssignorderCubit,
+                                              //     AssignorderCubitState>(
+                                              //   builder: (context,
+                                              //       assignStaffstate) {
+                                              //     if (assignStaffstate.status ==
+                                              //         AssignCubitStatus
+                                              //             .loadingSuccess)
+                                              //       return Column(
+                                              //         children: [
+                                              //           for (int i = 0;
+                                              //               i <
+                                              //                   assignStaffstate
+                                              //                       .listStaff
+                                              //                       .length;
+                                              //               i++)
+                                              //             Card(
+                                              //               child: Column(
+                                              //                   children: [
+                                              //                     ListTile(
+                                              //                       leading: Image
+                                              //                           .asset(
+                                              //                               'lib/images/logo_blue.png'),
+                                              //                       title: Text(assignStaffstate
+                                              //                           .listStaff[
+                                              //                               i]
+                                              //                           .fullname),
+                                              //                     ),
+                                              //                   ]),
+                                              //             ),
+                                              //           SizedBox(
+                                              //             height: 15,
+                                              //           ),
+                                              //           ElevatedButton(
+                                              //               style:
+                                              //                   ElevatedButton
+                                              //                       .styleFrom(
+                                              //                 primary: AppTheme
+                                              //                     .colors.blue,
+                                              //               ),
+                                              //               child: Text(
+                                              //                   'Chọn nhân viên'),
+                                              //               onPressed: () =>
+                                              //                   setState(() {
+                                              //                     showInformationDialog(
+                                              //                       context,
+                                              //                       staffState
+                                              //                           .staffList,
+                                              //                     );
+                                              //                   })),
+                                              //           SizedBox(
+                                              //             height: 20,
+                                              //           ),
 
-                                                                      Navigator.pushNamed(
-                                                                          context,
-                                                                          '/manager');
-                                                                    },
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    );
-                                                  else
-                                                    return SizedBox();
-                                                  // ListView.builder(
-                                                  //   shrinkWrap: true,
-                                                  //   itemCount: state.length,
-                                                  //   itemBuilder:
-                                                  //       (context, index) {
-                                                  //     return Card(
-                                                  //       child: Column(
-                                                  //           children: [
-                                                  //             ListTile(
-                                                  //               leading: Image
-                                                  //                   .asset(
-                                                  //                       'lib/images/logo_blue.png'),
-                                                  //               title: Text(
-                                                  //                   state[index]
-                                                  //                       .fullname),
-                                                  //             ),
-                                                  //           ]),
-                                                  //     );
-                                                  //   },
-                                                  // );
+                                              //         ],
+                                              //       );
+                                              //     else
+                                              //       return SizedBox();
+                                              //     // ListView.builder(
+                                              //     //   shrinkWrap: true,
+                                              //     //   itemCount: state.length,
+                                              //     //   itemBuilder:
+                                              //     //       (context, index) {
+                                              //     //     return Card(
+                                              //     //       child: Column(
+                                              //     //           children: [
+                                              //     //             ListTile(
+                                              //     //               leading: Image
+                                              //     //                   .asset(
+                                              //     //                       'lib/images/logo_blue.png'),
+                                              //     //               title: Text(
+                                              //     //                   state[index]
+                                              //     //                       .fullname),
+                                              //     //             ),
+                                              //     //           ]),
+                                              //     //     );
+                                              //     //   },
+                                              //     // );
+                                              //   },
+                                              // ),
+                                              // // ),
+
+                                              ListView.builder(
+                                                shrinkWrap: true,
+                                                itemCount: state.assignDetail[0]
+                                                    .crew.members.length,
+                                                itemBuilder: (context, index) {
+                                                  // state.processDetail[0].crew
+                                                  //     .members
+                                                  //     .map((e) => selectCrewName
+                                                  //         .add(e.fullname))
+                                                  //     .toList();
+                                                  // print(selectCrewName);
+                                                  // for (int i = 0;
+                                                  //     i <=
+                                                  //         state
+                                                  //             .processDetail[0]
+                                                  //             .crew
+                                                  //             .members
+                                                  //             .length;
+                                                  //     i++) {
+                                                  //   selectCrewName.add(state
+                                                  //       .processDetail[0]
+                                                  //       .crew
+                                                  //       .members[i]
+                                                  //       .username);
+                                                  //   print('selectCrewName is');
+                                                  //   print(state.processDetail[0]
+                                                  //       .crew.members.length);
+                                                  // }
+                                                  return Card(
+                                                    child: Column(children: [
+                                                      ListTile(
+                                                        leading: Image.asset(
+                                                            'lib/images/logo_blue.png'),
+                                                        title: Text(state
+                                                            .assignDetail[0]
+                                                            .crew
+                                                            .members[index]
+                                                            .fullname),
+                                                      ),
+                                                    ]),
+                                                  );
                                                 },
                                               ),
                                               // ),
-
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    primary:
+                                                        AppTheme.colors.blue,
+                                                  ),
+                                                  child: Text('Chọn nhân viên'),
+                                                  onPressed: () => setState(() {
+                                                        showInformationDialog(
+                                                                context,
+                                                                staffState
+                                                                    .staffList,
+                                                                state
+                                                                    .assignDetail[
+                                                                        0]
+                                                                    .crew
+                                                                    .id,
+                                                                widget.userId)
+                                                            .then((value) {
+                                                          setState(() {
+                                                            selectData = value;
+                                                            _visible = true;
+                                                          });
+                                                        });
+                                                      })),
                                               Container(height: 10),
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.45,
+                                                child: BlocListener<
+                                                    UpdateStatusOrderBloc,
+                                                    UpdateStatusOrderState>(
+                                                  // ignore: missing_return
+                                                  listener:
+                                                      (builder, statusState) {
+                                                    if (statusState.status ==
+                                                        UpdateStatus
+                                                            .updateStatusStartSuccess) {}
+                                                  },
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      SizedBox(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.45,
+                                                        child: ElevatedButton(
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                                  primary:
+                                                                      AppTheme
+                                                                          .colors
+                                                                          .blue),
+                                                          child: Text('Bắt đầu',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white)),
+                                                          onPressed: () {
+                                                            print(state
+                                                                .assignDetail[0]
+                                                                .id);
+                                                            // crewBloc.add(UpdateCrewToListEvent(
+                                                            //     id: widget
+                                                            //         .userId,
+                                                            //     listName:
+                                                            //         widget.selectCrewName));
+                                                            updateStatusBloc.add(UpdateStatusStartAndWorkingButtonPressed(
+                                                                id: state
+                                                                    .assignDetail[
+                                                                        0]
+                                                                    .id,
+                                                                listData: state
+                                                                    .assignDetail[
+                                                                        0]
+                                                                    .crew
+                                                                    .members,
+                                                                status:
+                                                                    processingStatus,
+                                                                workingStatus:
+                                                                    workingStatus));
+
+                                                            Navigator.pushNamed(
+                                                                context,
+                                                                '/manager');
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
                                             ],
                                           ),
                                         ),
@@ -567,7 +705,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                       ],
                     ),
                   );
-                else
+                } else
                   return Center(child: Text('Empty'));
               } else if (state.detailStatus == AssignDetailStatus.error) {
                 return ErrorWidget(state.message.toString());
@@ -579,129 +717,134 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
     );
   }
 
-  Future showInformationDialog(
-      BuildContext context, List<StaffModel> stafflist) async {
+  Future showInformationDialog(BuildContext context, List<StaffModel> stafflist,
+      String crewId, String orderId) async {
     return showDialog(
         context: context,
         builder: (context) {
-          return BlocProvider.value(
-            value: assignCubit,
-            child: StatefulBuilder(builder: (context, setState) {
-              return AlertDialog(
-                content: SingleChildScrollView(
-                  child: Form(
-                    child: Container(
-                      // height: MediaQuery.of(context).size.height * 0.7,
-                      // width: MediaQuery.of(context).size.width * 0.7,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Text(
-                              'Chọn nhân viên',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w600),
-                            ),
-                            Container(
-                              height: MediaQuery.of(context).size.height * 0.3,
-                              width: MediaQuery.of(context).size.width * 0.7,
-                              child: BlocBuilder<AssignorderCubit,
-                                  AssignorderCubitState>(
-                                bloc: assignCubit,
-                                builder: (context, state) {
-                                  return ListView.builder(
-                                      itemCount: stafflist.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return CheckboxListTile(
-                                          value: state.listStaff
-                                              .contains(stafflist[index]),
-                                          onChanged: (bool selected) {
-                                            if (selected == true) {
-                                              setState(() {
-                                                BlocProvider.of<
-                                                            AssignorderCubit>(
-                                                        context)
-                                                    .addItem(stafflist[index]);
-                                                widget.selectCrewName.add(
-                                                    stafflist[index].username);
-                                                print('select crewname 3');
-                                                print(widget.selectCrewName);
-                                              });
-                                            } else {
-                                              setState(() {
-                                                BlocProvider.of<
-                                                            AssignorderCubit>(
-                                                        context)
-                                                    .removeItem(
-                                                        stafflist[index]);
-                                                widget.selectCrewName.remove(
-                                                    stafflist[index].username);
-                                                print('select crewname 4');
-                                                print(widget.selectCrewName);
-                                              });
-                                            }
-                                          },
-                                          title:
-                                              Text(stafflist[index].fullname),
-                                        );
-                                      });
-                                },
-                              ),
-                            ),
-                          ],
-                          //  stafflist.map((e) {
-                          //   return CheckboxListTile(
-                          //       activeColor: AppTheme.colors.deepBlue,
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              content: SingleChildScrollView(
+                child: Form(
+                  child: Container(
+                    // height: MediaQuery.of(context).size.height * 0.7,
+                    // width: MediaQuery.of(context).size.width * 0.7,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text(
+                            'Chọn nhân viên',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.5,
+                            width: MediaQuery.of(context).size.width * 0.7,
+                            child:
+                                // BlocBuilder<AssignorderCubit,
+                                //     AssignorderCubitState>(
+                                //   builder: (context, state) {
+                                //     return
+                                ListView.builder(
+                                    itemCount: stafflist.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return CheckboxListTile(
+                                        value: selectCrew.indexWhere(
+                                                (element) =>
+                                                    element.username ==
+                                                    stafflist[index]
+                                                        .username) >=
+                                            0,
+                                        onChanged: (bool selected) {
+                                          if (selected) {
+                                            setState(() {
+                                              // BlocProvider.of<AssignorderCubit>(
+                                              //         context)
+                                              //     .addItem(stafflist[index]);
+                                              selectCrew.add(stafflist[index]);
+                                              // selectCrewName.add(
+                                              //     stafflist[index].username);
+                                              // print('select crew name 1');
+                                              // print(selectCrew);
+                                            });
+                                          } else {
+                                            setState(() {
+                                              // BlocProvider.of<AssignorderCubit>(
+                                              //         context)
+                                              //     .removeItem(stafflist[index]);
+                                              // selectCrewName.remove(
+                                              //     stafflist[index].username);
+                                              selectCrew
+                                                  .remove(stafflist[index]);
+                                              print('select crew name 2');
+                                              print(selectCrew);
+                                            });
+                                          }
+                                        },
+                                        title: Text(stafflist[index].fullname),
+                                      );
+                                    }),
+                            //   },
+                            // ),
+                          ),
+                        ],
+                        //  stafflist.map((e) {
+                        //   return CheckboxListTile(
+                        //       activeColor: AppTheme.colors.deepBlue,
 
-                          //       //font change
-                          //       title: new Text(
-                          //         e.username,
-                          //       ),
-                          //       value: selectData.indexOf(e) < 0 ? false : true,
-                          //       secondary: Container(
-                          //         height: 50,
-                          //         width: 50,
-                          //         child: Image.asset(
-                          //           'lib/images/logo_blue.png',
-                          //           fit: BoxFit.cover,
-                          //         ),
-                          //       ),
-                          //       onChanged: (bool val) {
-                          //         if (selectData.indexOf(e) < 0) {
-                          //           setState(() {
-                          //             selectData.add(e);
-                          //             _selectStaff = true;
-                          //           });
-                          //         } else {
-                          //           setState(() {
-                          //             selectData
-                          //                 .removeWhere((element) => element == e);
-                          //           });
-                          //         }
-                          //         print(selectData);
-                          //       });
-                          // }).toList(),
-                        ),
+                        //       //font change
+                        //       title: new Text(
+                        //         e.username,
+                        //       ),
+                        //       value: selectData.indexOf(e) < 0 ? false : true,
+                        //       secondary: Container(
+                        //         height: 50,
+                        //         width: 50,
+                        //         child: Image.asset(
+                        //           'lib/images/logo_blue.png',
+                        //           fit: BoxFit.cover,
+                        //         ),
+                        //       ),
+                        //       onChanged: (bool val) {
+                        //         if (selectData.indexOf(e) < 0) {
+                        //           setState(() {
+                        //             selectData.add(e);
+                        //             _selectStaff = true;
+                        //           });
+                        //         } else {
+                        //           setState(() {
+                        //             selectData
+                        //                 .removeWhere((element) => element == e);
+                        //           });
+                        //         }
+                        //         print(selectData);
+                        //       });
+                        // }).toList(),
                       ),
                     ),
                   ),
                 ),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text(
-                      'Xác nhận',
-                      style: TextStyle(color: AppTheme.colors.blue),
-                    ),
-                    onPressed: () {
-                      // Do something like updating SharedPreferences or User Settings etc.
-
-                      Navigator.pop(context);
-                    },
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text(
+                    'Xác nhận',
+                    style: TextStyle(color: AppTheme.colors.blue),
                   ),
-                ],
-              );
-            }),
-          );
+                  onPressed: () {
+                    processOrderBloc.add(UpdateSelectCrewEvent(
+                        crewId: crewId,
+                        selectCrew: selectCrew,
+                        orderId: orderId));
+                    // Do something like updating SharedPreferences or User Settings etc.
+
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          });
         });
   }
 }

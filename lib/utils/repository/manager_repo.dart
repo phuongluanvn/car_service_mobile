@@ -139,10 +139,50 @@ class ManagerRepository {
     }
   }
 
+  Future<List<OrderDetailModel>> getAssingReviewList() async {
+    List<OrderDetailModel> checkingList = [];
+    List<OrderDetailModel> waitingList = [];
+    var resChecking = await http.get(
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/orders?status=Kiểm tra"),
+      headers: headers,
+    );
+    var resWaitingConfirm = await http.get(
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/orders?status=Đợi phản hồi"),
+      headers: headers,
+    );
+    if (resChecking.statusCode == 200 && resWaitingConfirm.statusCode == 200) {
+      var dataChecking = json.decode(resChecking.body);
+      var dataWaiting = json.decode(resWaitingConfirm.body);
+      if (dataChecking != null && dataWaiting != null) {
+        print('Check assign success');
+        dataWaiting
+            .map((order) => waitingList.add(OrderDetailModel.fromJson(order)))
+            .toList();
+        dataChecking
+            .map((order) => checkingList.add(OrderDetailModel.fromJson(order)))
+            .toList();
+        List<OrderDetailModel> newList = [
+          ...checkingList,
+          ...waitingList,
+        ];
+        print('????');
+        print(newList);
+        return newList;
+      } else {
+        print('Đuu');
+        return null;
+      }
+    } else {
+      print('No test order data');
+      return null;
+    }
+  }
+
   Future<List<OrderDetailModel>> getAssingOrderList() async {
     List<OrderDetailModel> checkinList = [];
     List<OrderDetailModel> acceptedList = [];
-    List<OrderDetailModel> checkingList = [];
 
     var resAccepted = await http.get(
       Uri.parse(
@@ -154,19 +194,12 @@ class ManagerRepository {
           "https://carservicesystem.azurewebsites.net/api/orders?status=Đã nhận xe"),
       headers: headers,
     );
-    var resChecking = await http.get(
-      Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/orders?status=Kiểm tra"),
-      headers: headers,
-    );
-    if (resAccepted.statusCode == 200 &&
-        resCheckin.statusCode == 200 &&
-        resChecking.statusCode == 200) {
+
+    if (resAccepted.statusCode == 200 && resCheckin.statusCode == 200) {
       var dataAccepted = json.decode(resAccepted.body);
       var dataCheckin = json.decode(resCheckin.body);
-      var dataChecking = json.decode(resChecking.body);
 
-      if (dataAccepted != null && dataCheckin != null && dataChecking != null) {
+      if (dataAccepted != null && dataCheckin != null) {
         print('Check assign success');
         dataAccepted
             .map((order) => acceptedList.add(OrderDetailModel.fromJson(order)))
@@ -174,13 +207,10 @@ class ManagerRepository {
         dataCheckin
             .map((order) => checkinList.add(OrderDetailModel.fromJson(order)))
             .toList();
-        dataChecking
-            .map((order) => checkingList.add(OrderDetailModel.fromJson(order)))
-            .toList();
+
         List<OrderDetailModel> newList = [
           ...acceptedList,
           ...checkinList,
-          ...checkingList
         ];
         print('????');
         print(newList);
@@ -449,20 +479,22 @@ class ManagerRepository {
       "id": '$orderId',
       "orderDetails": [
         {
-          "id": '$detailId',
+          "id": detailId,
           "serviceId": '$svId',
-          "accessoryId": '$accId',
+          "accessoryId": accId,
           "quantity": quantity,
           "price": price
         }
       ]
     };
+
     var res = await http.put(
       Uri.parse(
           "https://carservicesystem.azurewebsites.net/api/orders/details"),
       headers: headers,
       body: json.encode(body),
     );
+    print(res.body);
     if (res.statusCode != null) {
       print(res.statusCode);
       if (res.statusCode == 200) {
