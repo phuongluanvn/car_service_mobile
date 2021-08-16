@@ -2,8 +2,10 @@ import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_event.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dart';
 import 'package:car_service/theme/app_theme.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:money_formatter/money_formatter.dart';
 
 class WaitingConfirmOrderDetailUi extends StatefulWidget {
   final String orderId;
@@ -55,7 +57,7 @@ class _WaitingConfirmOrderDetailUiState
                     children: <Widget>[
                       cardInforOrder(
                           state.orderDetail[0].status,
-                          state.orderDetail[0].bookingTime,
+                          _convertDate(state.orderDetail[0].bookingTime),
                           state.orderDetail[0].checkinTime != null
                               ? state.orderDetail[0].checkinTime
                               : 'Chưa nhận xe',
@@ -63,10 +65,15 @@ class _WaitingConfirmOrderDetailUiState
                               ? state.orderDetail[0].checkinTime
                               : 'Không có ghi chú'),
                       cardInforService(
-                          state.orderDetail[0].orderDetails[0].name,
-                          state.orderDetail[0].orderDetails[0].name,
-                          state.orderDetail[0].orderDetails[0].price
-                              .toString()),
+                          state.orderDetail[0].vehicle.model,
+                          state.orderDetail[0].vehicle.model,
+                          state.orderDetail[0].vehicle.licensePlate,
+                          state.orderDetail[0].orderDetails,
+                          state.orderDetail[0].note == null ? false : true,
+                          state.orderDetail[0].note != null
+                              ? state.orderDetail[0].note
+                              : 'Không có ghi chú',
+                          state.orderDetail[0].package.price),
                       cardInforCar(
                           state.orderDetail[0].vehicle.manufacturer,
                           state.orderDetail[0].vehicle.model,
@@ -108,6 +115,7 @@ class _WaitingConfirmOrderDetailUiState
                           onPressed: () {
                             if (textButton == false) {
                               print('????');
+                              print(state.orderDetail[0].orderDetails[0].price);
                               setState(() {
                                 // _visibleByDenied = !_visibleByDenied;
                                 // textButton = !textButton;
@@ -188,7 +196,7 @@ class _WaitingConfirmOrderDetailUiState
   }
 
   Widget cardInforOrder(
-      String stautus, String createTime, String checkinTime, String note) {
+      String stautus, String bookingTime, String checkinTime, String note) {
     return Card(
       child: Column(
         children: [
@@ -199,7 +207,7 @@ class _WaitingConfirmOrderDetailUiState
           ),
           ListTile(
             title: Text('Thời gian đặt hẹn: '),
-            trailing: Text(createTime),
+            trailing: Text(bookingTime),
           ),
           ListTile(
             title: Text('Thời gian nhận xe: '),
@@ -215,31 +223,85 @@ class _WaitingConfirmOrderDetailUiState
   }
 
   Widget cardInforService(
-      String servicePackageName, String serviceName, String price) {
-    return Card(
-      child: Column(
-        children: [
-          Text('Thông tin dịch vụ'),
-          ListTile(
-            title: Text('Loại dịch vụ: '),
-            trailing: Text(servicePackageName),
-          ),
-          ListTile(
-            title: Text('Chi tiết: '),
-            trailing: Text('Giá tiền'),
-          ),
-          Divider(
-            color: Colors.black,
-            thickness: 2,
-            indent: 20,
-            endIndent: 20,
-          ),
-          ListTile(
-            title: Text('Tổng: '),
-            trailing: Text('Giá tiền'),
-          ),
-        ],
+      String servicePackageName,
+      String serviceName,
+      String price,
+      List services,
+      bool serviceType,
+      String note,
+      int totalPrice) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.black26),
+            borderRadius: BorderRadius.circular(5)),
+        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+        child: Column(
+          children: [
+            Text(
+              'Thông tin dịch vụ',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.start,
+            ),
+            ListTile(
+              title: Text('Loại dịch vụ: '),
+              trailing: serviceType ? Text('Sửa chữa') : Text('Bảo dưỡng'),
+            ),
+            serviceType
+                ? ListTile(
+                    title: Text('Tình trạng xe từ người dùng: '),
+                    subtitle: Text(
+                      note,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    ))
+                : ExpansionTile(
+                    title: Text('Chi tiết:'),
+                    children: services.map((service) {
+                      return ListTile(
+                        title: Text(service.name),
+                        trailing: Text(_convertMoney(service.price.toDouble())),
+                      );
+                    }).toList(),
+                  ),
+            Divider(
+              color: Colors.black,
+              thickness: 2,
+              indent: 20,
+              endIndent: 20,
+            ),
+            ListTile(
+              title: Text('Tổng: '),
+              trailing: Text(_convertMoney(totalPrice.toDouble())),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  _convertDate(dateInput) {
+    return formatDate(DateTime.parse(dateInput),
+        [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
+  }
+
+  _convertMoney(double money) {
+    MoneyFormatter fmf = new MoneyFormatter(
+        amount: money,
+        settings: MoneyFormatterSettings(
+          symbol: 'VND',
+          thousandSeparator: '.',
+          decimalSeparator: ',',
+          symbolAndNumberSeparator: ' ',
+          fractionDigits: 0,
+          // compactFormatType: CompactFormatType.sort
+        ));
+    print(fmf.output.symbolOnRight);
+    return fmf.output.symbolOnRight.toString();
   }
 }

@@ -5,6 +5,7 @@ import 'package:car_service/theme/app_theme.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:money_formatter/money_formatter.dart';
 
 class CustomerOrderDetailUi extends StatefulWidget {
   final String orderId;
@@ -92,7 +93,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                     children: <Widget>[
                       cardInforOrder(
                           state.orderDetail[0].status,
-                          state.orderDetail[0].bookingTime,
+                          _convertDate(state.orderDetail[0].bookingTime),
                           state.orderDetail[0].checkinTime != null
                               ? _convertDate(state.orderDetail[0].checkinTime)
                               : 'Chưa nhận xe',
@@ -108,7 +109,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].note
                               : 'Không có ghi chú',
-                          state.orderDetail[0].package.price.toString()),
+                          state.orderDetail[0].package.price),
                       cardInforCar(
                           state.orderDetail[0].vehicle.manufacturer,
                           state.orderDetail[0].vehicle.model,
@@ -165,7 +166,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
   }
 
   Widget cardInforOrder(
-      String status, String createTime, String checkinTime, String note) {
+      String status, String bookingTime, String checkinTime, String note) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
       child: Container(
@@ -192,7 +193,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                 )),
             ListTile(
               title: Text('Thời gian đặt hẹn: '),
-              trailing: Text(_convertDate(createTime)),
+              trailing: Text(bookingTime),
             ),
             ListTile(
               title: Text('Thời gian nhận xe: '),
@@ -221,7 +222,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
       List services,
       bool serviceType,
       String note,
-      String totalPrice) {
+      int totalPrice) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       child: Container(
@@ -257,7 +258,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                     children: services.map((service) {
                       return ListTile(
                         title: Text(service.name),
-                        trailing: Text('${service.price}'),
+                        trailing: Text(_convertMoney(service.price.toDouble())),
                       );
                     }).toList(),
                   ),
@@ -269,7 +270,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
             ),
             ListTile(
               title: Text('Tổng: '),
-              trailing: Text('${totalPrice}'),
+              trailing: Text(_convertMoney(totalPrice.toDouble())),
             ),
           ],
         ),
@@ -279,10 +280,22 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
 
   _convertDate(dateInput) {
     return formatDate(
-        DateTime.parse(dateInput), [dd, '-', mm, '-', yyyy, ' ', hh, ':', nn]);
+        DateTime.parse(dateInput), [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
   }
 
-  _countPriceService() {
-    
+ 
+  _convertMoney(double money) {
+    MoneyFormatter fmf = new MoneyFormatter(
+        amount: money,
+        settings: MoneyFormatterSettings(
+          symbol: 'VND',
+          thousandSeparator: '.',
+          decimalSeparator: ',',
+          symbolAndNumberSeparator: ' ',
+          fractionDigits: 0,
+          // compactFormatType: CompactFormatType.sort
+        ));
+    print(fmf.output.symbolOnRight);
+    return fmf.output.symbolOnRight.toString();
   }
 }

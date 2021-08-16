@@ -1,13 +1,18 @@
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_event.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_bloc.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_event.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_state.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/OrderManagement/tabbar.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:money_formatter/money_formatter.dart';
 
 class ConfirmOrderDetailUi extends StatefulWidget {
   final String orderId;
@@ -29,6 +34,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     BlocProvider.of<CustomerOrderBloc>(context)
         .add(DoOrderDetailEvent(id: widget.orderId));
+    BlocProvider.of<AccessoryBloc>(context).add(DoListAccessories());
   }
 
   @override
@@ -58,9 +64,13 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                 return SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
+                      // cardInforCar(
+                      //     state.orderDetail[0].vehicle.manufacturer,
+                      //     state.orderDetail[0].vehicle.model,
+                      //     state.orderDetail[0].vehicle.licensePlate),
                       cardInforOrder(
                           state.orderDetail[0].status,
-                          state.orderDetail[0].bookingTime,
+                          _convertDate(state.orderDetail[0].bookingTime),
                           state.orderDetail[0].checkinTime != null
                               ? state.orderDetail[0].checkinTime
                               : 'Chưa nhận xe',
@@ -68,14 +78,17 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                               ? state.orderDetail[0].checkinTime
                               : 'Không có ghi chú'),
                       cardInforService(
-                          state.orderDetail[0].orderDetails[0].name,
-                          state.orderDetail[0].orderDetails[0].name,
-                          state.orderDetail[0].orderDetails[0].price
-                              .toString()),
-                      cardInforCar(
-                          state.orderDetail[0].vehicle.manufacturer,
                           state.orderDetail[0].vehicle.model,
-                          state.orderDetail[0].vehicle.licensePlate),
+                          state.orderDetail[0].vehicle.model,
+                          state.orderDetail[0].vehicle.licensePlate,
+                          state.orderDetail[0].orderDetails,
+                          // state.orderDetail[0].orderDetails[0].accessoryId,
+                          state.orderDetail[0].note == null ? false : true,
+                          state.orderDetail[0].note != null
+                              ? state.orderDetail[0].note
+                              : 'Không có ghi chú',
+                          state.orderDetail[0].package.price),
+
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Visibility(
@@ -107,11 +120,10 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                           if (statusState.status ==
                               UpdateStatus.updateStatusSuccess) {
                             Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              TabOrderCustomer()),
-                                    );
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TabOrderCustomer()),
+                            );
                           }
                         },
                         child: Row(
@@ -191,7 +203,14 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
     return Card(
       child: Column(
         children: [
-          Text('Thông tin đơn hàng'),
+          Text(
+            'Thông tin đơn hàng',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+            textAlign: TextAlign.start,
+          ),
           ListTile(
             title: Text('Trạng thái đơn hàng: '),
             trailing: Text(stautus),
@@ -214,31 +233,116 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
   }
 
   Widget cardInforService(
-      String servicePackageName, String serviceName, String price) {
-    return Card(
-      child: Column(
-        children: [
-          Text('Thông tin dịch vụ'),
-          ListTile(
-            title: Text('Loại dịch vụ: '),
-            trailing: Text(servicePackageName),
-          ),
-          ListTile(
-            title: Text('Chi tiết: '),
-            trailing: Text('Giá tiền'),
-          ),
-          Divider(
-            color: Colors.black,
-            thickness: 2,
-            indent: 20,
-            endIndent: 20,
-          ),
-          ListTile(
-            title: Text('Tổng: '),
-            trailing: Text('Giá tiền'),
-          ),
-        ],
-      ),
-    );
+      String servicePackageName,
+      String serviceName,
+      String price,
+      List services,
+      // String accessoryId,
+      bool serviceType,
+      String note,
+      int totalPrice) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+        child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.black26),
+                borderRadius: BorderRadius.circular(5)),
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+            child: BlocBuilder<AccessoryBloc, AccessoryState>(
+                // ignore: missing_return
+                builder: (context, accState) {
+              if (accState.status == ListAccessoryStatus.init) {
+                return CircularProgressIndicator();
+              } else if (accState.status == ListAccessoryStatus.loading) {
+                return CircularProgressIndicator();
+              } else if (accState.status == ListAccessoryStatus.success) {
+                return Column(
+                  children: [
+                    Text(
+                      'Thông tin dịch vụ',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                    ListTile(
+                      title: Text('Loại dịch vụ: '),
+                      trailing:
+                          serviceType ? Text('Sửa chữa') : Text('Bảo dưỡng'),
+                    ),
+                    serviceType
+                        ? ListTile(
+                            title: Text('Tình trạng xe từ người dùng: '),
+                            subtitle: Text(
+                              note,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ))
+                        : ExpansionTile(
+                            title: Text('Chi tiết:'),
+                            children: services.map((service) {
+                              return ExpansionTile(
+                                title: Text(service.name),
+                                trailing: Text(
+                                    _convertMoney(service.price.toDouble())),
+                                children: [
+                                  accState.accessoryList.indexWhere((element) =>
+                                              element.id ==
+                                              service.accessoryId) >=
+                                          0
+                                      ? ListTile(
+                                          title: Text(accState.accessoryList
+                                              .firstWhere((element) =>
+                                                  element.id ==
+                                                  service.accessoryId)
+                                              .name),
+                                              trailing: Image.network(accState.accessoryList
+                                              .firstWhere((element) =>
+                                                  element.id ==
+                                                  service.accessoryId)
+                                              .imageUrl),
+                                        )
+                                      : Text('Hiện tại không có phụ tùng'),
+                                ],
+                              );
+                            }).toList(),
+                          ),
+                    Divider(
+                      color: Colors.black,
+                      thickness: 2,
+                      indent: 20,
+                      endIndent: 20,
+                    ),
+                    ListTile(
+                      title: Text('Tổng: '),
+                      trailing: Text(_convertMoney(totalPrice.toDouble())),
+                    ),
+                  ],
+                );
+              }
+            })));
+  }
+
+  _convertDate(dateInput) {
+    return formatDate(DateTime.parse(dateInput),
+        [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
+  }
+
+  _convertMoney(double money) {
+    MoneyFormatter fmf = new MoneyFormatter(
+        amount: money,
+        settings: MoneyFormatterSettings(
+          symbol: 'VND',
+          thousandSeparator: '.',
+          decimalSeparator: ',',
+          symbolAndNumberSeparator: ' ',
+          fractionDigits: 0,
+          // compactFormatType: CompactFormatType.sort
+        ));
+    print(fmf.output.symbolOnRight);
+    return fmf.output.symbolOnRight.toString();
   }
 }
