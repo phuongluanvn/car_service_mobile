@@ -114,8 +114,6 @@ class _WaitingConfirmOrderDetailUiState
                               style: TextStyle(color: Colors.white)),
                           onPressed: () {
                             if (textButton == false) {
-                              print('????');
-                              print(state.orderDetail[0].orderDetails[0].price);
                               setState(() {
                                 // _visibleByDenied = !_visibleByDenied;
                                 // textButton = !textButton;

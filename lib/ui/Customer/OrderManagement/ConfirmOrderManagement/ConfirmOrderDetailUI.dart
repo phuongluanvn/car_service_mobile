@@ -27,7 +27,9 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visibleByDenied = false;
   bool textButton = true;
-  String acceptStatus = 'Đã phản hồi';
+  String acceptStatus = 'Đã đồng ý';
+  String rejectStatus = 'Đã từ chối';
+  String reasonReject;
 
   @override
   void initState() {
@@ -104,8 +106,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                             child: TextField(
                               onChanged: (noteValue) {
                                 setState(() {
-                                  // _packageId = null;
-                                  // _note = noteValue;
+                                  reasonReject = noteValue;
                                 });
                               },
                               maxLines: 3,
@@ -138,10 +139,20 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                                 child: Text(textButton ? 'Đồng ý' : 'Xác nhận',
                                     style: TextStyle(color: Colors.white)),
                                 onPressed: () {
-                                  updateStatusBloc.add(
-                                      UpdateStatusConfirmAcceptedButtonPressed(
-                                          id: state.orderDetail[0].id,
-                                          status: acceptStatus));
+                                  if (reasonReject != null) {
+                                    // updateStatusBloc.add(
+                                    //   UpdateStatusConfirmAcceptedButtonPressed(
+                                    //       id: state.orderDetail[0].id,
+                                    //       status: rejectStatus));
+                                    print(reasonReject);
+                                    print('1');
+                                  } else {
+                                    print('hihihi');
+                                    // updateStatusBloc.add(
+                                    //     UpdateStatusConfirmAcceptedButtonPressed(
+                                    //         id: state.orderDetail[0].id,
+                                    //         status: acceptStatus));
+                                  }
                                 },
                               ),
                             ),
@@ -150,13 +161,17 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     primary: Colors.red),
-                                child: Text('Từ chối',
-                                    style: TextStyle(color: Colors.white)),
+                                child: _visibleByDenied == false
+                                    ? Text('Từ chối',
+                                        style: TextStyle(color: Colors.white))
+                                    : Text('Hủy',
+                                        style: TextStyle(color: Colors.white)),
                                 onPressed: () {
                                   setState(() {
                                     _visibleByDenied = !_visibleByDenied;
                                     textButton = !textButton;
                                   });
+                                  print(reasonReject);
                                 },
                               ),
                             ),
