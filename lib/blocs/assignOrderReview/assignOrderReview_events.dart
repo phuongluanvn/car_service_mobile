@@ -6,6 +6,7 @@ abstract class AssignOrderReviewEvent extends Equatable {
 }
 
 class DoListAssignReviewEvent extends AssignOrderReviewEvent {}
+class DoListOrderConfirmEvent extends AssignOrderReviewEvent {}
 
 class DoAssignReviewDetailEvent extends AssignOrderReviewEvent {
   final String id;

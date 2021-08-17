@@ -1,7 +1,7 @@
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:equatable/equatable.dart';
 
-class OrderDetailModel extends Equatable{
+class OrderDetailModel extends Equatable {
   String id;
   String note;
   String status;
@@ -85,7 +85,7 @@ class OrderDetailModel extends Equatable{
   List<Object> get props => [];
 }
 
-class Customer extends Equatable{
+class Customer extends Equatable {
   String username;
   String email;
   String fullname;
@@ -126,12 +126,11 @@ class Customer extends Equatable{
   List<Object> get props => [];
 }
 
-class Vehicle extends Equatable{
-  
+class Vehicle extends Equatable {
   @override
   // TODO: implement props
   List<Object> get props => [];
-String id;
+  String id;
   String manufacturer;
   String model;
   String licensePlate;
@@ -171,7 +170,7 @@ String id;
   }
 }
 
-class Package extends Equatable{
+class Package extends Equatable {
   String id;
   String name;
   String description;
@@ -203,7 +202,7 @@ class Package extends Equatable{
   List<Object> get props => [];
 }
 
-class Crew extends Equatable{
+class Crew extends Equatable {
   String id;
   String timeAssigned;
   Null timeFinished;
@@ -239,7 +238,7 @@ class Crew extends Equatable{
   List<Object> get props => [];
 }
 
-class Members extends Equatable{
+class Members extends Equatable {
   String username;
   String role;
   String fullname;
@@ -288,7 +287,7 @@ class Members extends Equatable{
   List<Object> get props => [this.fullname];
 }
 
-class OrderDetails extends Equatable{
+class OrderDetails extends Equatable {
   String id;
   String serviceId;
   String accessoryId;

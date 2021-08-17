@@ -351,12 +351,14 @@ class ManagerRepository {
     }
   }
 
-  updateCrewByName(String id, List selectName) async {
+  updateCrewByName(String id, List<StaffModel> selectName) async {
     print('lololo');
     print(selectName);
+    List<String> listName =
+        List.generate(selectName.length, (index) => selectName[index].username);
     var body = {
       "orderId": '$id',
-      "memberUsernameList": selectName,
+      "memberUsernameList": listName,
     };
     var res = await http.post(
       Uri.parse("https://carservicesystem.azurewebsites.net/api/crews"),
@@ -416,7 +418,7 @@ class ManagerRepository {
     // print(crewid);
     List<String> listName = List.generate(
         selectedCrew.length, (index) => selectedCrew[index].username);
-    print('listname:');
+    // print('listname:');
     // print(listName);
     var body = {"id": '$crewid', "memberUsernameList": listName};
     var res = await http.put(
@@ -504,6 +506,49 @@ class ManagerRepository {
     } else {
       print('cannot update acc');
       return res.body;
+    }
+  }
+
+  Future<List<OrderDetailModel>> getConfirmOrderList() async {
+    List<OrderDetailModel> acceptedList = [];
+    List<OrderDetailModel> deniedList = [];
+
+    var resAccepted = await http.get(
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Đã đồng ý"),
+      headers: headers,
+    );
+    var resDenied = await http.get(
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Đã từ chối"),
+      headers: headers,
+    );
+
+    if (resAccepted.statusCode == 200 && resDenied.statusCode == 200) {
+      var dataAccepted = json.decode(resAccepted.body);
+      var dataCheckin = json.decode(resDenied.body);
+
+      if (dataAccepted != null && dataCheckin != null) {
+        dataAccepted
+            .map((order) => acceptedList.add(OrderDetailModel.fromJson(order)))
+            .toList();
+        dataCheckin
+            .map((order) => deniedList.add(OrderDetailModel.fromJson(order)))
+            .toList();
+
+        var newList = [
+          ...acceptedList,
+          ...deniedList,
+        ];
+        print('????');
+        print(newList);
+        return newList;
+      } else {
+        return null;
+      }
+    } else {
+      print('No test order data');
+      return null;
     }
   }
 

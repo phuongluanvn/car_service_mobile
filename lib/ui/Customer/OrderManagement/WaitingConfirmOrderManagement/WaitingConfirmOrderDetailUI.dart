@@ -62,7 +62,7 @@ class _WaitingConfirmOrderDetailUiState
                               ? state.orderDetail[0].checkinTime
                               : 'Chưa nhận xe',
                           state.orderDetail[0].note != null
-                              ? state.orderDetail[0].checkinTime
+                              ? state.orderDetail[0].note
                               : 'Không có ghi chú'),
                       cardInforService(
                           state.orderDetail[0].vehicle.model,
@@ -73,7 +73,9 @@ class _WaitingConfirmOrderDetailUiState
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].note
                               : 'Không có ghi chú',
-                          state.orderDetail[0].package.price),
+                          state.orderDetail[0].note == null
+                              ? state.orderDetail[0].package.price
+                              : 0),
                       cardInforCar(
                           state.orderDetail[0].vehicle.manufacturer,
                           state.orderDetail[0].vehicle.model,

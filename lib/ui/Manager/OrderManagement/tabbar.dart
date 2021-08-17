@@ -1,6 +1,7 @@
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/ManagerAccountUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignReviewList.dart';
+import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/ConfirmOrderListUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/CreateOrderUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/ProcessOrderManagement/ProcessOrderUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingUi.dart';
@@ -19,6 +20,7 @@ class _TabManagerState extends State<TabManager> {
     VerifyBookingUi(),
     AssignOrderUi(),
     AssignReviewUi(),
+    ConfirmOrderListUi(),
     ProcessOrderUi()
   ];
 
@@ -31,7 +33,7 @@ class _TabManagerState extends State<TabManager> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Scaffold(
         appBar: AppBar(
           title: Text('Quản lý đơn hàng'),
@@ -60,6 +62,9 @@ class _TabManagerState extends State<TabManager> {
               ),
               Tab(
                 text: 'Chờ kiểm tra',
+              ),
+              Tab(
+                text: 'Đã phản hồi',
               ),
               Tab(
                 text: 'Đang tiến hành',

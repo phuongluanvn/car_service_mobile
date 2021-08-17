@@ -58,6 +58,26 @@ class AssignReviewBloc extends Bloc<AssignOrderReviewEvent, AssignReviewState> {
             detailStatus: AssignReviewDetailStatus.error,
             message: e.toString());
       }
+    } else if (event is DoListOrderConfirmEvent) {
+      yield state.copyWith(listConfirmStatus: ConfirmOrderStatus.loading);
+      try {
+        List<OrderDetailModel> data = await _repo.getConfirmOrderList();
+        if (data != null) {
+          print('hasdada');
+          yield state.copyWith(
+            listConfirmStatus: ConfirmOrderStatus.listConfirmSuccess,
+            confirmList: data,
+          );
+        } else {
+          yield state.copyWith(
+            listConfirmStatus: ConfirmOrderStatus.error,
+            message: 'Detail Error',
+          );
+        }
+      } catch (e) {
+        yield state.copyWith(
+            listConfirmStatus: ConfirmOrderStatus.error, message: e.toString());
+      }
     }
   }
 }

@@ -9,6 +9,9 @@ import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
 
 import 'package:car_service/blocs/manager/assign_order_cubit/assignorder_cubit.dart';
 import 'package:car_service/blocs/manager/assign_order_cubit/assignorder_cubit_state.dart';
+import 'package:car_service/blocs/manager/booking/booking_bloc.dart';
+import 'package:car_service/blocs/manager/booking/booking_events.dart';
+import 'package:car_service/blocs/manager/booking/booking_state.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
@@ -48,15 +51,19 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   List selectCrewName = [];
   List<StaffModel> selectCrew = [];
   ProcessOrderBloc processOrderBloc;
+  VerifyBookingBloc verifyBloc;
   @override
   void initState() {
     super.initState();
     processOrderBloc = BlocProvider.of<ProcessOrderBloc>(context);
+    verifyBloc = BlocProvider.of<VerifyBookingBloc>(context);
     // assignCubit = BlocProvider.of<AssignorderCubit>(context);
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     crewBloc = BlocProvider.of<CrewBloc>(context);
     BlocProvider.of<AssignOrderBloc>(context)
         .add(DoAssignOrderDetailEvent(id: widget.userId));
+    BlocProvider.of<VerifyBookingBloc>(context)
+        .add(DoVerifyBookingDetailEvent(email: widget.userId));
     BlocProvider.of<ManageStaffBloc>(context).add(DoListStaffEvent());
   }
 
@@ -84,9 +91,13 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                 return CircularProgressIndicator();
               } else if (state.detailStatus == AssignDetailStatus.success) {
                 if (state.assignDetail != null &&
-                    state.assignDetail.isNotEmpty) {
+                    state.assignDetail.isNotEmpty &&
+                    state.assignDetail[0].crew?.members != null &&
+                    state.assignDetail[0].crew != null) {
                   selectCrew = state.assignDetail[0].crew.members;
-                  if (state.assignDetail[0].status == 'Đợi phản hồi') {
+                  if (state.assignDetail[0].status == 'Đợi phản hồi' ||
+                      state.assignDetail[0].status == 'Đã từ chối' ||
+                      state.assignDetail[0].status == 'Đã đồng ý') {
                     _visible = true;
                   }
                   print(_visible);
@@ -341,53 +352,96 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                 .updateStatusWaitConfirmSuccess) {
                                           setState(() {
                                             _visible = true;
+                                            verifyBloc.add(
+                                              DoVerifyBookingDetailEvent(
+                                                  email: widget.userId),
+                                            );
                                           });
                                         }
                                       },
-                                      child: SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.4,
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.065,
-                                        child: _visible
-                                            ? Container(
-                                                decoration: BoxDecoration(
-                                                    color:
-                                                        AppTheme.colors.white,
-                                                    border: Border.all(
-                                                        width: 2,
-                                                        color: AppTheme
-                                                            .colors.deepBlue),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5)),
-                                                child: Center(
-                                                  child: Text(
-                                                    'Đợi phản hồi',
-                                                    style: TextStyle(
-                                                        color: AppTheme
-                                                            .colors.deepBlue),
-                                                  ),
-                                                ))
-                                            : ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    primary:
-                                                        AppTheme.colors.blue),
-                                                child: Text('Gửi xác nhận',
-                                                    style: TextStyle(
-                                                        color: Colors.white)),
-                                                onPressed: () {
-                                                  updateStatusBloc.add(
-                                                      UpdateStatusSendConfirmButtonPressed(
-                                                          id: state
-                                                              .assignDetail[0]
-                                                              .id,
-                                                          status:
-                                                              sendConfirmStatus));
-                                                },
-                                              ),
+                                      child: BlocBuilder<VerifyBookingBloc,
+                                          VerifyBookingState>(
+                                        // ignore: missing_return
+                                        builder: (context, costate) {
+                                          if (costate.detailStatus ==
+                                              BookingDetailStatus.init) {
+                                            return CircularProgressIndicator();
+                                          } else if (costate.detailStatus ==
+                                              BookingDetailStatus.loading) {
+                                            return CircularProgressIndicator();
+                                          } else if (costate.detailStatus ==
+                                              BookingDetailStatus.success) {
+                                            if (costate.bookingDetail != null &&
+                                                costate
+                                                    .bookingDetail.isNotEmpty) {
+                                              return SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.4,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.065,
+                                                child: _visible
+                                                    ? Container(
+                                                        decoration: BoxDecoration(
+                                                            color: AppTheme
+                                                                .colors.white,
+                                                            border: Border.all(
+                                                                width: 2,
+                                                                color: AppTheme
+                                                                    .colors
+                                                                    .deepBlue),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5)),
+                                                        child: Center(
+                                                          child: Text(
+                                                            costate
+                                                                .bookingDetail[
+                                                                    0]
+                                                                .status,
+                                                            style: TextStyle(
+                                                                color: AppTheme
+                                                                    .colors
+                                                                    .deepBlue),
+                                                          ),
+                                                        ))
+                                                    : ElevatedButton(
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                                primary:
+                                                                    AppTheme
+                                                                        .colors
+                                                                        .blue),
+                                                        child: Text(
+                                                            'Gửi xác nhận',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white)),
+                                                        onPressed: () {
+                                                          updateStatusBloc.add(
+                                                              UpdateStatusSendConfirmButtonPressed(
+                                                                  id: state
+                                                                      .assignDetail[
+                                                                          0]
+                                                                      .id,
+                                                                  status:
+                                                                      sendConfirmStatus));
+                                                        },
+                                                      ),
+                                              );
+                                            } else
+                                              return Center(
+                                                  child: Text('Empty'));
+                                          } else if (costate.detailStatus ==
+                                              BookingDetailStatus.error) {
+                                            return ErrorWidget(
+                                                state.message.toString());
+                                          }
+                                        },
                                       ),
                                     ),
                                   ],
@@ -455,115 +509,12 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                               SizedBox(
                                                 height: 20,
                                               ),
-                                              // BlocBuilder<AssignorderCubit,
-                                              //     AssignorderCubitState>(
-                                              //   builder: (context,
-                                              //       assignStaffstate) {
-                                              //     if (assignStaffstate.status ==
-                                              //         AssignCubitStatus
-                                              //             .loadingSuccess)
-                                              //       return Column(
-                                              //         children: [
-                                              //           for (int i = 0;
-                                              //               i <
-                                              //                   assignStaffstate
-                                              //                       .listStaff
-                                              //                       .length;
-                                              //               i++)
-                                              //             Card(
-                                              //               child: Column(
-                                              //                   children: [
-                                              //                     ListTile(
-                                              //                       leading: Image
-                                              //                           .asset(
-                                              //                               'lib/images/logo_blue.png'),
-                                              //                       title: Text(assignStaffstate
-                                              //                           .listStaff[
-                                              //                               i]
-                                              //                           .fullname),
-                                              //                     ),
-                                              //                   ]),
-                                              //             ),
-                                              //           SizedBox(
-                                              //             height: 15,
-                                              //           ),
-                                              //           ElevatedButton(
-                                              //               style:
-                                              //                   ElevatedButton
-                                              //                       .styleFrom(
-                                              //                 primary: AppTheme
-                                              //                     .colors.blue,
-                                              //               ),
-                                              //               child: Text(
-                                              //                   'Chọn nhân viên'),
-                                              //               onPressed: () =>
-                                              //                   setState(() {
-                                              //                     showInformationDialog(
-                                              //                       context,
-                                              //                       staffState
-                                              //                           .staffList,
-                                              //                     );
-                                              //                   })),
-                                              //           SizedBox(
-                                              //             height: 20,
-                                              //           ),
-
-                                              //         ],
-                                              //       );
-                                              //     else
-                                              //       return SizedBox();
-                                              //     // ListView.builder(
-                                              //     //   shrinkWrap: true,
-                                              //     //   itemCount: state.length,
-                                              //     //   itemBuilder:
-                                              //     //       (context, index) {
-                                              //     //     return Card(
-                                              //     //       child: Column(
-                                              //     //           children: [
-                                              //     //             ListTile(
-                                              //     //               leading: Image
-                                              //     //                   .asset(
-                                              //     //                       'lib/images/logo_blue.png'),
-                                              //     //               title: Text(
-                                              //     //                   state[index]
-                                              //     //                       .fullname),
-                                              //     //             ),
-                                              //     //           ]),
-                                              //     //     );
-                                              //     //   },
-                                              //     // );
-                                              //   },
-                                              // ),
-                                              // // ),
 
                                               ListView.builder(
                                                 shrinkWrap: true,
                                                 itemCount: state.assignDetail[0]
-                                                    .crew.members.length,
+                                                    .crew.members?.length,
                                                 itemBuilder: (context, index) {
-                                                  // state.processDetail[0].crew
-                                                  //     .members
-                                                  //     .map((e) => selectCrewName
-                                                  //         .add(e.fullname))
-                                                  //     .toList();
-                                                  // print(selectCrewName);
-                                                  // for (int i = 0;
-                                                  //     i <=
-                                                  //         state
-                                                  //             .processDetail[0]
-                                                  //             .crew
-                                                  //             .members
-                                                  //             .length;
-                                                  //     i++) {
-                                                  //   selectCrewName.add(state
-                                                  //       .processDetail[0]
-                                                  //       .crew
-                                                  //       .members[i]
-                                                  //       .username);
-                                                  //   print('selectCrewName is');
-                                                  //   print(state.processDetail[0]
-                                                  //       .crew.members.length);
-                                                  // }
                                                   return Card(
                                                     child: Column(children: [
                                                       ListTile(
