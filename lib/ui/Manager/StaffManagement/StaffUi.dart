@@ -51,16 +51,16 @@ class _StaffUiState extends State<StaffUi> {
                   Color color;
                   var status = state.staffList[index].status;
                   switch (status) {
-                    case 'absent':
+                    case 'Nghỉ phép':
                       color = Colors.red[600];
                       break;
-                    case 'working':
+                    case 'Đang làm việc':
                       color = Colors.yellow[300];
                       break;
 
 //con nhieu case nua lam sau
                     default:
-                      color = Colors.lightGreenAccent;
+                      color = Colors.green;
                   }
                   // if (state.assignList[index].status == 'Accepted') {
                   return Card(
@@ -68,20 +68,25 @@ class _StaffUiState extends State<StaffUi> {
                       //     ?
                       child: Column(children: [
                     ListTile(
-                      trailing: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Icon(
-                              Icons.circle,
-                              color: color,
-                            ),
-                            Text(state.staffList[index].status),
-                          ]),
+                      trailing: Padding(
+                        padding: const EdgeInsets.only(right: 15),
+                        child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Icon(
+                                Icons.circle,
+                                color: color,
+                              ),
+                            ]),
+                      ),
                       leading: Image.asset(
                         'lib/images/mechanic.png',
                       ),
                       title: Text(state.staffList[index].fullname),
-                      subtitle: Text(state.staffList[index].role.toString()),
+                      subtitle: Text(
+                        state.staffList[index].status,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (_) => StaffDetailUi(

@@ -167,6 +167,29 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                                   ),
                                 ],
                               ),
+                              Container(height: 16),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.baseline,
+                                textBaseline: TextBaseline.alphabetic,
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    child: Text(
+                                      'Loại dịch vụ:',
+                                      style: TextStyle(fontSize: 16.0),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Text(
+                                      state.bookingDetail[0].note == null
+                                          ? 'Bảo dưỡng'
+                                          : 'Sửa chữa',
+                                      style: TextStyle(fontSize: 15.0),
+                                    ),
+                                  ),
+                                ],
+                              ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 20, horizontal: 5),
@@ -272,26 +295,63 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                                       borderRadius: BorderRadius.circular(5)),
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 5, vertical: 10),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        'Thông tin gói dịch vụ',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      ListView(
-                                        shrinkWrap: true,
-                                        children: state
-                                            .bookingDetail[0].orderDetails
-                                            .map((service) {
-                                          return ListTile(
-                                            title: Text(service.name),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ],
-                                  ),
+                                  child: state.bookingDetail[0].note != null
+                                      ? Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.9,
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                'Ghi chú từ người dùng',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              SizedBox(
+                                                height: 15,
+                                              ),
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.baseline,
+                                                textBaseline:
+                                                    TextBaseline.alphabetic,
+                                                children: [
+                                                  Container(
+                                                    child: Text(
+                                                      state.bookingDetail[0]
+                                                          .note,
+                                                      style: TextStyle(
+                                                          fontSize: 15.0),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : Column(
+                                          children: [
+                                            Text(
+                                              'Thông tin gói dịch vụ',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            ListView(
+                                              shrinkWrap: true,
+                                              children: state
+                                                  .bookingDetail[0].orderDetails
+                                                  .map((service) {
+                                                return ListTile(
+                                                  title: Text(service.name),
+                                                );
+                                              }).toList(),
+                                            ),
+                                          ],
+                                        ),
                                 ),
                               ),
                             ],

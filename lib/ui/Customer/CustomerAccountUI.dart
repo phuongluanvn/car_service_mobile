@@ -180,21 +180,21 @@ class _CustomerAccountUiState extends State<CustomerAccountUi> {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              child: Container(
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _isShown == true ? () => _logout(context) : null,
-                  child: Row(
-                    children: [
-                      Expanded(child: Text('Đăng xuất')),
-                      Icon(Icons.arrow_forward_ios),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            //   child: Container(
+            //     height: 50,
+            //     child: ElevatedButton(
+            //       onPressed: _isShown == true ? () => _logout(context) : null,
+            //       child: Row(
+            //         children: [
+            //           Expanded(child: Text('Đăng xuất')),
+            //           Icon(Icons.arrow_forward_ios),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

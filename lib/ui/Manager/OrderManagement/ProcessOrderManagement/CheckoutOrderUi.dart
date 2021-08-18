@@ -123,8 +123,12 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
 
                                           final x = state.processDetail[0]
                                               .orderDetails[index].quantity;
-                                          final z = state.processDetail[0]
-                                              .orderDetails[index].price;
+                                          final z =
+                                              state.processDetail[0].note ==
+                                                      null
+                                                  ? state.processDetail[0]
+                                                      .package.price
+                                                  : 0;
 
                                           return DataRow(cells: [
                                             DataCell(Container(
@@ -159,8 +163,11 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          state.processDetail[0].package.price
-                                              .toString(),
+                                          state.processDetail[0].note == null
+                                              ? state.processDetail[0].package
+                                                  .price
+                                                  .toString()
+                                              : '',
                                           style: TextStyle(
                                             fontSize: 18,
                                           ),

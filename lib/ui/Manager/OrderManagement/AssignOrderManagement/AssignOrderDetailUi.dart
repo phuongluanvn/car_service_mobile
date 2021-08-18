@@ -39,6 +39,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
   List selectCrewName = [];
   CrewBloc crewBloc;
   ProcessOrderBloc processOrderBloc;
+  bool _checkStatusCheckin = false;
 
   @override
   void initState() {
@@ -81,7 +82,12 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
               } else if (state.detailStatus == AssignDetailStatus.loading) {
                 return CircularProgressIndicator();
               } else if (state.detailStatus == AssignDetailStatus.success) {
-                if (state.assignDetail != null && state.assignDetail.isNotEmpty)
+                if (state.assignDetail != null && state.assignDetail.isNotEmpty){
+                  // if(state.assignDetail[0].status == 'Đã nhận xe'){
+                  //   setState(() {
+                  //   _checkStatusCheckin = true;                      
+                  //                       });
+                  // }
                   return Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Column(
@@ -538,7 +544,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                       ],
                     ),
                   );
-                else
+                }else
                   return Center(child: Text('Empty'));
               } else if (state.detailStatus == AssignDetailStatus.error) {
                 return Text(state.message.toString());

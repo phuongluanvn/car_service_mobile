@@ -197,7 +197,7 @@ class _ManagerProfileState extends State<ManagerProfile> {
         builder: (BuildContext ctx) {
           return AlertDialog(
             title: Text('Xác nhận'),
-            content: Text('Bạn xác nhận muốn thoát ứng dụng?'),
+            content: Text('Bạn có chắc muốn đăng xuất không?'),
             actions: [
               // The "Yes" button
               TextButton(

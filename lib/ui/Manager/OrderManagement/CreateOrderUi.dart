@@ -95,7 +95,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
       },
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: Colors.blue, // background
+          primary: AppTheme.colors.blue, // background
           onPrimary: Colors.white, // foreground
         ),
         onPressed: () {

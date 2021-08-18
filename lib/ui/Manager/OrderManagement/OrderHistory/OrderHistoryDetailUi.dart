@@ -38,7 +38,7 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Booking Information'),
+        title: Text('Chi tiết lịch sử đơn hàng'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),

@@ -64,7 +64,7 @@ class _OrderHistoryUiState extends State<OrderHistoryUi> {
                                 Icons.circle,
                                 color: Colors.red,
                               ),
-                              Text('Finished'),
+                              Text(state.historyList[index].status),
                             ]),
                         leading: Image.asset('lib/images/order_small.png'),
                         title:
