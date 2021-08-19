@@ -26,7 +26,7 @@ class CheckoutOrderUi extends StatefulWidget {
 }
 
 class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
-  final String processingStatus = 'Hoàn thành';
+  final String processingStatus = 'Đợi  thanh toán';
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visible = false;
   bool checkedValue = false;
@@ -201,7 +201,7 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                                           child: ElevatedButton(
                                             style: ElevatedButton.styleFrom(
                                                 primary: AppTheme.colors.blue),
-                                            child: Text('Hoàn tất',
+                                            child: Text('Hoàn tất dịch vụ',
                                                 style: TextStyle(
                                                     color: Colors.white)),
                                             onPressed: () {

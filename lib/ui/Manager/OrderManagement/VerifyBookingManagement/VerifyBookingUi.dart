@@ -64,7 +64,7 @@ class _VerifyBookingUiState extends State<VerifyBookingUi> {
                                 title: Text(state
                                     .bookingList[index].vehicle.licensePlate),
                                 subtitle: Text(_convertDate(
-                                    state.bookingList[index].createdTime)),
+                                    state.bookingList[index].bookingTime)),
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (_) => VerifyBookingDetailUi(

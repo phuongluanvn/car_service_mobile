@@ -1,4 +1,5 @@
 import 'package:car_service/theme/app_theme.dart';
+import 'package:car_service/ui/Manager/ManageWaitingPayment/WaitingPaymentUi.dart';
 import 'package:car_service/ui/Manager/ManagerAccountUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignReviewList.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/ConfirmOrderListUi.dart';
@@ -21,7 +22,8 @@ class _TabManagerState extends State<TabManager> {
     AssignOrderUi(),
     AssignReviewUi(),
     ConfirmOrderListUi(),
-    ProcessOrderUi()
+    ProcessOrderUi(),
+    WaitingPaymentUi()
   ];
 
   void _onItemTap(int index) {
@@ -33,7 +35,7 @@ class _TabManagerState extends State<TabManager> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 6,
       child: Scaffold(
         appBar: AppBar(
           title: Text('Quản lý đơn hàng'),
@@ -68,6 +70,9 @@ class _TabManagerState extends State<TabManager> {
               ),
               Tab(
                 text: 'Đang tiến hành',
+              ),
+              Tab(
+                text: 'Đợi thanh toán',
               )
             ],
           ),

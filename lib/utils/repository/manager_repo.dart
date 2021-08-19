@@ -66,6 +66,7 @@ class ManagerRepository {
       return null;
     }
   }
+
   Future<List<StaffModel>> getStaffAvailList() async {
     List<StaffModel> staffList = [];
 
@@ -575,9 +576,43 @@ class ManagerRepository {
     }
   }
 
+  Future<List<OrderDetailModel>> getWaitingPaymentList() async {
+    List<OrderDetailModel> finishList = [];
+
+    var resAccepted = await http.get(
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Đợi thanh toán"),
+      headers: headers,
+    );
+    
+    if (resAccepted.statusCode == 200 ) {
+      var dataAccepted = json.decode(resAccepted.body);
+      
+      if (dataAccepted != null ) {
+        dataAccepted
+            .map((order) => finishList.add(OrderDetailModel.fromJson(order)))
+            .toList();
+       
+        var newList = [
+          ...finishList,
+         
+        ];
+        print('????');
+        print(newList);
+        return newList;
+      } else {
+        return null;
+      }
+    } else {
+      print('No test order data');
+      return null;
+    }
+  }
+
   Future<List<OrderDetailModel>> getOrderHistoryList() async {
     List<OrderDetailModel> finishList = [];
     List<OrderDetailModel> cancelList = [];
+    List<OrderDetailModel> cancelBookingList = [];
 
     var resAccepted = await http.get(
       Uri.parse(
@@ -586,14 +621,19 @@ class ManagerRepository {
     );
     var resCheckin = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Từ chối"),
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Hủy đơn"),
+      headers: headers,
+    );
+    var resCancel = await http.get(
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Hủy đặt lịch"),
       headers: headers,
     );
 
-    if (resAccepted.statusCode == 200 && resCheckin.statusCode == 200) {
+    if (resAccepted.statusCode == 200 && resCheckin.statusCode == 200  && resCancel.statusCode == 200) {
       var dataAccepted = json.decode(resAccepted.body);
       var dataCheckin = json.decode(resCheckin.body);
-
+      var dataCancel = json.decode(resCancel.body);
       if (dataAccepted != null && dataCheckin != null) {
         dataAccepted
             .map((order) => finishList.add(OrderDetailModel.fromJson(order)))
@@ -601,10 +641,14 @@ class ManagerRepository {
         dataCheckin
             .map((order) => cancelList.add(OrderDetailModel.fromJson(order)))
             .toList();
-
+        dataCancel
+            .map((order) =>
+                cancelBookingList.add(OrderDetailModel.fromJson(order)))
+            .toList();
         var newList = [
           ...finishList,
           ...cancelList,
+          ...cancelBookingList,
         ];
         print('????');
         print(newList);

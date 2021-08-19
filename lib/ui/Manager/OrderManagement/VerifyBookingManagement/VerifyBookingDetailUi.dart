@@ -39,7 +39,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
   @override
   Widget build(BuildContext context) {
     final String acceptStatus = 'Đã xác nhận';
-    final String denyStatus = 'Từ chối';
+    final String denyStatus = 'Hủy đơn';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,

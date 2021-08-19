@@ -26,6 +26,7 @@ import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/blocs/manager/updateItem/updateItem_bloc.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
+import 'package:car_service/blocs/manager/waitingPayment/waitingPayment_bloc.dart';
 import 'package:car_service/blocs/packageService/PackageService_bloc.dart';
 import 'package:car_service/blocs/sign_up/sign_up_bloc.dart';
 import 'package:car_service/blocs/sign_up/sign_up_state.dart';
@@ -195,6 +196,8 @@ class _AuthState extends State<Auth> {
             create: (context) => AccessoryBloc(repo: ManagerRepository())),
         BlocProvider(
             create: (context) => UpdateItemBloc(repo: ManagerRepository())),
+        BlocProvider(
+            create: (context) => WaitingPaymentBloc(repo: ManagerRepository())),
         // BlocProvider(
         //     create: (context) =>
         //         BookingCubit(VerifyBookingInitState(), ManagerRepository())),
