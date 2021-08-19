@@ -90,8 +90,9 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].note
                               : 'Không có ghi chú',
-                          state.orderDetail[0].package.price
-                          ),
+                          state.orderDetail[0].note == null
+                              ? state.orderDetail[0].package.price
+                              : 0),
 
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -140,15 +141,13 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                                 child: Text(textButton ? 'Đồng ý' : 'Xác nhận',
                                     style: TextStyle(color: Colors.white)),
                                 onPressed: () {
-                                  if (reasonReject != null) {
+                                  if (textButton == false &&
+                                      reasonReject != null) {
                                     updateStatusBloc.add(
-                                      UpdateStatusConfirmAcceptedButtonPressed(
-                                          id: state.orderDetail[0].id,
-                                          status: rejectStatus));
-                                    print(reasonReject);
-                                    print('1');
+                                        UpdateStatusConfirmAcceptedButtonPressed(
+                                            id: state.orderDetail[0].id,
+                                            status: rejectStatus));
                                   } else {
-                                    print('hihihi');
                                     updateStatusBloc.add(
                                         UpdateStatusConfirmAcceptedButtonPressed(
                                             id: state.orderDetail[0].id,

@@ -118,6 +118,9 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                                       case 'Kiểm tra':
                                         color = Colors.blue[700];
                                         break;
+                                      case 'Đang tiến hành':
+                                        color = Colors.green[300];
+                                        break;
                                       case 'Đợi phản hồi':
                                         color = Colors.orange;
                                         break;
@@ -135,6 +138,9 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                                         break;
                                       case 'Hủy đơn':
                                         color = Colors.red;
+                                        break;
+                                      case 'Hủy đặt lịch':
+                                        color = Colors.red[400];
                                         break;
                                       default:
                                         color = Colors.black;

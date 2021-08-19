@@ -5,16 +5,17 @@ import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/OrderManagement/ConfirmOrderManagement/ConfirmOrderDetailUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CreateOrderManagement/CreateBookingOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderDetailUI.dart';
+import 'package:car_service/ui/Customer/OrderManagement/WaitingPaymentOrderManagement/PaymentOrderDetailUI.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CheckingOrderUI extends StatefulWidget {
+class WaitingPaymentUI extends StatefulWidget {
   @override
-  _CheckingOrderUIState createState() => _CheckingOrderUIState();
+  _WaitingPaymentUIState createState() => _WaitingPaymentUIState();
 }
 
-class _CheckingOrderUIState extends State<CheckingOrderUI> {
+class _WaitingPaymentUIState extends State<WaitingPaymentUI> {
   @override
   void initState() {
     super.initState();
@@ -40,8 +41,8 @@ class _CheckingOrderUIState extends State<CheckingOrderUI> {
             } else if (state.status == CustomerOrderStatus.loading) {
               return CircularProgressIndicator();
             } else if (state.status == CustomerOrderStatus.loadedOrderSuccess) {
-              if (state.orderCheckingLists != null &&
-                  state.orderCheckingLists.isNotEmpty)
+              if (state.waitingPaymentLists != null &&
+                  state.waitingPaymentLists.isNotEmpty)
                 return Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
@@ -60,13 +61,13 @@ class _CheckingOrderUIState extends State<CheckingOrderUI> {
                         // ),
                         Expanded(
                           child: ListView.builder(
-                            itemCount: state.orderCheckingLists.length,
+                            itemCount: state.waitingPaymentLists.length,
                             shrinkWrap: true,
                             // ignore: missing_return
                             itemBuilder: (context, index) {
                               assert(context != null);
-                              if (state.orderCheckingLists[index].status ==
-                                  'Kiểm tra') {
+                              if (state.waitingPaymentLists[index].status ==
+                                  'Đợi thanh toán') {
                                 return Card(
                                     child: Column(children: [
                                   ListTile(
@@ -75,22 +76,22 @@ class _CheckingOrderUIState extends State<CheckingOrderUI> {
                                         children: <Widget>[
                                           Icon(
                                             Icons.circle,
-                                            color: Colors.blue[700],
+                                            color: Colors.green[200],
                                           ),
                                           Text(
-                                            state.orderCheckingLists[index]
+                                            state.waitingPaymentLists[index]
                                                 .status,
                                             style: TextStyle(
-                                                color: Colors.blue[700]),
+                                                color: Colors.green[200]),
                                           ),
                                         ]),
                                     leading: Image.asset(
                                         'lib/images/order_small.png'),
-                                    title: Text(state.orderCheckingLists[index]
+                                    title: Text(state.waitingPaymentLists[index]
                                         .vehicle.licensePlate),
                                     subtitle: Text(
                                       _convertDate(state
-                                          .orderCheckingLists[index]
+                                          .waitingPaymentLists[index]
                                           .bookingTime),
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -100,9 +101,9 @@ class _CheckingOrderUIState extends State<CheckingOrderUI> {
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (_) =>
-                                                  CustomerOrderDetailUi(
+                                                  PaymentOrderDetailUi(
                                                       orderId: state
-                                                          .orderCheckingLists[
+                                                          .waitingPaymentLists[
                                                               index]
                                                           .id)));
                                     },
