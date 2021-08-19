@@ -8,6 +8,7 @@ import 'package:car_service/blocs/customer/customerCar/UpdateCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/UpdateCar_event.dart';
 import 'package:car_service/blocs/customer/customerCar/UpdateCar_state.dart';
 import 'package:car_service/theme/app_theme.dart';
+// import 'package:car_service/ui/Customer/CarManagement/EditInforOfCarUI.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -120,6 +121,12 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
             onPressed: () => Navigator.pop(context),
           ),
           actions: [
+            // IconButton(
+            //     onPressed: () {
+            //       Navigator.of(context).push(
+            //           MaterialPageRoute(builder: (_) => EditInforOfCarUi()));
+            //     },
+            //     icon: Icon(Icons.edit)),
             IconButton(
                 onPressed: () {
                   _showDeleteDialog();
@@ -163,13 +170,13 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                           'Thông báo!',
                           style: TextStyle(color: Colors.greenAccent),
                         ),
-                        content: Text('Xóa thông tin xe thành công!'),
+                        content: Text('Cập nhật thông tin xe thành công!'),
                         actions: [
                           TextButton(
                               onPressed: () {
                                 // Close the dialog
                                 // Navigator.of(context).pop();
-                                Navigator.pushNamed(context, '/customer');
+                                // Navigator.pushNamed(context, '/customer');
                               },
                               child: Text('Đồng ý'))
                         ],
@@ -361,6 +368,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                 ),
               ),
             ),
+         
           ),
         ),
       ),
