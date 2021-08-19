@@ -40,7 +40,10 @@ class CustomerRepository {
       body: json.encode(body),
     );
     if (res.statusCode != null) {
+      print(res.statusCode);
+      print(res.body);
       if (res.statusCode == 200) {
+        print('3');
         return res.body;
       } else if (res.statusCode == 404) {
         return res.body;

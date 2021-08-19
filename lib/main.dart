@@ -148,7 +148,7 @@ class _AuthState extends State<Auth> {
         // BlocProvider(create: (context) => CarCustomerCubit()),
         BlocProvider(
             create: (context) => AssignOrderBloc(repo: ManagerRepository())),
-            BlocProvider(
+        BlocProvider(
             create: (context) => AssignReviewBloc(repo: ManagerRepository())),
         BlocProvider(
             create: (context) => CustomerCarBloc(repo: CustomerRepository())),
@@ -199,7 +199,7 @@ class _AuthState extends State<Auth> {
         routes: {
           '/': (context) => LoginUi(),
           '/manager': (context) => ManagerMain(),
-          '/staff': (context) => StaffHome(),
+          '/staff': (context) => StaffHomeUi(),
           '/customer': (context) => CustomerHome(),
         },
       ),
