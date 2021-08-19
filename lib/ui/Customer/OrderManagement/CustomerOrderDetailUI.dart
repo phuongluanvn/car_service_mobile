@@ -57,6 +57,9 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
       case 'Hủy':
         color = Colors.red;
         break;
+      case 'Hủy đặt lịch':
+        color = Colors.red[400];
+        break;
 //con nhieu case nua lam sau
       default:
         color = Colors.greenAccent[400];
@@ -109,7 +112,9 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].note
                               : 'Không có ghi chú',
-                          state.orderDetail[0].package.price),
+                          state.orderDetail[0].note == null
+                              ? state.orderDetail[0].package.price
+                              : 0),
                       cardInforCar(
                           state.orderDetail[0].vehicle.manufacturer,
                           state.orderDetail[0].vehicle.model,
@@ -199,16 +204,15 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
               title: Text('Thời gian nhận xe: '),
               trailing: Text(checkinTime),
             ),
-
-            // ListTile(
-            //   title: Text('Ghi chú từ người dùng: '),
-            //   subtitle: Text(
-            //     note,
-            //     style:
-            //         TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-            //   ),
-            //   isThreeLine: true,
-            // ),
+            ListTile(
+              title: Text('Ghi chú từ người dùng: '),
+              subtitle: Text(
+                note,
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+              ),
+              isThreeLine: true,
+            ),
           ],
         ),
       ),
@@ -223,6 +227,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
       bool serviceType,
       String note,
       int totalPrice) {
+    int countPrice = 0;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       child: Container(
@@ -256,6 +261,9 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                 : ExpansionTile(
                     title: Text('Chi tiết:'),
                     children: services.map((service) {
+                      countPrice += service.price;
+                      print('object');
+                      print(_convertMoney(countPrice.toDouble()));
                       return ListTile(
                         title: Text(service.name),
                         trailing: Text(_convertMoney(service.price.toDouble())),
@@ -269,9 +277,16 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
               endIndent: 20,
             ),
             ListTile(
-              title: Text('Tổng: '),
-              trailing: Text(_convertMoney(totalPrice.toDouble())),
-            ),
+                title: Text('Tổng: '),
+                trailing: Column(
+                  children: [
+                    Text(
+                      _convertMoney(countPrice.toDouble()),
+                      style: TextStyle(decoration: TextDecoration.lineThrough),
+                    ),
+                    Text(_convertMoney(totalPrice.toDouble())),
+                  ],
+                )),
           ],
         ),
       ),
@@ -279,11 +294,10 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
   }
 
   _convertDate(dateInput) {
-    return formatDate(
-        DateTime.parse(dateInput), [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
+    return formatDate(DateTime.parse(dateInput),
+        [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
   }
 
- 
   _convertMoney(double money) {
     MoneyFormatter fmf = new MoneyFormatter(
         amount: money,

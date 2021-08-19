@@ -22,6 +22,7 @@ class CustomerOrderBloc extends Bloc<CustomerOrderEvent, CustomerOrderState> {
       List<OrderModel> processingOrderList = [];
       List<OrderModel> waittingConfirmOrderList = [];
       List<OrderModel> acceptedOrderList = [];
+      List<OrderModel> waitingPaymentdOrderList = [];
 
       yield state.copyWith(status: CustomerOrderStatus.loading);
       try {
@@ -46,6 +47,8 @@ class CustomerOrderBloc extends Bloc<CustomerOrderEvent, CustomerOrderState> {
                       {waittingConfirmOrderList.add(order)}
                     else if (order.status == 'Đã xác nhận')
                       {acceptedOrderList.add(order)}
+                    else if (order.status == 'Đợi thanh toán')
+                      {waitingPaymentdOrderList.add(order)}
                   })
               .toList();
           if (orderLists != null) {
@@ -57,6 +60,7 @@ class CustomerOrderBloc extends Bloc<CustomerOrderEvent, CustomerOrderState> {
                 orderProcessingLists: processingOrderList,
                 orderWaitingConfirmLists: waittingConfirmOrderList,
                 orderAcceptedLists: acceptedOrderList,
+                waitingPaymentLists: waitingPaymentdOrderList,
                 status: CustomerOrderStatus.loadedOrderSuccess);
           }
         } else {

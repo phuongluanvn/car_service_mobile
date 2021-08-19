@@ -352,7 +352,7 @@ class CustomerRepository {
 
   editProfile(String username, String fullname, String phoneNumber,
       String email, String address) async {
-        print(username);
+    print(username);
     final body = jsonEncode({
       "username": username,
       "email": email,
@@ -376,7 +376,7 @@ class CustomerRepository {
   getProfile(String username) async {
     String message;
     List convertData = [];
-    List<CustomerProfileModel> cusProfile =[];
+    List<CustomerProfileModel> cusProfile = [];
     var res = await http.get(Uri.parse(BASE_URL + "customers/" + username),
         headers: headers);
     final data = json.decode(res.body);
@@ -384,16 +384,23 @@ class CustomerRepository {
     print(convertData);
     if (res.statusCode == 200) {
       if (data != null) {
-        convertData.map((e) => cusProfile.add(CustomerProfileModel.fromJson(e))).toList();
+        convertData
+            .map((e) => cusProfile.add(CustomerProfileModel.fromJson(e)))
+            .toList();
         return cusProfile;
       } else {
         return 'Không tìm thấy thông tin người dùng';
       }
     } else if (res.statusCode == 404) {
-      message = 'Không tìm thấy thông tin người dùng ' + res.statusCode.toString();
+      message =
+          'Không tìm thấy thông tin người dùng ' + res.statusCode.toString();
       return message;
     } else {
       return res.body;
     }
+  }
+
+  getCoupon() async {
+    
   }
 }

@@ -6,6 +6,7 @@ import 'package:car_service/ui/Customer/OrderManagement/CreateOrderManagement/Cr
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/ProcessingOrderManagement/ProcessingOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/WaitingConfirmOrderManagement/WaitingConfirmOrderUI.dart';
+import 'package:car_service/ui/Customer/OrderManagement/WaitingPaymentOrderManagement/WaitingPayment.dart';
 import 'package:flutter/material.dart';
 
 class TabOrderCustomer extends StatefulWidget {
@@ -21,6 +22,7 @@ class _TabOrderState extends State<TabOrderCustomer> {
     CheckingOrderUI(),
     ProcessingOrderUI(),
     ConfirmOrderUI(),
+    WaitingPaymentUI(),
     CustomerOrderUi(),
   ];
 
@@ -33,7 +35,7 @@ class _TabOrderState extends State<TabOrderCustomer> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 6,
+      length: 7,
       child: Scaffold(
         appBar: AppBar(
           title: Text('Đơn hàng'),
@@ -68,6 +70,9 @@ class _TabOrderState extends State<TabOrderCustomer> {
               ),
               Tab(
                 text: 'Đợi phản hồi',
+              ),
+              Tab(
+                text: 'Đợi thanh toán',
               ),
               Tab(
                 text: 'Tất cả đơn hàng',

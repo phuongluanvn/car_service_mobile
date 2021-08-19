@@ -75,13 +75,13 @@ class _AcceptedOrderUIState extends State<AcceptedOrderUI> {
                                         children: <Widget>[
                                           Icon(
                                             Icons.circle,
-                                            color: Colors.orangeAccent,
+                                            color: Colors.green[200],
                                           ),
                                           Text(
                                             state.orderAcceptedLists[index]
                                                 .status,
                                             style: TextStyle(
-                                                color: Colors.orangeAccent),
+                                                color: Colors.green[200]),
                                           ),
                                         ]),
                                     leading: Image.asset(

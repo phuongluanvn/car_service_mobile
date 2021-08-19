@@ -75,13 +75,13 @@ class _ProcessingOrderUIState extends State<ProcessingOrderUI> {
                                         children: <Widget>[
                                           Icon(
                                             Icons.circle,
-                                            color: Colors.orangeAccent,
+                                            color: Colors.green[300],
                                           ),
                                           Text(
                                             state.orderProcessingLists[index]
                                                 .status,
                                             style: TextStyle(
-                                                color: Colors.orangeAccent),
+                                                color: Colors.green[300]),
                                           ),
                                         ]),
                                     leading: Image.asset(

@@ -77,14 +77,14 @@ class _WaitingConfirmOrderUIState extends State<WaitingConfirmOrderUI> {
                                         children: <Widget>[
                                           Icon(
                                             Icons.circle,
-                                            color: Colors.orangeAccent,
+                                            color: Colors.orange[600],
                                           ),
                                           Text(
                                             state
                                                 .orderWaitingConfirmLists[index]
                                                 .status,
                                             style: TextStyle(
-                                                color: Colors.orangeAccent),
+                                                color: Colors.orange[600]),
                                           ),
                                         ]),
                                     leading: Image.asset(
