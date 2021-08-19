@@ -292,4 +292,24 @@ class CustomerRepository {
       }
     }
   }
+
+  editProfile(String username, String email, String fullname,
+      String phoneNumber, String address) async {
+    final body = jsonEncode({
+      "username": username,
+      "email": email,
+      "fullname": fullname,
+      "phoneNumber": phoneNumber,
+      "address": address
+    });
+
+    var res = await http.put(Uri.parse(BASE_URL + "customers"),
+        headers: headers, body: body);
+    final data = (res.body);
+    if (data != null) {
+      return data;
+    } else {
+      return res.body;
+    }
+  }
 }

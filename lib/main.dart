@@ -5,6 +5,7 @@ import 'package:car_service/blocs/customer/customerCar/CreateCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CreateBooking_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
+import 'package:car_service/blocs/customer/customerProfile/CustomerProfile_bloc.dart';
 import 'package:car_service/blocs/customer/customerService/CustomerService_bloc.dart';
 import 'package:car_service/blocs/customer/manufacturers/Manufacturer_bloc.dart';
 import 'package:car_service/blocs/login/auth_bloc.dart';
@@ -143,6 +144,8 @@ class _AuthState extends State<Auth> {
         BlocProvider(
             create: (context) => AssignOrderBloc(repo: ManagerRepository())),
         BlocProvider(
+            create: (context) => AssignReviewBloc(repo: ManagerRepository())),
+        BlocProvider(
             create: (context) => CustomerCarBloc(repo: CustomerRepository())),
         BlocProvider(
             create: (context) => CustomerOrderBloc(repo: CustomerRepository())),
@@ -164,6 +167,9 @@ class _AuthState extends State<Auth> {
         BlocProvider(
             create: (context) =>
                 UpdateStatusOrderBloc(repo: ManagerRepository())),
+        BlocProvider(
+            create: (context) =>
+                EditProfileBloc(repo: CustomerRepository())),
         BlocProvider(
             create: (context) => ManageStaffBloc(repo: ManagerRepository())),
         BlocProvider(
