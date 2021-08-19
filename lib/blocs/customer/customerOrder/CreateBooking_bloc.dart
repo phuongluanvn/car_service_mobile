@@ -20,6 +20,7 @@ class CreateBookingBloc extends Bloc<CreateBookingEvent, CreateBookingState> {
         var data = await _repo.createNewBooking(event.carId, event.serviceId,
             event.note, event.timeBooking, event.imageUrl);
         // String jsonsDataString = data.toString();
+        print('1');
         print(data);
         // final jsonData = jsonDecode(jsonsDataString);
         // print(jsonData);

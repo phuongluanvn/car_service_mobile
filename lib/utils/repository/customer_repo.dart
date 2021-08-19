@@ -40,7 +40,10 @@ class CustomerRepository {
       body: json.encode(body),
     );
     if (res.statusCode != null) {
+      print(res.statusCode);
+      print(res.body);
       if (res.statusCode == 200) {
+        print('3');
         return res.body;
       } else if (res.statusCode == 404) {
         return res.body;
@@ -343,6 +346,26 @@ class CustomerRepository {
         print('No manufacturer data');
         return res.body;
       }
+    }
+  }
+
+  editProfile(String username, String email, String fullname,
+      String phoneNumber, String address) async {
+    final body = jsonEncode({
+      "username": username,
+      "email": email,
+      "fullname": fullname,
+      "phoneNumber": phoneNumber,
+      "address": address
+    });
+
+    var res = await http.put(Uri.parse(BASE_URL + "customers"),
+        headers: headers, body: body);
+    final data = (res.body);
+    if (data != null) {
+      return data;
+    } else {
+      return res.body;
     }
   }
 }

@@ -46,18 +46,17 @@ dependencies:
   multi_image_picker:
   date_format:
   flutter_typeahead: ^3.2.0
-  date_time_picker: 
+  date_time_picker:
   search_widget:
   flutter_slidable: ^0.6.0
   money_formatter: ^0.0.3
-  
+  calendar_strip: ^1.0.7
 
 dev_dependencies:
   intl:
-  flutter_launcher_icons: 
+  flutter_launcher_icons:
   flutter_test:
     sdk: flutter
-    
 
 flutter_icons:
   android: true
