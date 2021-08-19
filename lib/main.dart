@@ -205,7 +205,7 @@ class _AuthState extends State<Auth> {
         routes: {
           '/': (context) => LoginUi(),
           '/manager': (context) => ManagerMain(),
-          // '/staff': (context) => StaffHomeUi(),
+          '/staff': (context) => StaffHomeUi(),
           '/customer': (context) => CustomerHome(),
         },
       ),
