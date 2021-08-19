@@ -13,6 +13,7 @@ import 'package:car_service/blocs/packageService/PackageService_bloc.dart';
 import 'package:car_service/blocs/packageService/PackageService_event.dart';
 import 'package:car_service/blocs/packageService/PackageService_state.dart';
 import 'package:car_service/theme/app_theme.dart';
+import 'package:car_service/ui/Customer/CustomerMainUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/tabbar.dart';
 import 'package:date_format/date_format.dart';
@@ -666,7 +667,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                   //         return Cir
                   //       });
                   //     }
-                  // else 
+                  // else
                   if (state.status ==
                       CreateBookingStatus.createBookingOrderSuccess) {
                     // Navigator.pop(context);
@@ -686,8 +687,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              TabOrderCustomer()),
+                                          builder: (context) => CustomerHome()),
                                     );
                                   },
                                   child: Text('Đồng ý'))

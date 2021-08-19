@@ -84,6 +84,33 @@ class ManageStaffBloc extends Bloc<ManageStaffEvent, ManageStaffState> {
         yield state.copyWith(
             staffSelectStt: StaffSelectStatus.error, message: e.toString());
       }
+    } else if (event is DoListStaffWithAvaiStatusEvent) {
+      List<StaffModel> listTest = [];
+      yield state.copyWith(status: StaffStatus.loading);
+      try {
+        var staffList = await _repo.getStaffList();
+        staffList
+            .map((e) => {
+                  if (e.role == 'staff') {listTest.add(e)}
+                })
+            .toList();
+        print(listTest);
+        if (staffList != null) {
+          yield state.copyWith(
+              staffList: listTest, status: StaffStatus.staffListAvaisuccess);
+        } else {
+          yield state.copyWith(
+            status: StaffStatus.error,
+            message: 'Staff Error',
+          );
+          print('no data');
+        }
+      } catch (e) {
+        yield state.copyWith(
+          status: StaffStatus.error,
+          message: e.toString(),
+        );
+      }
     }
   }
 }

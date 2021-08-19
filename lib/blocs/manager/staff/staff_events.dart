@@ -19,3 +19,5 @@ class DoStaffDetailEvent extends ManageStaffEvent {
 }
 
 class StaffTabPressed extends ManageStaffEvent {}
+
+class DoListStaffWithAvaiStatusEvent extends ManageStaffEvent{}

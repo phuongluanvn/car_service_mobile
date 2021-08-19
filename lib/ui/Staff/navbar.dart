@@ -4,7 +4,7 @@ import 'package:car_service/ui/Manager/OrderManagement/ManagementBookingOrder.da
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingUi.dart';
 import 'package:car_service/ui/Manager/ManagerProfileUi.dart';
 import 'package:car_service/ui/Manager/StaffManagement/StaffUi.dart';
-import 'package:car_service/ui/Staff/OrderHistory/ScheduleListUi.dart';
+import 'package:car_service/ui/Staff/ScheduleManagement/ScheduleListUi.dart';
 import 'package:car_service/ui/Staff/StaffProfileUi.dart';
 import 'package:flutter/material.dart';
 

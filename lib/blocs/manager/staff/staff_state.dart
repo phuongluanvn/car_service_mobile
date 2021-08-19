@@ -6,6 +6,7 @@ enum StaffStatus {
   loading,
   staffListsuccess,
   staffDetailsuccess,
+  staffListAvaisuccess,
   error,
 }
 

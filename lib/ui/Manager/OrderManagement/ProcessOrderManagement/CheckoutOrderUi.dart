@@ -127,7 +127,7 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                                               state.processDetail[0].note ==
                                                       null
                                                   ? state.processDetail[0]
-                                                      .package.price
+                                                      .orderDetails[index].price
                                                   : 0;
 
                                           return DataRow(cells: [

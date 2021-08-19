@@ -3,6 +3,9 @@ import 'package:car_service/blocs/manager/CrewManagement/crew_event.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
+import 'package:car_service/blocs/manager/orderHistory/orderHistory_bloc.dart';
+import 'package:car_service/blocs/manager/orderHistory/orderHistory_events.dart';
+import 'package:car_service/blocs/manager/orderHistory/orderHistory_state.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
@@ -39,17 +42,21 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
   List selectCrewName = [];
   CrewBloc crewBloc;
   ProcessOrderBloc processOrderBloc;
-  bool _checkStatusCheckin = false;
+  bool _checkStatusCheckin = true;
+  OrderHistoryBloc orderHistoryBloc;
 
   @override
   void initState() {
     super.initState();
+    orderHistoryBloc = BlocProvider.of<OrderHistoryBloc>(context);
     processOrderBloc = BlocProvider.of<ProcessOrderBloc>(context);
     crewBloc = BlocProvider.of<CrewBloc>(context);
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     BlocProvider.of<AssignOrderBloc>(context)
         .add(DoAssignOrderDetailEvent(id: widget.orderId));
     BlocProvider.of<ManageStaffBloc>(context).add(DoListStaffEvent());
+    BlocProvider.of<OrderHistoryBloc>(context)
+        .add(DoOrderHistoryDetailEvent(id: widget.orderId));
   }
 
   void getDropDownItem() {
@@ -82,12 +89,12 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
               } else if (state.detailStatus == AssignDetailStatus.loading) {
                 return CircularProgressIndicator();
               } else if (state.detailStatus == AssignDetailStatus.success) {
-                if (state.assignDetail != null && state.assignDetail.isNotEmpty){
-                  // if(state.assignDetail[0].status == 'Đã nhận xe'){
-                  //   setState(() {
-                  //   _checkStatusCheckin = true;                      
-                  //                       });
-                  // }
+                if (state.assignDetail != null &&
+                    state.assignDetail.isNotEmpty) {
+                  if (state.assignDetail[0].status == 'Đã nhận xe') {
+                    _visible = true;
+                    _checkStatusCheckin = false;
+                  }
                   return Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Column(
@@ -307,41 +314,77 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                   if (statusState.status ==
                                       UpdateStatus.updateStatusCheckinSuccess) {
                                     setState(() {
-                                      _visible = !_visible;
+                                      _visible = true;
+                                      _checkStatusCheckin = false;
+                                      orderHistoryBloc.add(
+                                          DoOrderHistoryDetailEvent(
+                                              id: widget.orderId));
                                     });
                                   } else if (statusState.status ==
                                       UpdateStatus
                                           .updateStatusCheckingSuccess) {}
                                 },
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.45,
-                                          child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                primary: AppTheme.colors.blue),
-                                            child: Text('Nhận xe',
-                                                style: TextStyle(
-                                                    color: Colors.white)),
-                                            onPressed: () {
-                                              updateStatusBloc.add(
-                                                  UpdateStatusCheckinButtonPressed(
-                                                      id: state
-                                                          .assignDetail[0].id,
-                                                      status: checkinStatus));
-                                            },
+                                child: BlocBuilder<OrderHistoryBloc,
+                                    OrderHistoryState>(
+                                  // ignore: missing_return
+                                  builder: (context, hstate) {
+                                    if (hstate.detailStatus ==
+                                        OrderHistoryDetailStatus.init) {
+                                      return CircularProgressIndicator();
+                                    } else if (hstate.detailStatus ==
+                                        OrderHistoryDetailStatus.loading) {
+                                      return CircularProgressIndicator();
+                                    } else if (hstate.detailStatus ==
+                                        OrderHistoryDetailStatus.success) {
+                                      if (hstate.historyDetail != null &&
+                                          hstate.historyDetail.isNotEmpty) {
+                                        return Visibility(
+                                          visible: _checkStatusCheckin,
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.45,
+                                                    child: ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              primary: AppTheme
+                                                                  .colors.blue),
+                                                      child: Text('Nhận xe',
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .white)),
+                                                      onPressed: () {
+                                                        updateStatusBloc.add(
+                                                            UpdateStatusCheckinButtonPressed(
+                                                                id: hstate
+                                                                    .historyDetail[
+                                                                        0]
+                                                                    .id,
+                                                                status:
+                                                                    checkinStatus));
+                                                      },
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                        );
+                                      } else
+                                        return Center(child: Text('Empty'));
+                                    } else if (hstate.detailStatus ==
+                                        OrderHistoryDetailStatus.error) {
+                                      return Text(hstate.message.toString());
+                                    }
+                                  },
                                 ),
                               ),
                             ],
@@ -544,7 +587,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                       ],
                     ),
                   );
-                }else
+                } else
                   return Center(child: Text('Empty'));
               } else if (state.detailStatus == AssignDetailStatus.error) {
                 return Text(state.message.toString());

@@ -66,6 +66,29 @@ class ManagerRepository {
       return null;
     }
   }
+  Future<List<StaffModel>> getStaffAvailList() async {
+    List<StaffModel> staffList = [];
+
+    var resStaff = await http.get(
+      Uri.parse("https://carservicesystem.azurewebsites.net/api/employees"),
+      headers: headers,
+    );
+    if (resStaff.statusCode == 200) {
+      var dataProcessing = json.decode(resStaff.body);
+      if (dataProcessing != null) {
+        dataProcessing
+            .map((order) => staffList.add(StaffModel.fromJson(order)))
+            .toList();
+        var newList = [...staffList];
+        return newList;
+      } else {
+        return null;
+      }
+    } else {
+      print('No test order data');
+      return null;
+    }
+  }
 
   Future<List<StaffModel>> getStaffDetail(String username) async {
     List<StaffModel> listdata = [];

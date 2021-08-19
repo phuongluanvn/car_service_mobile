@@ -50,7 +50,7 @@ dependencies:
   search_widget:
   flutter_slidable: ^0.6.0
   money_formatter: ^0.0.3
-  calendar_strip: ^1.0.7
+  flutter_clean_calendar: ^1.1.0
 
 dev_dependencies:
   intl:

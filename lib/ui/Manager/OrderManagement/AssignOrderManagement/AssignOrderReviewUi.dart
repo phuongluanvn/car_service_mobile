@@ -39,7 +39,7 @@ class AssignOrderReviewUi extends StatefulWidget {
 
 class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   final String processingStatus = 'Đang tiến hành';
-  final String workingStatus = 'working';
+  final String workingStatus = 'Đang làm việc';
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visible = false;
   List<StaffModel> _selection = [];
