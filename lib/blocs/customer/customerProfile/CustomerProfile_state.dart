@@ -1,36 +1,43 @@
+import 'package:car_service/ui/Customer/CustomerProfile.dart';
+import 'package:car_service/utils/model/CustomerProfileModel.dart';
 import 'package:equatable/equatable.dart';
 
-enum EditProfileStatus {
+enum ProfileStatus {
   init,
   loading,
-  editSuccess,
+  getProflieSuccess,
   error,
 }
 
-class EditProfileState extends Equatable {
-  final EditProfileStatus status;
+class ProfileState extends Equatable {
+  final List<CustomerProfileModel> cusProfile;
+  final ProfileStatus status;
   final String message;
-  EditProfileState({this.status: EditProfileStatus.init, this.message: ''});
+  ProfileState(
+      {this.status: ProfileStatus.init,
+      this.message: '',
+      this.cusProfile: const []});
 
-  EditProfileState copyWith({
-    EditProfileStatus status,
+  ProfileState copyWith({
+    List<CustomerProfileModel> cusProfile,
+    ProfileStatus status,
     String message,
   }) =>
-      EditProfileState(
-        status: status ?? this.status,
-        message: message ?? this.message,
-      );
+      ProfileState(
+          status: status ?? this.status,
+          message: message ?? this.message,
+          cusProfile: cusProfile ?? this.cusProfile);
   @override
-  List<Object> get props => [status, message];
+  List<Object> get props => [status, message, cusProfile];
 }
 
-// class SignUpInitState extends EditProfileState {}
+// class SignUpInitState extends ProfileState {}
 
-// class SignUpLoadingState extends EditProfileState {}
+// class SignUpLoadingState extends ProfileState {}
 
-// class CustomerSignUpSuccessState extends EditProfileState {}
+// class CustomerSignUpSuccessState extends ProfileState {}
 
-// class SignUpErrorState extends EditProfileState {
+// class SignUpErrorState extends ProfileState {
 //   final String message;
 //   SignUpErrorState({this.message});
 // }

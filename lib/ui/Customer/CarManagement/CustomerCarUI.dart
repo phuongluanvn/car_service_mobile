@@ -7,7 +7,6 @@ import 'package:car_service/ui/Customer/CarManagement/CustomerCarDetailUI.dart';
 import 'package:car_service/utils/model/VehicleModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:search_widget/search_widget.dart';
 
 class CustomerCarUi extends StatefulWidget {
   @override

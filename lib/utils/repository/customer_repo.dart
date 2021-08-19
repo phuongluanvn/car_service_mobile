@@ -1,4 +1,5 @@
 import 'package:car_service/utils/model/CarModel.dart';
+import 'package:car_service/utils/model/CustomerProfileModel.dart';
 import 'package:car_service/utils/model/ManufacturerModel.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/OrderModel.dart';
@@ -349,8 +350,9 @@ class CustomerRepository {
     }
   }
 
-  editProfile(String username, String email, String fullname,
-      String phoneNumber, String address) async {
+  editProfile(String username, String fullname, String phoneNumber,
+      String email, String address) async {
+        print(username);
     final body = jsonEncode({
       "username": username,
       "email": email,
@@ -362,8 +364,34 @@ class CustomerRepository {
     var res = await http.put(Uri.parse(BASE_URL + "customers"),
         headers: headers, body: body);
     final data = (res.body);
+    print(data);
+    print('objectobjectobject');
     if (data != null) {
       return data;
+    } else {
+      return res.body;
+    }
+  }
+
+  getProfile(String username) async {
+    String message;
+    List convertData = [];
+    List<CustomerProfileModel> cusProfile =[];
+    var res = await http.get(Uri.parse(BASE_URL + "customers/" + username),
+        headers: headers);
+    final data = json.decode(res.body);
+    convertData.add(data);
+    print(convertData);
+    if (res.statusCode == 200) {
+      if (data != null) {
+        convertData.map((e) => cusProfile.add(CustomerProfileModel.fromJson(e))).toList();
+        return cusProfile;
+      } else {
+        return 'Không tìm thấy thông tin người dùng';
+      }
+    } else if (res.statusCode == 404) {
+      message = 'Không tìm thấy thông tin người dùng ' + res.statusCode.toString();
+      return message;
     } else {
       return res.body;
     }

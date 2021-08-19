@@ -8,7 +8,7 @@ import 'package:car_service/blocs/customer/customerCar/UpdateCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/UpdateCar_event.dart';
 import 'package:car_service/blocs/customer/customerCar/UpdateCar_state.dart';
 import 'package:car_service/theme/app_theme.dart';
-import 'package:car_service/ui/Customer/CarManagement/EditInforOfCarUI.dart';
+// import 'package:car_service/ui/Customer/CarManagement/EditInforOfCarUI.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

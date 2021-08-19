@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:car_service/blocs/customer/customerProfile/CustomerEditProfile_event.dart';
 import 'package:car_service/blocs/customer/customerProfile/CustomerEditProfile_state.dart';
-import 'package:car_service/blocs/customer/customerProfile/CustomerProfile_event.dart';
-import 'package:car_service/blocs/customer/customerProfile/CustomerProfile_state.dart';
 import 'package:car_service/blocs/sign_up/sign_up_events.dart';
 import 'package:car_service/blocs/sign_up/sign_up_state.dart';
 import 'package:car_service/utils/repository/auth_repo.dart';
@@ -11,30 +9,32 @@ import 'package:car_service/utils/repository/customer_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
+class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
   CustomerRepository _repo;
 
-  ProfileBloc({CustomerRepository repo})
+  EditProfileBloc({CustomerRepository repo})
       : _repo = repo,
-        super(ProfileState());
+        super(EditProfileState());
 
   @override
-  Stream<ProfileState> mapEventToState(ProfileEvent event) async* {
-    if (event is GetProfileByUsername) {
-      yield state.copyWith(status: ProfileStatus.loading);
+  Stream<EditProfileState> mapEventToState(EditProfileEvent event) async* {
+    if (event is EditProfileButtonPressed) {
+      yield state.copyWith(status: EditProfileStatus.loading);
       try {
-        var data = await _repo.getProfile('chonwang');
-        if (data != null) {
-          yield state.copyWith(
-            cusProfile: data,
-            status: ProfileStatus.getProflieSuccess);
+        var data = await _repo.editProfile(event.username, event.fullname,
+            event.phoneNumber, event.email, event.address);
+        String jsonsDataString = data.toString();
+        final jsonData = jsonDecode(jsonsDataString);
+        print(jsonData);
+        if (jsonData != null) {
+          yield state.copyWith(status: EditProfileStatus.editSuccess);
         } else {
           yield state.copyWith(
-              status: ProfileStatus.error, message: 'Error getprofile');
+              status: EditProfileStatus.error, message: 'Error Edit');
         }
       } catch (e) {
         yield state.copyWith(
-          status: ProfileStatus.error,
+          status: EditProfileStatus.error,
           message: e.toString(),
         );
       }
