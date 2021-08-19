@@ -66,8 +66,7 @@ class _SignUpUiState extends State<SignUpUi> {
       controller: fullname,
       autofocus: false,
       decoration: InputDecoration(
-        prefixIcon:
-            Icon(Icons.face ,color: Color.fromRGBO(8, 56, 99, 1)),
+        prefixIcon: Icon(Icons.face, color: Color.fromRGBO(8, 56, 99, 1)),
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
@@ -87,6 +86,21 @@ class _SignUpUiState extends State<SignUpUi> {
         fillColor: Colors.white,
         hintStyle: TextStyle(color: Colors.black54),
         hintText: 'Email',
+        contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
+
+   final address = TextField(
+      controller: email,
+      keyboardType: TextInputType.emailAddress,
+      autofocus: false,
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.email, color: Color.fromRGBO(8, 56, 99, 1)),
+        filled: true,
+        fillColor: Colors.white,
+        hintStyle: TextStyle(color: Colors.black54),
+        hintText: 'Địa chỉ',
         contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -119,7 +133,6 @@ class _SignUpUiState extends State<SignUpUi> {
         contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
-      
     );
 
     final confirmpass = TextFormField(
@@ -153,10 +166,10 @@ class _SignUpUiState extends State<SignUpUi> {
           // ),
           onPressed: () {
             signUpBloc.add(SignUpButtonPressed(
-                user: username.text,
-                name: fullname.text,
+                username: username.text,
+                fullname: fullname.text,
                 email: email.text,
-                phone: phoneNumber.text,
+                phoneNumber: phoneNumber.text,
                 password: password.text));
           },
           style:
@@ -222,6 +235,10 @@ class _SignUpUiState extends State<SignUpUi> {
               height: 20,
             ),
             phone,
+            SizedBox(
+              height: 20,
+            ),
+            address,
             SizedBox(
               height: 20,
             ),

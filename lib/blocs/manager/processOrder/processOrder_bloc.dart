@@ -1,3 +1,4 @@
+import 'package:car_service/blocs/manager/CrewManagement/crew_event.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_events.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
@@ -22,7 +23,9 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
         var assignList = await _repo.getProcessOrderList();
         if (assignList != null) {
           yield state.copyWith(
-              processList: assignList, status: ProcessStatus.processSuccess);
+            processList: assignList,
+            status: ProcessStatus.processSuccess,
+          );
           print('dada');
         } else {
           yield state.copyWith(
@@ -45,6 +48,7 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
             await _repo.getVerifyOrderDetail(event.email);
         if (data != null) {
           yield state.copyWith(
+            updateAccIdStatus: UpdateAccIdStatus.init,
             detailStatus: ProcessDetailStatus.success,
             processDetail: data,
           );
@@ -57,6 +61,57 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
       } catch (e) {
         yield state.copyWith(
             detailStatus: ProcessDetailStatus.error, message: e.toString());
+      }
+    } else if (event is UpdateAccesIdToOrder) {
+      yield state.copyWith(
+        updateAccIdStatus: UpdateAccIdStatus.loading,
+      );
+      try {
+        var data = await _repo.updateAccIdToOrder(event.orderId, event.detailId,
+            event.serviceId, event.accId, event.quantity, event.price);
+
+        if (data != null) {
+          yield state.copyWith(
+            updateAccIdStatus: UpdateAccIdStatus.success,
+          );
+          print('AccId updated');
+        } else {
+          yield state.copyWith(
+            updateAccIdStatus: UpdateAccIdStatus.error,
+            message: 'Error',
+          );
+        }
+      } catch (e) {
+        yield state.copyWith(
+            updateAccIdStatus: UpdateAccIdStatus.error, message: e.toString());
+      }
+    } else if (event is UpdateSelectCrewEvent) {
+      yield state.copyWith(
+        updateCrewStatus: UpdateCrewStatus.loading,
+      );
+      try {
+        // for (int i = 0; i <= event.selectedTaskId.length; i++) {
+        var data =
+            await _repo.updateSelectedCrew(event.crewId, event.selectCrew);
+
+        if (data != null) {
+          // print('task event');
+          DoProcessOrderDetailEvent(email: event.orderId);
+          yield state.copyWith(
+            updateCrewStatus: UpdateCrewStatus.success,
+          );
+          print('Crew updated');
+        } else {
+          yield state.copyWith(
+            updateCrewStatus: UpdateCrewStatus.error,
+            message: 'Error',
+          );
+          // }
+        }
+        ;
+      } catch (e) {
+        yield state.copyWith(
+            updateCrewStatus: UpdateCrewStatus.error, message: e.toString());
       }
     }
   }

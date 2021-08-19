@@ -4,8 +4,10 @@ import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/CarManagement/CreateCustomerCarUI.dart';
 import 'package:car_service/ui/Customer/CarManagement/CustomerCarDetailUI.dart';
+import 'package:car_service/utils/model/VehicleModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:search_widget/search_widget.dart';
 
 class CustomerCarUi extends StatefulWidget {
   @override
@@ -14,11 +16,12 @@ class CustomerCarUi extends StatefulWidget {
 
 class _CustomerCarUiState extends State<CustomerCarUi> {
   Image image;
+  TextEditingController _textEditingController = TextEditingController();
+  List<VehicleModel> vehicleListsOnSearch = [];
 
   @override
   void initState() {
     super.initState();
-
     context.read<CustomerCarBloc>().add(DoCarListEvent());
   }
 
@@ -47,8 +50,8 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
           )
         ],
       ),
-      backgroundColor: Colors.blue[100],
-      body: Center(
+      backgroundColor: AppTheme.colors.lightblue,
+      body: SingleChildScrollView(
         child: BlocBuilder<CustomerCarBloc, CustomerCarState>(
           // ignore: missing_return
           builder: (context, state) {
@@ -58,28 +61,80 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
               return CircularProgressIndicator();
             } else if (state.status == CustomerCarStatus.loadedCarSuccess) {
               if (state.vehicleLists != null && state.vehicleLists.isNotEmpty)
-                return ListView.builder(
-                  itemCount: state.vehicleLists.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    //hiển thị list xe
-                    return Card(
-                      child: Column(children: [
-                        ListTile(
-                          leading: Image.asset('lib/images/logo_blue.png'),
-                          title: Text(state.vehicleLists[index].licensePlate),
-                          subtitle:
-                              Text(state.vehicleLists[index].manufacturer),
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => CustomerCarDetailUi(
-                                    id: state.vehicleLists[index].id)));
-                          },
-                        ),
-                      ]),
-                    );
-                  },
-                );
+                return 
+                // Column(
+                  // children: [
+                    // Container(
+                    //   decoration: BoxDecoration(
+                    //       color: Colors.grey.shade200,
+                    //       borderRadius: BorderRadius.circular(30)),
+                    //   child: TextField(
+                    //     controller: _textEditingController,
+                    //     decoration: InputDecoration(
+                    //         border: InputBorder.none,
+                    //         errorBorder: InputBorder.none,
+                    //         focusedBorder: InputBorder.none,
+                    //         contentPadding: EdgeInsets.all(15),
+                    //         hintText: 'Tìm kiếm'),
+                    //     onChanged: (value) {
+                    //       setState(() {
+                    //         vehicleListsOnSearch = state.vehicleLists
+                    //             .where((element) => element.licensePlate
+                    //                 .toLowerCase()
+                    //                 .contains(value.toLowerCase()))
+                    //             .toList();
+                    //       });
+                    //     },
+                    //   ),
+                    // ),
+                    // _textEditingController.text.isNotEmpty &&
+                    //         vehicleListsOnSearch.isEmpty
+                    //     ? Center(
+                    //         child: Text('Không tìm thấy xe'),
+                    //       )
+                    //     : 
+                        Center(
+                          child: ListView.builder(
+                              itemCount: _textEditingController.text.isNotEmpty
+                                  ? vehicleListsOnSearch.length
+                                  : state.vehicleLists.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                //hiển thị list xe
+                                return Card(
+                                  child: Column(children: [
+                                    ListTile(
+                                      leading:
+                                          Image.asset('lib/images/logo_blue.png'),
+                                      title: Text(
+                                          _textEditingController.text.isNotEmpty
+                                              ? vehicleListsOnSearch[index]
+                                                  .licensePlate
+                                              : state.vehicleLists[index]
+                                                  .licensePlate),
+                                      subtitle: Text(
+                                          _textEditingController.text.isNotEmpty
+                                              ? vehicleListsOnSearch[index]
+                                                  .manufacturer
+                                              : state.vehicleLists[index]
+                                                  .manufacturer),
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (_) =>
+                                                    CustomerCarDetailUi(
+                                                        id: state
+                                                            .vehicleLists[index]
+                                                            .id)));
+                                      },
+                                    ),
+                                  ]),
+                                );
+                              },
+                            ),
+                        );
+                //   ],
+                // );
               else
                 return Center(
                   child: Text('Không có thông tin xe'),
@@ -90,6 +145,7 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
           },
         ),
       ),
+
       //thêm mới xe
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {
@@ -101,4 +157,10 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
       // ),
     );
   }
+
+  // Widget _buildSearch() => SearchWidget(
+  //   dataList: dataList,
+  //   popupListItemBuilder: popupListItemBuilder,
+  //   selectedItemBuilder: selectedItemBuilder,
+  //   queryBuilder: queryBuilder)
 }

@@ -6,7 +6,7 @@ abstract class ManufacturerEvent extends Equatable {
 }
 
 class DoManufacturerListEvent extends ManufacturerEvent {
-   final String manuName;
+  final String manuName;
 
   DoManufacturerListEvent({this.manuName});
 }

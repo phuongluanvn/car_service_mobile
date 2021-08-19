@@ -1,4 +1,3 @@
-
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:equatable/equatable.dart';
 
@@ -38,7 +37,6 @@ class ManageStaffState extends Equatable {
     this.status: StaffStatus.init,
     this.detailStatus: StaffDetailStatus.init,
     this.staffSelectStt: StaffSelectStatus.init,
-
     this.staffSelect: const [],
     this.staffDetail: const [],
     this.staffList: const [],
@@ -49,7 +47,6 @@ class ManageStaffState extends Equatable {
     StaffStatus status,
     StaffDetailStatus detailStatus,
     StaffSelectStatus staffSelectStt,
-
     List<StaffModel> staffList,
     List<StaffModel> staffDetail,
     List<StaffModel> staffSelect,
@@ -59,7 +56,6 @@ class ManageStaffState extends Equatable {
         status: status ?? this.status,
         detailStatus: detailStatus ?? this.detailStatus,
         staffSelectStt: staffSelectStt ?? this.staffSelectStt,
-
         staffList: staffList ?? this.staffList,
         staffDetail: staffDetail ?? this.staffDetail,
         staffSelect: staffSelect ?? this.staffSelect,

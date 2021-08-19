@@ -1,6 +1,8 @@
 import 'package:car_service/blocs/manager/booking/booking_cubit.dart';
 import 'package:car_service/blocs/manager/booking/booking_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingDetailUi.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,7 +31,7 @@ class _VerifyBookingUiState extends State<VerifyBookingUi> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: Center(
         child: BlocBuilder<VerifyBookingBloc, VerifyBookingState>(
           // ignore: missing_return
@@ -45,7 +47,7 @@ class _VerifyBookingUiState extends State<VerifyBookingUi> {
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return Card(
-                      child: (state.bookingList[index].status == 'Booked')
+                      child: (state.bookingList[index].status == 'Đợi xác nhận')
                           ? Column(children: [
                               ListTile(
                                 trailing: Column(
@@ -55,13 +57,14 @@ class _VerifyBookingUiState extends State<VerifyBookingUi> {
                                         Icons.circle,
                                         color: Colors.red,
                                       ),
-                                      Text('Booked'),
+                                      Text('Đợi xác nhận'),
                                     ]),
-                                leading: FlutterLogo(),
+                                leading:
+                                    Image.asset('lib/images/order_small.png'),
                                 title: Text(state
                                     .bookingList[index].vehicle.licensePlate),
-                                subtitle:
-                                    Text(state.bookingList[index].bookingTime),
+                                subtitle: Text(_convertDate(
+                                    state.bookingList[index].createdTime)),
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (_) => VerifyBookingDetailUi(
@@ -111,7 +114,7 @@ class _VerifyBookingUiState extends State<VerifyBookingUi> {
                 );
               else
                 return Center(
-                  child: Text('Empty'),
+                  child: Text('Hiện tại không có đơn'),
                 );
             } else if (state.status == BookingStatus.error) {
               return ErrorWidget(state.message.toString());
@@ -120,5 +123,10 @@ class _VerifyBookingUiState extends State<VerifyBookingUi> {
         ),
       ),
     );
+  }
+
+  _convertDate(dateInput) {
+    return formatDate(DateTime.parse(dateInput),
+        [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
   }
 }

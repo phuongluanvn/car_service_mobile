@@ -1,8 +1,11 @@
 import 'dart:io';
 
 // import 'package:car_service/blocs/customer_car/customerCar_state.dart';
+import 'package:car_service/blocs/assignOrderReview/assignOrderReview_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CreateCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
+import 'package:car_service/blocs/customer/customerCar/DelCar_bloc.dart';
+import 'package:car_service/blocs/customer/customerCar/UpdateCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CreateBooking_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
 import 'package:car_service/blocs/customer/customerProfile/CustomerProfile_bloc.dart';
@@ -10,13 +13,17 @@ import 'package:car_service/blocs/customer/customerService/CustomerService_bloc.
 import 'package:car_service/blocs/customer/manufacturers/Manufacturer_bloc.dart';
 import 'package:car_service/blocs/login/auth_bloc.dart';
 import 'package:car_service/blocs/login/auth_state.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_bloc.dart';
+import 'package:car_service/blocs/manager/CrewManagement/crew_bloc.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
 import 'package:car_service/blocs/manager/booking/booking_bloc.dart';
 import 'package:car_service/blocs/manager/createOrder/createOrder_bloc.dart';
 import 'package:car_service/blocs/manager/orderHistory/orderHistory_bloc.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
+import 'package:car_service/blocs/manager/processOrder/updateFinishTask_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
+import 'package:car_service/blocs/manager/updateItem/updateItem_bloc.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
 import 'package:car_service/blocs/packageService/PackageService_bloc.dart';
 import 'package:car_service/blocs/sign_up/sign_up_bloc.dart';
@@ -135,8 +142,7 @@ class _AuthState extends State<Auth> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-            create: (context) => AuthBloc(LoginInitState(), AuthRepository())),
+        BlocProvider(create: (context) => AuthBloc(repo: AuthRepository())),
         BlocProvider(create: (context) => SignUpBloc(repo: AuthRepository())),
         BlocProvider(
             create: (context) => VerifyBookingBloc(repo: ManagerRepository())),
@@ -156,12 +162,19 @@ class _AuthState extends State<Auth> {
         BlocProvider(
             create: (context) => ManufacturerBloc(repo: CustomerRepository())),
         BlocProvider(
+            create: (context) => DeleteCarBloc(repo: CustomerRepository())),
+        BlocProvider(
+            create: (context) => UpdateCarBloc(repo: CustomerRepository())),
+        BlocProvider(
             create: (context) =>
                 CustomerServiceBloc(repo: CustomerRepository())),
         BlocProvider(
             create: (context) => CreateOrderBloc(repo: ManagerRepository())),
         BlocProvider(
             create: (context) => ProcessOrderBloc(repo: ManagerRepository())),
+        BlocProvider(
+            create: (context) =>
+                UpdateFinishTaskBloc(repo: ManagerRepository())),
         BlocProvider(
             create: (context) => OrderHistoryBloc(repo: ManagerRepository())),
         BlocProvider(
@@ -175,6 +188,11 @@ class _AuthState extends State<Auth> {
         BlocProvider(
             create: (context) =>
                 PackageServiceBloc(repo: CustomerRepository())),
+        BlocProvider(create: (context) => CrewBloc(repo: ManagerRepository())),
+        BlocProvider(
+            create: (context) => AccessoryBloc(repo: ManagerRepository())),
+        BlocProvider(
+            create: (context) => UpdateItemBloc(repo: ManagerRepository())),
         // BlocProvider(
         //     create: (context) =>
         //         BookingCubit(VerifyBookingInitState(), ManagerRepository())),
@@ -185,7 +203,7 @@ class _AuthState extends State<Auth> {
         routes: {
           '/': (context) => LoginUi(),
           '/manager': (context) => ManagerMain(),
-          '/staff': (context) => StaffHome(),
+          '/staff': (context) => StaffHomeUi(),
           '/customer': (context) => CustomerHome(),
         },
       ),

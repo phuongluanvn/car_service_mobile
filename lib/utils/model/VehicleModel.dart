@@ -3,7 +3,7 @@ class VehicleModel {
   String manufacturer;
   String model;
   String licensePlate;
-  Null dateOfLastMaintenance;
+  String dateOfLastMaintenance;
   int millageCount;
 
   VehicleModel(

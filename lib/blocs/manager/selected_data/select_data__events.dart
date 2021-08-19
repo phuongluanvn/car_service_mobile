@@ -6,10 +6,7 @@ abstract class SelectDataEvent extends Equatable {
   List<Object> get props => [];
 }
 
-
-
 class DoListSelectStaffEvent extends SelectDataEvent {
   final List<StaffModel> listDataStaff;
   DoListSelectStaffEvent({this.listDataStaff});
 }
-

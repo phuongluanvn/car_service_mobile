@@ -15,9 +15,12 @@ import 'package:car_service/blocs/packageService/PackageService_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/tabbar.dart';
+import 'package:date_format/date_format.dart';
+// import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'dart:async';
@@ -41,10 +44,12 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
   String _valueSelectedPackageService;
   bool _valueCheckbox = false;
   CreateBookingBloc _createBookingBloc;
-  int _selectedTimeButton = 0;
+  String _selectedTimeButton;
   File _image;
   List<Asset> images = List<Asset>();
   String _error = 'Selectionner une image';
+  String _timeSelected;
+  Color _colorBgrBtn;
 
   Map<String, bool> checkboxListValues = {};
 
@@ -95,26 +100,39 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
     });
   }
 
+  _convertDate(dateInput) {
+    return formatDate(DateTime.parse(dateInput), [yyyy, '-', mm, '-', dd]);
+  }
+
   Widget showTimeButton(String text, int index) {
-    return OutlineButton(
+    return ElevatedButton(
       onPressed: () {
         setState(() {
-          _selectedTimeButton = index;
+          _selectedTimeButton = text;
+          _colorBgrBtn = AppTheme.colors.lightblue;
           // print(_selectedDay.day.toString() + text);
         });
       },
       child: Text(
         text,
         style: TextStyle(
-            color: (_selectedTimeButton == index)
-                ? Colors.blueAccent
+            color: (_selectedTimeButton == text)
+                ? AppTheme.colors.white
+                : AppTheme.colors.blue),
+      ),
+      style: ElevatedButton.styleFrom(
+        primary: (_selectedTimeButton == text)
+            ? AppTheme.colors.blue
+            : AppTheme.colors.white,
+        onPrimary: Colors.white,
+        // fixedSize: Size(80, 20),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        side: BorderSide(
+            width: 2,
+            color: (_selectedTimeButton == text)
+                ? AppTheme.colors.deepBlue
                 : Colors.blueGrey),
       ),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      borderSide: BorderSide(
-          color: (_selectedTimeButton == index)
-              ? Colors.blueAccent
-              : Colors.blueGrey),
     );
   }
 
@@ -184,10 +202,25 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
         });
   }
 
+  _convertMoney(double money) {
+    MoneyFormatter fmf = new MoneyFormatter(
+        amount: money,
+        settings: MoneyFormatterSettings(
+          symbol: 'VND',
+          thousandSeparator: '.',
+          decimalSeparator: ',',
+          symbolAndNumberSeparator: ' ',
+          fractionDigits: 0,
+          // compactFormatType: CompactFormatType.sort
+        ));
+    print(fmf.output.symbolOnRight);
+    return fmf.output.symbolOnRight.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
         title: Text('Đặt lịch dịch vụ'),
@@ -204,8 +237,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                 height: 10,
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 5),
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: Container(
                   decoration: BoxDecoration(
                       // color: Colors.white,
@@ -246,12 +278,16 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                     crossAxisCount:
                                         2, // Số item trên một hàng ngang
                                     crossAxisSpacing:
-                                        0, // Khoảng cách giữa các item trong hàng ngang
+                                        5, // Khoảng cách giữa các item trong hàng ngang
                                     mainAxisSpacing: 0,
                                     // Khoảng cách giữa các hàng (giữa các item trong cột dọc)
                                   ),
                                   itemBuilder: (context, index) {
                                     return Card(
+                                      color: (_carId ==
+                                              state.vehicleLists[index].id)
+                                          ? AppTheme.colors.blue
+                                          : Colors.white,
                                       child: ListTile(
                                         leading: CircleAvatar(
                                           backgroundImage: AssetImage(
@@ -262,16 +298,26 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                           state
                                               .vehicleLists[index].licensePlate,
                                           style: TextStyle(
+                                              fontSize: 15,
                                               color: (_carId ==
                                                       state.vehicleLists[index]
                                                           .id)
-                                                  ? Colors.blue
-                                                  : Colors.grey),
+                                                  ? AppTheme.colors.white
+                                                  : AppTheme.colors.deepBlue),
                                         ),
-                                        subtitle: Text(state.vehicleLists[index]
-                                                .manufacturer +
-                                            " - " +
-                                            state.vehicleLists[index].model),
+                                        subtitle: Text(
+                                            state.vehicleLists[index]
+                                                    .manufacturer +
+                                                " - " +
+                                                state.vehicleLists[index].model,
+                                            style: TextStyle(
+                                                color: (_carId ==
+                                                        state
+                                                            .vehicleLists[index]
+                                                            .id)
+                                                    ? AppTheme.colors.white
+                                                    : AppTheme
+                                                        .colors.deepBlue)),
                                         onTap: () {
                                           setState(() {
                                             _carId =
@@ -284,10 +330,10 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                           borderRadius:
                                               BorderRadius.circular(20)),
                                       margin: EdgeInsets.only(
-                                          top: 12,
-                                          left: 12,
-                                          right: 12,
-                                          bottom: 45),
+                                          top: 0,
+                                          left: 2,
+                                          right: 2,
+                                          bottom: 40),
                                     );
                                   },
                                 );
@@ -307,11 +353,10 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
 
               // CHỌN DỊCH VỤ CHO ĐẶT LỊCH
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 5),
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      // color: Colors.white,
                       border: Border.all(color: Colors.black26),
                       borderRadius: BorderRadius.circular(5)),
                   padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
@@ -389,8 +434,9 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                                                             .grey),
                                                               ),
                                                               trailing: Text(
-                                                                e.price
-                                                                    .toString(),
+                                                                _convertMoney(e
+                                                                    .price
+                                                                    .toDouble()),
                                                                 style: TextStyle(
                                                                     color: (_valueSelectedPackageService ==
                                                                             e
@@ -425,9 +471,10 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                                                           .name),
                                                                   trailing:
                                                                       Text(
-                                                                    service
-                                                                        .price
-                                                                        .toString(),
+                                                                    _convertMoney(
+                                                                        service
+                                                                            .price
+                                                                            .toDouble()),
                                                                   ),
                                                                 );
                                                               }).toList(),
@@ -512,66 +559,6 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                         },
                                       ),
                                     )
-
-                                    // MULTI_SELECT_PIC
-                                    // Container(
-                                    //   child: Row(
-                                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    //     children: [
-                                    //       GestureDetector(
-                                    //         child: Container(
-                                    //           color: Colors.white24,
-                                    //           height: 100,
-                                    //           width: 100,
-                                    //           child: _image != null
-                                    //               ? Image.file(
-                                    //                   _image,
-                                    //                   fit: BoxFit.fill,
-                                    //                 )
-                                    //               : Icon(Icons.add_a_photo),
-                                    //           alignment: Alignment.center,
-                                    //         ),
-                                    //         onTap: () {
-                                    //           _showPicker(context);
-                                    //         },
-                                    //       ),
-                                    //       GestureDetector(
-                                    //         child: Container(
-                                    //           color: Colors.white24,
-                                    //           height: 100,
-                                    //           width: 100,
-                                    //           child: _image != null
-                                    //               ? Image.file(
-                                    //                   _image,
-                                    //                   fit: BoxFit.fill,
-                                    //                 )
-                                    //               : Icon(Icons.add_a_photo),
-                                    //           alignment: Alignment.center,
-                                    //         ),
-                                    //         onTap: () {
-                                    //           _showPicker(context);
-                                    //         },
-                                    //       ),
-                                    //       GestureDetector(
-                                    //         child: Container(
-                                    //           color: Colors.white24,
-                                    //           height: 100,
-                                    //           width: 100,
-                                    //           child: _image != null
-                                    //               ? Image.file(
-                                    //                   _image,
-                                    //                   fit: BoxFit.fill,
-                                    //                 )
-                                    //               : Icon(Icons.add_a_photo),
-                                    //           alignment: Alignment.center,
-                                    //         ),
-                                    //         onTap: () {
-                                    //           _showPicker(context);
-                                    //         },
-                                    //       ),
-                                    //     ],
-                                    //   ),
-                                    // ),
                                   ],
                                 ),
                               ),
@@ -583,13 +570,11 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                   ),
                 ),
               ),
-
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 5),
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      // color: Colors.white,
                       border: Border.all(color: Colors.black26),
                       borderRadius: BorderRadius.circular(5)),
                   padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
@@ -632,19 +617,37 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          showTimeButton('7:00', 1),
-                          showTimeButton('7:30', 2),
-                          showTimeButton('8:00', 3),
-                          showTimeButton('8:30', 4),
+                          showTimeButton('08:00', 1),
+                          showTimeButton('08:30', 2),
+                          showTimeButton('09:00', 3),
+                          showTimeButton('09:30', 4),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          showTimeButton('9:00', 5),
-                          showTimeButton('9:30', 6),
-                          showTimeButton('10:00', 7),
-                          showTimeButton('10:30', 8),
+                          showTimeButton('10:00', 5),
+                          showTimeButton('10:30', 6),
+                          showTimeButton('11:00', 7),
+                          showTimeButton('11:30', 8),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          showTimeButton('12:00', 9),
+                          showTimeButton('13:00', 10),
+                          showTimeButton('13:30', 11),
+                          showTimeButton('14:00', 12),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          showTimeButton('14:30', 13),
+                          showTimeButton('15:00', 14),
+                          showTimeButton('15:30', 15),
+                          showTimeButton('16:00', 16),
                         ],
                       ),
                     ],
@@ -652,25 +655,82 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                 ),
               ),
 
-              Divider(),
+              // Divider(),
               BlocListener<CreateBookingBloc, CreateBookingState>(
                 listener: (context, state) {
+                  // if(state.status ==
+                  //     CreateBookingStatus.loading){
+                  //       showDialog(
+                  //       context: context,
+                  //       builder: (BuildContext ctx) {
+                  //         return Cir
+                  //       });
+                  //     }
+                  // else 
                   if (state.status ==
                       CreateBookingStatus.createBookingOrderSuccess) {
                     // Navigator.pop(context);
-                    Navigator.pop(
-                      context,
-                      new MaterialPageRoute(
-                          builder: (context) => TabOrderCustomer()),
-                    );
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext ctx) {
+                          return AlertDialog(
+                            title: Text(
+                              'Thông báo!',
+                              style: TextStyle(color: Colors.greenAccent),
+                            ),
+                            content: Text('Đặt lịch dịch vụ thành công!'),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    // Close the dialog
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              TabOrderCustomer()),
+                                    );
+                                  },
+                                  child: Text('Đồng ý'))
+                            ],
+                          );
+                        });
                   }
                 },
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.blue, // background
+                    primary: AppTheme.colors.blue, // background
                     onPrimary: Colors.white, // foreground
                   ),
                   onPressed: () {
+                    // showDialog(
+                    //     context: context,
+                    //     builder: (BuildContext ctx) {
+                    //       return AlertDialog(
+                    //         title: Text(
+                    //           'Thông báo!',
+                    //           style: TextStyle(color: Colors.greenAccent),
+                    //         ),
+                    //         content: Text('Đặt lịch dịch vụ thành công!'),
+                    //         actions: [
+                    //           TextButton(
+                    //               onPressed: () {
+                    //                 // Close the dialog
+                    //                 Navigator.push(
+                    //                   context,
+                    //                   MaterialPageRoute(
+                    //                       builder: (context) =>
+                    //                           TabOrderCustomer()),
+                    //                 );
+                    //               },
+                    //               child: Text('Đồng ý'))
+                    //         ],
+                    //       );
+                    //     });
+                    _timeSelected =
+                        _convertDate(_selectedDay.toString()).toString() +
+                            'T' +
+                            _selectedTimeButton;
+                    print(_timeSelected);
                     if (_carId == null) {
                       showDialog(
                           context: context,
@@ -692,19 +752,21 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                             );
                           });
                     } else if (_note == null) {
-                      _createBookingBloc.add(CreateBookingButtonPressed(
-                        carId: _carId,
-                        serviceId: _packageId,
-                        note: null,
-                        timeBooking: _selectedDay.toIso8601String(),
-                      ));
+                      _createBookingBloc.add(
+                        CreateBookingButtonPressed(
+                            carId: _carId,
+                            serviceId: _packageId,
+                            note: null,
+                            timeBooking: _timeSelected,
+                            imageUrl: null),
+                      );
                     } else if (_packageId == null) {
                       _createBookingBloc.add(CreateBookingButtonPressed(
-                        carId: _carId,
-                        serviceId: null,
-                        note: _note,
-                        timeBooking: _selectedDay.toIso8601String(),
-                      ));
+                          carId: _carId,
+                          serviceId: null,
+                          note: _note,
+                          timeBooking: _timeSelected,
+                          imageUrl: null));
                     }
                   },
                   child: Text('Xác nhận'),

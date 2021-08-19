@@ -16,19 +16,48 @@ class CustomerOrderBloc extends Bloc<CustomerOrderEvent, CustomerOrderState> {
   @override
   Stream<CustomerOrderState> mapEventToState(CustomerOrderEvent event) async* {
     if (event is DoOrderListEvent) {
+      List<OrderModel> confirmOrderList = [];
+      List<OrderModel> historyOrderList = [];
+      List<OrderModel> checkingOrderList = [];
+      List<OrderModel> processingOrderList = [];
+      List<OrderModel> waittingConfirmOrderList = [];
+      List<OrderModel> acceptedOrderList = [];
+
       yield state.copyWith(status: CustomerOrderStatus.loading);
       try {
         final prefs = await SharedPreferences.getInstance();
         final _username = prefs.getString('Username');
-        print(_username);
         if (_username != null) {
           var orderLists = await _repo.getOrderList(_username);
+          //lay curent
+          orderLists
+              .map((order) => {
+                    if (order.status == 'Đợi phản hồi')
+                      {confirmOrderList.add(order)}
+                    else if (order.status == 'Hoàn thành' ||
+                        order.status == 'Hủy đơn' ||
+                        order.status == 'Từ chối')
+                      {historyOrderList.add(order)}
+                    else if (order.status == 'Kiểm tra')
+                      {checkingOrderList.add(order)}
+                    else if (order.status == 'Đang tiến hành')
+                      {processingOrderList.add(order)}
+                    else if (order.status == 'Đợi xác nhận')
+                      {waittingConfirmOrderList.add(order)}
+                    else if (order.status == 'Đã xác nhận')
+                      {acceptedOrderList.add(order)}
+                  })
+              .toList();
           if (orderLists != null) {
             yield state.copyWith(
                 orderLists: orderLists,
+                orderCurrentLists: confirmOrderList,
+                orderHistoryLists: historyOrderList,
+                orderCheckingLists: checkingOrderList,
+                orderProcessingLists: processingOrderList,
+                orderWaitingConfirmLists: waittingConfirmOrderList,
+                orderAcceptedLists: acceptedOrderList,
                 status: CustomerOrderStatus.loadedOrderSuccess);
-            print('List order');
-            print(orderLists);
           }
         } else {
           yield state.copyWith(
@@ -66,7 +95,7 @@ class CustomerOrderBloc extends Bloc<CustomerOrderEvent, CustomerOrderState> {
             detailStatus: CustomerOrderDetailStatus.error,
             message: e.toString());
       }
-    } else if (event is DoConfirmOrderEvent){
+    } else if (event is DoConfirmOrderEvent) {
       print('vào đi được chưa');
     }
   }

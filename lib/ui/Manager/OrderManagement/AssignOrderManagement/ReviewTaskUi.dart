@@ -1,18 +1,30 @@
+import 'package:car_service/blocs/manager/Accessories/accessory_bloc.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_event.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_state.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_events.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_state.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
+import 'package:car_service/blocs/manager/updateItem/updateItem_bloc.dart';
+import 'package:car_service/blocs/manager/updateItem/updateItem_state.dart';
+import 'package:car_service/blocs/manager/updateItem/updateItem_event.dart';
 import 'package:car_service/blocs/packageService/PackageService_bloc.dart';
 import 'package:car_service/blocs/packageService/PackageService_event.dart';
 import 'package:car_service/blocs/packageService/PackageService_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
+import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/ExpansionList.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/PackageServiceModel.dart';
+import 'package:car_service/utils/model/ServiceModel.dart';
+import 'package:car_service/utils/model/StaffModel.dart';
+import 'package:car_service/utils/model/accessory_model.dart';
+import 'package:car_service/utils/repository/manager_repo.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:sizer/sizer.dart';
 
 class ReviewTaskUi extends StatefulWidget {
@@ -31,48 +43,31 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
   String holder = '';
   List results = [1, 2, 3, 4, 5];
   List<OrderDetailModel> selectedValue;
-  String _selectedValueDetail;
-  String _valueSelectedPackageService;
-  String _packageId;
-  String _note;
-
+  bool isEditTextField = false;
+  AccessoryBloc _accessoryBloc;
   List selectedDetailsValue;
-
+  List<AccessoryModel> listAcc;
+  final TextEditingController _typeAheadController = TextEditingController();
+  final TextEditingController _typeAheadController2 = TextEditingController();
+  String _accId;
+  String _selectAccName;
+  ProcessOrderBloc processBloc;
+  UpdateItemBloc updateBloc;
   @override
   void initState() {
     super.initState();
+    updateBloc = BlocProvider.of<UpdateItemBloc>(context);
+    BlocProvider.of<UpdateItemBloc>(context).add(DoListServices());
+    processBloc = BlocProvider.of<ProcessOrderBloc>(context);
+    processBloc.add(DoProcessOrderDetailEvent(email: widget.orderId));
     print('Order id is:' + widget.orderId);
-    BlocProvider.of<ProcessOrderBloc>(context)
-        .add(DoProcessOrderDetailEvent(email: widget.orderId));
-    // BlocProvider.of<PackageServiceBloc>(context)
-    //     .add(DoPackageServiceListEvent());
+
+    BlocProvider.of<AccessoryBloc>(context).add(DoListAccessories());
   }
 
   void onChanged(bool value) {
     setState(() {
       checkedValue = value;
-    });
-  }
-
-  DataRow _getDataRow(result) {
-    return DataRow(
-      cells: <DataCell>[
-        DataCell(TextField(
-          decoration: InputDecoration(hintText: '1'),
-        )),
-        DataCell(TextField(
-          decoration: InputDecoration(hintText: '2'),
-        )),
-        DataCell(TextField(
-          decoration: InputDecoration(hintText: '2'),
-        )),
-      ],
-    );
-  }
-
-  void getDropDownItem() {
-    setState(() {
-      holder = selectItem;
     });
   }
 
@@ -87,197 +82,267 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
+      backgroundColor: AppTheme.colors.lightblue,
       body: SingleChildScrollView(
-        child: Container(
-          child: BlocBuilder<ProcessOrderBloc, ProcessOrderState>(
+        child: Center(
+          child: BlocConsumer<ProcessOrderBloc, ProcessOrderState>(
             // ignore: missing_return
+            listener: (context, state) {
+              if (state.updateAccIdStatus == UpdateAccIdStatus.success) {
+                processBloc
+                    .add(DoProcessOrderDetailEvent(email: widget.orderId));
+              }
+            },
             builder: (context, state) {
-              if (state.detailStatus == ProcessDetailStatus.init) {
+              if (state.detailStatus == ProcessDetailStatus.init ||
+                  state.detailStatus == ProcessDetailStatus.loading ||
+                  state.updateAccIdStatus == UpdateAccIdStatus.loading) {
                 return CircularProgressIndicator();
-              } else if (state.detailStatus == ProcessDetailStatus.loading) {
-                return CircularProgressIndicator();
-              } else if (state.detailStatus == ProcessDetailStatus.success) {
+              } else if (state.detailStatus == ProcessDetailStatus.success ||
+                  state.updateAccIdStatus == UpdateAccIdStatus.success) {
                 selectedValue = List.from(state.processDetail);
 
                 return Padding(
                   padding: const EdgeInsets.all(12.0),
                   // child: SingleChildScrollView(
-                  child: Center(
-                    child: FittedBox(
-                      child: Row(
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width * 1,
-                            height: MediaQuery.of(context).size.height * 1,
-                            child: Column(
-                              children: [
-                                Center(
-                                  child: ExpansionPanelList.radio(
-                                    children: state
-                                        .processDetail[0].orderDetails
-                                        .map<ExpansionPanelRadio>(
-                                      (e) {
-                                        return ExpansionPanelRadio(
-                                            value: e.name,
-                                            headerBuilder:
-                                                (context, isExpanded) {
-                                              return RadioListTile(
-                                                title: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    Text(e.name),
-                                                    Text('${e.price}'),
-                                                  ],
-                                                ),
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    _valueSelectedPackageService =
-                                                        value;
-                                                    _packageId = value;
-                                                    _note = null;
-                                                  });
-                                                },
-                                                groupValue:
-                                                    _valueSelectedPackageService,
-                                                value: e.id,
-                                              );
-                                            },
-                                            body: SingleChildScrollView(
-                                              child:
-                                                  // Text('????')
-                                                  ListView(
-                                                shrinkWrap: true,
-                                                children: state.processDetail
-                                                    .map((service) {
-                                                  return ListTile(
-                                                    title: Text(service
-                                                        .orderDetails[0].name),
-                                                  );
-                                                }).toList(),
+                  child: Column(
+                    children: [
+                      Center(
+                        child: FittedBox(
+                          child: Row(
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width * 1,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.5,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(color: Colors.black26),
+                                    borderRadius: BorderRadius.circular(5)),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 10),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        'Cập nhật thông tin dịch vụ',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(
+                                            'Tên dịch vụ',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          Text(
+                                            'Giá tiền',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ],
+                                      ),
+                                      Center(
+                                        child: Column(
+                                          children: [
+                                            for (int i = 0;
+                                                i <
+                                                    state.processDetail[0]
+                                                        .orderDetails.length;
+                                                i++)
+                                              ExpansionList(
+                                                index: i,
+                                                orderId: widget.orderId,
                                               ),
-                                            ));
-                                      },
-                                    ).toList(),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                const Divider(
-                                  color: Colors.black87,
-                                  height: 20,
-                                  thickness: 1,
-                                  indent: 10,
-                                  endIndent: 10,
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.45,
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                            primary: Colors.blue),
-                                        child: Text('Lưu',
-                                            style:
-                                                TextStyle(color: Colors.white)),
-                                        onPressed: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      AssignOrderReviewUi(
-                                                        userId: widget.orderId,
-                                                      )));
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.45,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: AppTheme.colors.blue),
+                              child: Text('Thêm dịch vụ',
+                                  style: TextStyle(color: Colors.white)),
+                              onPressed: () {
+                                showInformationDialog(context);
+                              },
                             ),
                           ),
-                          // Container(
-                          //   width: MediaQuery.of(context).size.width * 0.5,
-                          //   height: MediaQuery.of(context).size.height * 1,
-                          //   child: Column(
-                          //     children: [
-                          //       Center(
-                          //         child: ExpansionPanelList(
-                          //           children: state.processDetail[0].orderDetails
-                          //               .map<ExpansionPanelRadio>(
-                          //             (e) {
-                          //               return ExpansionPanelRadio(
-                          //                   value: e.name,
-                          //                   headerBuilder: (context, isExpanded) {
-                          //                     return RadioListTile(
-                          //                       title: Text(e.name),
-                          //                       onChanged: (value) {
-                          //                         setState(() {
-                          //                           _valueSelectedPackageService =
-                          //                               value;
-                          //                           _packageId = value;
-                          //                           _note = null;
-                          //                         });
-                          //                       },
-                          //                       controlAffinity:
-                          //                           ListTileControlAffinity
-                          //                               .leading,
-                          //                       groupValue:
-                          //                           _valueSelectedPackageService,
-                          //                       value: e.id,
-                          //                     );
-                          //                   },
-                          //                   body: SingleChildScrollView(
-                          //                     child: ListView(
-                          //                       shrinkWrap: true,
-                          //                       children: state
-                          //                           .processDetail[0].orderDetails
-                          //                           .map((service) {
-                          //                         return ListTile(
-                          //                           title: Text(service.name),
-                          //                         );
-                          //                       }).toList(),
-                          //                     ),
-                          //                   ));
-                          //               // );
-                          //             },
-                          //           ).toList(),
-                          //         ),
-                          //       ),
-                          //       const Divider(
-                          //         color: Colors.black87,
-                          //         height: 20,
-                          //         thickness: 1,
-                          //         indent: 10,
-                          //         endIndent: 10,
-                          //       ),
-                          //       SizedBox(
-                          //         height: 20,
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
+                        ],
+                      ),
+                      const Divider(
+                        color: Colors.black87,
+                        height: 20,
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.45,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: AppTheme.colors.blue),
+                              child: Text('Hoàn tất',
+                                  style: TextStyle(color: Colors.white)),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              } else if (state.detailStatus == ProcessDetailStatus.error) {
+                return ErrorWidget(state.message.toString());
+              } else
+                return SizedBox();
+            },
+          ),
+        ),
+        // ),
+        // ),
+      ),
+    );
+  }
+
+  Future showInformationDialog(
+    BuildContext context,
+  ) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              content: SingleChildScrollView(
+                child: Form(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.1,
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text(
+                            'Thêm dịch vụ',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                          BlocBuilder<UpdateItemBloc, UpdateItemState>(
+                            // ignore: missing_return
+                            builder:
+                                // ignore: missing_return
+                                (context, svstate) {
+                              if (svstate.listServiceStatus ==
+                                  ListServiceStatus.init) {
+                                return CircularProgressIndicator();
+                              } else if (svstate.listServiceStatus ==
+                                  ListServiceStatus.loading) {
+                                return CircularProgressIndicator();
+                              } else if (svstate.listServiceStatus ==
+                                  ListServiceStatus.success) {
+                                return Column(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        TypeAheadFormField(
+                                          textFieldConfiguration:
+                                              TextFieldConfiguration(
+                                            decoration: InputDecoration(
+                                              labelText: 'Nhập dịch vụ',
+                                            ),
+                                            controller:
+                                                this._typeAheadController,
+                                          ),
+                                          suggestionsCallback: (pattern) =>
+                                              svstate.listServices.where(
+                                                  (element) => element.name
+                                                      .toLowerCase()
+                                                      .contains(pattern
+                                                          .toLowerCase())),
+                                          hideSuggestionsOnKeyboardHide: false,
+                                          itemBuilder: (context,
+                                              ServiceModel suggestion) {
+                                            return ListTile(
+                                              title: Text(suggestion.name),
+                                            );
+                                          },
+                                          noItemsFoundBuilder: (context) =>
+                                              Center(
+                                            child:
+                                                Text('Không tìm thấy phụ tùng'),
+                                          ),
+                                          onSuggestionSelected: (suggestion) {
+                                            this._typeAheadController.text =
+                                                suggestion.name;
+                                            _accId = suggestion.id;
+                                          },
+                                          onSaved: (value) =>
+                                              this._selectAccName = value,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              } else if (svstate.listServiceStatus ==
+                                  ListServiceStatus.error) {
+                                return ErrorWidget(svstate.message.toString());
+                              }
+                            },
+                          ),
                         ],
                       ),
                     ),
                   ),
-
-                  // ),
-                  // ),
-                  // ),
-                );
-              } else if (state.detailStatus == ProcessDetailStatus.error) {
-                return ErrorWidget(state.message.toString());
-              }
-            },
-          ),
-          // ),
-          // ),
-        ),
-      ),
-    );
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text(
+                    'Thêm mới dịch vụ',
+                    style: TextStyle(color: AppTheme.colors.blue),
+                  ),
+                  onPressed: () {
+                    processBloc.add(
+                      UpdateAccesIdToOrder(
+                        orderId: widget.orderId,
+                        detailId: null,
+                        accId: null,
+                        serviceId: _accId,
+                        quantity: 1,
+                        price: 200,
+                      ),
+                    );
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          });
+        });
   }
 }

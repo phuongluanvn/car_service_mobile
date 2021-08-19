@@ -1,7 +1,11 @@
 import 'package:car_service/theme/app_theme.dart';
+import 'package:car_service/ui/Customer/OrderManagement/AcceptedOrderManagement/AcceptedOrderUI.dart';
+import 'package:car_service/ui/Customer/OrderManagement/CheckingOrdermanagement/CheckingOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/ConfirmOrderManagement/ConfirmOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CreateOrderManagement/CreateBookingOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderUI.dart';
+import 'package:car_service/ui/Customer/OrderManagement/ProcessingOrderManagement/ProcessingOrderUI.dart';
+import 'package:car_service/ui/Customer/OrderManagement/WaitingConfirmOrderManagement/WaitingConfirmOrderUI.dart';
 import 'package:flutter/material.dart';
 
 class TabOrderCustomer extends StatefulWidget {
@@ -12,9 +16,12 @@ class TabOrderCustomer extends StatefulWidget {
 class _TabOrderState extends State<TabOrderCustomer> {
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = <Widget>[
-    CustomerOrderUi(),
-    // ConfirmOrderUI(orderId: '7380a13f-bfc1-4cd8-9847-7c95ae7f8fc1',),
+    WaitingConfirmOrderUI(),
+    AcceptedOrderUI(),
+    CheckingOrderUI(),
+    ProcessingOrderUI(),
     ConfirmOrderUI(),
+    CustomerOrderUi(),
   ];
 
   void _onItemTap(int index) {
@@ -26,10 +33,10 @@ class _TabOrderState extends State<TabOrderCustomer> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 6,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Order'),
+          title: Text('Đơn hàng'),
           backgroundColor: AppTheme.colors.deepBlue,
           automaticallyImplyLeading: false,
           actions: <Widget>[
@@ -45,12 +52,25 @@ class _TabOrderState extends State<TabOrderCustomer> {
             )
           ],
           bottom: TabBar(
+            isScrollable: true,
             tabs: <Widget>[
               Tab(
-                text: 'Đơn hàng hiện tại',
+                text: 'Đợi xác nhận',
               ),
               Tab(
-                text: 'Cần xác nhận',
+                text: 'Đã xác nhận',
+              ),
+              Tab(
+                text: 'Kiểm tra',
+              ),
+              Tab(
+                text: 'Đang tiến hành',
+              ),
+              Tab(
+                text: 'Đợi phản hồi',
+              ),
+              Tab(
+                text: 'Tất cả đơn hàng',
               ),
             ],
           ),

@@ -1,6 +1,7 @@
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/CustomerAccountUI.dart';
 import 'package:car_service/ui/LoginUi.dart';
+import 'package:car_service/ui/Manager/OrderManagement/OrderHistory/OrderHistoryUi.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,11 +33,11 @@ class _CustomerProfileState extends State<CustomerProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Thông tin'),
+        title: Text('Thông tin người dùng'),
         automaticallyImplyLeading: false,
         backgroundColor: AppTheme.colors.deepBlue,
       ),
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(vertical: 5),
         child: Column(
@@ -73,6 +74,8 @@ class _CustomerProfileState extends State<CustomerProfile> {
               child: Container(
                 height: 50,
                 child: ElevatedButton(
+                  style:
+                      ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
                   onPressed: () {
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => CustomerAccountUi()));
@@ -91,7 +94,12 @@ class _CustomerProfileState extends State<CustomerProfile> {
               child: Container(
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  style:
+                      ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => OrderHistoryUi()));
+                  },
                   child: Row(
                     children: [
                       Expanded(child: Text('Lịch sử đơn hàng')),
@@ -106,6 +114,8 @@ class _CustomerProfileState extends State<CustomerProfile> {
               child: Container(
                 height: 50,
                 child: ElevatedButton(
+                  style:
+                      ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
                   onPressed: () {},
                   child: Row(
                     children: [
@@ -121,6 +131,8 @@ class _CustomerProfileState extends State<CustomerProfile> {
               child: Container(
                 height: 50,
                 child: ElevatedButton(
+                  style:
+                      ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
                   onPressed: _isShown == true ? () => _logout(context) : null,
                   child: Row(
                     children: [
@@ -137,7 +149,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
     );
   }
 
-  void _logout(BuildContext context) {
+  _logout(BuildContext context) {
     showDialog(
         context: context,
         builder: (BuildContext ctx) {

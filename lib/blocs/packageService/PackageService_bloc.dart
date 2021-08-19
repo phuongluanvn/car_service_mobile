@@ -7,7 +7,8 @@ import 'package:car_service/blocs/packageService/PackageService_state.dart';
 import 'package:car_service/utils/repository/customer_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class PackageServiceBloc extends Bloc<PackageServiceEvent, PackageServiceState> {
+class PackageServiceBloc
+    extends Bloc<PackageServiceEvent, PackageServiceState> {
   CustomerRepository _repo;
 
   PackageServiceBloc({CustomerRepository repo})
@@ -15,7 +16,8 @@ class PackageServiceBloc extends Bloc<PackageServiceEvent, PackageServiceState> 
         super(PackageServiceState());
 
   @override
-  Stream<PackageServiceState> mapEventToState(PackageServiceEvent event) async* {
+  Stream<PackageServiceState> mapEventToState(
+      PackageServiceEvent event) async* {
     if (event is DoPackageServiceListEvent) {
       yield state.copyWith(status: PackageServiceStatus.loading);
       try {
@@ -47,8 +49,7 @@ class PackageServiceBloc extends Bloc<PackageServiceEvent, PackageServiceState> 
         print(data.toString());
         if (data != null) {
           yield state.copyWith(
-            detailStatus:
-                DetailOfPackageStatus.loadedDetailOfPackageSuccess,
+            detailStatus: DetailOfPackageStatus.loadedDetailOfPackageSuccess,
             detailOfPackage: data,
           );
         } else {
@@ -59,8 +60,7 @@ class PackageServiceBloc extends Bloc<PackageServiceEvent, PackageServiceState> 
         }
       } catch (e) {
         yield state.copyWith(
-            detailStatus: DetailOfPackageStatus.error,
-            message: e.toString());
+            detailStatus: DetailOfPackageStatus.error, message: e.toString());
       }
     }
   }

@@ -10,22 +10,16 @@ enum CreateCarStatus {
 class CreateCarState extends Equatable {
   final CreateCarStatus status;
   final String message;
- CreateCarState({
-    this.status: CreateCarStatus.init, 
-    this.message: ''
-    });
+  CreateCarState({this.status: CreateCarStatus.init, this.message: ''});
 
- CreateCarState copyWith({
+  CreateCarState copyWith({
     CreateCarStatus status,
     String message,
   }) =>
-     CreateCarState(
+      CreateCarState(
         status: status ?? this.status,
         message: message ?? this.message,
       );
   @override
-  List<Object> get props => [
-    status,
-    message
-  ];
+  List<Object> get props => [status, message];
 }

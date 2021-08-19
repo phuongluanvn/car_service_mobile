@@ -2,7 +2,7 @@ import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/NotificationUI.dart';
 import 'package:car_service/ui/Manager/OrderManagement/ManagementBookingOrder.dart';
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingUi.dart';
-import 'package:car_service/ui/Manager/ManagerProfile.dart';
+import 'package:car_service/ui/Manager/ManagerProfileUi.dart';
 import 'package:car_service/ui/Manager/StaffManagement/StaffUi.dart';
 import 'package:flutter/material.dart';
 
@@ -66,7 +66,7 @@ class _NavBarState extends State<NavBar> {
         currentIndex: _selectedIndex,
         selectedItemColor: AppTheme.colors.deepBlue,
         onTap: _onItemTap,
-        selectedFontSize: 12.0,
+        selectedFontSize: 14.0,
         unselectedFontSize: 12.0,
       ),
     );

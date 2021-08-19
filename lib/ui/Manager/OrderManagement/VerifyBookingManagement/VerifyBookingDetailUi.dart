@@ -6,6 +6,7 @@ import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingUi.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -37,7 +38,8 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
 
   @override
   Widget build(BuildContext context) {
-    final String acceptStatus = 'Accepted';
+    final String acceptStatus = 'Đã xác nhận';
+    final String denyStatus = 'Từ chối';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
@@ -47,7 +49,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: SingleChildScrollView(
         child: Center(
           child: BlocBuilder<VerifyBookingBloc, VerifyBookingState>(
@@ -66,7 +68,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: AppTheme.colors.white,
                               borderRadius: BorderRadius.circular(5)),
                           padding: EdgeInsets.symmetric(
                               horizontal: 10, vertical: 10),
@@ -88,7 +90,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                                     width:
                                         MediaQuery.of(context).size.width * 0.2,
                                     child: Text(
-                                      'Fullname:',
+                                      'Họ tên:',
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                   ),
@@ -128,15 +130,16 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                                 children: [
                                   Container(
                                     width:
-                                        MediaQuery.of(context).size.width * 0.3,
+                                        MediaQuery.of(context).size.width * 0.4,
                                     child: Text(
-                                      'Booking Time:',
+                                      'Thời gian đặt lịch:',
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                   ),
                                   Container(
                                     child: Text(
-                                      state.bookingDetail[0].bookingTime,
+                                      _convertDate(
+                                          state.bookingList[0].bookingTime),
                                       style: TextStyle(fontSize: 15.0),
                                     ),
                                   ),
@@ -149,15 +152,39 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                                 children: [
                                   Container(
                                     width:
-                                        MediaQuery.of(context).size.width * 0.2,
+                                        MediaQuery.of(context).size.width * 0.4,
                                     child: Text(
-                                      'Status:',
+                                      'Trạng thái hiện tại:',
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                   ),
                                   Container(
                                     child: Text(
                                       state.bookingDetail[0].status,
+                                      style: TextStyle(
+                                          fontSize: 15.0, color: Colors.red),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(height: 16),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.baseline,
+                                textBaseline: TextBaseline.alphabetic,
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    child: Text(
+                                      'Loại dịch vụ:',
+                                      style: TextStyle(fontSize: 16.0),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Text(
+                                      state.bookingDetail[0].note == null
+                                          ? 'Bảo dưỡng'
+                                          : 'Sửa chữa',
                                       style: TextStyle(fontSize: 15.0),
                                     ),
                                   ),
@@ -268,26 +295,63 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                                       borderRadius: BorderRadius.circular(5)),
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 5, vertical: 10),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        'Thông tin gói dịch vụ',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      ListView(
-                                        shrinkWrap: true,
-                                        children: state
-                                            .bookingDetail[0].orderDetails
-                                            .map((service) {
-                                          return ListTile(
-                                            title: Text(service.name),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ],
-                                  ),
+                                  child: state.bookingDetail[0].note != null
+                                      ? Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.9,
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                'Ghi chú từ người dùng',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              SizedBox(
+                                                height: 15,
+                                              ),
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.baseline,
+                                                textBaseline:
+                                                    TextBaseline.alphabetic,
+                                                children: [
+                                                  Container(
+                                                    child: Text(
+                                                      state.bookingDetail[0]
+                                                          .note,
+                                                      style: TextStyle(
+                                                          fontSize: 15.0),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : Column(
+                                          children: [
+                                            Text(
+                                              'Thông tin gói dịch vụ',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            ListView(
+                                              shrinkWrap: true,
+                                              children: state
+                                                  .bookingDetail[0].orderDetails
+                                                  .map((service) {
+                                                return ListTile(
+                                                  title: Text(service.name),
+                                                );
+                                              }).toList(),
+                                            ),
+                                          ],
+                                        ),
                                 ),
                               ),
                             ],
@@ -309,8 +373,8 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                                 width: MediaQuery.of(context).size.width * 0.45,
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      primary: Colors.blue),
-                                  child: Text('Accept',
+                                      primary: AppTheme.colors.blue),
+                                  child: Text('Đồng ý',
                                       style: TextStyle(color: Colors.white)),
                                   onPressed: () {
                                     updateStatusBloc.add(
@@ -325,9 +389,42 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       primary: Colors.red),
-                                  child: Text('Deny',
+                                  child: Text('Từ chối',
                                       style: TextStyle(color: Colors.white)),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext ctx) {
+                                          return AlertDialog(
+                                            title: Text(
+                                              'Thông báo!',
+                                              style: TextStyle(
+                                                  color: Colors.redAccent),
+                                            ),
+                                            content: Text(
+                                                'Bạn có chắc muốn từ chối ?'),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () {
+                                                    updateStatusBloc.add(
+                                                        UpdateStatusButtonPressed(
+                                                            id: state
+                                                                .bookingDetail[
+                                                                    0]
+                                                                .id,
+                                                            status:
+                                                                denyStatus));
+                                                  },
+                                                  child: Text('Xác nhận')),
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text('Hùy bỏ')),
+                                            ],
+                                          );
+                                        });
+                                  },
                                 ),
                               ),
                             ],
@@ -346,5 +443,10 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
         ),
       ),
     );
+  }
+
+  _convertDate(dateInput) {
+    return formatDate(DateTime.parse(dateInput),
+        [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
   }
 }

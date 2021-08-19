@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:car_service/theme/colors.dart';
 
 class AppTheme {
-  static final  colors = AppColors();
+  static final colors = AppColors();
 
-   AppTheme._();
+  AppTheme._();
 
   static ThemeData define() {
     return ThemeData(

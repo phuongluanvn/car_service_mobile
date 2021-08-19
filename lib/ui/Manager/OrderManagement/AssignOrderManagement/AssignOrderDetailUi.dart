@@ -1,6 +1,10 @@
+import 'package:car_service/blocs/manager/CrewManagement/crew_bloc.dart';
+import 'package:car_service/blocs/manager/CrewManagement/crew_event.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
+import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
+import 'package:car_service/blocs/manager/processOrder/processOrder_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
@@ -10,6 +14,7 @@ import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,10 +35,17 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
   List<StaffModel> selectData = [];
   List<StaffModel> selectbackvalue = [];
   bool _selectStaff = false;
+  List<StaffModel> selectCrew = [];
+  List selectCrewName = [];
+  CrewBloc crewBloc;
+  ProcessOrderBloc processOrderBloc;
+  bool _checkStatusCheckin = false;
 
   @override
   void initState() {
     super.initState();
+    processOrderBloc = BlocProvider.of<ProcessOrderBloc>(context);
+    crewBloc = BlocProvider.of<CrewBloc>(context);
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     BlocProvider.of<AssignOrderBloc>(context)
         .add(DoAssignOrderDetailEvent(id: widget.orderId));
@@ -48,8 +60,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
 
   @override
   Widget build(BuildContext context) {
-    final String checkinStatus = 'Checkin';
-    final String checkingStatus = 'Checking';
+    final String checkinStatus = 'Đã nhận xe';
+    final String checkingStatus = 'Kiểm tra';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
@@ -59,7 +71,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: SingleChildScrollView(
         child: Center(
           child: BlocBuilder<AssignOrderBloc, AssignOrderState>(
@@ -70,7 +82,12 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
               } else if (state.detailStatus == AssignDetailStatus.loading) {
                 return CircularProgressIndicator();
               } else if (state.detailStatus == AssignDetailStatus.success) {
-                if (state.assignDetail != null && state.assignDetail.isNotEmpty)
+                if (state.assignDetail != null && state.assignDetail.isNotEmpty){
+                  // if(state.assignDetail[0].status == 'Đã nhận xe'){
+                  //   setState(() {
+                  //   _checkStatusCheckin = true;                      
+                  //                       });
+                  // }
                   return Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Column(
@@ -99,7 +116,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                     width:
                                         MediaQuery.of(context).size.width * 0.2,
                                     child: Text(
-                                      'Fullname:',
+                                      'Họ tên:',
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                   ),
@@ -138,42 +155,24 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                 textBaseline: TextBaseline.alphabetic,
                                 children: [
                                   Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.3,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.36,
                                     child: Text(
-                                      'Booking Time:',
+                                      'Thời gian xác nhận:',
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                   ),
                                   Container(
                                     child: Text(
-                                      state.assignDetail[0].bookingTime,
+                                      _convertDate(
+                                          state.assignDetail[0].bookingTime),
                                       style: TextStyle(fontSize: 15.0),
                                     ),
                                   ),
                                 ],
                               ),
                               Container(height: 16),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.baseline,
-                                textBaseline: TextBaseline.alphabetic,
-                                children: [
-                                  Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.2,
-                                    child: Text(
-                                      'Status:',
-                                      style: TextStyle(fontSize: 16.0),
-                                    ),
-                                  ),
-                                  Container(
-                                    child: Text(
-                                      state.assignDetail[0].status,
-                                      style: TextStyle(fontSize: 15.0),
-                                    ),
-                                  ),
-                                ],
-                              ),
+
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 20, horizontal: 5),
@@ -327,8 +326,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                               0.45,
                                           child: ElevatedButton(
                                             style: ElevatedButton.styleFrom(
-                                                primary: Colors.blue),
-                                            child: Text('Checkin',
+                                                primary: AppTheme.colors.blue),
+                                            child: Text('Nhận xe',
                                                 style: TextStyle(
                                                     color: Colors.white)),
                                             onPressed: () {
@@ -400,7 +399,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                             child: Column(
                                               children: [
                                                 Text(
-                                                  'Thông tin nhân viên',
+                                                  'Nhân viên phụ trách',
                                                   style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight:
@@ -409,29 +408,56 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                 SizedBox(
                                                   height: 20,
                                                 ),
-                                                ListView.builder(
-                                                  shrinkWrap: true,
-                                                  itemCount: selectData.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return Card(
-                                                      child: Column(children: [
-                                                        ListTile(
-                                                          leading: Image.asset(
-                                                              'lib/images/logo_blue.png'),
-                                                          title: Text(
-                                                              selectData[index]
-                                                                  .fullname),
-                                                        ),
-                                                      ]),
-                                                    );
-                                                  },
+                                                Column(
+                                                  children: [
+                                                    for (int i = 0;
+                                                        i < selectCrew.length;
+                                                        i++)
+                                                      Card(
+                                                        child:
+                                                            Column(children: [
+                                                          ListTile(
+                                                            leading: Image.asset(
+                                                                'lib/images/logo_blue.png'),
+                                                            title: Text(
+                                                                selectCrew[i]
+                                                                    .fullname),
+                                                          ),
+                                                        ]),
+                                                      ),
+                                                  ],
                                                 ),
+
+                                                // ListView.builder(
+                                                //   shrinkWrap: true,
+                                                //   itemCount: state.length,
+                                                //   itemBuilder:
+                                                //       (context, index) {
+                                                //     return Card(
+                                                //       child: Column(
+                                                //           children: [
+                                                //             ListTile(
+                                                //               leading: Image
+                                                //                   .asset(
+                                                //                       'lib/images/logo_blue.png'),
+                                                //               title: Text(
+                                                //                   state[index]
+                                                //                       .fullname),
+                                                //             ),
+                                                //           ]),
+                                                //     );
+                                                //   },
+                                                // );
+
                                                 // ),
                                                 SizedBox(
                                                   height: 10,
                                                 ),
                                                 ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            primary: AppTheme
+                                                                .colors.blue),
                                                     child:
                                                         Text('Chọn nhân viên'),
                                                     onPressed: () =>
@@ -439,12 +465,13 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                           showInformationDialog(
                                                                   context,
                                                                   staffState
-                                                                      .staffList)
+                                                                      .staffList,
+                                                                  widget
+                                                                      .orderId)
                                                               .then((value) {
                                                             setState(() {
                                                               selectData =
                                                                   value;
-                                                              _visible = true;
                                                             });
                                                           });
                                                         })),
@@ -463,8 +490,9 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                 0.6,
                                             child: ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                  primary: Colors.blue),
-                                              child: Text('Checking',
+                                                  primary:
+                                                      AppTheme.colors.blue),
+                                              child: Text('Kiểm tra xe',
                                                   style: TextStyle(
                                                       color: Colors.white)),
                                               onPressed: () {
@@ -475,23 +503,29 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                         status:
                                                             checkingStatus));
                                                 // getDropDownItem,
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (_) =>
-                                                            AssignOrderReviewUi(
-                                                              userId: state
-                                                                  .assignDetail[
-                                                                      0]
-                                                                  .id,
-                                                              selectStaff:
-                                                                  selectData,
-                                                            )));
+                                                // Navigator.of(context).push(
+                                                //     MaterialPageRoute(
+                                                //         builder: (_) =>
+                                                //             BlocProvider
+                                                //                 .value(
+                                                //               value:
+                                                //                   assignCubit,
+                                                //               child:
+                                                //                   AssignOrderReviewUi(
+                                                //                 userId: state
+                                                //                     .assignDetail[
+                                                //                         0]
+                                                //                     .id,
+                                                //               ),
+                                                //             )));
+                                                Navigator.pushNamed(
+                                                    context, '/manager');
                                               },
                                             ),
                                           ),
 
                                           // Container(
-                                          //   child: Text('$holder'),
+                                          //   child: Text(''),
                                           // ),
                                         ],
                                       );
@@ -510,7 +544,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                       ],
                     ),
                   );
-                else
+                }else
                   return Center(child: Text('Empty'));
               } else if (state.detailStatus == AssignDetailStatus.error) {
                 return Text(state.message.toString());
@@ -524,64 +558,140 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
 
   // ======================
 
-  Future showInformationDialog(BuildContext context, List stafflist) async {
+  Future showInformationDialog(
+      BuildContext context, List<StaffModel> stafflist, String orderId) async {
     return showDialog(
         context: context,
         builder: (context) {
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
-              content: Form(
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 1,
-                  width: MediaQuery.of(context).size.width * 7,
-                  child: Column(
-                    children: stafflist.map((e) {
-                      return CheckboxListTile(
-                          activeColor: AppTheme.colors.deepBlue,
+              content: SingleChildScrollView(
+                child: Form(
+                  child: Container(
+                    // height: MediaQuery.of(context).size.height * 0.7,
+                    // width: MediaQuery.of(context).size.width * 0.7,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text(
+                            'Chọn nhân viên',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.5,
+                            width: MediaQuery.of(context).size.width * 0.7,
+                            child:
+                                // BlocBuilder<AssignorderCubit,
+                                //     AssignorderCubitState>(
+                                //   builder: (context, state) {
+                                //     return
+                                ListView.builder(
+                                    itemCount: stafflist.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return CheckboxListTile(
+                                        value: selectCrew.indexWhere(
+                                                (element) =>
+                                                    element.username ==
+                                                    stafflist[index]
+                                                        .username) >=
+                                            0,
+                                        onChanged: (bool selected) {
+                                          if (selected) {
+                                            setState(() {
+                                              // BlocProvider.of<AssignorderCubit>(
+                                              //         context)
+                                              //     .addItem(stafflist[index]);
+                                              selectCrew.add(stafflist[index]);
+                                              // selectCrewName.add(
+                                              //     stafflist[index].username);
+                                              // print('select crew name 1');
+                                              // print(selectCrew);
+                                            });
+                                          } else {
+                                            setState(() {
+                                              // BlocProvider.of<AssignorderCubit>(
+                                              //         context)
+                                              //     .removeItem(stafflist[index]);
+                                              // selectCrewName.remove(
+                                              //     stafflist[index].username);
+                                              selectCrew
+                                                  .remove(stafflist[index]);
+                                              print('select crew name 2');
+                                              print(selectCrew);
+                                            });
+                                          }
+                                        },
+                                        title: Text(stafflist[index].fullname),
+                                      );
+                                    }),
+                            //   },
+                            // ),
+                          ),
+                        ],
+                        //  stafflist.map((e) {
+                        //   return CheckboxListTile(
+                        //       activeColor: AppTheme.colors.deepBlue,
 
-                          //font change
-                          title: new Text(
-                            e.username,
-                          ),
-                          value: selectData.indexOf(e) < 0 ? false : true,
-                          secondary: Container(
-                            height: 50,
-                            width: 50,
-                            child: Image.asset(
-                              'lib/images/logo_blue.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          onChanged: (bool val) {
-                            if (selectData.indexOf(e) < 0) {
-                              setState(() {
-                                selectData.add(e);
-                                _selectStaff = true;
-                              });
-                            } else {
-                              setState(() {
-                                selectData
-                                    .removeWhere((element) => element == e);
-                              });
-                            }
-                            print(selectData);
-                          });
-                    }).toList(),
+                        //       //font change
+                        //       title: new Text(
+                        //         e.username,
+                        //       ),
+                        //       value: selectData.indexOf(e) < 0 ? false : true,
+                        //       secondary: Container(
+                        //         height: 50,
+                        //         width: 50,
+                        //         child: Image.asset(
+                        //           'lib/images/logo_blue.png',
+                        //           fit: BoxFit.cover,
+                        //         ),
+                        //       ),
+                        //       onChanged: (bool val) {
+                        //         if (selectData.indexOf(e) < 0) {
+                        //           setState(() {
+                        //             selectData.add(e);
+                        //             _selectStaff = true;
+                        //           });
+                        //         } else {
+                        //           setState(() {
+                        //             selectData
+                        //                 .removeWhere((element) => element == e);
+                        //           });
+                        //         }
+                        //         print(selectData);
+                        //       });
+                        // }).toList(),
+                      ),
+                    ),
                   ),
                 ),
               ),
               actions: <Widget>[
                 TextButton(
-                  child: Text('Okay'),
+                  child: Text(
+                    'Xác nhận',
+                    style: TextStyle(color: AppTheme.colors.blue),
+                  ),
                   onPressed: () {
+                    // processOrderBloc.add(UpdateSelectCrewEvent(
+                    //     crewId: crewId,
+                    //     selectCrew: selectCrew,
+                    //     orderId: orderId));
                     // Do something like updating SharedPreferences or User Settings etc.
-
-                    Navigator.pop(context, selectData);
+                    crewBloc.add(UpdateCrewToListEvent(
+                        id: widget.orderId, selectCrew: selectCrew));
+                    Navigator.pop(context);
                   },
                 ),
               ],
             );
           });
         });
+  }
+
+  _convertDate(dateInput) {
+    return formatDate(DateTime.parse(dateInput),
+        [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
   }
 }

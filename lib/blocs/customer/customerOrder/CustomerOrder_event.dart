@@ -14,6 +14,4 @@ class DoOrderDetailEvent extends CustomerOrderEvent {
   List<Object> get props => [id];
 }
 
-
-
 class DoConfirmOrderEvent extends CustomerOrderEvent {}

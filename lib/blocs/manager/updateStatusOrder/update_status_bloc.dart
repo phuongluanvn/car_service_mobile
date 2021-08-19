@@ -41,6 +41,7 @@ class UpdateStatusOrderBloc
       yield state.copyWith(status: UpdateStatus.loading);
       try {
         var data = await _repo.updateStatusOrder(event.id, event.status);
+
         // String jsonsDataString = data.toString();
         print(data);
         // final jsonData = jsonDecode(jsonsDataString);
@@ -69,7 +70,7 @@ class UpdateStatusOrderBloc
         // print(jsonData);
         if (data != null) {
           yield state.copyWith(status: UpdateStatus.updateStatusCheckinSuccess);
-          print('Start Success');
+          print('Checkin Success');
         } else {
           yield state.copyWith(
               status: UpdateStatus.error, message: 'Error Update');
@@ -85,6 +86,7 @@ class UpdateStatusOrderBloc
       yield state.copyWith(status: UpdateStatus.loading);
       try {
         var data = await _repo.updateStatusOrder(event.id, event.status);
+
         // String jsonsDataString = data.toString();
         print(data);
         // final jsonData = jsonDecode(jsonsDataString);
@@ -92,7 +94,136 @@ class UpdateStatusOrderBloc
         if (data != null) {
           yield state.copyWith(
               status: UpdateStatus.updateStatusCheckingSuccess);
+          print('Checking Success');
+        } else {
+          yield state.copyWith(
+              status: UpdateStatus.error, message: 'Error Update');
+        }
+      } catch (e) {
+        yield state.copyWith(
+          status: UpdateStatus.error,
+          message: e.toString(),
+        );
+      }
+    } else if (event is UpdateAbsentStatusButtonPressed) {
+      print('loading');
+      yield state.copyWith(status: UpdateStatus.loading);
+      try {
+        var data =
+            await _repo.updateStaffStatusOrder(event.username, event.status);
+        // String jsonsDataString = data.toString();
+        print(data);
+        // final jsonData = jsonDecode(jsonsDataString);
+        // print(jsonData);
+        if (data != null) {
+          yield state.copyWith(status: UpdateStatus.updateStatusAbsentSuccess);
+          print('Staff status updated');
+        } else {
+          yield state.copyWith(
+              status: UpdateStatus.error, message: 'Error Update');
+        }
+      } catch (e) {
+        yield state.copyWith(
+          status: UpdateStatus.error,
+          message: e.toString(),
+        );
+      }
+    } else if (event is UpdateStatusWorkingButtonPress) {
+      print('loading2');
+      var data;
+      yield state.copyWith(status: UpdateStatus.loading);
+      try {
+        for (var i = 0; i <= event.listdata.length; i++) {
+          data = await _repo.updateStaffStatusOrder(
+              event.listdata[i].username, event.status);
+          print(event.listdata[i].username);
+        }
+
+        // String jsonsDataString = data.toString();
+        print(data);
+        // final jsonData = jsonDecode(jsonsDataString);
+        // print(jsonData);
+        if (data != null) {
+          yield state.copyWith(status: UpdateStatus.updateStatusWorkingSuccess);
+          print('Staff working status updated');
+        } else {
+          yield state.copyWith(
+              status: UpdateStatus.error, message: 'Error Update');
+        }
+      } catch (e) {
+        yield state.copyWith(
+          status: UpdateStatus.error,
+          message: e.toString(),
+        );
+      }
+    } else if (event is UpdateStatusStartAndWorkingButtonPressed) {
+      print('Vô');
+      var data2;
+      yield state.copyWith(status: UpdateStatus.loading);
+      try {
+        var data = await _repo.updateStatusOrder(event.id, event.status);
+        for (var i = 0; i <= event.listData.length; i++) {
+          data2 = await _repo.updateStaffStatusOrder(
+              event.listData[i].username, event.workingStatus);
+          print(data2);
+        }
+
+        // String jsonsDataString = data.toString();
+        print(data);
+        print(data2);
+        // final jsonData = jsonDecode(jsonsDataString);
+        // print(jsonData);
+        if (data != null && data2 != null) {
+          yield state.copyWith(status: UpdateStatus.updateStatusStartSuccess);
           print('Start Success');
+        } else {
+          yield state.copyWith(
+              status: UpdateStatus.error, message: 'Error Update');
+        }
+      } catch (e) {
+        yield state.copyWith(
+          status: UpdateStatus.error,
+          message: e.toString(),
+        );
+      }
+    } else if (event is UpdateStatusSendConfirmButtonPressed) {
+      print('loading');
+      yield state.copyWith(status: UpdateStatus.loading);
+      try {
+        var data = await _repo.updateStatusOrder(event.id, event.status);
+
+        // String jsonsDataString = data.toString();
+        print(data);
+        // final jsonData = jsonDecode(jsonsDataString);
+        // print(jsonData);
+        if (data != null) {
+          yield state.copyWith(
+              status: UpdateStatus.updateStatusWaitConfirmSuccess);
+          print('Send confirm Success');
+        } else {
+          yield state.copyWith(
+              status: UpdateStatus.error, message: 'Error Update');
+        }
+      } catch (e) {
+        yield state.copyWith(
+          status: UpdateStatus.error,
+          message: e.toString(),
+        );
+      }
+    } else if (event is UpdateStatusConfirmAcceptedButtonPressed) {
+      print('loading');
+      yield state.copyWith(status: UpdateStatus.loading);
+      try {
+        var data = await _repo.updateStatusOrder(event.id, event.status);
+
+        // String jsonsDataString = data.toString();
+        print(data);
+        // final jsonData = jsonDecode(jsonsDataString);
+        // print(jsonData);
+        if (data != null) {
+          yield state.copyWith(
+              status: UpdateStatus.updateStatusConfirmAcceptedSuccess);
+          print('Send confirm Success');
         } else {
           yield state.copyWith(
               status: UpdateStatus.error, message: 'Error Update');

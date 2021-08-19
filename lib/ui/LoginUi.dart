@@ -1,6 +1,7 @@
 import 'package:car_service/blocs/login/auth_bloc.dart';
 import 'package:car_service/blocs/login/auth_events.dart';
 import 'package:car_service/blocs/login/auth_state.dart';
+import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/SignUpUi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,9 +35,12 @@ class _LoginUiState extends State<LoginUi> {
         );
 
     final msg = BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
-      if (state is LoginErrorState) {
-        return Text(state.message);
-      } else if (state is LoginLoadingState) {
+      if (state.status == LoginStatus.error) {
+        return Text(
+          state.message,
+          style: TextStyle(color: Colors.redAccent),
+        );
+      } else if (state.status == LoginStatus.loading) {
         return Center(
           child: CircularProgressIndicator(),
         );
@@ -64,25 +68,28 @@ class _LoginUiState extends State<LoginUi> {
       obscureText: _obscureText,
       autofocus: false,
       decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.lock,
-            color: Color.fromRGBO(8, 56, 99, 1),
+        prefixIcon: Icon(
+          Icons.lock,
+          color: Color.fromRGBO(8, 56, 99, 1),
+        ),
+        filled: true,
+        fillColor: Colors.white,
+        hintStyle: TextStyle(color: Colors.black54),
+        hintText: 'Password',
+        contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _obscureText ? (Icons.visibility) : (Icons.visibility_off),
+            color: Theme.of(context).primaryColorDark,
           ),
-          filled: true,
-          fillColor: Colors.white,
-          hintStyle: TextStyle(color: Colors.black54),
-          hintText: 'Password',
-          contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          suffixIcon: IconButton(
-            icon: Icon(_obscureText ? (Icons.visibility) : (Icons.visibility_off),
-            color: Theme.of(context).primaryColorDark,), 
-            onPressed: () { setState(() {
+          onPressed: () {
+            setState(() {
               _obscureText = !_obscureText;
-            }); },
-          ),
-          
-          ),
+            });
+          },
+        ),
+      ),
     );
 
     final loginButton = Padding(
@@ -134,16 +141,59 @@ class _LoginUiState extends State<LoginUi> {
           },
         ));
 
+    Future showInformationDialog(BuildContext context) async {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return StatefulBuilder(builder: (context, setState) {
+              return AlertDialog(
+                content: SingleChildScrollView(
+                  child: Form(
+                    child: Container(
+                      // height: MediaQuery.of(context).size.height * 0.7,
+                      // width: MediaQuery.of(context).size.width * 0.7,
+                      child: Column(
+                        children: [
+                          Text(
+                            'Sai tài khoản hoăc mật khẩu',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text(
+                      'Xác nhận',
+                      style: TextStyle(color: AppTheme.colors.blue),
+                    ),
+                    onPressed: () {
+                      // Do something like updating SharedPreferences or User Settings etc.
+
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              );
+            });
+          });
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is ManagerLoginSuccessState) {
+          if (state.status == LoginStatus.managerSuccess) {
             Navigator.pushNamed(context, '/manager');
-          } else if (state is StaffLoginSuccessState) {
+          } else if (state.status == LoginStatus.staffSuccess) {
             Navigator.pushNamed(context, '/staff');
-          } else if (state is CustomerLoginSuccessState) {
+          } else if (state.status == LoginStatus.customerSuccess) {
             Navigator.pushNamed(context, '/customer');
+          } else if (state.status == LoginStatus.error) {
+            return SizedBox();
           }
         },
         child: ListView(
@@ -156,7 +206,7 @@ class _LoginUiState extends State<LoginUi> {
             ),
             msg,
             SizedBox(
-              height: 40,
+              height: 5,
             ),
             username,
             SizedBox(

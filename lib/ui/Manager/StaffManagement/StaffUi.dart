@@ -32,7 +32,7 @@ class _StaffUiState extends State<StaffUi> {
         title: Text('Quản lý nhân viên'),
         automaticallyImplyLeading: false,
       ),
-      backgroundColor: Colors.blue[100],
+      backgroundColor: AppTheme.colors.lightblue,
       body: Center(
         child: BlocBuilder<ManageStaffBloc, ManageStaffState>(
           // ignore: missing_return
@@ -46,25 +46,47 @@ class _StaffUiState extends State<StaffUi> {
                 itemCount: state.staffList.length,
                 shrinkWrap: true,
                 // ignore: missing_return
+
                 itemBuilder: (context, index) {
+                  Color color;
+                  var status = state.staffList[index].status;
+                  switch (status) {
+                    case 'Nghỉ phép':
+                      color = Colors.red[600];
+                      break;
+                    case 'Đang làm việc':
+                      color = Colors.yellow[300];
+                      break;
+
+//con nhieu case nua lam sau
+                    default:
+                      color = Colors.green;
+                  }
                   // if (state.assignList[index].status == 'Accepted') {
                   return Card(
                       // child: (state.assignList[0].status == 'Checkin')
                       //     ?
                       child: Column(children: [
                     ListTile(
-                      trailing: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Icon(
-                              Icons.circle,
-                              color: Colors.greenAccent[400],
-                            ),
-                            Text(state.staffList[index].status),
-                          ]),
-                      leading: FlutterLogo(),
+                      trailing: Padding(
+                        padding: const EdgeInsets.only(right: 15),
+                        child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Icon(
+                                Icons.circle,
+                                color: color,
+                              ),
+                            ]),
+                      ),
+                      leading: Image.asset(
+                        'lib/images/mechanic.png',
+                      ),
                       title: Text(state.staffList[index].fullname),
-                      subtitle: Text(state.staffList[index].status.toString()),
+                      subtitle: Text(
+                        state.staffList[index].status,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (_) => StaffDetailUi(

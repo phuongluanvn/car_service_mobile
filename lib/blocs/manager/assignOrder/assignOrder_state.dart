@@ -9,8 +9,7 @@ enum AssignStatus {
   init,
   loading,
   assignSuccess,
-  assignDetailSuccess,
-  assignStaffSuccess,
+
   error,
 }
 

@@ -25,26 +25,31 @@ class CustomerRepository {
 // }'
 
   createNewBooking(String vehicleId, String packageId, String note,
-      String bookingTime) async {
+      String bookingTime, String imageUrl) async {
     var body = {
-      "vehicleId": '$vehicleId',
+      "vehicleId": vehicleId,
       "packageId": packageId,
-      "note": '$note',
-      "bookingTime": '$bookingTime'
+      "note": note,
+      "bookingTime": bookingTime,
+      "imageurl": imageUrl
     };
+    print(json.encode(body));
     var res = await http.post(
       Uri.parse(BASE_URL + "orders"),
       headers: headers,
       body: json.encode(body),
     );
     if (res.statusCode != null) {
+      print(res.statusCode);
+      print(res.body);
       if (res.statusCode == 200) {
+        print('3');
         return res.body;
       } else if (res.statusCode == 404) {
         return res.body;
       }
     } else {
-      return null;
+      return res.body;
     }
   }
 
@@ -69,6 +74,85 @@ class CustomerRepository {
       }
     } else {
       return null;
+    }
+  }
+
+  updateVehicle(
+      String id,
+      String manufacturer,
+      String model,
+      String licensePlateNumber,
+      DateTime dateOfLastMaintenance,
+      int millageCount) async {
+    var body = {
+      "id": id,
+      "manufacturer": manufacturer,
+      "model": model,
+      "licensePlate": licensePlateNumber,
+      "dateOfLastMaintenance": dateOfLastMaintenance,
+      "millageCount": millageCount
+    };
+    var res = await http.post(
+      Uri.parse(BASE_URL + "vehicles"),
+      headers: headers,
+      body: json.encode(body),
+    );
+    if (res.statusCode != null) {
+      if (res.statusCode == 200) {
+        return res.body;
+      } else if (res.statusCode == 404) {
+        return res.body;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  getVehicleDetail(String vehicleId) async {
+    List convertData = [];
+    List<VehicleModel> detailVehicle = [];
+    var res = await http.get(
+      Uri.parse(BASE_URL + 'vehicles/' + vehicleId),
+      headers: headers,
+    );
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      convertData.add(data);
+      print(convertData);
+      try {
+        if (data != null) {
+          convertData
+              .map((vehicleDetail) =>
+                  detailVehicle.add(VehicleModel.fromJson(vehicleDetail)))
+              .toList();
+          return detailVehicle;
+        } else {
+          res.body;
+        }
+      } catch (e) {
+        res.body;
+      }
+    } else {
+      res.body;
+    }
+  }
+
+  deleteVehicle(String vehicleId) async {
+    print(vehicleId);
+    print("hihihihi");
+    var res = await http.delete(
+      Uri.parse(BASE_URL + "vehicles?id=" + vehicleId),
+      headers: headers,
+    );
+    print(res.body);
+    if (res.statusCode != null) {
+      if (res.statusCode == 200) {
+        return res.body;
+      } else if (res.statusCode == 404) {
+        return res.body;
+      }
+    } else {
+      return res.body;
     }
   }
 
@@ -99,32 +183,6 @@ class CustomerRepository {
     }
   }
 
-  Future<List<VehicleModel>> getVehicleDetail(String vehicleId) async {
-    var res = await http.get(
-      Uri.parse(
-          'https://movie0706.cybersoft.edu.vn/api/QuanLyNguoiDung/LayDanhSachNguoiDung?MaNhom=GP01&tuKhoa=' +
-              vehicleId),
-      headers: headers,
-    );
-    if (res.statusCode == 200) {
-      var data = json.decode(res.body);
-      try {
-        if (data != null) {
-          List<VehicleModel> listdata = [];
-          data.forEach((element) {
-            Map<String, dynamic> map = element;
-            listdata.add(VehicleModel.fromJson(map));
-          });
-          return listdata;
-        } else {
-          print('No data');
-        }
-      } catch (e) {
-        print(e.toString());
-      }
-    }
-  }
-
   getOrderList(String username) async {
     List<OrderModel> orderLists = [];
     var res = await http.get(
@@ -151,7 +209,7 @@ class CustomerRepository {
     List convertData = [];
     print(id);
     var res = await http.get(
-      Uri.parse(BASE_URL + 'Orders/' + id),
+      Uri.parse(BASE_URL + 'orders/' + id),
       headers: headers,
     );
     print(res.body);
@@ -161,12 +219,10 @@ class CustomerRepository {
       print(convertData);
       try {
         if (data != null) {
-          print('jịịịịịi');
           convertData
               .map((orderDetail) =>
                   orderDetails.add(OrderDetailModel.fromJson(orderDetail)))
               .toList();
-              print('?????');
           return orderDetails;
         } else {
           res.body;
@@ -249,11 +305,11 @@ class CustomerRepository {
     }
   }
 
-  Future<List<ManufacturerModel>> getManufacturerList() async {
+  getManufacturerList() async {
     List<ManufacturerModel> manufacturerLists = [];
 
     var res = await http.get(
-      Uri.parse( BASE_URL+ "Manufacturers"),
+      Uri.parse(BASE_URL + "manufacturers"),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -266,29 +322,29 @@ class CustomerRepository {
         return manufacturerLists;
       } else {
         print('No manufacturer data');
-        return null;
+        return res.body;
       }
     }
   }
 
-  Future<List<String>> getListModelOfManufacturer(String namuName) async {
-    List<String> modelOfManufacturer = [];
+  getListModelOfManufacturer(String namuName) async {
+    List<VehicleModels> modelOfManufacturer = [];
     var res = await http.get(
-      Uri.parse(
-          BASE_URL+"Manufacturers/" +
-              namuName),
+      Uri.parse(BASE_URL + "manufacturers/" + namuName),
       headers: headers,
     );
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
+      print(data);
       if (data != null) {
         data['vehicleModels']
-            .map((order) => modelOfManufacturer.add((order)))
+            .map((order) =>
+                modelOfManufacturer.add((VehicleModels.fromJson(order))))
             .toList();
         return modelOfManufacturer;
       } else {
         print('No manufacturer data');
-        return null;
+        return res.body;
       }
     }
   }

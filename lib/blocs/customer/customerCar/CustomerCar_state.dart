@@ -25,12 +25,26 @@ enum CustomerCarDetailStatus {
   loading,
   success,
   error,
+  // updateDetailSuccess,
+  // deleteDetailSuccess
+}
+
+enum CustomerCarDeleteStatus { init, loading, error, deleteDetailSuccess }
+
+enum CustomerCarUpdateDetailStatus {
+  init,
+  loading,
+  error,
+  updateDetailSuccess,
 }
 
 class CustomerCarState extends Equatable {
   final CustomerCarStatus status;
   final CustomerCarWithIdStatus withIdstatus;
   final CustomerCarDetailStatus detailStatus;
+  final CustomerCarDeleteStatus deleteStatus;
+  final CustomerCarUpdateDetailStatus updateDetailStatus;
+
   final List<VehicleModel> vehicleDetail;
   final List<VehicleModel> vehicleLists;
 
@@ -39,6 +53,8 @@ class CustomerCarState extends Equatable {
     this.status: CustomerCarStatus.init,
     this.withIdstatus: CustomerCarWithIdStatus.init,
     this.detailStatus: CustomerCarDetailStatus.init,
+    this.deleteStatus: CustomerCarDeleteStatus.init,
+    this.updateDetailStatus: CustomerCarUpdateDetailStatus.init,
     this.vehicleDetail: const [],
     this.vehicleLists: const [],
     this.message: '',
@@ -47,6 +63,8 @@ class CustomerCarState extends Equatable {
   CustomerCarState copyWith({
     CustomerCarStatus status,
     final CustomerCarWithIdStatus withIdstatus,
+    CustomerCarDeleteStatus deleteStatus,
+    CustomerCarUpdateDetailStatus updateDetailStatus,
     CustomerCarDetailStatus detailStatus,
     List<VehicleModel> vehicleDetail,
     List<VehicleModel> vehicleLists,
@@ -56,6 +74,8 @@ class CustomerCarState extends Equatable {
         status: status ?? this.status,
         withIdstatus: withIdstatus ?? this.withIdstatus,
         detailStatus: detailStatus ?? this.detailStatus,
+        deleteStatus: deleteStatus ?? this.deleteStatus,
+        updateDetailStatus: updateDetailStatus ?? this.updateDetailStatus,
         vehicleDetail: vehicleDetail ?? this.vehicleDetail,
         message: message ?? this.message,
         vehicleLists: vehicleLists ?? this.vehicleLists,
@@ -64,6 +84,8 @@ class CustomerCarState extends Equatable {
   List<Object> get props => [
         status,
         detailStatus,
+        deleteStatus,
+        updateDetailStatus,
         vehicleDetail,
         vehicleLists,
         message,
