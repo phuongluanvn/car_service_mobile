@@ -10,6 +10,7 @@ import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderDetailUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/OrderHistory/OrderHistoryDetailUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingDetailUi.dart';
+import 'package:car_service/ui/Staff/ScheduleManagement/ScheduleDetailUi.dart';
 import 'package:car_service/ui/Staff/ScheduleManagement/event.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/repository/manager_repo.dart';
@@ -215,10 +216,11 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
                                     .order.bookingTime),
                               ),
                               onTap: () {
+                                print(state.tableCalendarList[index].order.id);
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) => AssignOrderDetailUi(
-                                        orderId: state
-                                            .tableCalendarList[index].id)));
+                                    builder: (_) => ScheduleDetailUi(
+                                        orderId: state.tableCalendarList[index]
+                                            .order.id)));
                               },
                             ),
                           ])

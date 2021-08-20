@@ -139,7 +139,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                                   Container(
                                     child: Text(
                                       _convertDate(
-                                          state.bookingList[0].bookingTime),
+                                          state.bookingDetail[0].bookingTime),
                                       style: TextStyle(fontSize: 15.0),
                                     ),
                                   ),
@@ -357,6 +357,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                             ],
                           ),
                         ),
+                       
                         BlocListener<UpdateStatusOrderBloc,
                             UpdateStatusOrderState>(
                           // ignore: missing_return

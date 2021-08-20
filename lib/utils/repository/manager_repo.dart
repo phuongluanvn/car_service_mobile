@@ -580,9 +580,8 @@ class ManagerRepository {
   }
 
   Future<List<CrewModel>> getCalendarList(String username) async {
-    print(username);
     List<CrewModel> listdata = [];
-    List convertData = [];
+    // List convertData = [];
 
     var res = await http.get(
       Uri.parse('https://carservicesystem.azurewebsites.net/api/employees/' +
@@ -590,16 +589,14 @@ class ManagerRepository {
           '/tasks'),
       headers: headers,
     );
-    print(res.body);
+
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
-      convertData.add(data); //thêm [] để dùng .map bêndưới
+      // convertData.add(data); //thêm [] để dùng .map bêndưới
 
       try {
         if (data != null) {
-          convertData
-              .map((element) => listdata.add(CrewModel.fromJson(element)))
-              .toList();
+          data.map((order) => listdata.add(CrewModel.fromJson(order))).toList();
           return listdata;
         } else {
           print('No calendar data');
