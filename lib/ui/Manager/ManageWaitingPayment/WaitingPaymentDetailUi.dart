@@ -29,7 +29,7 @@ class WaitingPaymentDetailUi extends StatefulWidget {
 }
 
 class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
-  final String processingStatus = 'Đợi  thanh toán';
+  final String processingStatus = 'Hoàn thành';
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visible = false;
   bool checkedValue = false;
@@ -40,8 +40,8 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     super.initState();
 
-    BlocProvider.of<WaitingPaymentBloc>(context)
-        .add(DoWaitingPaymentDetailEvent(id: widget.orderId));
+    BlocProvider.of<ProcessOrderBloc>(context)
+        .add(DoProcessOrderDetailEvent(email: widget.orderId));
     // BlocProvider.of<StaffBloc>(context).add(DoListStaffEvent());
   }
 
@@ -350,7 +350,7 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
                                                 style: ElevatedButton.styleFrom(
                                                     primary:
                                                         AppTheme.colors.blue),
-                                                child: Text('Hoàn tất dịch vụ',
+                                                child: Text('Hoàn thành',
                                                     style: TextStyle(
                                                         color: Colors.white)),
                                                 onPressed: () {

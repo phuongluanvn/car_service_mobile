@@ -26,7 +26,7 @@ class CheckoutOrderUi extends StatefulWidget {
 }
 
 class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
-  final String processingStatus = 'Đợi  thanh toán';
+  final String processingStatus = 'Đợi thanh toán';
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visible = false;
   bool checkedValue = false;

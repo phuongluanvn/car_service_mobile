@@ -1,6 +1,6 @@
 import 'package:car_service/utils/model/CouponModel.dart';
 import 'package:equatable/equatable.dart';
-import '../../../utils/model/CarModel.dart';
+// import '../../../utils/model/CarModel.dart';
 
 enum CouponStatus {
   init,

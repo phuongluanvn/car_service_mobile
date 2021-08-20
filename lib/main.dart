@@ -25,6 +25,7 @@ import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
 import 'package:car_service/blocs/manager/processOrder/updateFinishTask_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
+import 'package:car_service/blocs/manager/tableCalendar/tableCalendar_bloc.dart';
 import 'package:car_service/blocs/manager/updateItem/updateItem_bloc.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
 import 'package:car_service/blocs/manager/waitingPayment/waitingPayment_bloc.dart';
@@ -201,6 +202,8 @@ class _AuthState extends State<Auth> {
             create: (context) => UpdateItemBloc(repo: ManagerRepository())),
         BlocProvider(
             create: (context) => WaitingPaymentBloc(repo: ManagerRepository())),
+             BlocProvider(
+            create: (context) => TableCalendarBloc(repo: ManagerRepository())),
         // BlocProvider(
         //     create: (context) =>
         //         BookingCubit(VerifyBookingInitState(), ManagerRepository())),

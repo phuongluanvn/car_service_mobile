@@ -45,11 +45,11 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
-          IconButton(
-          color: AppTheme.colors.white,
-          icon: Icon(Icons.airplane_ticket)
-          )
-          ],
+          // IconButton(
+          // color: AppTheme.colors.white,
+          // icon: Icon(Icons.airplane_ticket)
+          // )
+        ],
       ),
       body: Center(
         child: BlocBuilder<CustomerOrderBloc, CustomerOrderState>(

@@ -355,6 +355,7 @@ class ManagerRepository {
       Uri.parse('https://carservicesystem.azurewebsites.net/api/orders/' + id),
       headers: headers,
     );
+    print(res.body);
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
       convertData.add(data); //thêm [] để dùng .map bêndưới
@@ -576,26 +577,68 @@ class ManagerRepository {
     }
   }
 
-  Future<List<OrderDetailModel>> getWaitingPaymentList() async {
+  Future<List<OrderDetailModel>> getCalendarList() async {
     List<OrderDetailModel> finishList = [];
+
+    var resAccepted = await http.get(
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Đang tiến hành"),
+      headers: headers,
+    );
+
+    if (resAccepted.statusCode == 200) {
+      var dataAccepted = json.decode(resAccepted.body);
+
+      if (dataAccepted != null) {
+        dataAccepted
+            .map((order) => finishList.add(OrderDetailModel.fromJson(order)))
+            .toList();
+
+        var newList = [
+          ...finishList,
+        ];
+        print('????');
+        print(newList);
+        return newList;
+      } else {
+        return null;
+      }
+    } else {
+      print('No test order data');
+      return null;
+    }
+  }
+
+  Future<List<OrderDetailModel>> getWaitingPaymentList() async {
+    List<OrderDetailModel> acceptedList = [];
+    List<OrderDetailModel> deniedList = [];
 
     var resAccepted = await http.get(
       Uri.parse(
           "https://carservicesystem.azurewebsites.net/api/Orders?status=Đợi thanh toán"),
       headers: headers,
     );
-    
-    if (resAccepted.statusCode == 200 ) {
+    var resDenied = await http.get(
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/Orders?status=Đã thanh toán"),
+      headers: headers,
+    );
+
+    if (resAccepted.statusCode == 200 && resDenied.statusCode == 200) {
       var dataAccepted = json.decode(resAccepted.body);
-      
-      if (dataAccepted != null ) {
+      var dataCheckin = json.decode(resDenied.body);
+
+      if (dataAccepted != null && dataCheckin != null) {
         dataAccepted
-            .map((order) => finishList.add(OrderDetailModel.fromJson(order)))
+            .map((order) => acceptedList.add(OrderDetailModel.fromJson(order)))
             .toList();
-       
+        dataCheckin
+            .map((order) => deniedList.add(OrderDetailModel.fromJson(order)))
+            .toList();
+
         var newList = [
-          ...finishList,
-         
+          ...acceptedList,
+          ...deniedList,
         ];
         print('????');
         print(newList);
@@ -630,7 +673,9 @@ class ManagerRepository {
       headers: headers,
     );
 
-    if (resAccepted.statusCode == 200 && resCheckin.statusCode == 200  && resCancel.statusCode == 200) {
+    if (resAccepted.statusCode == 200 &&
+        resCheckin.statusCode == 200 &&
+        resCancel.statusCode == 200) {
       var dataAccepted = json.decode(resAccepted.body);
       var dataCheckin = json.decode(resCheckin.body);
       var dataCancel = json.decode(resCancel.body);

@@ -39,7 +39,8 @@ class _AssignOrderUiState extends State<AssignOrderUi> {
               return CircularProgressIndicator();
             } else if (state.status == AssignStatus.assignSuccess) {
               if (state.assignList != null && state.assignList.isNotEmpty) {
-                return ListView.builder(
+                return
+                 ListView.builder(
                   itemCount: state.assignList.length,
                   shrinkWrap: true,
                   // ignore: missing_return

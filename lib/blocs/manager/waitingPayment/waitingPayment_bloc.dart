@@ -19,6 +19,7 @@ class WaitingPaymentBloc
   Stream<WaitingPaymentState> mapEventToState(
       WaitingPaymentEvent event) async* {
     if (event is DoListWaitingPaymentEvent) {
+      print('11');
       yield state.copyWith(status: WaitingPaymentStatus.loading);
       try {
         List<OrderDetailModel> historyList =
@@ -42,6 +43,7 @@ class WaitingPaymentBloc
         ;
       }
     } else if (event is DoWaitingPaymentDetailEvent) {
+      print('11');
       yield state.copyWith(detailStatus: WaitingPaymentDetailStatus.loading);
       try {
         print('check 1: ' + event.id);
