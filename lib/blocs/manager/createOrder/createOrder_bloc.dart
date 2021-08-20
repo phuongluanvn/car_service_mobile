@@ -20,6 +20,8 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
       try {
         var data = await _repo.createOrder(
             event.carId, event.serviceId, event.note, event.timeBooking);
+            print('object');
+            print(data);
         String jsonsDataString = data.toString();
         // final jsonData = jsonDecode(jsonsDataString);
         if (data != null) {
@@ -35,12 +37,9 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
         );
       }
     } else if (event is DoCreateOrderDetailEvent) {
-      print('CHECK CREATE');
       yield state.copyWith(detailStatus: CreateDetailStatus.loading);
       try {
         List<CustomerModel> data = await _repo.getCreateOrderDetail(event.id);
-        print('hihihihihuhuhuhu');
-        print(data);
         if (data != null) {
           yield state.copyWith(
             detailStatus: CreateDetailStatus.success,

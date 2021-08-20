@@ -53,6 +53,7 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
   String _selectAccName;
   ProcessOrderBloc processBloc;
   UpdateItemBloc updateBloc;
+  int _priceService = 0;
   @override
   void initState() {
     super.initState();
@@ -294,12 +295,13 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                           noItemsFoundBuilder: (context) =>
                                               Center(
                                             child:
-                                                Text('Không tìm thấy phụ tùng'),
+                                                Text('Không tìm thấy dịch vụ'),
                                           ),
                                           onSuggestionSelected: (suggestion) {
                                             this._typeAheadController.text =
                                                 suggestion.name;
                                             _accId = suggestion.id;
+                                            _priceService = suggestion.price;
                                           },
                                           onSaved: (value) =>
                                               this._selectAccName = value,
@@ -327,6 +329,7 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                     style: TextStyle(color: AppTheme.colors.blue),
                   ),
                   onPressed: () {
+                    print(_priceService);
                     processBloc.add(
                       UpdateAccesIdToOrder(
                         orderId: widget.orderId,
@@ -334,7 +337,7 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                         accId: null,
                         serviceId: _accId,
                         quantity: 1,
-                        price: 200,
+                        price: _priceService,
                       ),
                     );
                     Navigator.pop(context);

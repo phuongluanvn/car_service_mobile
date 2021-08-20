@@ -96,22 +96,19 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
   @override
   void initState() {
     super.initState();
-
-    _getStringFromSharedPref() async {
-      final prefs = await SharedPreferences.getInstance();
-      username = prefs.getString('Username');
-
-      setState(() {
-        _username = username;
-      });
-    }
-
+    _getStringFromSharedPref();
     selectedEvents = {};
-    print(_username);
-    BlocProvider.of<TableCalendarBloc>(context)
-        .add(DoListTableCalendarEvent(username: username));
-
     // context.read<OrderHistoryBloc>().add(DoListOrderHistoryEvent());
+  }
+
+  _getStringFromSharedPref() async {
+    final prefs = await SharedPreferences.getInstance();
+    // username = prefs.getString('Username');
+    // setState(() {
+    //   _username = username;
+    // });
+    BlocProvider.of<TableCalendarBloc>(context)
+        .add(DoListTableCalendarEvent(username: prefs.getString('Username')));
   }
 
   @override

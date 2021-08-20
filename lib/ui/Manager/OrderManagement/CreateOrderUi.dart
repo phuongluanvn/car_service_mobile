@@ -1,9 +1,9 @@
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_event.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
-import 'package:car_service/blocs/customer/customerOrder/CreateBooking_bloc.dart';
-import 'package:car_service/blocs/customer/customerOrder/CreateBooking_event.dart';
-import 'package:car_service/blocs/customer/customerOrder/CreateBooking_state.dart';
+// import 'package:car_service/blocs/customer/customerOrder/CreateBooking_bloc.dart';
+// import 'package:car_service/blocs/customer/customerOrder/CreateBooking_event.dart';
+// import 'package:car_service/blocs/customer/customerOrder/CreateBooking_state.dart';
 import 'package:car_service/blocs/manager/createOrder/createOrder_bloc.dart';
 import 'package:car_service/blocs/manager/createOrder/createOrder_state.dart';
 import 'package:car_service/blocs/manager/createOrder/createOrder_event.dart';
@@ -43,13 +43,13 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
 
   final Color selectedColor = AppTheme.colors.lightblue;
   final Color unselectedColor = Colors.black;
-  CreateBookingBloc _createBookingBloc;
+  CreateOrderBloc _createBookingBloc;
   @override
   void initState() {
     BlocProvider.of<PackageServiceBloc>(context)
         .add(DoPackageServiceListEvent());
     createOrderBloc = BlocProvider.of<CreateOrderBloc>(context);
-    _createBookingBloc = BlocProvider.of<CreateBookingBloc>(context);
+    _createBookingBloc = BlocProvider.of<CreateOrderBloc>(context);
     customerCarBloc = BlocProvider.of<CustomerCarBloc>(context);
 
     super.initState();
@@ -83,9 +83,9 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
     );
 
     final createOrderButton =
-        BlocListener<CreateBookingBloc, CreateBookingState>(
+        BlocListener<CreateOrderBloc, CreateOrderState>(
       listener: (context, state) {
-        if (state.status == CreateBookingStatus.createBookingOrderSuccess) {
+        if (state.status == CreateOrderStatus.createOrderSuccess) {
           // Navigator.pop(context);
           Navigator.pop(
             context,
@@ -120,14 +120,14 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                   );
                 });
           } else if (_note == null) {
-            _createBookingBloc.add(CreateBookingButtonPressed(
+            _createBookingBloc.add(CreateOrderButtonPressed(
               carId: _carId,
               serviceId: _packageId,
               note: null,
               timeBooking: _focusedDay.toIso8601String(),
             ));
           } else if (_packageId == null) {
-            _createBookingBloc.add(CreateBookingButtonPressed(
+            _createBookingBloc.add(CreateOrderButtonPressed(
               carId: _carId,
               serviceId: null,
               note: _note,

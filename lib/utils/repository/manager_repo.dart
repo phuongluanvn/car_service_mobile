@@ -34,7 +34,8 @@ class ManagerRepository {
     );
     if (res.statusCode != null) {
       if (res.statusCode == 200) {
-        // updateStatusOrder(res.body.id)
+        var id = json.decode(res.body);
+        updateStatusOrder(id['orderId'].toString(), 'Đã nhận xe');
         return res.body;
       } else if (res.statusCode == 404) {
         return res.body;
@@ -579,6 +580,7 @@ class ManagerRepository {
   }
 
   Future<List<CrewModel>> getCalendarList(String username) async {
+    print(username);
     List<CrewModel> listdata = [];
     List convertData = [];
 

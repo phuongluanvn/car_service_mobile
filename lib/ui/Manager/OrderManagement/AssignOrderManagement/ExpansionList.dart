@@ -29,6 +29,8 @@ class _ExpansionListState extends State<ExpansionList> {
   String _accId;
   ProcessOrderBloc processBloc;
   UpdateItemBloc updateItemBloc;
+  int quantity = 1;
+
   @override
   void initState() {
     super.initState();
@@ -179,43 +181,64 @@ class _ExpansionListState extends State<ExpansionList> {
                                             onSaved: (value) =>
                                                 this._selectAccName = value,
                                           ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          primary: AppTheme
+                                                              .colors.blue),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      quantity++;
+                                                    });
+                                                    // processBloc.add(UpdateTest(orderId: widget.orderId, acc: state
+                                                    //     .processDetail[0].orderDetails));
+                                                   
+                                                    print(_accId);
+                                                  },
+                                                  child: Text('x ' + quantity.toString())),
+                                              ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          primary: AppTheme
+                                                              .colors.blue),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      isEditTextField = false;
+                                                    });
+                                                    // processBloc.add(UpdateTest(orderId: widget.orderId, acc: state
+                                                    //     .processDetail[0].orderDetails));
+                                                    processBloc.add(
+                                                      UpdateAccesIdToOrder(
+                                                          orderId:
+                                                              widget.orderId,
+                                                          detailId: state
+                                                              .processDetail[0]
+                                                              .orderDetails[
+                                                                  widget.index]
+                                                              .id,
+                                                          accId: _accId,
+                                                          serviceId: state
+                                                              .processDetail[0]
+                                                              .orderDetails[
+                                                                  widget.index]
+                                                              .serviceId,
+                                                          quantity: 1,
+                                                          price: state
+                                                              .processDetail[0]
+                                                              .orderDetails[
+                                                                  widget.index]
+                                                              .price),
+                                                    );
+                                                    print(_accId);
+                                                  },
+                                                  child: Text('Cập nhật')),
+                                            ],
+                                          )
 
                                           // TODO: implement listener
-
-                                          ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                  primary:
-                                                      AppTheme.colors.blue),
-                                              onPressed: () {
-                                                setState(() {
-                                                  isEditTextField = false;
-                                                });
-                                                // processBloc.add(UpdateTest(orderId: widget.orderId, acc: state
-                                                //     .processDetail[0].orderDetails));
-                                                processBloc.add(
-                                                  UpdateAccesIdToOrder(
-                                                      orderId: widget.orderId,
-                                                      detailId: state
-                                                          .processDetail[0]
-                                                          .orderDetails[
-                                                              widget.index]
-                                                          .id,
-                                                      accId: _accId,
-                                                      serviceId: state
-                                                          .processDetail[0]
-                                                          .orderDetails[
-                                                              widget.index]
-                                                          .serviceId,
-                                                      quantity: 1,
-                                                      price: state
-                                                          .processDetail[0]
-                                                          .orderDetails[
-                                                              widget.index]
-                                                          .price),
-                                                );
-                                                print(_accId);
-                                              },
-                                              child: Text('Cập nhật')),
                                         ],
                                       ),
                               ],
