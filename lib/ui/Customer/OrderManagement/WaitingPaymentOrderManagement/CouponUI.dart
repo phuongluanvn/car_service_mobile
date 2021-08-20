@@ -12,6 +12,7 @@ import 'package:car_service/ui/Customer/OrderManagement/WaitingPaymentOrderManag
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CouponUI extends StatefulWidget {
   @override
@@ -19,11 +20,25 @@ class CouponUI extends StatefulWidget {
 }
 
 class _CouponUIState extends State<CouponUI> {
+  int point;
+  int _point;
+
   @override
   void initState() {
     super.initState();
+    _getStringFromSharedPref();
 
     context.read<CouponBloc>().add(DoListCouponEvent());
+  }
+
+  _getStringFromSharedPref() async {
+    final prefs = await SharedPreferences.getInstance();
+    point = prefs.getInt('AccumulatedPoint');
+
+    setState(() {
+      _point = point;
+    });
+    print(_point);
   }
 
   @override
@@ -35,6 +50,14 @@ class _CouponUIState extends State<CouponUI> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.colors.lightblue,
+      appBar: AppBar(
+        backgroundColor: AppTheme.colors.deepBlue,
+        title: Text('Khuyến mãi'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: Center(
         child: BlocBuilder<CouponBloc, CouponState>(
           // ignore: missing_return
@@ -44,8 +67,7 @@ class _CouponUIState extends State<CouponUI> {
             } else if (state.status == CouponStatus.loading) {
               return CircularProgressIndicator();
             } else if (state.status == CouponStatus.loadedCouponSuccess) {
-              if (state.couponLists != null &&
-                  state.couponLists.isNotEmpty)
+              if (state.couponLists != null && state.couponLists.isNotEmpty)
                 return Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
@@ -55,11 +77,41 @@ class _CouponUIState extends State<CouponUI> {
                         border: Border.all(color: Colors.black26),
                         borderRadius: BorderRadius.circular(5)),
                     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                    child: Column(
-                      children: [
-                      
-                      ],
-                    ),
+                    child: ListView.builder(
+                        itemCount: state.couponLists.length,
+                        // ignore: missing_return
+                        itemBuilder: (context, index) {
+                          return Card(
+                              child: Column(
+                            children: [
+                              ListTile(
+                                title: Text(state.couponLists[index].name +
+                                    ' (' +
+                                    state.couponLists[index].pointRequired
+                                        .toString() +
+                                    ' điểm)'),
+                                subtitle:
+                                    Text(state.couponLists[index].description),
+                                trailing: (_point -
+                                            state.couponLists[index]
+                                                .pointRequired) >=
+                                        0
+                                    ? ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            primary: AppTheme.colors.blue),
+                                        onPressed: () {},
+                                        child: Text('Áp dụng'),
+                                      )
+                                    : ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            primary: Colors.grey),
+                                        onPressed: () {},
+                                        child: Text('Áp dụng'),
+                                      ),
+                              )
+                            ],
+                          ));
+                        }),
                   ),
                 );
               else

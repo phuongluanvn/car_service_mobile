@@ -1,4 +1,5 @@
 import 'package:car_service/utils/model/CarModel.dart';
+import 'package:car_service/utils/model/CouponModel.dart';
 import 'package:car_service/utils/model/CustomerProfileModel.dart';
 import 'package:car_service/utils/model/ManufacturerModel.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
@@ -18,13 +19,6 @@ class CustomerRepository {
 
   String BASE_URL = 'https://carservicesystem.azurewebsites.net/api/';
 
-// '{
-//   "vehicleId": "e42d42cf-af6b-4e15-89df-264a7bb9ffee",
-//   "packageId": null,
-//   "note": "Hông có",
-//   "bookingTime": "2021-07-05T15:14:57.644Z"
-// }'
-
   createNewBooking(String vehicleId, String packageId, String note,
       String bookingTime, String imageUrl) async {
     var body = {
@@ -42,11 +36,11 @@ class CustomerRepository {
     );
     if (res.statusCode != null) {
       print(res.statusCode);
-      print(res.body);
       if (res.statusCode == 200) {
-        print('3');
         return res.body;
       } else if (res.statusCode == 404) {
+        return res.body;
+      }else if (res.statusCode == 400) {
         return res.body;
       }
     } else {
@@ -71,6 +65,8 @@ class CustomerRepository {
       if (res.statusCode == 200) {
         return res.body;
       } else if (res.statusCode == 404) {
+        return res.body;
+      }else if (res.statusCode == 400) {
         return res.body;
       }
     } else {
@@ -322,7 +318,6 @@ class CustomerRepository {
             .toList();
         return manufacturerLists;
       } else {
-        print('No manufacturer data');
         return res.body;
       }
     }
@@ -336,7 +331,6 @@ class CustomerRepository {
     );
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
-      print(data);
       if (data != null) {
         data['vehicleModels']
             .map((order) =>
@@ -344,7 +338,6 @@ class CustomerRepository {
             .toList();
         return modelOfManufacturer;
       } else {
-        print('No manufacturer data');
         return res.body;
       }
     }
@@ -364,8 +357,6 @@ class CustomerRepository {
     var res = await http.put(Uri.parse(BASE_URL + "customers"),
         headers: headers, body: body);
     final data = (res.body);
-    print(data);
-    print('objectobjectobject');
     if (data != null) {
       return data;
     } else {
@@ -401,6 +392,28 @@ class CustomerRepository {
   }
 
   getCoupon() async {
-    
+    String message;
+    // List convertData = [];
+    List<CouponModel> couponsList = [];
+    var res = await http.get(Uri.parse(BASE_URL + "coupons"),
+        headers: headers);
+    final data = json.decode(res.body);
+    print(data);
+    if (res.statusCode == 200) {
+      if (data != null) {
+        data
+            .map((e) => couponsList.add(CouponModel.fromJson(e)))
+            .toList();
+        return couponsList;
+      } else {
+        return 'Không tìm thấy thông tin người dùng';
+      }
+    } else if (res.statusCode == 404) {
+      message =
+          'Không tìm thấy thông tin người dùng ' + res.statusCode.toString();
+      return message;
+    } else {
+      return res.body;
+    }
   }
 }

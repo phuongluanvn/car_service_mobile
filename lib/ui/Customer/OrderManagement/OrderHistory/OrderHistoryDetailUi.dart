@@ -1,20 +1,18 @@
-import 'package:car_service/blocs/manager/booking/booking_state.dart';
-import 'package:car_service/blocs/manager/booking/booking_cubit.dart';
-import 'package:car_service/blocs/manager/orderHistory/orderHistory_bloc.dart';
-import 'package:car_service/blocs/manager/orderHistory/orderHistory_events.dart';
-import 'package:car_service/blocs/manager/orderHistory/orderHistory_state.dart';
+import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
+import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_event.dart';
+import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
 import 'package:car_service/theme/app_theme.dart';
-import 'package:car_service/ui/Manager/ManagerMain.dart';
-import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingUi.dart';
+import 'package:car_service/ui/Customer/CustomerMainUI.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:money_formatter/money_formatter.dart';
 
 class OrderHistoryDetailUi extends StatefulWidget {
   final String orderId;
-
   OrderHistoryDetailUi({@required this.orderId});
 
   @override
@@ -22,173 +20,264 @@ class OrderHistoryDetailUi extends StatefulWidget {
 }
 
 class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
-  // UpdateStatusOrderBloc updateStatusBloc;
+  UpdateStatusOrderBloc updateStatusBloc;
+  bool _visibleByDenied = false;
+  bool textButton = true;
+  String reasonReject;
+
   @override
   void initState() {
-    // updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     super.initState();
-    BlocProvider.of<OrderHistoryBloc>(context)
-        .add(DoOrderHistoryDetailEvent(id: widget.orderId));
-    print(widget.orderId);
+    BlocProvider.of<CustomerOrderBloc>(context)
+        .add(DoOrderDetailEvent(id: widget.orderId));
+    updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    final String acceptStatus = 'Accepted';
     return Scaffold(
+      backgroundColor: AppTheme.colors.lightblue,
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Booking Information'),
+        title: Text('Chi tiết đơn hàng'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
       ),
       body: Center(
-        child: BlocBuilder<OrderHistoryBloc, OrderHistoryState>(
+        child: BlocBuilder<CustomerOrderBloc, CustomerOrderState>(
           // ignore: missing_return
           builder: (context, state) {
-            if (state.detailStatus == OrderHistoryDetailStatus.init) {
+            if (state.detailStatus == CustomerOrderDetailStatus.init) {
               return CircularProgressIndicator();
-            } else if (state.detailStatus == OrderHistoryDetailStatus.loading) {
+            } else if (state.detailStatus ==
+                CustomerOrderDetailStatus.loading) {
               return CircularProgressIndicator();
-            } else if (state.detailStatus == OrderHistoryDetailStatus.success) {
-              if (state.historyDetail != null && state.historyDetail.isNotEmpty)
-                return Padding(
-                  padding: const EdgeInsets.all(12.0),
+            } else if (state.detailStatus ==
+                CustomerOrderDetailStatus.success) {
+              if (state.orderDetail != null && state.orderDetail.isNotEmpty)
+                return SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.2,
-                            child: Text(
-                              'Fullname:',
-                              style: TextStyle(fontSize: 16.0),
+                      cardInforOrder(
+                          state.orderDetail[0].status,
+                          _convertDate(state.orderDetail[0].bookingTime),
+                          state.orderDetail[0].checkinTime != null
+                              ? state.orderDetail[0].checkinTime
+                              : 'Chưa nhận xe',
+                          state.orderDetail[0].note != null
+                              ? state.orderDetail[0].note
+                              : 'Không có ghi chú'),
+                      cardInforService(
+                          state.orderDetail[0].vehicle.model,
+                          state.orderDetail[0].vehicle.model,
+                          state.orderDetail[0].vehicle.licensePlate,
+                          state.orderDetail[0].orderDetails,
+                          state.orderDetail[0].note == null ? false : true,
+                          state.orderDetail[0].note != null
+                              ? state.orderDetail[0].note
+                              : 'Không có ghi chú',
+                          state.orderDetail[0].note == null
+                              ? state.orderDetail[0].package.price
+                              : 0),
+                      cardInforCar(
+                          state.orderDetail[0].vehicle.manufacturer,
+                          state.orderDetail[0].vehicle.model,
+                          state.orderDetail[0].vehicle.licensePlate),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Visibility(
+                          visible: _visibleByDenied,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: TextField(
+                              onChanged: (noteValue) {
+                                setState(() {
+                                  reasonReject = noteValue;
+                                });
+                              },
+                              maxLines: 3,
+                              decoration: InputDecoration.collapsed(
+                                  hintText: 'Lý do từ chối'),
                             ),
                           ),
-                          Container(
-                            child: Text(
-                              state.historyDetail[0].customer.fullname,
-                              style: TextStyle(fontSize: 15.0),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                      Container(height: 16),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.2,
-                            child: Text(
-                              'Email:',
-                              style: TextStyle(fontSize: 16.0),
-                            ),
-                          ),
-                          Container(
-                            child: Text(
-                              state.historyDetail[0].customer.email,
-                              style: TextStyle(fontSize: 15.0),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(height: 16),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.2,
-                            child: Text(
-                              'Booking time:',
-                              style: TextStyle(fontSize: 16.0),
-                            ),
-                          ),
-                          Container(
-                            child: Text(
-                              state.historyDetail[0].bookingTime,
-                              style: TextStyle(fontSize: 15.0),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(height: 16),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.2,
-                            child: Text(
-                              'Status:',
-                              style: TextStyle(fontSize: 16.0),
-                            ),
-                          ),
-                          Container(
-                            child: Text(
-                              state.historyDetail[0].status,
-                              style: TextStyle(fontSize: 15.0),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(height: 16),
-                      // BlocListener<UpdateStatusOrderBloc,
-                      //     UpdateStatusOrderState>(
-                      //   // ignore: missing_return
-                      //   listener: (builder, statusState) {
-                      //     if (statusState.status ==
-                      //         UpdateStatus.updateStatusSuccess) {
-                      //       Navigator.pushNamed(context, '/manager');
-                      //     }
-                      //   },
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //     children: [
-                      //       SizedBox(
-                      //         width: MediaQuery.of(context).size.width * 0.45,
-                      //         child: ElevatedButton(
-                      //           style: ElevatedButton.styleFrom(
-                      //               primary: Colors.blue),
-                      //           child: Text('Accept',
-                      //               style: TextStyle(color: Colors.white)),
-                      //           onPressed: () {
-                      //             updateStatusBloc.add(
-                      //                 UpdateStatusButtonPressed(
-                      //                     id: state.bookingDetail[0].id,
-                      //                     status: acceptStatus));
-                      //           },
-                      //         ),
-                      //       ),
-                      //       SizedBox(
-                      //         width: MediaQuery.of(context).size.width * 0.45,
-                      //         child: ElevatedButton(
-                      //           style: ElevatedButton.styleFrom(
-                      //               primary: Colors.red),
-                      //           child: Text('Deny',
-                      //               style: TextStyle(color: Colors.white)),
-                      //           onPressed: () {},
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
+                      BlocListener<UpdateStatusOrderBloc,
+                          UpdateStatusOrderState>(
+                        listener: (builder, statusState) {
+                          if (statusState.status ==
+                              UpdateStatus.updateStatusConfirmAcceptedSuccess) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CustomerHome()),
+                            );
+                          }
+                        },
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.45,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: AppTheme.colors.blue),
+                              child: Text('Đánh giá đơn',
+                                  style: TextStyle(color: Colors.white)),
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (_) => OrderHistoryDetailUi(
+                                        orderId: widget.orderId)));
+                              }),
+                        ),
+                      )
                     ],
                   ),
                 );
               else
-                return Center(child: Text('Empty'));
-            } else if (state.detailStatus == BookingDetailStatus.error) {
+                return Center(child: Text('Không có chi tiết đơn hàng'));
+            } else if (state.detailStatus == CustomerOrderDetailStatus.error) {
               return ErrorWidget(state.message.toString());
             }
           },
         ),
       ),
     );
+  }
+
+  Widget cardInforCar(String manuName, String modelName, String licensePlace) {
+    return Card(
+      child: Column(
+        children: [
+          Text('Thông tin xe'),
+          ListTile(
+            title: Text('Biển số xe'),
+            trailing: Text(licensePlace),
+          ),
+          ListTile(
+            title: Text('Hãng xe'),
+            trailing: Text(manuName),
+          ),
+          ListTile(
+            title: Text('Mẫu xe'),
+            trailing: Text(modelName),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget cardInforOrder(
+      String stautus, String bookingTime, String checkinTime, String note) {
+    return Card(
+      child: Column(
+        children: [
+          Text('Thông tin đơn hàng'),
+          ListTile(
+            title: Text('Trạng thái đơn hàng: '),
+            trailing: Text(stautus),
+          ),
+          ListTile(
+            title: Text('Thời gian đặt hẹn: '),
+            trailing: Text(bookingTime),
+          ),
+          ListTile(
+            title: Text('Thời gian nhận xe: '),
+            trailing: Text(checkinTime),
+          ),
+          ListTile(
+            title: Text('Ghi chú từ người dùng: '),
+            trailing: Text(note),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget cardInforService(
+      String servicePackageName,
+      String serviceName,
+      String price,
+      List services,
+      bool serviceType,
+      String note,
+      int totalPrice) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.black26),
+            borderRadius: BorderRadius.circular(5)),
+        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+        child: Column(
+          children: [
+            Text(
+              'Thông tin dịch vụ',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.start,
+            ),
+            ListTile(
+              title: Text('Loại dịch vụ: '),
+              trailing: serviceType ? Text('Sửa chữa') : Text('Bảo dưỡng'),
+            ),
+            serviceType
+                ? ListTile(
+                    title: Text('Tình trạng xe từ người dùng: '),
+                    subtitle: Text(
+                      note,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    ))
+                : ExpansionTile(
+                    title: Text('Chi tiết:'),
+                    children: services.map((service) {
+                      return ListTile(
+                        title: Text(service.name),
+                        trailing: Text(_convertMoney(service.price.toDouble())),
+                      );
+                    }).toList(),
+                  ),
+            Divider(
+              color: Colors.black,
+              thickness: 2,
+              indent: 20,
+              endIndent: 20,
+            ),
+            ListTile(
+              title: Text('Tổng: '),
+              trailing: Text(_convertMoney(totalPrice.toDouble())),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _convertDate(dateInput) {
+    return formatDate(DateTime.parse(dateInput),
+        [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
+  }
+
+  _convertMoney(double money) {
+    MoneyFormatter fmf = new MoneyFormatter(
+        amount: money,
+        settings: MoneyFormatterSettings(
+          symbol: 'VND',
+          thousandSeparator: '.',
+          decimalSeparator: ',',
+          symbolAndNumberSeparator: ' ',
+          fractionDigits: 0,
+          // compactFormatType: CompactFormatType.sort
+        ));
+    print(fmf.output.symbolOnRight);
+    return fmf.output.symbolOnRight.toString();
   }
 }

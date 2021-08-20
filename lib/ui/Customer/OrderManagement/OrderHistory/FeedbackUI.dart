@@ -6,32 +6,30 @@ import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/CustomerMainUI.dart';
-import 'package:car_service/ui/Customer/OrderManagement/WaitingPaymentOrderManagement/CouponUI.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_formatter/money_formatter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class PaymentOrderDetailUi extends StatefulWidget {
+class FeedbackUi extends StatefulWidget {
   final String orderId;
-  PaymentOrderDetailUi({@required this.orderId});
+  FeedbackUi({@required this.orderId});
 
   @override
-  _PaymentOrderDetailUiState createState() => _PaymentOrderDetailUiState();
+  _FeedbackUiState createState() =>
+      _FeedbackUiState();
 }
 
-class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
+class _FeedbackUiState
+    extends State<FeedbackUi> {
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visibleByDenied = false;
   bool textButton = true;
   String reasonReject;
-  String paymentCompleted = 'Đã thanh toán';
 
   @override
   void initState() {
     super.initState();
-
     BlocProvider.of<CustomerOrderBloc>(context)
         .add(DoOrderDetailEvent(id: widget.orderId));
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
@@ -43,23 +41,11 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
       backgroundColor: AppTheme.colors.lightblue,
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Chi tiết đơn hàng'),
+        title: Text('Đánh giá đơn'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        actions: [
-
-          IconButton(
-            color: AppTheme.colors.white,
-            icon: Icon(Icons.card_giftcard),
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => CouponUI()));
-            },
-          )
-
-        ],
       ),
       body: Center(
         child: BlocBuilder<CustomerOrderBloc, CustomerOrderState>(
@@ -76,10 +62,15 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                 return SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      cardInforCar(
-                          state.orderDetail[0].vehicle.manufacturer,
-                          state.orderDetail[0].vehicle.model,
-                          state.orderDetail[0].vehicle.licensePlate),
+                      cardInforOrder(
+                          state.orderDetail[0].status,
+                          _convertDate(state.orderDetail[0].bookingTime),
+                          state.orderDetail[0].checkinTime != null
+                              ? state.orderDetail[0].checkinTime
+                              : 'Chưa nhận xe',
+                          state.orderDetail[0].note != null
+                              ? state.orderDetail[0].note
+                              : 'Không có ghi chú'),
                       cardInforService(
                           state.orderDetail[0].vehicle.model,
                           state.orderDetail[0].vehicle.model,
@@ -92,6 +83,10 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                           state.orderDetail[0].note == null
                               ? state.orderDetail[0].package.price
                               : 0),
+                      cardInforCar(
+                          state.orderDetail[0].vehicle.manufacturer,
+                          state.orderDetail[0].vehicle.model,
+                          state.orderDetail[0].vehicle.licensePlate),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Visibility(
@@ -132,16 +127,23 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                           width: MediaQuery.of(context).size.width * 0.45,
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  primary: AppTheme.colors.blue),
-                              child: Text('Đã thanh toán',
+                                      primary: AppTheme.colors.blue),
+                              child: Text('Đánh giá đơn',
                                   style: TextStyle(color: Colors.white)),
                               onPressed: () {
-                                setState(() {
-                                  updateStatusBloc.add(
-                                      UpdateStatusConfirmAcceptedButtonPressed(
-                                          id: state.orderDetail[0].id,
-                                          status: paymentCompleted));
-                                });
+                                if (textButton == false &&
+                                    reasonReject != null) {
+                                  //xác nhận hủy
+                                  setState(() {
+                                    
+                                  });
+                                } else {
+                                  //Hủy đơn
+                                  setState(() {
+                                    _visibleByDenied = !_visibleByDenied;
+                                    textButton = !textButton;
+                                  });
+                                }
                               }),
                         ),
                       )
@@ -163,13 +165,7 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
     return Card(
       child: Column(
         children: [
-          Text(
-            'Thông tin xe',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+          Text('Thông tin xe'),
           ListTile(
             title: Text('Biển số xe'),
             trailing: Text(licensePlace),
@@ -252,7 +248,8 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.black),
                     ))
-                : Column(
+                : ExpansionTile(
+                    title: Text('Chi tiết:'),
                     children: services.map((service) {
                       return ListTile(
                         title: Text(service.name),
@@ -265,10 +262,6 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
               thickness: 2,
               indent: 20,
               endIndent: 20,
-            ),
-            ListTile(
-              title: Text('Khuyến mãi: '),
-              trailing: Text('0 VND'),
             ),
             ListTile(
               title: Text('Tổng: '),
@@ -299,4 +292,5 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
     print(fmf.output.symbolOnRight);
     return fmf.output.symbolOnRight.toString();
   }
+
 }
