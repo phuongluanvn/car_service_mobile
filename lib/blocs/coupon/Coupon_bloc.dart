@@ -20,10 +20,10 @@ class CouponBloc extends Bloc<CouponEvent, CouponState> {
     if (event is DoListCouponEvent) {
       yield state.copyWith(status: CouponStatus.loading);
       try {
-        var carLists = await _repo.getCoupon();
-        if (carLists != null) {
+        var couponList = await _repo.getCoupon();
+        if (couponList != null) {
           yield state.copyWith(
-              couponLists: carLists, status: CouponStatus.loadedCouponSuccess);
+              couponLists: couponList, status: CouponStatus.loadedCouponSuccess);
         }
       } catch (e) {
         yield state.copyWith(

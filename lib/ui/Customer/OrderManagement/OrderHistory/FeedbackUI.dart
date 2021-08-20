@@ -11,15 +11,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_formatter/money_formatter.dart';
 
-class OrderHistoryDetailUi extends StatefulWidget {
+class FeedbackUi extends StatefulWidget {
   final String orderId;
-  OrderHistoryDetailUi({@required this.orderId});
+  FeedbackUi({@required this.orderId});
 
   @override
-  _OrderHistoryDetailUiState createState() => _OrderHistoryDetailUiState();
+  _FeedbackUiState createState() =>
+      _FeedbackUiState();
 }
 
-class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
+class _FeedbackUiState
+    extends State<FeedbackUi> {
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visibleByDenied = false;
   bool textButton = true;
@@ -39,7 +41,7 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
       backgroundColor: AppTheme.colors.lightblue,
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Chi tiết đơn hàng'),
+        title: Text('Đánh giá đơn'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -125,13 +127,23 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
                           width: MediaQuery.of(context).size.width * 0.45,
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  primary: AppTheme.colors.blue),
+                                      primary: AppTheme.colors.blue),
                               child: Text('Đánh giá đơn',
                                   style: TextStyle(color: Colors.white)),
                               onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) => OrderHistoryDetailUi(
-                                        orderId: widget.orderId)));
+                                if (textButton == false &&
+                                    reasonReject != null) {
+                                  //xác nhận hủy
+                                  setState(() {
+                                    
+                                  });
+                                } else {
+                                  //Hủy đơn
+                                  setState(() {
+                                    _visibleByDenied = !_visibleByDenied;
+                                    textButton = !textButton;
+                                  });
+                                }
                               }),
                         ),
                       )
@@ -280,4 +292,5 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
     print(fmf.output.symbolOnRight);
     return fmf.output.symbolOnRight.toString();
   }
+
 }

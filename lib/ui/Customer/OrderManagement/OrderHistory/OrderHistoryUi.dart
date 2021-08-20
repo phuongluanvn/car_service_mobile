@@ -1,18 +1,12 @@
-import 'package:car_service/blocs/manager/booking/booking_cubit.dart';
-import 'package:car_service/blocs/manager/booking/booking_state.dart';
 import 'package:car_service/blocs/manager/orderHistory/orderHistory_bloc.dart';
 import 'package:car_service/blocs/manager/orderHistory/orderHistory_events.dart';
 import 'package:car_service/blocs/manager/orderHistory/orderHistory_state.dart';
 import 'package:car_service/theme/app_theme.dart';
-import 'package:car_service/ui/Manager/OrderManagement/OrderHistory/OrderHistoryDetailUi.dart';
-import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingDetailUi.dart';
+import 'package:car_service/ui/Customer/OrderManagement/OrderHistory/OrderHistoryDetailUi.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../blocs/manager/booking/booking_bloc.dart';
-import '../../../../blocs/manager/booking/booking_bloc.dart';
-import '../../../../blocs/manager/booking/booking_events.dart';
 
 class OrderHistoryUi extends StatefulWidget {
   @override
@@ -64,7 +58,7 @@ class _OrderHistoryUiState extends State<OrderHistoryUi> {
                                 Icons.circle,
                                 color: Colors.red,
                               ),
-                              Text('Finished'),
+                              Text(state.historyList[index].status),
                             ]),
                         leading: FlutterLogo(),
                         title: Text(state.historyList[index].customer.fullname),

@@ -39,6 +39,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
   bool _visibleSuaChua = false;
   String _selectItem;
   CalendarFormat _calendarFormat = CalendarFormat.week;
+  int _currenDay = DateTime.now().day.toInt();
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay;
   int _valueSelected = 0;
@@ -51,6 +52,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
   String _error = 'Selectionner une image';
   String _timeSelected;
   Color _colorBgrBtn;
+  bool _isTimeBooking = false;
 
   Map<String, bool> checkboxListValues = {};
 
@@ -133,6 +135,22 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
             color: (_selectedTimeButton == text)
                 ? AppTheme.colors.deepBlue
                 : Colors.blueGrey),
+      ),
+    );
+  }
+
+  Widget showTimeButtonIsBooking(String text, int index) {
+    return ElevatedButton(
+      onPressed: () {},
+      child: Text(
+        text,
+        style: TextStyle(color: Colors.white24),
+      ),
+      style: ElevatedButton.styleFrom(
+        primary: Colors.grey,
+        // fixedSize: Size(80, 20),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        side: BorderSide(width: 2, color: Colors.grey),
       ),
     );
   }
@@ -610,47 +628,99 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                               setState(() {
                                 _selectedDay = selectedDay;
                                 _focusedDay = focusedDay;
+                                if ((_focusedDay.day.toInt() - _currenDay) >
+                                        0 &&
+                                    (_selectedDay.day.toInt() - _currenDay) <=
+                                        7) {
+                                  setState(() {
+                                    _isTimeBooking = true;
+                                  });
+                                } else {
+                                  setState(() {
+                                    _isTimeBooking = false;
+                                  });
+                                }
                                 print(_selectedDay.toIso8601String());
                               });
                           },
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          showTimeButton('08:00', 1),
-                          showTimeButton('08:30', 2),
-                          showTimeButton('09:00', 3),
-                          showTimeButton('09:30', 4),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          showTimeButton('10:00', 5),
-                          showTimeButton('10:30', 6),
-                          showTimeButton('11:00', 7),
-                          showTimeButton('11:30', 8),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          showTimeButton('12:00', 9),
-                          showTimeButton('13:00', 10),
-                          showTimeButton('13:30', 11),
-                          showTimeButton('14:00', 12),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          showTimeButton('14:30', 13),
-                          showTimeButton('15:00', 14),
-                          showTimeButton('15:30', 15),
-                          showTimeButton('16:00', 16),
-                        ],
-                      ),
+                      _isTimeBooking
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                showTimeButton('08:00', 1),
+                                showTimeButton('08:30', 2),
+                                showTimeButton('09:00', 3),
+                                showTimeButton('09:30', 4),
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                showTimeButtonIsBooking('08:00', 1),
+                                showTimeButtonIsBooking('08:30', 2),
+                                showTimeButtonIsBooking('09:00', 3),
+                                showTimeButtonIsBooking('09:30', 4),
+                              ],
+                            ),
+                      _isTimeBooking
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                showTimeButton('10:00', 5),
+                                showTimeButton('10:30', 6),
+                                showTimeButton('11:00', 7),
+                                showTimeButton('11:30', 8),
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                showTimeButtonIsBooking('10:00', 5),
+                                showTimeButtonIsBooking('10:30', 6),
+                                showTimeButtonIsBooking('11:00', 7),
+                                showTimeButtonIsBooking('11:30', 8),
+                              ],
+                            ),
+                      _isTimeBooking
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                showTimeButton('12:00', 9),
+                                showTimeButton('13:00', 10),
+                                showTimeButton('13:30', 11),
+                                showTimeButton('14:00', 12),
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                showTimeButtonIsBooking('12:00', 9),
+                                showTimeButtonIsBooking('13:00', 10),
+                                showTimeButtonIsBooking('13:30', 11),
+                                showTimeButtonIsBooking('14:00', 12),
+                              ],
+                            ),
+                      _isTimeBooking
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                showTimeButton('14:30', 13),
+                                showTimeButton('15:00', 14),
+                                showTimeButton('15:30', 15),
+                                showTimeButton('16:00', 16),
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                showTimeButtonIsBooking('14:30', 13),
+                                showTimeButtonIsBooking('15:00', 14),
+                                showTimeButtonIsBooking('15:30', 15),
+                                showTimeButtonIsBooking('16:00', 16),
+                              ],
+                            ),
                     ],
                   ),
                 ),
@@ -659,18 +729,8 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
               // Divider(),
               BlocListener<CreateBookingBloc, CreateBookingState>(
                 listener: (context, state) {
-                  // if(state.status ==
-                  //     CreateBookingStatus.loading){
-                  //       showDialog(
-                  //       context: context,
-                  //       builder: (BuildContext ctx) {
-                  //         return Cir
-                  //       });
-                  //     }
-                  // else
                   if (state.status ==
                       CreateBookingStatus.createBookingOrderSuccess) {
-                    // Navigator.pop(context);
                     showDialog(
                         context: context,
                         builder: (BuildContext ctx) {
@@ -689,6 +749,26 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                       MaterialPageRoute(
                                           builder: (context) => CustomerHome()),
                                     );
+                                  },
+                                  child: Text('Đồng ý'))
+                            ],
+                          );
+                        });
+                  } else {
+                     showDialog(
+                        context: context,
+                        builder: (BuildContext ctx) {
+                          return AlertDialog(
+                            title: Text(
+                              'Thông báo!',
+                              style: TextStyle(color: Colors.greenAccent),
+                            ),
+                            content: Text(state.message),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    // Close the dialog
+                                    Navigator.pop(context);
                                   },
                                   child: Text('Đồng ý'))
                             ],

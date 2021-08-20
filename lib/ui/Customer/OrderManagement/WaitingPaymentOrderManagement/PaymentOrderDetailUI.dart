@@ -6,10 +6,12 @@ import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/CustomerMainUI.dart';
+import 'package:car_service/ui/Customer/OrderManagement/WaitingPaymentOrderManagement/CouponUI.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_formatter/money_formatter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PaymentOrderDetailUi extends StatefulWidget {
   final String orderId;
@@ -24,10 +26,12 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
   bool _visibleByDenied = false;
   bool textButton = true;
   String reasonReject;
+  String paymentCompleted = 'Đã thanh toán';
 
   @override
   void initState() {
     super.initState();
+
     BlocProvider.of<CustomerOrderBloc>(context)
         .add(DoOrderDetailEvent(id: widget.orderId));
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
@@ -46,10 +50,14 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
         ),
         actions: [
           IconButton(
-          color: AppTheme.colors.white,
-          icon: Icon(Icons.airplane_ticket)
+            color: AppTheme.colors.white,
+            icon: Icon(Icons.card_giftcard),
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => CouponUI()));
+            },
           )
-          ],
+        ],
       ),
       body: Center(
         child: BlocBuilder<CustomerOrderBloc, CustomerOrderState>(
@@ -126,16 +134,12 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                               child: Text('Đã thanh toán',
                                   style: TextStyle(color: Colors.white)),
                               onPressed: () {
-                                if (textButton == false &&
-                                    reasonReject != null) {
-                                  //xác nhận hủy
-                                  setState(() {
-                                    // updateStatusBloc.add(
-                                    //     UpdateStatusConfirmAcceptedButtonPressed(
-                                    //         id: state.orderDetail[0].id,
-                                    //         status: cancelBooking));
-                                  });
-                                }
+                                setState(() {
+                                  updateStatusBloc.add(
+                                      UpdateStatusConfirmAcceptedButtonPressed(
+                                          id: state.orderDetail[0].id,
+                                          status: paymentCompleted));
+                                });
                               }),
                         ),
                       )
@@ -262,7 +266,7 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
             ),
             ListTile(
               title: Text('Khuyến mãi: '),
-              trailing: Text(_convertMoney(totalPrice.toDouble())),
+              trailing: Text('0 VND'),
             ),
             ListTile(
               title: Text('Tổng: '),
