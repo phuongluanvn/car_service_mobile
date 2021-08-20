@@ -6,7 +6,12 @@ abstract class TableCalendarEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class DoListTableCalendarEvent extends TableCalendarEvent {}
+class DoListTableCalendarEvent extends TableCalendarEvent {
+   final String username;
+  DoListTableCalendarEvent({this.username});
+  @override
+  List<Object> get props => [username];
+}
 
 class DoTableCalendarDetailEvent extends TableCalendarEvent {
   final String id;

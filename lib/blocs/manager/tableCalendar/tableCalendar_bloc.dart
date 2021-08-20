@@ -1,6 +1,7 @@
 import 'package:car_service/blocs/manager/tableCalendar/tableCalendar_events.dart';
 import 'package:car_service/blocs/manager/tableCalendar/tableCalendar_state.dart';
 import 'package:car_service/utils/model/BookingModel.dart';
+import 'package:car_service/utils/model/CrewModel.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:car_service/utils/repository/manager_repo.dart';
@@ -19,7 +20,7 @@ class TableCalendarBloc extends Bloc<TableCalendarEvent, TableCalendarState> {
     if (event is DoListTableCalendarEvent) {
       yield state.copyWith(status: TableCalendarStatus.loading);
       try {
-        List<OrderDetailModel> historyList = await _repo.getCalendarList();
+        List<CrewModel> historyList = await _repo.getCalendarList(event.username);
         if (historyList != null) {
           print(historyList);
           yield state.copyWith(

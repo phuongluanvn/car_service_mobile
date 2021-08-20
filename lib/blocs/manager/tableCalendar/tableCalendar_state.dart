@@ -1,4 +1,5 @@
 import 'package:car_service/utils/model/BookingModel.dart';
+import 'package:car_service/utils/model/CrewModel.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:car_service/utils/model/TestOrderModel.dart';
@@ -25,7 +26,7 @@ enum TableCalendarDetailStatus {
 class TableCalendarState extends Equatable {
   final TableCalendarStatus status;
   final TableCalendarDetailStatus detailStatus;
-  final List<OrderDetailModel> tableCalendarList;
+  final List<CrewModel> tableCalendarList;
   final List<OrderDetailModel> tableCalendarDetail;
   final String message;
   const TableCalendarState({
@@ -39,7 +40,7 @@ class TableCalendarState extends Equatable {
   TableCalendarState copyWith({
     TableCalendarStatus status,
     TableCalendarDetailStatus detailStatus,
-    List<OrderDetailModel> tableCalendarList,
+    List<CrewModel> tableCalendarList,
     List<OrderDetailModel> tableCalendarDetail,
     String message,
   }) =>

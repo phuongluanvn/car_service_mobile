@@ -36,6 +36,7 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
   Map<DateTime, List> _events;
   String _username = '';
   String username;
+  // final DateTime selectedDay = DateTime.now();
   // CalendarController _calendarController;
 
   AnimationController _animationController;
@@ -94,8 +95,8 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
 
   @override
   void initState() {
-    final DateTime selectedDay = DateTime.now();
     super.initState();
+
     _getStringFromSharedPref() async {
       final prefs = await SharedPreferences.getInstance();
       username = prefs.getString('Username');
@@ -106,15 +107,12 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
     }
 
     selectedEvents = {};
-    setState(() {
-      BlocProvider.of<TableCalendarBloc>(context)
-          .add(DoListTableCalendarEvent());
-    });
+    print(_username);
+    BlocProvider.of<TableCalendarBloc>(context)
+        .add(DoListTableCalendarEvent(username: username));
 
     // context.read<OrderHistoryBloc>().add(DoListOrderHistoryEvent());
   }
-
-  _getUsernameRef() async {}
 
   @override
   void dispose() {
@@ -192,7 +190,8 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
                       children: List.generate(state.tableCalendarList.length,
                           (index) {
                         DateTime bookingTime = DateFormat('yyyy-MM-ddTHH:mm:ss')
-                            .parse(state.tableCalendarList[index].bookingTime);
+                            .parse(state
+                                .tableCalendarList[index].order.bookingTime);
 
                         if (isSameDay(selectedDay, bookingTime)) {
                           return Card(
@@ -207,15 +206,16 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
                                       Icons.circle,
                                       color: Colors.yellow,
                                     ),
-                                    Text(state.tableCalendarList[index].status),
+                                    Text(state
+                                        .tableCalendarList[index].order.status),
                                   ]),
                               leading:
                                   Image.asset('lib/images/order_small.png'),
-                              title: Text(state.tableCalendarList[index].vehicle
-                                  .licensePlate),
+                              title: Text(state.tableCalendarList[index].order
+                                  .vehicle.licensePlate),
                               subtitle: Text(
-                                _convertDate(
-                                    state.tableCalendarList[index].bookingTime),
+                                _convertDate(state.tableCalendarList[index]
+                                    .order.bookingTime),
                               ),
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(

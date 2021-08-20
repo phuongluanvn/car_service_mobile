@@ -1,5 +1,6 @@
 import 'package:car_service/utils/model/AssignOrderModel.dart';
 import 'package:car_service/utils/model/BookingModel.dart';
+import 'package:car_service/utils/model/CrewModel.dart';
 import 'package:car_service/utils/model/CustomerModel.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/ServiceModel.dart';
@@ -577,35 +578,33 @@ class ManagerRepository {
     }
   }
 
-  Future<List<OrderDetailModel>> getCalendarList() async {
-    List<OrderDetailModel> finishList = [];
+  Future<List<CrewModel>> getCalendarList(String username) async {
+    List<CrewModel> listdata = [];
+    List convertData = [];
 
-    var resAccepted = await http.get(
-      Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Đang tiến hành"),
+    var res = await http.get(
+      Uri.parse('https://carservicesystem.azurewebsites.net/api/employees/' +
+          username +
+          '/tasks'),
       headers: headers,
     );
+    print(res.body);
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      convertData.add(data); //thêm [] để dùng .map bêndưới
 
-    if (resAccepted.statusCode == 200) {
-      var dataAccepted = json.decode(resAccepted.body);
-
-      if (dataAccepted != null) {
-        dataAccepted
-            .map((order) => finishList.add(OrderDetailModel.fromJson(order)))
-            .toList();
-
-        var newList = [
-          ...finishList,
-        ];
-        print('????');
-        print(newList);
-        return newList;
-      } else {
-        return null;
+      try {
+        if (data != null) {
+          convertData
+              .map((element) => listdata.add(CrewModel.fromJson(element)))
+              .toList();
+          return listdata;
+        } else {
+          print('No calendar data');
+        }
+      } catch (e) {
+        print(e.toString());
       }
-    } else {
-      print('No test order data');
-      return null;
     }
   }
 
