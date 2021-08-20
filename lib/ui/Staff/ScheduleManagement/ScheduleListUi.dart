@@ -16,6 +16,7 @@ import 'package:car_service/utils/repository/manager_repo.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -33,6 +34,8 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
   List _selectedEvents;
   int _counter = 0;
   Map<DateTime, List> _events;
+  String _username = '';
+  String username;
   // CalendarController _calendarController;
 
   AnimationController _animationController;
@@ -93,6 +96,15 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
   void initState() {
     final DateTime selectedDay = DateTime.now();
     super.initState();
+    _getStringFromSharedPref() async {
+      final prefs = await SharedPreferences.getInstance();
+      username = prefs.getString('Username');
+
+      setState(() {
+        _username = username;
+      });
+    }
+
     selectedEvents = {};
     setState(() {
       BlocProvider.of<TableCalendarBloc>(context)
@@ -101,6 +113,8 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
 
     // context.read<OrderHistoryBloc>().add(DoListOrderHistoryEvent());
   }
+
+  _getUsernameRef() async {}
 
   @override
   void dispose() {
@@ -177,10 +191,10 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
                     return Column(
                       children: List.generate(state.tableCalendarList.length,
                           (index) {
-                        DateTime checkinTime = DateFormat('yyyy-MM-ddTHH:mm:ss')
-                            .parse(state.tableCalendarList[index].checkinTime);
+                        DateTime bookingTime = DateFormat('yyyy-MM-ddTHH:mm:ss')
+                            .parse(state.tableCalendarList[index].bookingTime);
 
-                        if (isSameDay(selectedDay, checkinTime)) {
+                        if (isSameDay(selectedDay, bookingTime)) {
                           return Card(
                               // child: (state.assignList[0].status == 'Checkin')
                               //     ?
@@ -201,7 +215,7 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
                                   .licensePlate),
                               subtitle: Text(
                                 _convertDate(
-                                    state.tableCalendarList[index].checkinTime),
+                                    state.tableCalendarList[index].bookingTime),
                               ),
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(

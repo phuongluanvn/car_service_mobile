@@ -734,4 +734,21 @@ class ManagerRepository {
       }
     }
   }
+
+  getTaskList(String username) async {
+    var res = await http.get(
+      Uri.parse('https://carservicesystem.azurewebsites.net/api/employees/' +
+          username +
+          '/tasks'),
+      headers: headers,
+    );
+    if (res.statusCode != null) {
+      print(res.statusCode);
+      if (res.statusCode == 200) {
+        return res.body;
+      }
+    } else {
+      return res.body;
+    }
+  }
 }
