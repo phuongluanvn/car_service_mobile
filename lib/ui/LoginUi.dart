@@ -2,7 +2,11 @@ import 'package:car_service/blocs/login/auth_bloc.dart';
 import 'package:car_service/blocs/login/auth_events.dart';
 import 'package:car_service/blocs/login/auth_state.dart';
 import 'package:car_service/theme/app_theme.dart';
+import 'package:car_service/ui/Customer/CustomerMainUI.dart';
+import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/SignUpUi.dart';
+import 'package:car_service/ui/Staff/StaffHome.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -98,6 +102,7 @@ class _LoginUiState extends State<LoginUi> {
         height: MediaQuery.of(context).size.height * 0.055,
         child: ElevatedButton(
           onPressed: () {
+            FocusScope.of(context).unfocus();
             authBloc.add(
                 LoginButtonPressed(email: email.text, password: password.text));
           },
@@ -182,47 +187,67 @@ class _LoginUiState extends State<LoginUi> {
           });
     }
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state.status == LoginStatus.managerSuccess) {
-            Navigator.pushNamed(context, '/manager');
-          } else if (state.status == LoginStatus.staffSuccess) {
-            Navigator.pushNamed(context, '/staff');
-          } else if (state.status == LoginStatus.customerSuccess) {
-            Navigator.pushNamed(context, '/customer');
-          } else if (state.status == LoginStatus.error) {
-            return SizedBox();
-          }
-        },
-        child: ListView(
-          shrinkWrap: true,
-          padding: EdgeInsets.only(left: 24, right: 24, top: 50),
-          children: <Widget>[
-            logo,
-            SizedBox(
-              height: 20,
-            ),
-            msg,
-            SizedBox(
-              height: 5,
-            ),
-            username,
-            SizedBox(
-              height: 20,
-            ),
-            pass,
-            SizedBox(
-              height: 20,
-            ),
-            loginButton,
-            // SizedBox(
-            //   height: 20,
-            // ),
-            signUpLink,
-            forgetPass,
-          ],
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state.status == LoginStatus.managerSuccess) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => ManagerMain(),
+                  ),
+                  (route) => false);
+            } else if (state.status == LoginStatus.staffSuccess) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => StaffHomeUi(),
+                  ),
+                  (route) => false);
+            } else if (state.status == LoginStatus.customerSuccess) {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => CustomerHome(),
+                  ),
+                  (route) => false);
+            } else if (state.status == LoginStatus.error) {
+              return SizedBox();
+            }
+          },
+          child: ListView(
+            shrinkWrap: true,
+            padding: EdgeInsets.only(left: 24, right: 24, top: 50),
+            children: <Widget>[
+              logo,
+              SizedBox(
+                height: 20,
+              ),
+              msg,
+              SizedBox(
+                height: 5,
+              ),
+              username,
+              SizedBox(
+                height: 20,
+              ),
+              pass,
+              SizedBox(
+                height: 20,
+              ),
+              loginButton,
+              // SizedBox(
+              //   height: 20,
+              // ),
+              signUpLink,
+              forgetPass,
+            ],
+          ),
         ),
       ),
     );

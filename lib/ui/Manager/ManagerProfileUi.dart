@@ -2,6 +2,7 @@ import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/LoginUi.dart';
 import 'package:car_service/ui/Manager/ManagerAccountUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/OrderHistory/OrderHistoryUi.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -208,8 +209,12 @@ class _ManagerProfileState extends State<ManagerProfile> {
                     });
 
                     // Close the dialog
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LoginUi()));
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => LoginUi(),
+                        ),
+                        (route) => false);
                   },
                   child: Text('Có')),
               TextButton(

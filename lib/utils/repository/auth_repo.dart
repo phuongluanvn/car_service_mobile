@@ -29,7 +29,7 @@ class AuthRepository {
       if (res.statusCode == 200) {
         return res.body;
       } else if (res.statusCode == 404) {
-        return res;
+        return res.body;
       }
     } else {
       return res.body;

@@ -79,153 +79,129 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                     padding: const EdgeInsets.all(10.0),
                     // child: SingleChildScrollView(
                     child: Center(
-                      child: FittedBox(
-                        child: Row(
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 1,
-                              height: MediaQuery.of(context).size.height * 0.55,
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: DataTable(
-                                        columnSpacing: 70.0,
-                                        columns: [
-                                          DataColumn(
-                                              label: Text(
-                                            'Tên dịch vụ',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          )),
-                                          DataColumn(
-                                              label: Text(
-                                            'Số lượng',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          )),
-                                          DataColumn(
-                                              label: Text(
-                                            'Giá',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          )),
-                                        ],
-                                        rows: List.generate(
-                                            state.processDetail[0].orderDetails
-                                                .length, (index) {
-                                          final y = state.processDetail[0]
-                                              .orderDetails[index].name;
-
-                                          final x = state.processDetail[0]
-                                              .orderDetails[index].quantity;
-                                          final z =
-                                              state.processDetail[0].note ==
-                                                      null
-                                                  ? state.processDetail[0]
-                                                      .orderDetails[index].price
-                                                  : 0;
-
-                                          return DataRow(cells: [
-                                            DataCell(Container(
-                                                width: 75, child: Text(y))),
-                                            DataCell(Container(
-                                                child: Text(x.toString()))),
-                                            DataCell(Container(
-                                                child: Text(z.toString()))),
-                                          ]);
-                                        }),
-                                      ),
-                                    ),
-                                  ),
-                                  const Divider(
-                                    color: Colors.black87,
-                                    height: 20,
-                                    thickness: 1,
-                                    indent: 10,
-                                    endIndent: 10,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10, right: 40),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Tổng cộng:',
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          state.processDetail[0].note == null
-                                              ? state.processDetail[0].package
-                                                  .price
-                                                  .toString()
-                                              : '',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  BlocListener<UpdateStatusOrderBloc,
-                                      UpdateStatusOrderState>(
-                                    // ignore: missing_return
-                                    listener: (builder, statusState) {
-                                      if (statusState.status ==
-                                          UpdateStatus
-                                              .updateStatusStartSuccess) {
-                                        Navigator.pushNamed(
-                                            context, '/manager');
-                                      }
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.45,
-                                          child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                primary: AppTheme.colors.blue),
-                                            child: Text('Hoàn tất dịch vụ',
-                                                style: TextStyle(
-                                                    color: Colors.white)),
-                                            onPressed: () {
-                                              updateStatusBloc.add(
-                                                  UpdateStatusButtonPressed(
-                                                      id: state
-                                                          .processDetail[0].id,
-                                                      status:
-                                                          processingStatus));
-                                              Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                      builder: (_) =>
-                                                          ManagerMain()));
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: DataTable(
+                                columnSpacing: 70.0,
+                                columns: [
+                                  DataColumn(
+                                      label: Text(
+                                    'Tên dịch vụ',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                                  DataColumn(
+                                      label: Text(
+                                    'Số lượng',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                                  DataColumn(
+                                      label: Text(
+                                    'Giá',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  )),
                                 ],
+                                rows: List.generate(
+                                    state.processDetail[0].orderDetails.length,
+                                    (index) {
+                                  final y = state.processDetail[0]
+                                      .orderDetails[index].name;
+
+                                  final x = state.processDetail[0]
+                                      .orderDetails[index].quantity;
+                                  final z = state.processDetail[0].note == null
+                                      ? state.processDetail[0]
+                                          .orderDetails[index].price
+                                      : 0;
+
+                                  return DataRow(cells: [
+                                    DataCell(
+                                        Container(width: 75, child: Text(y))),
+                                    DataCell(
+                                        Container(child: Text(x.toString()))),
+                                    DataCell(
+                                        Container(child: Text(z.toString()))),
+                                  ]);
+                                }),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                          const Divider(
+                            color: Colors.black87,
+                            height: 20,
+                            thickness: 1,
+                            indent: 10,
+                            endIndent: 10,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 40),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Tổng cộng:',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  state.processDetail[0].note == null
+                                      ? state.processDetail[0].package.price
+                                          .toString()
+                                      : '',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          BlocListener<UpdateStatusOrderBloc,
+                              UpdateStatusOrderState>(
+                            // ignore: missing_return
+                            listener: (builder, statusState) {
+                              if (statusState.status ==
+                                  UpdateStatus.updateStatusStartSuccess) {
+                                Navigator.pushNamed(context, '/manager');
+                              }
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.45,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        primary: AppTheme.colors.blue),
+                                    child: Text('Hoàn tất dịch vụ',
+                                        style: TextStyle(color: Colors.white)),
+                                    onPressed: () {
+                                      updateStatusBloc.add(
+                                          UpdateStatusButtonPressed(
+                                              id: state.processDetail[0].id,
+                                              status: processingStatus));
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (_) => ManagerMain()));
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
 

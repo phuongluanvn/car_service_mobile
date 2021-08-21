@@ -25,22 +25,30 @@ class _AssignOrderUiState extends State<AssignOrderUi> {
     super.dispose();
   }
 
+  Future<void> _getData() async {
+    setState(() {
+      BlocProvider.of<AssignOrderBloc>(context).add(DoListAssignOrderEvent());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.colors.lightblue,
-      body: Center(
+      body: RefreshIndicator(
+        onRefresh: _getData,
         child: BlocBuilder<AssignOrderBloc, AssignOrderState>(
           // ignore: missing_return
           builder: (context, state) {
             if (state.status == AssignStatus.init) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             } else if (state.status == AssignStatus.loading) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             } else if (state.status == AssignStatus.assignSuccess) {
               if (state.assignList != null && state.assignList.isNotEmpty) {
-                return
-                 ListView.builder(
+                return ListView.builder(
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
                   itemCount: state.assignList.length,
                   shrinkWrap: true,
                   // ignore: missing_return
@@ -83,8 +91,25 @@ class _AssignOrderUiState extends State<AssignOrderUi> {
                   },
                 );
               } else
-                return Center(
-                  child: Text('Hiện tại không có đơn'),
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics()),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height *
+                                      0.35),
+                              child: Text('Hiện tại không có đơn')),
+                        ],
+                      ),
+                    ),
+                  ],
                 );
             } else if (state.status == AssignStatus.error) {
               return ErrorWidget(state.message.toString());

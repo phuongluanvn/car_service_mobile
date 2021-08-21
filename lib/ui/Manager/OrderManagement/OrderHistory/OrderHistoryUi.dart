@@ -6,6 +6,7 @@ import 'package:car_service/blocs/manager/orderHistory/orderHistory_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/OrderHistory/OrderHistoryDetailUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingDetailUi.dart';
+import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +21,7 @@ class OrderHistoryUi extends StatefulWidget {
 }
 
 class _OrderHistoryUiState extends State<OrderHistoryUi> {
+  List dataModel = [];
   @override
   void initState() {
     super.initState();
@@ -32,6 +34,12 @@ class _OrderHistoryUiState extends State<OrderHistoryUi> {
     super.dispose();
   }
 
+  Future<void> _getData() async {
+    setState(() {
+      BlocProvider.of<OrderHistoryBloc>(context).add(DoListOrderHistoryEvent());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,19 +48,21 @@ class _OrderHistoryUiState extends State<OrderHistoryUi> {
         title: Text('Lịch sử đơn hàng'),
       ),
       backgroundColor: AppTheme.colors.lightblue,
-      body: Center(
+      body: RefreshIndicator(
+        onRefresh: _getData,
         child: BlocBuilder<OrderHistoryBloc, OrderHistoryState>(
           // ignore: missing_return
           builder: (context, state) {
             if (state.status == OrderHistoryStatus.init) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             } else if (state.status == OrderHistoryStatus.loading) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             } else if (state.status == OrderHistoryStatus.historySuccess) {
-              if (state.historyList != null && state.historyList.isNotEmpty)
+              if (state.historyList != null && state.historyList.isNotEmpty) {
                 return ListView.builder(
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
                   itemCount: state.historyList.length,
-                  shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return Card(
                         child: Column(children: [
@@ -118,7 +128,7 @@ class _OrderHistoryUiState extends State<OrderHistoryUi> {
                     // );
                   },
                 );
-              else
+              } else
                 return Center(
                   child: Text('Hiện tại không có đơn'),
                 );

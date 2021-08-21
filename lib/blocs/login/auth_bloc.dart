@@ -36,7 +36,7 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
         var data = json.decode(res);
         // print(data);
 
-        if (data != null) {
+        if (data != null && data['jwt'] != null) {
           print('đaa');
           if (data['role'] == 'manager') {
             var dataProfile = data['profile'];
@@ -77,12 +77,15 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
             yield state.copyWith(status: LoginStatus.customerSuccess);
           } else {
             yield state.copyWith(
-                status: LoginStatus.error, message: res.body.toString());
+                status: LoginStatus.error, message: res.toString());
           }
+        } else {
+          yield state.copyWith(
+              status: LoginStatus.error, message: 'Login Failed!!');
         }
       } catch (e) {
         yield state.copyWith(
-            status: LoginStatus.error, message: res.body ? res.body.toString() : e.toString());
+            status: LoginStatus.error, message: 'Login Failed!!');
       }
     }
   }
