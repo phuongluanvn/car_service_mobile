@@ -117,23 +117,6 @@ class _CustomerProfileState extends State<CustomerProfile> {
                 child: ElevatedButton(
                   style:
                       ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
-                  onPressed: () {},
-                  child: Row(
-                    children: [
-                      Expanded(child: Text('Đánh giá')),
-                      Icon(Icons.arrow_forward_ios),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              child: Container(
-                height: 50,
-                child: ElevatedButton(
-                  style:
-                      ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
                   onPressed: _isShown == true ? () => _logout(context) : null,
                   child: Row(
                     children: [

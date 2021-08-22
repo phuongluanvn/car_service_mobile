@@ -741,7 +741,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                               'Thông báo!',
                               style: TextStyle(color: Colors.greenAccent),
                             ),
-                            content: Text('Đặt lịch dịch vụ thành công!'),
+                            content: Text(state.message),
                             actions: [
                               TextButton(
                                   onPressed: () {

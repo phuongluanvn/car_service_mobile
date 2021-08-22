@@ -3,40 +3,54 @@ import 'package:equatable/equatable.dart';
 
 class OrderDetailModel extends Equatable {
   String id;
-  String note;
-  String status;
-  String imageUrl;
   String createdTime;
   String bookingTime;
   String checkinTime;
+  String completeTime;
+  String cancelTime;
+  String note;
+  String noteCustomer;
+  String noteManager;
+  String status;
+  String imageUrl;
   Customer customer;
   Vehicle vehicle;
   Package package;
   Crew crew;
   List<OrderDetails> orderDetails;
+  List<Feedbacks> feedbacks;
 
   OrderDetailModel(
       {this.id,
-      this.note,
-      this.status,
-      this.imageUrl,
       this.createdTime,
       this.bookingTime,
       this.checkinTime,
+      this.completeTime,
+      this.cancelTime,
+      this.note,
+      this.noteCustomer,
+      this.noteManager,
+      this.status,
+      this.imageUrl,
       this.customer,
       this.vehicle,
       this.package,
       this.crew,
-      this.orderDetails});
+      this.orderDetails,
+      this.feedbacks});
 
   OrderDetailModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    note = json['note'];
-    status = json['status'];
-    imageUrl = json['imageUrl'];
     createdTime = json['createdTime'];
     bookingTime = json['bookingTime'];
     checkinTime = json['checkinTime'];
+    completeTime = json['completeTime'];
+    cancelTime = json['cancelTime'];
+    note = json['note'];
+    noteCustomer = json['noteCustomer'];
+    noteManager = json['noteManager'];
+    status = json['status'];
+    imageUrl = json['imageUrl'];
     customer = json['customer'] != null
         ? new Customer.fromJson(json['customer'])
         : null;
@@ -51,17 +65,27 @@ class OrderDetailModel extends Equatable {
         orderDetails.add(new OrderDetails.fromJson(v));
       });
     }
+    if (json['feedbacks'] != null) {
+      feedbacks = new List<Feedbacks>();
+      json['feedbacks'].forEach((v) {
+        feedbacks.add(new Feedbacks.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['note'] = this.note;
-    data['status'] = this.status;
-    data['imageUrl'] = this.imageUrl;
     data['createdTime'] = this.createdTime;
     data['bookingTime'] = this.bookingTime;
     data['checkinTime'] = this.checkinTime;
+    data['completeTime'] = this.completeTime;
+    data['cancelTime'] = this.cancelTime;
+    data['note'] = this.note;
+    data['noteCustomer'] = this.noteCustomer;
+    data['noteManager'] = this.noteManager;
+    data['status'] = this.status;
+    data['imageUrl'] = this.imageUrl;
     if (this.customer != null) {
       data['customer'] = this.customer.toJson();
     }
@@ -76,6 +100,9 @@ class OrderDetailModel extends Equatable {
     }
     if (this.orderDetails != null) {
       data['orderDetails'] = this.orderDetails.map((v) => v.toJson()).toList();
+    }
+    if (this.feedbacks != null) {
+      data['feedbacks'] = this.feedbacks.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -92,6 +119,8 @@ class Customer extends Equatable {
   String phoneNumber;
   String address;
   int accumulatedPoint;
+  bool isBanned;
+  Vehicle vehicles;
 
   Customer(
       {this.username,
@@ -99,7 +128,9 @@ class Customer extends Equatable {
       this.fullname,
       this.phoneNumber,
       this.address,
-      this.accumulatedPoint});
+      this.accumulatedPoint,
+      this.isBanned,
+      this.vehicles});
 
   Customer.fromJson(Map<String, dynamic> json) {
     username = json['username'];
@@ -108,6 +139,8 @@ class Customer extends Equatable {
     phoneNumber = json['phoneNumber'];
     address = json['address'];
     accumulatedPoint = json['accumulatedPoint'];
+    isBanned = json['isBanned'];
+    vehicles = json['vehicles'];
   }
 
   Map<String, dynamic> toJson() {
@@ -118,6 +151,8 @@ class Customer extends Equatable {
     data['phoneNumber'] = this.phoneNumber;
     data['address'] = this.address;
     data['accumulatedPoint'] = this.accumulatedPoint;
+    data['isBanned'] = this.isBanned;
+    data['vehicles'] = this.vehicles;
     return data;
   }
 
@@ -127,15 +162,12 @@ class Customer extends Equatable {
 }
 
 class Vehicle extends Equatable {
-  @override
-  // TODO: implement props
-  List<Object> get props => [];
   String id;
   String manufacturer;
   String model;
   String licensePlate;
-  Null imageUrl;
-  Null dateOfLastMaintenance;
+  String imageUrl;
+  String dateOfLastMaintenance;
   int millageCount;
 
   Vehicle(
@@ -168,6 +200,10 @@ class Vehicle extends Equatable {
     data['millageCount'] = this.millageCount;
     return data;
   }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
 }
 
 class Package extends Equatable {
@@ -205,7 +241,7 @@ class Package extends Equatable {
 class Crew extends Equatable {
   String id;
   String timeAssigned;
-  Null timeFinished;
+  String timeFinished;
   List<StaffModel> members;
 
   Crew({this.id, this.timeAssigned, this.timeFinished, this.members});
@@ -284,7 +320,7 @@ class Members extends Equatable {
 
   @override
   // TODO: implement props
-  List<Object> get props => [this.fullname];
+  List<Object> get props => [];
 }
 
 class OrderDetails extends Equatable {
@@ -332,6 +368,35 @@ class OrderDetails extends Equatable {
     data['isIncurred'] = this.isIncurred;
     data['isFinished'] = this.isFinished;
     data['timeFinished'] = this.timeFinished;
+    return data;
+  }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+}
+
+class Feedbacks extends Equatable {
+  String id;
+  String orderId;
+  int rating;
+  String description;
+
+  Feedbacks({this.id, this.orderId, this.rating, this.description});
+
+  Feedbacks.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    orderId = json['orderId'];
+    rating = json['rating'];
+    description = json['description'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['orderId'] = this.orderId;
+    data['rating'] = this.rating;
+    data['description'] = this.description;
     return data;
   }
 
