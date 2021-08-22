@@ -57,25 +57,26 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
         listener: (context, stateFB) {
           // TODO: implement listener
           if (stateFB.status == FeedbackOrderStatus.successFeedback) {
-            showDialog(context: context, builder: (context) {
-              return AlertDialog(
-            title: Text(
-              'Thông báo!',
-              style: TextStyle(color: Colors.greenAccent),
-            ),
-            content: Text('Cảm ơn bạn đã đánh giá!'),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    // Close the dialog
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  },
-                  child: Text('Đồng ý'))
-            ],
-          );
-            });
-            
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text(
+                      'Thông báo!',
+                      style: TextStyle(color: Colors.greenAccent),
+                    ),
+                    content: Text('Cảm ơn bạn đã đánh giá!'),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            // Close the dialog
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                          child: Text('Đồng ý'))
+                    ],
+                  );
+                });
           }
         },
         child: Center(
@@ -118,60 +119,42 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
                             state.orderDetail[0].vehicle.manufacturer,
                             state.orderDetail[0].vehicle.model,
                             state.orderDetail[0].vehicle.licensePlate),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Visibility(
-                            visible: _visibleByDenied,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 10),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: TextField(
-                                onChanged: (noteValue) {
-                                  setState(() {
-                                    reasonReject = noteValue;
-                                  });
-                                },
-                                maxLines: 3,
-                                decoration: InputDecoration.collapsed(
-                                    hintText: 'Lý do từ chối'),
-                              ),
-                            ),
-                          ),
-                        ),
-                        BlocListener<UpdateStatusOrderBloc,
-                            UpdateStatusOrderState>(
-                          listener: (builder, statusState) {
-                            if (statusState.status ==
-                                UpdateStatus
-                                    .updateStatusConfirmAcceptedSuccess) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CustomerHome()),
-                              );
-                            }
-                          },
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.45,
-                            child: ElevatedButton(
-                                style: _isShowButtonFB
-                                    ? ElevatedButton.styleFrom(
-                                        primary: AppTheme.colors.blue)
-                                    : ElevatedButton.styleFrom(
-                                        primary: Colors.grey),
-                                child: Text('Đánh giá đơn',
-                                    style: TextStyle(color: Colors.white)),
-                                onPressed: () {
-                                  if (_isShowButtonFB) {
-                                    _showFBDialog();
+                        state.orderDetail[0].feedbacks != null
+                            ? _showFeedback(
+                                state.orderDetail[0].feedbacks[0].rating,
+                                state.orderDetail[0].feedbacks[0].description)
+                            : BlocListener<UpdateStatusOrderBloc,
+                                UpdateStatusOrderState>(
+                                listener: (builder, statusState) {
+                                  if (statusState.status ==
+                                      UpdateStatus
+                                          .updateStatusConfirmAcceptedSuccess) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => CustomerHome()),
+                                    );
                                   }
-                                }),
-                          ),
-                        )
+                                },
+                                child: SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.45,
+                                  child: ElevatedButton(
+                                      style: _isShowButtonFB
+                                          ? ElevatedButton.styleFrom(
+                                              primary: AppTheme.colors.blue)
+                                          : ElevatedButton.styleFrom(
+                                              primary: Colors.grey),
+                                      child: Text('Đánh giá đơn',
+                                          style:
+                                              TextStyle(color: Colors.white)),
+                                      onPressed: () {
+                                        if (_isShowButtonFB) {
+                                          _showFBDialog();
+                                        }
+                                      }),
+                                ),
+                              )
                       ],
                     ),
                   );
@@ -184,6 +167,32 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
             },
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _showFeedback(int rating, String dess) {
+    return Card(
+      child: Column(
+        children: [
+          Text('Đánh giá của khách hàng'),
+          ListTile(
+            title: Text('Số sao'),
+            trailing: IconTheme(
+              data: IconThemeData(color: Colors.yellow, size: 30),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(5, (index) {
+                  return index < rating ? Icon(Icons.star) : Icon(Icons.star_border);
+                }),
+              ),
+            ),
+          ),
+          ListTile(
+            title: Text('Nội dung'),
+            trailing: Text(dess),
+          ),
+        ],
       ),
     );
   }

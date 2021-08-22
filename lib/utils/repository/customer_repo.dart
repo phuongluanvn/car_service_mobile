@@ -37,14 +37,14 @@ class CustomerRepository {
     if (res.statusCode != null) {
       print(res.statusCode);
       if (res.statusCode == 200) {
-        return res.body;
+        return res;
       } else if (res.statusCode == 404) {
-        return res.body;
+        return res;
       } else if (res.statusCode == 400) {
-        return res.body;
+        return res;
       }
     } else {
-      return res.body;
+      return res;
     }
   }
 
