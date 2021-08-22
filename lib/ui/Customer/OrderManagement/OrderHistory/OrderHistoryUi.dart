@@ -7,7 +7,6 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 class OrderHistoryUi extends StatefulWidget {
   @override
   _OrderHistoryUiState createState() => _OrderHistoryUiState();
@@ -48,6 +47,19 @@ class _OrderHistoryUiState extends State<OrderHistoryUi> {
                   itemCount: state.historyList.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
+                    Color color;
+                    var status = state.historyList[index].status;
+                    switch (status) {
+                      case 'Hoàn thành':
+                        color = Colors.green[600];
+                        break;
+                      case 'Hủy đơn':
+                        color = Colors.red;
+                        break;
+                      case 'Hủy đặt lịch':
+                        color = Colors.red[400];
+                        break;
+                    }
                     return Card(
                         child: Column(children: [
                       ListTile(
@@ -56,56 +68,27 @@ class _OrderHistoryUiState extends State<OrderHistoryUi> {
                             children: <Widget>[
                               Icon(
                                 Icons.circle,
-                                color: Colors.red,
+                                color: color,
                               ),
-                              Text(state.historyList[index].status),
+                              Text(
+                                state.historyList[index].status,
+                                style: TextStyle(color: color),
+                              ),
                             ]),
-                        leading: FlutterLogo(),
-                        title: Text(state.historyList[index].customer.fullname),
-                        subtitle: Text(state.historyList[index].bookingTime),
+                        leading: Image.asset('lib/images/order_small.png'),
+                        title:
+                            Text(state.historyList[index].vehicle.licensePlate),
+                        subtitle: Text(
+                            _convertDate(state.historyList[index].bookingTime),
+                            style: TextStyle(fontWeight: FontWeight.bold,
+                            color: Colors.black)),
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (_) => OrderHistoryDetailUi(
                                   orderId: state.historyList[index].id)));
                         },
                       ),
-                    ])
-                        // : Column(children: [
-                        //     ListTile(
-                        //       trailing: Column(
-                        //           mainAxisSize: MainAxisSize.min,
-                        //           children: <Widget>[
-                        //             Icon(
-                        //               Icons.circle,
-                        //               color: Colors.green,
-                        //             ),
-                        //             Text('Đợi xác nhận'),
-                        //           ]),
-                        //       leading: FlutterLogo(),
-                        //       title: Text(
-                        //           state.orderLists[index].taiKhoan),
-                        //       subtitle:
-                        //           Text(state.orderLists[index].hoTen),
-                        //       onTap: () {
-                        //         Navigator.of(context).push(
-                        //             MaterialPageRoute(
-                        //                 builder: (_) =>
-                        //                     CustomerCarDetailUi(
-                        //                         emailId: state
-                        //                             .orderLists[index]
-                        //                             .taiKhoan)));
-                        //       },
-                        //     ),
-                        //   ]),
-                        );
-                    // ListTile(
-                    //   title: Text(state.bookingList[index].customer.fullname),
-                    //   onTap: () {
-                    //     Navigator.of(context).push(MaterialPageRoute(
-                    //         builder: (_) => VerifyBookingDetailUi(
-                    //             emailId: state.bookingList[index].id)));
-                    //   },
-                    // );
+                    ]));
                   },
                 );
               else
@@ -121,7 +104,7 @@ class _OrderHistoryUiState extends State<OrderHistoryUi> {
     );
   }
 
-    _convertDate(dateInput) {
+  _convertDate(dateInput) {
     return formatDate(DateTime.parse(dateInput),
         [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
   }

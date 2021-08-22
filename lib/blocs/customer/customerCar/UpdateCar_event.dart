@@ -10,14 +10,11 @@ class UpdateCarButtonPressed extends UpdateCarEvent {
   final String manufacturer;
   final String model;
   final String licensePlateNumber;
-  final DateTime dateOfLastMaintenance;
-  final int millageCount;
 
   UpdateCarButtonPressed(
       {this.carId,
       this.manufacturer,
       this.model,
       this.licensePlateNumber,
-      this.dateOfLastMaintenance,
-      this.millageCount});
+     });
 }

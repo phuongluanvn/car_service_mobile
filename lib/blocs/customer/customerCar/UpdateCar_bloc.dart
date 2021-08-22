@@ -19,9 +19,8 @@ class UpdateCarBloc extends Bloc<UpdateCarEvent, UpdateCarState> {
             event.carId,
             event.manufacturer,
             event.model,
-            event.licensePlateNumber,
-            event.dateOfLastMaintenance,
-            event.millageCount);
+            event.licensePlateNumber
+            );
         if (data != null) {
           yield state.copyWith(
               message: data, updateStatus: UpdateCarStatus.updateDetailSuccess);

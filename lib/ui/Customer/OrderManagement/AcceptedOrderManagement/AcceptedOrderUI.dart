@@ -2,8 +2,6 @@ import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_event.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dart';
 import 'package:car_service/theme/app_theme.dart';
-import 'package:car_service/ui/Customer/OrderManagement/ConfirmOrderManagement/ConfirmOrderDetailUI.dart';
-import 'package:car_service/ui/Customer/OrderManagement/CreateOrderManagement/CreateBookingOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderDetailUI.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
@@ -53,11 +51,6 @@ class _AcceptedOrderUIState extends State<AcceptedOrderUI> {
                     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                     child: Column(
                       children: [
-                        // Text(
-                        //   'Đơn cần phản hồi',
-                        //   style: TextStyle(
-                        //       fontSize: 16, fontWeight: FontWeight.w600),
-                        // ),
                         Expanded(
                           child: ListView.builder(
                             itemCount: state.orderAcceptedLists.length,

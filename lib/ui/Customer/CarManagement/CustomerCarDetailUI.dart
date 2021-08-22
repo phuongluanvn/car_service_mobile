@@ -7,31 +7,47 @@ import 'package:car_service/blocs/customer/customerCar/DelCar_state.dart';
 import 'package:car_service/blocs/customer/customerCar/UpdateCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/UpdateCar_event.dart';
 import 'package:car_service/blocs/customer/customerCar/UpdateCar_state.dart';
+import 'package:car_service/blocs/customer/manufacturers/Manufacturer_bloc.dart';
+import 'package:car_service/blocs/customer/manufacturers/Manufacturer_event.dart';
+import 'package:car_service/blocs/customer/manufacturers/Manufacturer_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 // import 'package:car_service/ui/Customer/CarManagement/EditInforOfCarUI.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class CustomerCarDetailUi extends StatefulWidget {
   final String id;
-  CustomerCarDetailUi({@required this.id});
+  final String manuName;
+  final String modelName;
+
+  CustomerCarDetailUi({@required this.id, this.manuName, this.modelName});
 
   @override
   _CustomerCarDetailUiState createState() => _CustomerCarDetailUiState();
 }
 
 class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
-  String _manufacturer, _model, _licensePlate;
-  DateTime _dateOfLastMaintenance;
-  String _millageCount;
+  final TextEditingController _typeAheadController = TextEditingController();
+  TextEditingController _modelName = TextEditingController();
+
+  String _manufacturer, _licensePlate;
   UpdateCarBloc _updateCarButton;
+  String manuName;
+  bool _isChangeValueModelName = false;
+  bool _isChangeLicensePlate = false;
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      _modelName.text = widget.modelName;
+    });
     _updateCarButton = BlocProvider.of<UpdateCarBloc>(context);
     BlocProvider.of<CustomerCarBloc>(context)
         .add(DoCarDetailEvent(vehicleId: widget.id));
+    BlocProvider.of<ManufacturerBloc>(context)
+        .add(DoModelListOfManufacturerEvent(manuName: widget.manuName));
   }
 
   Image image;
@@ -51,6 +67,9 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                   onPressed: () {
                     // Close the dialog
                     Navigator.of(context).pop();
+                    BlocProvider.of<ManufacturerBloc>(context).add(
+                        DoModelListOfManufacturerEvent(
+                            manuName: widget.manuName));
                   },
                   child: Text('Đồng ý'))
             ],
@@ -118,15 +137,12 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
           backgroundColor: AppTheme.colors.deepBlue,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
           actions: [
-            // IconButton(
-            //     onPressed: () {
-            //       Navigator.of(context).push(
-            //           MaterialPageRoute(builder: (_) => EditInforOfCarUi()));
-            //     },
-            //     icon: Icon(Icons.edit)),
+            IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
             IconButton(
                 onPressed: () {
                   _showDeleteDialog();
@@ -162,26 +178,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
           child: BlocListener<UpdateCarBloc, UpdateCarState>(
             listener: (context, state) {
               if (state.updateStatus == UpdateCarStatus.updateDetailSuccess) {
-                return showDialog(
-                    context: context,
-                    builder: (BuildContext ctx) {
-                      return AlertDialog(
-                        title: Text(
-                          'Thông báo!',
-                          style: TextStyle(color: Colors.greenAccent),
-                        ),
-                        content: Text('Cập nhật thông tin xe thành công!'),
-                        actions: [
-                          TextButton(
-                              onPressed: () {
-                                // Close the dialog
-                                // Navigator.of(context).pop();
-                                // Navigator.pushNamed(context, '/customer');
-                              },
-                              child: Text('Đồng ý'))
-                        ],
-                      );
-                    });
+                return _showSuccessUpdateDialog();
               }
             },
             child: SingleChildScrollView(
@@ -208,9 +205,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                                 'https://picsum.photos/400/200?image=1071');
                         }
                         var manufacturer = TextFormField(
-                          onChanged: (newManu) {
-                            _manufacturer = newManu;
-                          },
+                          readOnly: true,
                           initialValue: state.vehicleDetail[0].manufacturer,
                           keyboardType: TextInputType.text,
                           autofocus: false,
@@ -228,9 +223,6 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                           ),
                         );
                         var modelOfManu = TextFormField(
-                          onChanged: (newModel) {
-                            _model = newModel;
-                          },
                           initialValue: state.vehicleDetail[0].model,
                           keyboardType: TextInputType.text,
                           autofocus: false,
@@ -248,8 +240,11 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                           ),
                         );
                         var licenNumber = TextFormField(
-                          onChanged: (newPlace) {
-                            _licensePlate = newPlace;
+                          onChanged: (newValue) {
+                            _licensePlate = newValue;
+                            setState(() {
+                              _isChangeLicensePlate = true;
+                            });
                           },
                           initialValue: state.vehicleDetail[0].licensePlate,
                           keyboardType: TextInputType.text,
@@ -268,9 +263,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                           ),
                         );
                         var repairTime = TextFormField(
-                          onChanged: (newManu) {
-                            _dateOfLastMaintenance = DateTime.parse(newManu);
-                          },
+                          readOnly: true,
                           initialValue:
                               state.vehicleDetail[0].dateOfLastMaintenance,
                           keyboardType: TextInputType.text,
@@ -289,9 +282,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                           ),
                         );
                         var kilometer = TextFormField(
-                          onChanged: (km) {
-                            _millageCount = km;
-                          },
+                          readOnly: true,
                           initialValue:
                               state.vehicleDetail[0].millageCount.toString(),
                           keyboardType: TextInputType.text,
@@ -316,20 +307,20 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                               style: TextStyle(color: Colors.white)),
                           onPressed: () {
                             print(widget.id);
-                            print(_manufacturer);
-                            print(_model);
-                            print(_licensePlate);
-                            print(_dateOfLastMaintenance);
-                            print(_millageCount);
+                            print(widget.manuName);
+                            print(this._modelName.text);
+                            print(_isChangeLicensePlate
+                                ? _licensePlate
+                                : state.vehicleDetail[0].licensePlate);
 
-                            // _updateCarButton.add(UpdateCarButtonPressed(
-                            //   carId: widget.id,
-                            //   manufacturer: _manufacturer,
-                            //   model: _model,
-                            //   licensePlateNumber: _licensePlate,
-                            //   dateOfLastMaintenance: _dateOfLastMaintenance,
-                            //   millageCount: _millageCount
-                            // ));
+                            _updateCarButton.add(UpdateCarButtonPressed(
+                              carId: widget.id,
+                              manufacturer: widget.manuName,
+                              model: this._modelName.text,
+                              licensePlateNumber: _isChangeLicensePlate
+                                  ? _licensePlate
+                                  : state.vehicleDetail[0].licensePlate,
+                            ));
                           },
                         );
                         return SingleChildScrollView(
@@ -341,7 +332,80 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                                 Container(height: 18),
                                 manufacturer,
                                 Container(height: 14),
-                                modelOfManu,
+                                // modelOfManu,
+                                BlocBuilder<ManufacturerBloc,
+                                        ManufacturerState>(
+                                    // ignore: missing_return
+                                    builder: (context, manuState) {
+                                  if (manuState.status ==
+                                      ManufacturerStatus.init) {
+                                    return CircularProgressIndicator();
+                                  } else if (manuState.status ==
+                                      ManufacturerStatus.loading) {
+                                    return CircularProgressIndicator();
+                                  } else if (manuState.status ==
+                                      ManufacturerStatus
+                                          .loadedManufacturerSuccess) {
+                                    return Column(
+                                      children: [
+                                        TypeAheadField(
+                                            textFieldConfiguration:
+                                                TextFieldConfiguration(
+                                              decoration: InputDecoration(
+                                                prefixIcon:
+                                                    Icon(Icons.time_to_leave),
+                                                filled: true,
+                                                fillColor: Colors.white,
+                                                hintStyle: TextStyle(
+                                                    color: Colors.black54),
+                                                labelText: 'Mẫu xe',
+                                                contentPadding:
+                                                    EdgeInsets.fromLTRB(
+                                                        20, 10, 20, 10),
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                              ),
+                                              controller:
+                                                  _isChangeValueModelName
+                                                      ? this
+                                                          ._typeAheadController
+                                                      : this._modelName,
+                                            ),
+                                            // ignore: missing_return
+                                            suggestionsCallback: (pattern) =>
+                                                manuState.modelOfManu.where(
+                                                    (element) => element.name
+                                                        .toLowerCase()
+                                                        .contains(pattern
+                                                            .toLowerCase())),
+                                            hideSuggestionsOnKeyboardHide:
+                                                false,
+                                            itemBuilder: (context, suggestion) {
+                                              return ListTile(
+                                                title: Text(suggestion.name),
+                                              );
+                                            },
+                                            noItemsFoundBuilder: (context) =>
+                                                Center(
+                                                  child: Text(
+                                                      'Không tìm thấy mẫu xe'),
+                                                ),
+                                            onSuggestionSelected: (suggestion) {
+                                              this._typeAheadController.text =
+                                                  suggestion.name;
+                                              setState(() {
+                                                _isChangeValueModelName = true;
+                                                this._modelName.text = this
+                                                    ._typeAheadController
+                                                    .text;
+                                              });
+                                            }),
+                                      ],
+                                    );
+                                  }
+                                }),
                                 Container(height: 14),
                                 licenNumber,
                                 Container(height: 14),
@@ -368,7 +432,6 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                 ),
               ),
             ),
-         
           ),
         ),
       ),

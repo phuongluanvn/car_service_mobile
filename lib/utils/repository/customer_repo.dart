@@ -74,22 +74,15 @@ class CustomerRepository {
     }
   }
 
-  updateVehicle(
-      String id,
-      String manufacturer,
-      String model,
-      String licensePlateNumber,
-      DateTime dateOfLastMaintenance,
-      int millageCount) async {
+  updateVehicle(String id, String manufacturer, String model,
+      String licensePlateNumber) async {
     var body = {
       "id": id,
       "manufacturer": manufacturer,
       "model": model,
       "licensePlate": licensePlateNumber,
-      "dateOfLastMaintenance": dateOfLastMaintenance,
-      "millageCount": millageCount
     };
-    var res = await http.post(
+    var res = await http.put(
       Uri.parse(BASE_URL + "vehicles"),
       headers: headers,
       body: json.encode(body),
@@ -372,7 +365,6 @@ class CustomerRepository {
         headers: headers);
     final data = json.decode(res.body);
     convertData.add(data);
-    print(convertData);
     if (res.statusCode == 200) {
       if (data != null) {
         convertData
@@ -424,6 +416,20 @@ class CustomerRepository {
       return data;
     } else {
       return res.body;
+    }
+  }
+
+  sendNoteReasonCancelBooking(
+      String id, String managerNote, String customerNote) async {
+    final body = jsonEncode(
+        {"id": id, "managerNote": managerNote, "customerNote": customerNote});
+    var res = await http.put(Uri.parse(BASE_URL + 'orders/note'),
+        headers: headers, body: body);
+    final data = res.body;
+    if (data != null) {
+      return data;
+    } else {
+      return data;
     }
   }
 }
