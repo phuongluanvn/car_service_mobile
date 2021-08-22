@@ -54,6 +54,8 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
   ProcessOrderBloc processBloc;
   UpdateItemBloc updateBloc;
   int _priceService = 0;
+  int _priceAcc = 0;
+  List<ServiceModel> listService = [];
   @override
   void initState() {
     super.initState();
@@ -186,7 +188,8 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                               child: Text('Thêm dịch vụ',
                                   style: TextStyle(color: Colors.white)),
                               onPressed: () {
-                                showInformationDialog(context);
+                                showInformationDialog(
+                                    context, state.processDetail);
                               },
                             ),
                           ),
@@ -233,8 +236,7 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
   }
 
   Future showInformationDialog(
-    BuildContext context,
-  ) async {
+      BuildContext context, List<OrderDetailModel> detailList) async {
     return showDialog(
         context: context,
         builder: (context) {
@@ -242,83 +244,127 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
             return AlertDialog(
               content: SingleChildScrollView(
                 child: Form(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.1,
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Text(
-                            'Thêm dịch vụ',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
-                          ),
-                          BlocBuilder<UpdateItemBloc, UpdateItemState>(
-                            // ignore: missing_return
-                            builder:
-                                // ignore: missing_return
-                                (context, svstate) {
-                              if (svstate.listServiceStatus ==
-                                  ListServiceStatus.init) {
-                                return CircularProgressIndicator();
-                              } else if (svstate.listServiceStatus ==
-                                  ListServiceStatus.loading) {
-                                return CircularProgressIndicator();
-                              } else if (svstate.listServiceStatus ==
-                                  ListServiceStatus.success) {
-                                return Column(
-                                  children: [
-                                    Column(
-                                      children: [
-                                        TypeAheadFormField(
-                                          textFieldConfiguration:
-                                              TextFieldConfiguration(
-                                            decoration: InputDecoration(
-                                              labelText: 'Nhập dịch vụ',
-                                            ),
-                                            controller:
-                                                this._typeAheadController,
+                  child: BlocBuilder<AccessoryBloc, AccessoryState>(
+                    // ignore: missing_return
+                    builder: (context, astate) {
+                      if (astate.status == ListAccessoryStatus.init) {
+                        return CircularProgressIndicator();
+                      } else if (astate.status == ListAccessoryStatus.loading) {
+                        return CircularProgressIndicator();
+                      } else if (astate.status == ListAccessoryStatus.success) {
+                        // for (int i = 0; i < detailList.length; i++)
+                        //   if (detailList[0].orderDetails != null) {
+                        //     _priceAcc = astate.accessoryList.indexWhere(
+                        //                 (element) =>
+                        //                     element.id ==
+                        //                     detailList[0]
+                        //                         .orderDetails[i]
+                        //                         .accessoryId) >=
+                        //             0
+                        //         ? astate.accessoryList
+                        //                 .firstWhere((element) =>
+                        //                     element.id ==
+                        //                     detailList[0]
+                        //                         .orderDetails[i]
+                        //                         .accessoryId)
+                        //                 .price ??
+                        //             'empty'
+                        //         : 0;
+                        //     print("price acc - " +
+                        //         '${detailList[0].orderDetails[i].accessoryId}');
+                        //   } else {}
+                        // ;
+                        return Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Thêm dịch vụ',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                BlocBuilder<UpdateItemBloc, UpdateItemState>(
+                                  // ignore: missing_return
+                                  builder:
+                                      // ignore: missing_return
+                                      (context, svstate) {
+                                    if (svstate.listServiceStatus ==
+                                        ListServiceStatus.init) {
+                                      return CircularProgressIndicator();
+                                    } else if (svstate.listServiceStatus ==
+                                        ListServiceStatus.loading) {
+                                      return CircularProgressIndicator();
+                                    } else if (svstate.listServiceStatus ==
+                                        ListServiceStatus.success) {
+                                      return Column(
+                                        children: [
+                                          Column(
+                                            children: [
+                                              TypeAheadFormField(
+                                                textFieldConfiguration:
+                                                    TextFieldConfiguration(
+                                                  decoration: InputDecoration(
+                                                    labelText: 'Nhập dịch vụ',
+                                                  ),
+                                                  controller:
+                                                      this._typeAheadController,
+                                                ),
+                                                suggestionsCallback: (pattern) =>
+                                                    svstate.listServices.where(
+                                                        (element) => element
+                                                            .name
+                                                            .toLowerCase()
+                                                            .contains(pattern
+                                                                .toLowerCase())),
+                                                hideSuggestionsOnKeyboardHide:
+                                                    false,
+                                                itemBuilder: (context,
+                                                    ServiceModel suggestion) {
+                                                  return ListTile(
+                                                    title:
+                                                        Text(suggestion.name),
+                                                  );
+                                                },
+                                                noItemsFoundBuilder:
+                                                    (context) => Center(
+                                                  child: Text(
+                                                      'Không tìm thấy dịch vụ'),
+                                                ),
+                                                onSuggestionSelected:
+                                                    (suggestion) {
+                                                  this
+                                                      ._typeAheadController
+                                                      .text = suggestion.name;
+                                                  _accId = suggestion.id;
+                                                  _priceService =
+                                                      suggestion.price +
+                                                          _priceAcc;
+                                                },
+                                                onSaved: (value) =>
+                                                    this._selectAccName = value,
+                                              ),
+                                            ],
                                           ),
-                                          suggestionsCallback: (pattern) =>
-                                              svstate.listServices.where(
-                                                  (element) => element.name
-                                                      .toLowerCase()
-                                                      .contains(pattern
-                                                          .toLowerCase())),
-                                          hideSuggestionsOnKeyboardHide: false,
-                                          itemBuilder: (context,
-                                              ServiceModel suggestion) {
-                                            return ListTile(
-                                              title: Text(suggestion.name),
-                                            );
-                                          },
-                                          noItemsFoundBuilder: (context) =>
-                                              Center(
-                                            child:
-                                                Text('Không tìm thấy dịch vụ'),
-                                          ),
-                                          onSuggestionSelected: (suggestion) {
-                                            this._typeAheadController.text =
-                                                suggestion.name;
-                                            _accId = suggestion.id;
-                                            _priceService = suggestion.price;
-                                          },
-                                          onSaved: (value) =>
-                                              this._selectAccName = value,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                );
-                              } else if (svstate.listServiceStatus ==
-                                  ListServiceStatus.error) {
-                                return ErrorWidget(svstate.message.toString());
-                              }
-                            },
+                                        ],
+                                      );
+                                    } else if (svstate.listServiceStatus ==
+                                        ListServiceStatus.error) {
+                                      return ErrorWidget(
+                                          svstate.message.toString());
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
+                        );
+                      } else if (astate.status == ListAccessoryStatus.error) {
+                        return ErrorWidget(astate.message.toString());
+                      }
+                    },
                   ),
                 ),
               ),

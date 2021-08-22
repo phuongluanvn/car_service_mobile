@@ -26,68 +26,94 @@ class _ConfirmOrderListUiState extends State<ConfirmOrderListUi> {
     super.dispose();
   }
 
+  Future<void> _getData() async {
+    setState(() {
+      BlocProvider.of<AssignReviewBloc>(context).add(DoListOrderConfirmEvent());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.colors.lightblue,
-      body: Center(
+      body: RefreshIndicator(
+        onRefresh: _getData,
         child: BlocBuilder<AssignReviewBloc, AssignReviewState>(
           // ignore: missing_return
           builder: (context, state) {
             if (state.listConfirmStatus == ConfirmOrderStatus.init) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             } else if (state.listConfirmStatus == ConfirmOrderStatus.loading) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             } else if (state.listConfirmStatus ==
                 ConfirmOrderStatus.listConfirmSuccess) {
               if (state.confirmList != null && state.confirmList.isNotEmpty) {
-                print('11');
-                print(state.confirmList);
-                return ListView.builder(
-                  itemCount: state.confirmList.length,
-                  shrinkWrap: true,
-                  // ignore: missing_return
-                  itemBuilder: (context, index) {
-                    // if (state.assignList[index].status == 'Accepted') {
-                    return Card(
-                        // child: (state.assignList[0].status == 'Checkin')
-                        //     ?
-                        child: Column(children: [
-                      ListTile(
-                        trailing: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Icon(
-                                Icons.circle,
-                                color: Colors.yellow,
-                              ),
-                              Text(state.confirmList[index].status),
-                            ]),
-                        leading: Image.asset('lib/images/order_small.png'),
-                        title:
-                            Text(state.confirmList[index].vehicle.licensePlate),
-                        subtitle: Text(
-                          _convertDate(state.confirmList[index].bookingTime),
+                return SingleChildScrollView(
+                  child: ListView.builder(
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                    itemCount: state.confirmList.length,
+                    shrinkWrap: true,
+                    // ignore: missing_return
+                    itemBuilder: (context, index) {
+                      // if (state.assignList[index].status == 'Accepted') {
+                      return Card(
+                          // child: (state.assignList[0].status == 'Checkin')
+                          //     ?
+                          child: Column(children: [
+                        ListTile(
+                          trailing: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.circle,
+                                  color: Colors.yellow,
+                                ),
+                                Text(state.confirmList[index].status),
+                              ]),
+                          leading: Image.asset('lib/images/order_small.png'),
+                          title: Text(
+                              state.confirmList[index].vehicle.licensePlate),
+                          subtitle: Text(
+                            _convertDate(state.confirmList[index].bookingTime),
+                          ),
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (_) => AssignOrderReviewUi(
+                                    userId: state.confirmList[index].id)));
+                          },
                         ),
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (_) => AssignOrderReviewUi(
-                                  userId: state.confirmList[index].id)));
-                        },
-                      ),
-                    ])
-                        // : SizedBox(),
-                        );
-                    // } else {
-                    //   return Center(
-                    //     child: Text('Empty'),
-                    //   );
-                    // }
-                  },
+                      ])
+                          // : SizedBox(),
+                          );
+                      // } else {
+                      //   return Center(
+                      //     child: Text('Empty'),
+                      //   );
+                      // }
+                    },
+                  ),
                 );
               } else
-                return Center(
-                  child: Text('Hiện tại không có đơn'),
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics()),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height *
+                                      0.35),
+                              child: Text('Hiện tại không có đơn')),
+                        ],
+                      ),
+                    ),
+                  ],
                 );
             } else if (state.listConfirmStatus == ConfirmOrderStatus.error) {
               return ErrorWidget(state.message.toString());

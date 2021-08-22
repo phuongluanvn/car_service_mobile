@@ -278,6 +278,50 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                           ),
                                         ],
                                       ),
+                                      Container(height: 10),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        textBaseline: TextBaseline.alphabetic,
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                border: Border.all(),
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.82,
+                                            child: TextField(
+                                              maxLines: null,
+                                              autofocus: false,
+                                              decoration: InputDecoration(
+                                                filled: true,
+                                                fillColor: Colors.white,
+                                                hintStyle: TextStyle(
+                                                    color: Colors.black),
+                                                hintText: 'Số km được ghi nhận',
+                                                contentPadding:
+                                                    EdgeInsets.fromLTRB(
+                                                        20, 10, 20, 10),
+                                              ),
+                                              // onChanged: (event) {
+                                              //   createOrderBloc.add(
+                                              //       DoCreateOrderDetailEvent(
+                                              //           id: event));
+                                              //   customerCarBloc.add(
+                                              //       DoCarListWithIdEvent(
+                                              //           vehicleId: event));
+
+                                              //   print(event);
+                                              // },
+                                              textInputAction:
+                                                  TextInputAction.search,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ],
                                   ),
                                 ),

@@ -26,65 +26,93 @@ class _AssignReviewUiState extends State<AssignReviewUi> {
     super.dispose();
   }
 
+  Future<void> _getData() async {
+    setState(() {
+      BlocProvider.of<AssignReviewBloc>(context).add(DoListAssignReviewEvent());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.colors.lightblue,
-      body: Center(
+      body: RefreshIndicator(
+        onRefresh: _getData,
         child: BlocBuilder<AssignReviewBloc, AssignReviewState>(
           // ignore: missing_return
           builder: (context, state) {
             if (state.status == AssignReviewStatus.init) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             } else if (state.status == AssignReviewStatus.loading) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             } else if (state.status == AssignReviewStatus.assignSuccess) {
               if (state.assignList != null && state.assignList.isNotEmpty) {
-                return ListView.builder(
-                  itemCount: state.assignList.length,
-                  shrinkWrap: true,
-                  // ignore: missing_return
-                  itemBuilder: (context, index) {
-                    // if (state.assignList[index].status == 'Accepted') {
-                    return Card(
-                        // child: (state.assignList[0].status == 'Checkin')
-                        //     ?
-                        child: Column(children: [
-                      ListTile(
-                        trailing: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Icon(
-                                Icons.circle,
-                                color: Colors.yellow,
-                              ),
-                              Text(state.assignList[index].status),
-                            ]),
-                        leading: Image.asset('lib/images/order_small.png'),
-                        title:
-                            Text(state.assignList[index].vehicle.licensePlate),
-                        subtitle: Text(
-                          _convertDate(state.assignList[index].bookingTime),
+                return SingleChildScrollView(
+                  child: ListView.builder(
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                    itemCount: state.assignList.length,
+                    shrinkWrap: true,
+                    // ignore: missing_return
+                    itemBuilder: (context, index) {
+                      // if (state.assignList[index].status == 'Accepted') {
+                      return Card(
+                          // child: (state.assignList[0].status == 'Checkin')
+                          //     ?
+                          child: Column(children: [
+                        ListTile(
+                          trailing: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.circle,
+                                  color: Colors.yellow,
+                                ),
+                                Text(state.assignList[index].status),
+                              ]),
+                          leading: Image.asset('lib/images/order_small.png'),
+                          title: Text(
+                              state.assignList[index].vehicle.licensePlate),
+                          subtitle: Text(
+                            _convertDate(state.assignList[index].bookingTime),
+                          ),
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (_) => AssignOrderReviewUi(
+                                    userId: state.assignList[index].id)));
+                          },
                         ),
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (_) => AssignOrderReviewUi(
-                                  userId: state.assignList[index].id)));
-                        },
-                      ),
-                    ])
-                        // : SizedBox(),
-                        );
-                    // } else {
-                    //   return Center(
-                    //     child: Text('Empty'),
-                    //   );
-                    // }
-                  },
+                      ])
+                          // : SizedBox(),
+                          );
+                      // } else {
+                      //   return Center(
+                      //     child: Text('Empty'),
+                      //   );
+                      // }
+                    },
+                  ),
                 );
               } else
-                return Center(
-                  child: Text('Hiện tại không có đơn'),
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics()),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height *
+                                      0.35),
+                              child: Text('Hiện tại không có đơn')),
+                        ],
+                      ),
+                    ),
+                  ],
                 );
             } else if (state.status == AssignReviewStatus.error) {
               return ErrorWidget(state.message.toString());

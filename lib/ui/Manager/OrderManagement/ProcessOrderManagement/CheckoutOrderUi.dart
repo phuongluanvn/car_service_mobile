@@ -1,3 +1,5 @@
+import 'package:car_service/blocs/manager/Accessories/accessory_bloc.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_state.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
@@ -15,6 +17,7 @@ import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:money_formatter/money_formatter.dart';
 
 class CheckoutOrderUi extends StatefulWidget {
   final String orderId;
@@ -32,6 +35,7 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
   bool checkedValue = false;
   String selectItem;
   String holder = '';
+  int countPrice = 0;
   @override
   void initState() {
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
@@ -75,139 +79,114 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                 } else if (state.detailStatus == ProcessDetailStatus.loading) {
                   return CircularProgressIndicator();
                 } else if (state.detailStatus == ProcessDetailStatus.success) {
-                  return Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    // child: SingleChildScrollView(
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: DataTable(
-                                columnSpacing: 70.0,
-                                columns: [
-                                  DataColumn(
-                                      label: Text(
-                                    'Tên dịch vụ',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  )),
-                                  DataColumn(
-                                      label: Text(
-                                    'Số lượng',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  )),
-                                  DataColumn(
-                                      label: Text(
-                                    'Giá',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  )),
+                  return Column(
+                    children: [
+                      Text(
+                        'Thông tin hóa đơn',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      Column(
+                        children:
+                            state.processDetail[0].orderDetails.map((service) {
+                          countPrice += service.price;
+                          return BlocBuilder<AccessoryBloc, AccessoryState>(
+                              // ignore: missing_return
+                              builder: (context, accState) {
+                            if (accState.status == ListAccessoryStatus.init) {
+                              return CircularProgressIndicator();
+                            } else if (accState.status ==
+                                ListAccessoryStatus.loading) {
+                              return CircularProgressIndicator();
+                            } else if (accState.status ==
+                                ListAccessoryStatus.success) {
+                              return ExpansionTile(
+                                title: Text(service.name),
+                                trailing: Text(
+                                    _convertMoney(service.price.toDouble())),
+                                children: [
+                                  accState.accessoryList.indexWhere((element) =>
+                                              element.id ==
+                                              service.accessoryId) >=
+                                          0
+                                      ? ListTile(
+                                          title: Text(accState.accessoryList
+                                              .firstWhere((element) =>
+                                                  element.id ==
+                                                  service.accessoryId)
+                                              .name),
+                                          trailing: Image.network(accState
+                                              .accessoryList
+                                              .firstWhere((element) =>
+                                                  element.id ==
+                                                  service.accessoryId)
+                                              .imageUrl),
+                                        )
+                                      : Text('Hiện tại không có phụ tùng'),
                                 ],
-                                rows: List.generate(
-                                    state.processDetail[0].orderDetails.length,
-                                    (index) {
-                                  final y = state.processDetail[0]
-                                      .orderDetails[index].name;
-
-                                  final x = state.processDetail[0]
-                                      .orderDetails[index].quantity;
-                                  final z = state.processDetail[0].note == null
-                                      ? state.processDetail[0]
-                                          .orderDetails[index].price
-                                      : 0;
-
-                                  return DataRow(cells: [
-                                    DataCell(
-                                        Container(width: 75, child: Text(y))),
-                                    DataCell(
-                                        Container(child: Text(x.toString()))),
-                                    DataCell(
-                                        Container(child: Text(z.toString()))),
-                                  ]);
-                                }),
+                              );
+                            }
+                            ;
+                          });
+                        }).toList(),
+                      ),
+                      Divider(
+                        color: Colors.black,
+                        thickness: 2,
+                        indent: 20,
+                        endIndent: 20,
+                      ),
+                      ListTile(
+                          title: Text(
+                            'Tổng cộng: ',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w900),
+                          ),
+                          trailing: Column(
+                            children: [
+                              Text(
+                                _convertMoney(countPrice.toDouble()),
+                                style: TextStyle(
+                                    decoration: TextDecoration.lineThrough),
+                              ),
+                              Text(_convertMoney(state
+                                  .processDetail[0].package.price
+                                  .toDouble())),
+                            ],
+                          )),
+                      BlocListener<UpdateStatusOrderBloc,
+                          UpdateStatusOrderState>(
+                        // ignore: missing_return
+                        listener: (builder, statusState) {
+                          if (statusState.status ==
+                              UpdateStatus.updateStatusStartSuccess) {
+                            Navigator.pushNamed(context, '/manager');
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.45,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: AppTheme.colors.blue),
+                                child: Text('Hoàn tất dịch vụ',
+                                    style: TextStyle(color: Colors.white)),
+                                onPressed: () {
+                                  updateStatusBloc.add(
+                                      UpdateStatusButtonPressed(
+                                          id: state.processDetail[0].id,
+                                          status: processingStatus));
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) => ManagerMain()));
+                                },
                               ),
                             ),
-                          ),
-                          const Divider(
-                            color: Colors.black87,
-                            height: 20,
-                            thickness: 1,
-                            indent: 10,
-                            endIndent: 10,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10, right: 40),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Tổng cộng:',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  state.processDetail[0].note == null
-                                      ? state.processDetail[0].package.price
-                                          .toString()
-                                      : '',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          BlocListener<UpdateStatusOrderBloc,
-                              UpdateStatusOrderState>(
-                            // ignore: missing_return
-                            listener: (builder, statusState) {
-                              if (statusState.status ==
-                                  UpdateStatus.updateStatusStartSuccess) {
-                                Navigator.pushNamed(context, '/manager');
-                              }
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.45,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        primary: AppTheme.colors.blue),
-                                    child: Text('Hoàn tất dịch vụ',
-                                        style: TextStyle(color: Colors.white)),
-                                    onPressed: () {
-                                      updateStatusBloc.add(
-                                          UpdateStatusButtonPressed(
-                                              id: state.processDetail[0].id,
-                                              status: processingStatus));
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (_) => ManagerMain()));
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-
-                    // ),
-                    // ),
-                    // ),
+                    ],
                   );
                 } else if (state.detailStatus == ProcessDetailStatus.error) {
                   return ErrorWidget(state.message.toString());
@@ -218,5 +197,20 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
         ),
       ),
     );
+  }
+
+  _convertMoney(double money) {
+    MoneyFormatter fmf = new MoneyFormatter(
+        amount: money,
+        settings: MoneyFormatterSettings(
+          symbol: 'VND',
+          thousandSeparator: '.',
+          decimalSeparator: ',',
+          symbolAndNumberSeparator: ' ',
+          fractionDigits: 0,
+          // compactFormatType: CompactFormatType.sort
+        ));
+    print(fmf.output.symbolOnRight);
+    return fmf.output.symbolOnRight.toString();
   }
 }

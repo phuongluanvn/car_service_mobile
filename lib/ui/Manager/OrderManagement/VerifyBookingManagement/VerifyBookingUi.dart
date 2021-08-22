@@ -28,80 +28,57 @@ class _VerifyBookingUiState extends State<VerifyBookingUi> {
     super.dispose();
   }
 
+  Future<void> _getData() async {
+    setState(() {
+      BlocProvider.of<VerifyBookingBloc>(context).add(DoListBookingEvent());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.colors.lightblue,
-      body: Center(
+      body: RefreshIndicator(
+        onRefresh: _getData,
         child: BlocBuilder<VerifyBookingBloc, VerifyBookingState>(
           // ignore: missing_return
           builder: (context, state) {
             if (state.status == BookingStatus.init) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             } else if (state.status == BookingStatus.loading) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             } else if (state.status == BookingStatus.bookingSuccess) {
               if (state.bookingList != null && state.bookingList.isNotEmpty)
                 return ListView.builder(
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
                   itemCount: state.bookingList.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return Card(
-                      child: (state.bookingList[index].status == 'Đợi xác nhận')
-                          ? Column(children: [
-                              ListTile(
-                                trailing: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.circle,
-                                        color: Colors.red,
-                                      ),
-                                      Text('Đợi xác nhận'),
-                                    ]),
-                                leading:
-                                    Image.asset('lib/images/order_small.png'),
-                                title: Text(state
-                                    .bookingList[index].vehicle.licensePlate),
-                                subtitle: Text(_convertDate(
-                                    state.bookingList[index].bookingTime)),
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => VerifyBookingDetailUi(
-                                          orderId:
-                                              state.bookingList[index].id)));
-                                },
+                        child: Column(children: [
+                      ListTile(
+                        trailing: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Icon(
+                                Icons.circle,
+                                color: Colors.red,
                               ),
-                            ])
-                          : SizedBox(),
-                      // : Column(children: [
-                      //     ListTile(
-                      //       trailing: Column(
-                      //           mainAxisSize: MainAxisSize.min,
-                      //           children: <Widget>[
-                      //             Icon(
-                      //               Icons.circle,
-                      //               color: Colors.green,
-                      //             ),
-                      //             Text('Đợi xác nhận'),
-                      //           ]),
-                      //       leading: FlutterLogo(),
-                      //       title: Text(
-                      //           state.orderLists[index].taiKhoan),
-                      //       subtitle:
-                      //           Text(state.orderLists[index].hoTen),
-                      //       onTap: () {
-                      //         Navigator.of(context).push(
-                      //             MaterialPageRoute(
-                      //                 builder: (_) =>
-                      //                     CustomerCarDetailUi(
-                      //                         emailId: state
-                      //                             .orderLists[index]
-                      //                             .taiKhoan)));
-                      //       },
-                      //     ),
-                      //   ]),
-                    );
+                              Text('Đợi xác nhận'),
+                            ]),
+                        leading: Image.asset('lib/images/order_small.png'),
+                        title:
+                            Text(state.bookingList[index].vehicle.licensePlate),
+                        subtitle: Text(
+                            _convertDate(state.bookingList[index].bookingTime)),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => VerifyBookingDetailUi(
+                                  orderId: state.bookingList[index].id)));
+                        },
+                      ),
+                    ]));
                     // ListTile(
                     //   title: Text(state.bookingList[index].customer.fullname),
                     //   onTap: () {
@@ -113,8 +90,25 @@ class _VerifyBookingUiState extends State<VerifyBookingUi> {
                   },
                 );
               else
-                return Center(
-                  child: Text('Hiện tại không có đơn'),
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics()),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height *
+                                      0.35),
+                              child: Text('Hiện tại không có đơn')),
+                        ],
+                      ),
+                    ),
+                  ],
                 );
             } else if (state.status == BookingStatus.error) {
               return ErrorWidget(state.message.toString());
