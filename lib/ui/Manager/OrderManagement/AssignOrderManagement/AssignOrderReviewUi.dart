@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
+import 'package:car_service/blocs/customer/customerCar/CustomerCar_event.dart';
+import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_bloc.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_event.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
@@ -12,6 +15,9 @@ import 'package:car_service/blocs/manager/assign_order_cubit/assignorder_cubit_s
 import 'package:car_service/blocs/manager/booking/booking_bloc.dart';
 import 'package:car_service/blocs/manager/booking/booking_events.dart';
 import 'package:car_service/blocs/manager/booking/booking_state.dart';
+import 'package:car_service/blocs/manager/orderHistory/orderHistory_bloc.dart';
+import 'package:car_service/blocs/manager/orderHistory/orderHistory_events.dart';
+import 'package:car_service/blocs/manager/orderHistory/orderHistory_state.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
@@ -42,21 +48,27 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   final String workingStatus = 'Đang làm việc';
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visible = false;
-  List<StaffModel> _selection = [];
+  bool _visibleKm = false;
   List<StaffModel> selectData = [];
-  StaffModel _staffModel;
-  bool _selectStaff = false;
+
   // AssignorderCubit assignCubit;
   CrewBloc crewBloc;
   List selectCrewName = [];
   List<StaffModel> selectCrew = [];
   ProcessOrderBloc processOrderBloc;
   VerifyBookingBloc verifyBloc;
+  CustomerCarBloc customerCarBloc;
+  OrderHistoryBloc orderHistoryBloc;
+  TextEditingController kmController = TextEditingController();
+  int kmRecord = 0;
+  int kmCheck = 0;
   @override
   void initState() {
     super.initState();
+    customerCarBloc = BlocProvider.of<CustomerCarBloc>(context);
     processOrderBloc = BlocProvider.of<ProcessOrderBloc>(context);
     verifyBloc = BlocProvider.of<VerifyBookingBloc>(context);
+    orderHistoryBloc = BlocProvider.of<OrderHistoryBloc>(context);
     // assignCubit = BlocProvider.of<AssignorderCubit>(context);
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     crewBloc = BlocProvider.of<CrewBloc>(context);
@@ -64,6 +76,8 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
         .add(DoAssignOrderDetailEvent(id: widget.userId));
     BlocProvider.of<VerifyBookingBloc>(context)
         .add(DoVerifyBookingDetailEvent(email: widget.userId));
+    BlocProvider.of<OrderHistoryBloc>(context)
+        .add(DoOrderHistoryDetailEvent(id: widget.userId));
     BlocProvider.of<ManageStaffBloc>(context).add(DoListStaffEvent());
   }
 
@@ -99,6 +113,9 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                       state.assignDetail[0].status == 'Đã từ chối' ||
                       state.assignDetail[0].status == 'Đã đồng ý') {
                     _visible = true;
+                  }
+                  if (state.assignDetail[0].vehicle.millageCount != 0) {
+                    _visibleKm = true;
                   }
                   print(_visible);
                   return Padding(
@@ -185,7 +202,6 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                 ],
                               ),
                               Container(height: 16),
-
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 20, horizontal: 5),
@@ -279,85 +295,174 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                         ],
                                       ),
                                       Container(height: 10),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        textBaseline: TextBaseline.alphabetic,
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                border: Border.all(),
-                                                borderRadius:
-                                                    BorderRadius.circular(5)),
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.82,
-                                            child: TextField(
-                                              maxLines: null,
-                                              autofocus: false,
-                                              decoration: InputDecoration(
-                                                filled: true,
-                                                fillColor: Colors.white,
-                                                hintStyle: TextStyle(
-                                                    color: Colors.black),
-                                                hintText: 'Số km được ghi nhận',
-                                                contentPadding:
-                                                    EdgeInsets.fromLTRB(
-                                                        20, 10, 20, 10),
-                                              ),
-                                              // onChanged: (event) {
-                                              //   createOrderBloc.add(
-                                              //       DoCreateOrderDetailEvent(
-                                              //           id: event));
-                                              //   customerCarBloc.add(
-                                              //       DoCarListWithIdEvent(
-                                              //           vehicleId: event));
-
-                                              //   print(event);
-                                              // },
-                                              textInputAction:
-                                                  TextInputAction.search,
-                                            ),
-                                          ),
-                                        ],
+                                      BlocListener<CustomerCarBloc,
+                                          CustomerCarState>(
+                                        listener: (context, cstate) {
+                                          if (cstate.withIdstatus ==
+                                              CustomerCarWithIdStatus
+                                                  .loadedCarSuccess) {
+                                            setState(() {
+                                              _visibleKm = true;
+                                            });
+                                            orderHistoryBloc.add(
+                                              DoOrderHistoryDetailEvent(
+                                                  id: widget.userId),
+                                            );
+                                          }
+                                        },
+                                        child: BlocBuilder<OrderHistoryBloc,
+                                                OrderHistoryState>(
+                                            // ignore: missing_return
+                                            builder: (context, costate) {
+                                          if (costate.detailStatus ==
+                                              OrderHistoryDetailStatus.init) {
+                                            return CircularProgressIndicator();
+                                          } else if (costate.detailStatus ==
+                                              OrderHistoryDetailStatus
+                                                  .loading) {
+                                            return CircularProgressIndicator();
+                                          } else if (costate.detailStatus ==
+                                              OrderHistoryDetailStatus
+                                                  .success) {
+                                            if (costate.historyDetail != null &&
+                                                costate
+                                                    .historyDetail.isNotEmpty) {
+                                              return !_visibleKm
+                                                  ? Column(
+                                                      children: [
+                                                        Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .baseline,
+                                                          textBaseline:
+                                                              TextBaseline
+                                                                  .alphabetic,
+                                                          children: [
+                                                            Container(
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.4,
+                                                              child: Text(
+                                                                'Số km được ghi nhận:',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        16.0),
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              child: Text(
+                                                                costate
+                                                                    .historyDetail[
+                                                                        0]
+                                                                    .vehicle
+                                                                    .millageCount
+                                                                    .toString(),
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        15.0),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        ElevatedButton(
+                                                            onPressed: () {
+                                                              setState(() {
+                                                                _visibleKm =
+                                                                    false;
+                                                              });
+                                                            },
+                                                            child: Text(
+                                                                'Chỉnh sửa')),
+                                                      ],
+                                                    )
+                                                  : Column(
+                                                      children: [
+                                                        Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          // textBaseline: TextBaseline.alphabetic,
+                                                          children: [
+                                                            Container(
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.82,
+                                                              child:
+                                                                  TextFormField(
+                                                                // controller: kmController,
+                                                                maxLines: null,
+                                                                autofocus:
+                                                                    false,
+                                                                decoration:
+                                                                    InputDecoration(
+                                                                  filled: true,
+                                                                  fillColor:
+                                                                      Colors
+                                                                          .white,
+                                                                  hintStyle: TextStyle(
+                                                                      color: Colors
+                                                                          .black),
+                                                                  hintText:
+                                                                      'Số km được ghi nhận',
+                                                                  contentPadding:
+                                                                      EdgeInsets
+                                                                          .fromLTRB(
+                                                                              20,
+                                                                              10,
+                                                                              20,
+                                                                              10),
+                                                                ),
+                                                                onChanged:
+                                                                    (event) {
+                                                                  // kmController.text = event;
+                                                                  kmRecord =
+                                                                      int.parse(
+                                                                          event);
+                                                                },
+                                                                // textInputAction:
+                                                                //     TextInputAction.search,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        ElevatedButton(
+                                                            onPressed: () {
+                                                              setState(() {
+                                                                _visibleKm =
+                                                                    true;
+                                                              });
+                                                              customerCarBloc.add(
+                                                                  DoUpdateInfoCarEvent(
+                                                                      id: state
+                                                                          .assignDetail[
+                                                                              0]
+                                                                          .vehicle
+                                                                          .id,
+                                                                      kilometer:
+                                                                          kmRecord));
+                                                            },
+                                                            child: Text(
+                                                                'Cập nhật')),
+                                                      ],
+                                                    );
+                                            } else
+                                              return Center(
+                                                  child: Text('Empty'));
+                                          } else if (costate.detailStatus ==
+                                              OrderHistoryDetailStatus.error) {
+                                            return ErrorWidget(
+                                                state.message.toString());
+                                          }
+                                        }),
                                       ),
                                     ],
                                   ),
                                 ),
                               ),
-
-                              // Padding(
-                              //   padding: const EdgeInsets.symmetric(
-                              //       vertical: 5, horizontal: 5),
-                              //   child: Container(
-                              //     decoration: BoxDecoration(
-                              //         border: Border.all(color: Colors.black26),
-                              //         borderRadius: BorderRadius.circular(5)),
-                              //     padding: EdgeInsets.symmetric(
-                              //         horizontal: 5, vertical: 10),
-                              //     child: Column(
-                              //       children: [
-                              //         Text(
-                              //           'Thông tin gói dịch vụ',
-                              //           style: TextStyle(
-                              //               fontSize: 16,
-                              //               fontWeight: FontWeight.w600),
-                              //         ),
-                              //         ListView(
-                              //           shrinkWrap: true,
-                              //           children: state
-                              //               .bookingDetail[0].orderDetails
-                              //               .map((service) {
-                              //             return ListTile(
-                              //               title: Text(service.name),
-                              //             );
-                              //           }).toList(),
-                              //         ),
-                              //       ],
-                              //     ),
-                              //   ),
-                              // ),
                               Container(
                                 width: MediaQuery.of(context).size.width * 1,
                                 padding: EdgeInsets.all(10),

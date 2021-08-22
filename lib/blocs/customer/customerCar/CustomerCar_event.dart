@@ -29,10 +29,11 @@ class DoDelCarEvent extends CustomerCarEvent {
 }
 
 class DoUpdateInfoCarEvent extends CustomerCarEvent {
+  final String id;
   final int kilometer;
-  DoUpdateInfoCarEvent({this.kilometer});
+  DoUpdateInfoCarEvent({this.id,this.kilometer});
   @override
-  List<Object> get props => [kilometer];
+  List<Object> get props => [id,kilometer];
 }
 
 class VerifyBookingTabPressed extends CustomerCarEvent {}
