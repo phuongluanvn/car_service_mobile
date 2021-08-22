@@ -1,6 +1,9 @@
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_event.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dart';
+import 'package:car_service/blocs/customer/customerOrder/FeedbackOrder_bloc.dart';
+import 'package:car_service/blocs/customer/customerOrder/FeedbackOrder_event.dart';
+import 'package:car_service/blocs/customer/customerOrder/FeedbackOrder_state.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
@@ -10,6 +13,7 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_formatter/money_formatter.dart';
+import 'package:rating_dialog/rating_dialog.dart';
 
 class OrderHistoryDetailUi extends StatefulWidget {
   final String orderId;
@@ -21,16 +25,20 @@ class OrderHistoryDetailUi extends StatefulWidget {
 
 class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
   UpdateStatusOrderBloc updateStatusBloc;
+  FeedbackOrderBloc _buttonFeedback;
   bool _visibleByDenied = false;
   bool textButton = true;
   String reasonReject;
+  bool _isShowButtonFB = true;
 
   @override
   void initState() {
+    print(widget.orderId);
     super.initState();
     BlocProvider.of<CustomerOrderBloc>(context)
         .add(DoOrderDetailEvent(id: widget.orderId));
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
+    _buttonFeedback = BlocProvider.of<FeedbackOrderBloc>(context);
   }
 
   @override
@@ -45,105 +53,136 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Center(
-        child: BlocBuilder<CustomerOrderBloc, CustomerOrderState>(
-          // ignore: missing_return
-          builder: (context, state) {
-            if (state.detailStatus == CustomerOrderDetailStatus.init) {
-              return CircularProgressIndicator();
-            } else if (state.detailStatus ==
-                CustomerOrderDetailStatus.loading) {
-              return CircularProgressIndicator();
-            } else if (state.detailStatus ==
-                CustomerOrderDetailStatus.success) {
-              if (state.orderDetail != null && state.orderDetail.isNotEmpty)
-                return SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      cardInforOrder(
-                          state.orderDetail[0].status,
-                          _convertDate(state.orderDetail[0].bookingTime),
-                          state.orderDetail[0].checkinTime != null
-                              ? state.orderDetail[0].checkinTime
-                              : 'Chưa nhận xe',
-                          state.orderDetail[0].note != null
-                              ? state.orderDetail[0].note
-                              : 'Không có ghi chú'),
-                      cardInforService(
-                          state.orderDetail[0].vehicle.model,
-                          state.orderDetail[0].vehicle.model,
-                          state.orderDetail[0].vehicle.licensePlate,
-                          state.orderDetail[0].orderDetails,
-                          state.orderDetail[0].note == null ? false : true,
-                          state.orderDetail[0].note != null
-                              ? state.orderDetail[0].note
-                              : 'Không có ghi chú',
-                          state.orderDetail[0].note == null
-                              ? state.orderDetail[0].package.price
-                              : 0),
-                      cardInforCar(
-                          state.orderDetail[0].vehicle.manufacturer,
-                          state.orderDetail[0].vehicle.model,
-                          state.orderDetail[0].vehicle.licensePlate),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Visibility(
-                          visible: _visibleByDenied,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: TextField(
-                              onChanged: (noteValue) {
-                                setState(() {
-                                  reasonReject = noteValue;
-                                });
-                              },
-                              maxLines: 3,
-                              decoration: InputDecoration.collapsed(
-                                  hintText: 'Lý do từ chối'),
+      body: BlocListener<FeedbackOrderBloc, FeedbackOrderState>(
+        listener: (context, stateFB) {
+          // TODO: implement listener
+          if (stateFB.status == FeedbackOrderStatus.successFeedback) {
+            showDialog(context: context, builder: (context) {
+              return AlertDialog(
+            title: Text(
+              'Thông báo!',
+              style: TextStyle(color: Colors.greenAccent),
+            ),
+            content: Text('Cảm ơn bạn đã đánh giá!'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                  child: Text('Đồng ý'))
+            ],
+          );
+            });
+            
+          }
+        },
+        child: Center(
+          child: BlocBuilder<CustomerOrderBloc, CustomerOrderState>(
+            // ignore: missing_return
+            builder: (context, state) {
+              if (state.detailStatus == CustomerOrderDetailStatus.init) {
+                return CircularProgressIndicator();
+              } else if (state.detailStatus ==
+                  CustomerOrderDetailStatus.loading) {
+                return CircularProgressIndicator();
+              } else if (state.detailStatus ==
+                  CustomerOrderDetailStatus.success) {
+                if (state.orderDetail != null && state.orderDetail.isNotEmpty)
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        cardInforOrder(
+                            state.orderDetail[0].status,
+                            _convertDate(state.orderDetail[0].bookingTime),
+                            state.orderDetail[0].checkinTime != null
+                                ? state.orderDetail[0].checkinTime
+                                : 'Chưa nhận xe',
+                            state.orderDetail[0].note != null
+                                ? state.orderDetail[0].note
+                                : 'Không có ghi chú'),
+                        cardInforService(
+                            state.orderDetail[0].vehicle.model,
+                            state.orderDetail[0].vehicle.model,
+                            state.orderDetail[0].vehicle.licensePlate,
+                            state.orderDetail[0].orderDetails,
+                            state.orderDetail[0].note == null ? false : true,
+                            state.orderDetail[0].note != null
+                                ? state.orderDetail[0].note
+                                : 'Không có ghi chú',
+                            state.orderDetail[0].note == null
+                                ? state.orderDetail[0].package.price
+                                : 0),
+                        cardInforCar(
+                            state.orderDetail[0].vehicle.manufacturer,
+                            state.orderDetail[0].vehicle.model,
+                            state.orderDetail[0].vehicle.licensePlate),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Visibility(
+                            visible: _visibleByDenied,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: TextField(
+                                onChanged: (noteValue) {
+                                  setState(() {
+                                    reasonReject = noteValue;
+                                  });
+                                },
+                                maxLines: 3,
+                                decoration: InputDecoration.collapsed(
+                                    hintText: 'Lý do từ chối'),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      BlocListener<UpdateStatusOrderBloc,
-                          UpdateStatusOrderState>(
-                        listener: (builder, statusState) {
-                          if (statusState.status ==
-                              UpdateStatus.updateStatusConfirmAcceptedSuccess) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CustomerHome()),
-                            );
-                          }
-                        },
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.45,
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: AppTheme.colors.blue),
-                              child: Text('Đánh giá đơn',
-                                  style: TextStyle(color: Colors.white)),
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) => OrderHistoryDetailUi(
-                                        orderId: widget.orderId)));
-                              }),
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              else
-                return Center(child: Text('Không có chi tiết đơn hàng'));
-            } else if (state.detailStatus == CustomerOrderDetailStatus.error) {
-              return ErrorWidget(state.message.toString());
-            }
-          },
+                        BlocListener<UpdateStatusOrderBloc,
+                            UpdateStatusOrderState>(
+                          listener: (builder, statusState) {
+                            if (statusState.status ==
+                                UpdateStatus
+                                    .updateStatusConfirmAcceptedSuccess) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CustomerHome()),
+                              );
+                            }
+                          },
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.45,
+                            child: ElevatedButton(
+                                style: _isShowButtonFB
+                                    ? ElevatedButton.styleFrom(
+                                        primary: AppTheme.colors.blue)
+                                    : ElevatedButton.styleFrom(
+                                        primary: Colors.grey),
+                                child: Text('Đánh giá đơn',
+                                    style: TextStyle(color: Colors.white)),
+                                onPressed: () {
+                                  if (_isShowButtonFB) {
+                                    _showFBDialog();
+                                  }
+                                }),
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                else
+                  return Center(child: Text('Không có chi tiết đơn hàng'));
+              } else if (state.detailStatus ==
+                  CustomerOrderDetailStatus.error) {
+                return ErrorWidget(state.message.toString());
+              }
+            },
+          ),
         ),
       ),
     );
@@ -279,5 +318,32 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
         ));
     print(fmf.output.symbolOnRight);
     return fmf.output.symbolOnRight.toString();
+  }
+
+  _showFBDialog() {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return RatingDialog(
+              commentHint: 'Hãy nhập đánh giá của bạn',
+              title: 'Đánh giá đơn',
+              message: 'Bạn có hài lòng với dịch vụ của chúng tôi?',
+              image: Icon(
+                Icons.star,
+                size: 100,
+                color: Colors.yellow,
+              ),
+              submitButton: 'Gửi',
+              onSubmitted: (res) {
+                setState(() {
+                  _isShowButtonFB = false;
+                });
+                _buttonFeedback.add(DoFeedbackButtonPressed(
+                    ordeId: widget.orderId,
+                    rating: res.rating,
+                    description: res.comment));
+              });
+        });
   }
 }

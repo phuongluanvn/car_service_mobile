@@ -121,11 +121,32 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                         listener: (builder, statusState) {
                           if (statusState.status ==
                               UpdateStatus.updateStatusConfirmAcceptedSuccess) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CustomerHome()),
-                            );
+                            showDialog(
+                        context: context,
+                        builder: (BuildContext ctx) {
+                          return AlertDialog(
+                            title: Text(
+                              'Thông báo!',
+                              style: TextStyle(color: Colors.greenAccent),
+                            ),
+                            content: Text('Cảm ơn bạn đã xử dụng dịch vụ!'),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    // Close the dialog
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //       builder: (context) => CustomerHome()),
+                                    // );
+                                    Navigator.of(context).pop();
+                                    Navigator.pop(context);
+                                    context.read<CustomerOrderBloc>().add(DoOrderListEvent());
+                                  },
+                                  child: Text('Đồng ý'))
+                            ],
+                          );
+                        });
                           }
                         },
                         child: SizedBox(

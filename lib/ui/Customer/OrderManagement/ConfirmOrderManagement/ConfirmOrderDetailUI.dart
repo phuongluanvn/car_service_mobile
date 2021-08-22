@@ -123,11 +123,30 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                         listener: (builder, statusState) {
                           if (statusState.status ==
                               UpdateStatus.updateStatusConfirmAcceptedSuccess) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CustomerHome()),
-                            );
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext ctx) {
+                                  return AlertDialog(
+                                    title: Text(
+                                      'Thông báo!',
+                                      style:
+                                          TextStyle(color: Colors.greenAccent),
+                                    ),
+                                    content: Text('Phản hồi đơn thành công!'),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            // Close the dialog
+                                            Navigator.of(context).pop();
+                                            Navigator.pop(context);
+                                            context
+                                                .read<CustomerOrderBloc>()
+                                                .add(DoOrderListEvent());
+                                          },
+                                          child: Text('Đồng ý'))
+                                    ],
+                                  );
+                                });
                           }
                         },
                         child: Row(

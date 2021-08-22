@@ -16,7 +16,7 @@ class _SignUpUiState extends State<SignUpUi> {
   TextEditingController email = TextEditingController();
   TextEditingController phoneNumber = TextEditingController();
   TextEditingController password = TextEditingController();
-  TextEditingController address = TextEditingController();
+  TextEditingController _address = TextEditingController();
 
   TextEditingController confirmpassword = TextEditingController();
   SignUpBloc signUpBloc;
@@ -91,8 +91,8 @@ class _SignUpUiState extends State<SignUpUi> {
       ),
     );
 
-   final address = TextField(
-      controller: email,
+    final address = TextField(
+      controller: _address,
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
       decoration: InputDecoration(
@@ -167,10 +167,11 @@ class _SignUpUiState extends State<SignUpUi> {
           onPressed: () {
             signUpBloc.add(SignUpButtonPressed(
                 username: username.text,
-                fullname: fullname.text,
+                password: password.text,
                 email: email.text,
+                fullname: fullname.text,
                 phoneNumber: phoneNumber.text,
-                password: password.text));
+                address: _address.text));
           },
           style:
               ElevatedButton.styleFrom(primary: Color.fromRGBO(8, 56, 99, 1)),
@@ -183,6 +184,53 @@ class _SignUpUiState extends State<SignUpUi> {
         ),
       ),
     );
+
+    _showSuccessCreateCarDialog() {
+      showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              title: Text(
+                'Thông báo!',
+                style: TextStyle(color: Colors.greenAccent),
+              ),
+              content: Text('Tạo tài khoản thành công!'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      // Close the dialog
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (_) => LoginUi()));
+                    },
+                    child: Text('Đồng ý'))
+              ],
+            );
+          });
+    }
+
+    _showErrorCreateCarDialog(String message) {
+      showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              title: Text(
+                'Thông báo!',
+                style: TextStyle(color: Colors.greenAccent),
+              ),
+              content: Text(message),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      // Close the dialog
+                      Navigator.pop(context);
+                      // Navigator.of(context)
+                      //     .push(MaterialPageRoute(builder: (_) => LoginUi()));
+                    },
+                    child: Text('Đồng ý'))
+              ],
+            );
+          });
+    }
 
     final signInLink = Padding(
         padding: EdgeInsets.zero,
@@ -199,8 +247,11 @@ class _SignUpUiState extends State<SignUpUi> {
       body: BlocListener<SignUpBloc, SignUpState>(
         listener: (context, state) {
           if (state.status == SignUpStatus.signUpSuccess) {
-            Navigator.pushNamed(context, '/customer');
-          }
+            _showSuccessCreateCarDialog();
+          } 
+          // else {
+          //   _showErrorCreateCarDialog(state.message);
+          // }
         },
         child: ListView(
           shrinkWrap: true,

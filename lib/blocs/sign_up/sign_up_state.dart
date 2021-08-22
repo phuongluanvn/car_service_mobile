@@ -4,6 +4,7 @@ enum SignUpStatus {
   init,
   loading,
   signUpSuccess,
+  duplicateUser,
   error,
 }
 

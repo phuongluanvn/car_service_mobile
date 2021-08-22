@@ -7,6 +7,8 @@ import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
 import 'package:car_service/blocs/customer/customerOrder/CreateBooking_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CreateBooking_event.dart';
 import 'package:car_service/blocs/customer/customerOrder/CreateBooking_state.dart';
+import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
+import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_event.dart';
 import 'package:car_service/blocs/customer/customerService/CustomerService_bloc.dart';
 import 'package:car_service/blocs/customer/customerService/CustomerService_event.dart';
 import 'package:car_service/blocs/packageService/PackageService_bloc.dart';
@@ -744,31 +746,14 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                               TextButton(
                                   onPressed: () {
                                     // Close the dialog
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => CustomerHome()),
-                                    );
-                                  },
-                                  child: Text('Đồng ý'))
-                            ],
-                          );
-                        });
-                  } else {
-                     showDialog(
-                        context: context,
-                        builder: (BuildContext ctx) {
-                          return AlertDialog(
-                            title: Text(
-                              'Thông báo!',
-                              style: TextStyle(color: Colors.greenAccent),
-                            ),
-                            content: Text(state.message),
-                            actions: [
-                              TextButton(
-                                  onPressed: () {
-                                    // Close the dialog
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //       builder: (context) => CustomerHome()),
+                                    // );
+                                    Navigator.of(context).pop();
                                     Navigator.pop(context);
+                                    context.read<CustomerOrderBloc>().add(DoOrderListEvent());
                                   },
                                   child: Text('Đồng ý'))
                             ],
@@ -782,30 +767,6 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                     onPrimary: Colors.white, // foreground
                   ),
                   onPressed: () {
-                    // showDialog(
-                    //     context: context,
-                    //     builder: (BuildContext ctx) {
-                    //       return AlertDialog(
-                    //         title: Text(
-                    //           'Thông báo!',
-                    //           style: TextStyle(color: Colors.greenAccent),
-                    //         ),
-                    //         content: Text('Đặt lịch dịch vụ thành công!'),
-                    //         actions: [
-                    //           TextButton(
-                    //               onPressed: () {
-                    //                 // Close the dialog
-                    //                 Navigator.push(
-                    //                   context,
-                    //                   MaterialPageRoute(
-                    //                       builder: (context) =>
-                    //                           TabOrderCustomer()),
-                    //                 );
-                    //               },
-                    //               child: Text('Đồng ý'))
-                    //         ],
-                    //       );
-                    //     });
                     _timeSelected =
                         _convertDate(_selectedDay.toString()).toString() +
                             'T' +

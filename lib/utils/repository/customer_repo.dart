@@ -40,7 +40,7 @@ class CustomerRepository {
         return res.body;
       } else if (res.statusCode == 404) {
         return res.body;
-      }else if (res.statusCode == 400) {
+      } else if (res.statusCode == 400) {
         return res.body;
       }
     } else {
@@ -66,7 +66,7 @@ class CustomerRepository {
         return res.body;
       } else if (res.statusCode == 404) {
         return res.body;
-      }else if (res.statusCode == 400) {
+      } else if (res.statusCode == 400) {
         return res.body;
       }
     } else {
@@ -395,15 +395,12 @@ class CustomerRepository {
     String message;
     // List convertData = [];
     List<CouponModel> couponsList = [];
-    var res = await http.get(Uri.parse(BASE_URL + "coupons"),
-        headers: headers);
+    var res = await http.get(Uri.parse(BASE_URL + "coupons"), headers: headers);
     final data = json.decode(res.body);
     print(data);
     if (res.statusCode == 200) {
       if (data != null) {
-        data
-            .map((e) => couponsList.add(CouponModel.fromJson(e)))
-            .toList();
+        data.map((e) => couponsList.add(CouponModel.fromJson(e))).toList();
         return couponsList;
       } else {
         return 'Không tìm thấy thông tin người dùng';
@@ -412,6 +409,19 @@ class CustomerRepository {
       message =
           'Không tìm thấy thông tin người dùng ' + res.statusCode.toString();
       return message;
+    } else {
+      return res.body;
+    }
+  }
+
+  sendFeedbackOrder(String orderId, int rating, String description) async {
+    final body = jsonEncode(
+        {"orderId": orderId, "rating": rating, "description": description});
+    var res = await http.post(Uri.parse(BASE_URL + "orders/feedback"),
+        headers: headers, body: body);
+    final data = (res.body);
+    if (data != null) {
+      return data;
     } else {
       return res.body;
     }

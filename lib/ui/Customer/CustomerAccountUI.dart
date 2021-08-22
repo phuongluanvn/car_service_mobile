@@ -33,21 +33,19 @@ class _CustomerAccountUiState extends State<CustomerAccountUi> {
   @override
   void initState() {
     super.initState();
-    _getStringFromSharedPref() async {
+    _getStringFromSharedPref();
+  }
+
+_getStringFromSharedPref() async {
       final prefs = await SharedPreferences.getInstance();
       username = prefs.getString('Username');
 
-      setState(() {
-        _username = username;
-      });
-      
+     _editProfileBloc = BlocProvider.of<EditProfileBloc>(context);
+      BlocProvider.of<ProfileBloc>(context)
+          .add(GetProfileByUsername(username: prefs.getString('Username')));
     }
 
-    _editProfileBloc = BlocProvider.of<EditProfileBloc>(context);
-      BlocProvider.of<ProfileBloc>(context)
-          .add(GetProfileByUsername(username: username));
-  }
-
+    
   @override
   Widget build(BuildContext context) {
     return Scaffold(

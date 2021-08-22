@@ -23,7 +23,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     if (event is GetProfileByUsername) {
       yield state.copyWith(status: ProfileStatus.loading);
       try {
-        var data = await _repo.getProfile('chonwang');
+        var data = await _repo.getProfile(event.username);
         if (data != null) {
           yield state.copyWith(
             cusProfile: data,
