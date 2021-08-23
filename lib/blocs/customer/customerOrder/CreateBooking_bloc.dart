@@ -22,7 +22,7 @@ class CreateBookingBloc extends Bloc<CreateBookingEvent, CreateBookingState> {
         print(data);
         if (data != null) {
           yield state.copyWith(
-              message: data.body,
+              message: data == 'Đặt lịch hẹn thành công' ? 'Đặt lịch hẹn thành công' : data.body,
               status: CreateBookingStatus.createBookingOrderSuccess);
         } else {
           yield state.copyWith(

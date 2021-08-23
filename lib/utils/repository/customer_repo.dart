@@ -36,7 +36,6 @@ class CustomerRepository {
       body: json.encode(body),
     );
     if (res.statusCode != null) {
-      print(res.statusCode);
       if (res.statusCode == 200) {
         print(res.statusCode.toString());
         return 'Đặt lịch hẹn thành công';

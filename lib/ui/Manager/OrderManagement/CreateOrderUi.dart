@@ -108,13 +108,11 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                     'Thông báo!',
                     style: TextStyle(color: Colors.greenAccent),
                   ),
-                  content: Text(state.message == '"Xe đang có lịch"'
-                      ? state.message
-                      : 'Tạo đơn thành công'),
+                  content: Text(state.message),
                   actions: [
                     TextButton(
                         onPressed: () {
-                          if (state.message == '"Xe đang có lịch"') {
+                          if (state.message == 'Đặt lịch hẹn thành công') {
                             Navigator.of(context).pop();
                           } else {
                             Navigator.of(context).pop();

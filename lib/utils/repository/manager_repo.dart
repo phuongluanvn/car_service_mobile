@@ -37,7 +37,7 @@ class ManagerRepository {
       if (res.statusCode == 200) {
         var id = json.decode(res.body);
         updateStatusOrder(id['orderId'].toString(), 'Đã nhận xe');
-        return res;
+        return 'Đặt lịch hẹn thành công';
       } else if (res.statusCode == 404) {
         return res;
       } else {

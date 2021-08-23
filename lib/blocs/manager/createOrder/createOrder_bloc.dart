@@ -24,7 +24,7 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
         // final jsonData = jsonDecode(jsonsDataString);
         if (data != null) {
           yield state.copyWith(
-            message: data.body,
+            message: data == 'Đặt lịch hẹn thành công' ? 'Đặt lịch hẹn thành công' : data.body,
             status: CreateOrderStatus.createOrderSuccess);
         } else {
           yield state.copyWith(
