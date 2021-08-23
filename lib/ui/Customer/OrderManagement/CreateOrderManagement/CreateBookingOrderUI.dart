@@ -564,25 +564,25 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                             hintText: 'Tình trạng xe'),
                                       ),
                                     ),
-                                    Container(
-                                      child: GestureDetector(
-                                        child: Container(
-                                          color: Colors.white24,
-                                          height: 100,
-                                          width: 100,
-                                          child: _image != null
-                                              ? Image.file(
-                                                  _image,
-                                                  fit: BoxFit.fill,
-                                                )
-                                              : Icon(Icons.add_a_photo),
-                                          alignment: Alignment.center,
-                                        ),
-                                        onTap: () {
-                                          _showPicker(context);
-                                        },
-                                      ),
-                                    )
+                                    // Container(
+                                    //   child: GestureDetector(
+                                    //     child: Container(
+                                    //       color: Colors.white24,
+                                    //       height: 100,
+                                    //       width: 100,
+                                    //       child: _image != null
+                                    //           ? Image.file(
+                                    //               _image,
+                                    //               fit: BoxFit.fill,
+                                    //             )
+                                    //           : Icon(Icons.add_a_photo),
+                                    //       alignment: Alignment.center,
+                                    //     ),
+                                    //     onTap: () {
+                                    //       _showPicker(context);
+                                    //     },
+                                    //   ),
+                                    // )
                                   ],
                                 ),
                               ),
@@ -745,23 +745,25 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                               'Thông báo!',
                               style: TextStyle(color: Colors.greenAccent),
                             ),
-                            content: Text(state.message == '"Xe đang có lịch"'
-                                ? state.message
-                                : 'Tạo đơn thành công'),
+                            content: Text(state.message),
                             actions: [
                               TextButton(
                                   onPressed: () {
+                                    if (state.message == 'Đặt lịch hẹn thành công') {
+                                      Navigator.of(context).pop();
+                                      Navigator.pop(context);
+                                      context
+                                          .read<CustomerOrderBloc>()
+                                          .add(DoOrderListEvent());
+                                    } else {
+                                      Navigator.of(context).pop();
+                                    }
                                     // Close the dialog
                                     // Navigator.push(
                                     //   context,
                                     //   MaterialPageRoute(
                                     //       builder: (context) => CustomerHome()),
                                     // );
-                                    Navigator.of(context).pop();
-                                    Navigator.pop(context);
-                                    context
-                                        .read<CustomerOrderBloc>()
-                                        .add(DoOrderListEvent());
                                   },
                                   child: Text('Đồng ý'))
                             ],
@@ -826,5 +828,18 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
         ),
       ),
     );
+  }
+
+  _showMessage(String mes) {
+    String mesShow;
+    if (mes == "Xe đang có lịch") {
+      mesShow = mes;
+    } else if (mes == '"Khung giờ đã được đặt"') {
+      mesShow = mes;
+    } else {
+      mesShow = 'Đặt lịch thành công';
+    }
+
+    return mesShow;
   }
 }

@@ -112,7 +112,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].note
                               : 'Không có ghi chú',
-                          state.orderDetail[0].note == null
+                          state.orderDetail[0].package != null
                               ? state.orderDetail[0].package.price
                               : 0),
                       cardInforCar(
@@ -262,8 +262,8 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                     title: Text('Chi tiết:'),
                     children: services.map((service) {
                       countPrice += service.price;
-                      print('object');
-                      print(_convertMoney(countPrice.toDouble()));
+                      // print('object');
+                      // print(_convertMoney(countPrice.toDouble()));
                       return ListTile(
                         title: Text(service.name),
                         trailing: Text(_convertMoney(service.price.toDouble())),

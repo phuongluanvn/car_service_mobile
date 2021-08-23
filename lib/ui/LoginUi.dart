@@ -245,7 +245,7 @@ class _LoginUiState extends State<LoginUi> {
               //   height: 20,
               // ),
               signUpLink,
-              forgetPass,
+              // forgetPass,
             ],
           ),
         ),

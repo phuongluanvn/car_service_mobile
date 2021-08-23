@@ -38,7 +38,8 @@ class CustomerRepository {
     if (res.statusCode != null) {
       print(res.statusCode);
       if (res.statusCode == 200) {
-        return res;
+        print(res.statusCode.toString());
+        return 'Đặt lịch hẹn thành công';
       } else if (res.statusCode == 404) {
         return res;
       } else if (res.statusCode == 400) {
