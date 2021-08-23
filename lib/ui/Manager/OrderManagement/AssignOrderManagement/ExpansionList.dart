@@ -210,28 +210,27 @@ class _ExpansionListState extends State<ExpansionList> {
                                                       .loadedServiceSuccess) {
                                                 return Row(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                      MainAxisAlignment.center,
                                                   children: [
-                                                    ElevatedButton(
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                                primary:
-                                                                    AppTheme
-                                                                        .colors
-                                                                        .blue),
-                                                        onPressed: () {
-                                                          setState(() {
-                                                            quantity++;
-                                                          });
-                                                          // processBloc.add(UpdateTest(orderId: widget.orderId, acc: state
-                                                          //     .processDetail[0].orderDetails));
+                                                    // ElevatedButton(
+                                                    //     style: ElevatedButton
+                                                    //         .styleFrom(
+                                                    //             primary:
+                                                    //                 AppTheme
+                                                    //                     .colors
+                                                    //                     .blue),
+                                                    //     onPressed: () {
+                                                    //       setState(() {
+                                                    //         quantity++;
+                                                    //       });
+                                                    //       // processBloc.add(UpdateTest(orderId: widget.orderId, acc: state
+                                                    //       //     .processDetail[0].orderDetails));
 
-                                                          // print(_accId);
-                                                        },
-                                                        child: Text('x ' +
-                                                            quantity
-                                                                .toString())),
+                                                    //       // print(_accId);
+                                                    //     },
+                                                    //     child: Text('x ' +
+                                                    //         quantity
+                                                    //             .toString())),
                                                     ElevatedButton(
                                                         style: ElevatedButton
                                                             .styleFrom(

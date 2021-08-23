@@ -46,6 +46,8 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
       try {
         List<OrderDetailModel> data =
             await _repo.getVerifyOrderDetail(event.email);
+        print('1');
+        print(data);
         if (data != null) {
           yield state.copyWith(
             updateAccIdStatus: UpdateAccIdStatus.init,
@@ -53,12 +55,14 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
             processDetail: data,
           );
         } else {
+          print('aaaa');
           yield state.copyWith(
             detailStatus: ProcessDetailStatus.error,
             message: 'Error',
           );
         }
       } catch (e) {
+        print('aa');
         yield state.copyWith(
             detailStatus: ProcessDetailStatus.error, message: e.toString());
       }

@@ -78,8 +78,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
         .add(DoVerifyBookingDetailEvent(email: widget.userId));
     BlocProvider.of<OrderHistoryBloc>(context)
         .add(DoOrderHistoryDetailEvent(id: widget.userId));
-    BlocProvider.of<ManageStaffBloc>(context)
-        .add(DoListStaffWithAvaiStatusEvent());
+    BlocProvider.of<ManageStaffBloc>(context).add(DoListStaffEvent());
   }
 
   @override
@@ -115,9 +114,9 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                       state.assignDetail[0].status == 'Đã đồng ý') {
                     _visible = true;
                   }
-                  if (state.assignDetail[0].vehicle.millageCount != 0) {
-                    _visibleKm = true;
-                  }
+                  // if (state.assignDetail[0].vehicle.millageCount != 0) {
+                  //   _visibleKm = true;
+                  // }
                   print(_visible);
                   return Padding(
                     padding: const EdgeInsets.all(12.0),
@@ -328,7 +327,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                             if (costate.historyDetail != null &&
                                                 costate
                                                     .historyDetail.isNotEmpty) {
-                                              return !_visibleKm
+                                              return _visibleKm
                                                   ? Column(
                                                       children: [
                                                         Row(
@@ -368,6 +367,11 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                           ],
                                                         ),
                                                         ElevatedButton(
+                                                            style: ElevatedButton
+                                                                .styleFrom(
+                                                                    primary: AppTheme
+                                                                        .colors
+                                                                        .blue),
                                                             onPressed: () {
                                                               setState(() {
                                                                 _visibleKm =
@@ -394,21 +398,22 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                                   0.82,
                                                               child:
                                                                   TextFormField(
+                                                                initialValue:
+                                                                    'Nhập số km',
                                                                 // controller: kmController,
                                                                 maxLines: null,
                                                                 autofocus:
                                                                     false,
                                                                 decoration:
                                                                     InputDecoration(
+                                                                  border:
+                                                                      OutlineInputBorder(),
+                                                                  labelText:
+                                                                      'Số km được ghi nhận',
                                                                   filled: true,
                                                                   fillColor:
                                                                       Colors
                                                                           .white,
-                                                                  hintStyle: TextStyle(
-                                                                      color: Colors
-                                                                          .black),
-                                                                  hintText:
-                                                                      'Số km được ghi nhận',
                                                                   contentPadding:
                                                                       EdgeInsets
                                                                           .fromLTRB(
@@ -431,6 +436,11 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                           ],
                                                         ),
                                                         ElevatedButton(
+                                                            style: ElevatedButton
+                                                                .styleFrom(
+                                                                    primary: AppTheme
+                                                                        .colors
+                                                                        .blue),
                                                             onPressed: () {
                                                               setState(() {
                                                                 _visibleKm =
@@ -626,7 +636,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                       StaffStatus.loading) {
                                     return CircularProgressIndicator();
                                   } else if (staffState.status ==
-                                      StaffStatus.staffListAvaisuccess) {
+                                      StaffStatus.staffListsuccess) {
                                     return Column(
                                       children: [
                                         // Container(
