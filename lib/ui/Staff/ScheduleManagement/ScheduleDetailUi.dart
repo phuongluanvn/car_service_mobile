@@ -35,7 +35,7 @@ class _ScheduleDetailUiState extends State<ScheduleDetailUi> {
 
   @override
   Widget build(BuildContext context) {
-    final String acceptStatus = 'Accepted';
+    // final String acceptStatus = 'Accepted';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
@@ -287,13 +287,15 @@ class _ScheduleDetailUiState extends State<ScheduleDetailUi> {
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 5, horizontal: 5),
                                 child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.black26),
-                                      borderRadius: BorderRadius.circular(5)),
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 10),
-                                  child: state.historyDetail[0].note != null
-                                      ? Container(
+                                    decoration: BoxDecoration(
+                                        border:
+                                            Border.all(color: Colors.black26),
+                                        borderRadius: BorderRadius.circular(5)),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 5, vertical: 10),
+                                    child: Column(
+                                      children: [
+                                        Container(
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
@@ -319,7 +321,8 @@ class _ScheduleDetailUiState extends State<ScheduleDetailUi> {
                                                   Container(
                                                     child: Text(
                                                       state.historyDetail[0]
-                                                          .note,
+                                                              .note ??
+                                                          '',
                                                       style: TextStyle(
                                                           fontSize: 15.0),
                                                     ),
@@ -328,28 +331,39 @@ class _ScheduleDetailUiState extends State<ScheduleDetailUi> {
                                               ),
                                             ],
                                           ),
-                                        )
-                                      : Column(
-                                          children: [
-                                            Text(
-                                              'Thông tin gói dịch vụ',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                            ListView(
-                                              shrinkWrap: true,
-                                              children: state
-                                                  .historyDetail[0].orderDetails
-                                                  .map((service) {
-                                                return ListTile(
-                                                  title: Text(service.name),
-                                                );
-                                              }).toList(),
-                                            ),
-                                          ],
                                         ),
-                                ),
+                                        SizedBox(
+                                          height: 30,
+                                        ),
+                                        state.historyDetail[0].orderDetails
+                                                    .length ==
+                                                0
+                                            ? ''
+                                            : Column(
+                                                children: [
+                                                  Text(
+                                                    'Thông tin gói dịch vụ',
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  ListView(
+                                                    shrinkWrap: true,
+                                                    children: state
+                                                        .historyDetail[0]
+                                                        .orderDetails
+                                                        .map((service) {
+                                                      return ListTile(
+                                                        title:
+                                                            Text(service.name),
+                                                      );
+                                                    }).toList(),
+                                                  ),
+                                                ],
+                                              ),
+                                      ],
+                                    )),
                               ),
                             ],
                           ),

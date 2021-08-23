@@ -26,6 +26,7 @@ class VerifyBookingDetailUi extends StatefulWidget {
 }
 
 class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
+  String reasonReject;
   UpdateStatusOrderBloc updateStatusBloc;
   @override
   void initState() {
@@ -40,6 +41,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
   Widget build(BuildContext context) {
     final String acceptStatus = 'Đã xác nhận';
     final String denyStatus = 'Từ chối đặt lịch';
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
@@ -401,19 +403,33 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                                               style: TextStyle(
                                                   color: Colors.redAccent),
                                             ),
-                                            content: Text(
-                                                'Bạn có chắc muốn từ chối ?'),
+                                            content: TextField(
+                                              onChanged: (noteValue) {
+                                                setState(() {
+                                                  reasonReject = noteValue;
+                                                });
+                                              },
+                                              maxLines: 3,
+                                              decoration:
+                                                  InputDecoration.collapsed(
+                                                      hintText:
+                                                          'Lý do từ chối'),
+                                            ),
                                             actions: [
                                               TextButton(
                                                   onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                    Navigator.pop(context);
+                                                    print(reasonReject);
                                                     updateStatusBloc.add(
-                                                        UpdateStatusButtonPressed(
+                                                        UpdateStatusDenyWithReasonButtonPressed(
                                                             id: state
                                                                 .bookingDetail[
                                                                     0]
                                                                 .id,
-                                                            status:
-                                                                denyStatus));
+                                                            status: denyStatus,
+                                                            reason:
+                                                                reasonReject));
                                                   },
                                                   child: Text('Xác nhận')),
                                               TextButton(

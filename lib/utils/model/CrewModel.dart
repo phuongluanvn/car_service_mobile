@@ -163,7 +163,7 @@ class Vehicle {
   String licensePlate;
   String imageUrl;
   String dateOfLastMaintenance;
-  int millageCount;
+  var millageCount;
 
   Vehicle(
       {this.id,
@@ -202,8 +202,8 @@ class OrderDetails {
   String serviceId;
   String accessoryId;
   String name;
-  int quantity;
-  int price;
+  var quantity;
+  var price;
   bool isIncurred;
   bool isFinished;
   String timeFinished;

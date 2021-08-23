@@ -278,6 +278,27 @@ class UpdateStatusOrderBloc
           message: e.toString(),
         );
       }
+    }else if (event is UpdateStatusDenyWithReasonButtonPressed) {
+      yield state.copyWith(status: UpdateStatus.loading);
+      try {
+        var data = await _repo.updateStatusWithNote(event.id, event.status, event.reason);
+        // String jsonsDataString = data.toString();
+        print(data);
+        // final jsonData = jsonDecode(jsonsDataString);
+        // print(jsonData);
+        if (data != null) {
+          print('Update success');
+          yield state.copyWith(status: UpdateStatus.updateDenyWithReasonSuccess);
+        } else {
+          yield state.copyWith(
+              status: UpdateStatus.error, message: 'Error Update');
+        }
+      } catch (e) {
+        yield state.copyWith(
+          status: UpdateStatus.error,
+          message: e.toString(),
+        );
+      }
     }
   }
 }

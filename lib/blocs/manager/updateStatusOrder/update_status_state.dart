@@ -13,6 +13,7 @@ enum UpdateStatus {
   updateStatusConfirmAcceptedSuccess,
   updateStatusCancelSuccess,
   updateConfirmFromCustomerSuccess,
+  updateDenyWithReasonSuccess,
   error,
 }
 

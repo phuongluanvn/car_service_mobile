@@ -110,7 +110,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                     state.assignDetail[0].crew != null) {
                   selectCrew = state.assignDetail[0].crew.members;
                   if (state.assignDetail[0].status == 'Đợi phản hồi' ||
-                      state.assignDetail[0].status == 'Đã từ chối' ||
+                      // state.assignDetail[0].status == 'Đã từ chối' ||
                       state.assignDetail[0].status == 'Đã đồng ý') {
                     _visible = true;
                   }
@@ -490,6 +490,39 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                       ),
                                     ],
                                   ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 20, horizontal: 10),
+                                child: Row(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
+                                  textBaseline: TextBaseline.alphabetic,
+                                  children: [
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      child: Text(
+                                        'Ghi chú từ người dùng:',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Container(
+                                      child: Flexible(
+                                        child: Text(
+                                          state.assignDetail[0].noteCustomer ??
+                                              'Không có ghi chú',
+                                          style: TextStyle(fontSize: 15.0),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               Container(

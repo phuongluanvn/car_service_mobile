@@ -13,6 +13,13 @@ class UpdateStatusButtonPressed extends UpdateStatusOrderEvent {
 
   UpdateStatusButtonPressed({this.id, this.status});
 }
+class UpdateStatusDenyWithReasonButtonPressed extends UpdateStatusOrderEvent {
+  final String id;
+  final String status;
+  final String reason;
+
+  UpdateStatusDenyWithReasonButtonPressed({this.id, this.status, this.reason});
+}
 
 class UpdateStatusStartButtonPressed extends UpdateStatusOrderEvent {
   final String id;

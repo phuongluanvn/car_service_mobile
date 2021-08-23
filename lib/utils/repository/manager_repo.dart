@@ -101,8 +101,7 @@ class ManagerRepository {
     List convertData = [];
 
     var res = await http.get(
-      Uri.parse(BASE_URL+'employees/' +
-          username),
+      Uri.parse(BASE_URL + 'employees/' + username),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -149,8 +148,7 @@ class ManagerRepository {
     List<OrderDetailModel> bookingList = [];
 
     var res = await http.get(
-      Uri.parse(
-          BASE_URL + "orders?status=Accepted"),
+      Uri.parse(BASE_URL + "orders?status=Accepted"),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -172,13 +170,11 @@ class ManagerRepository {
     List<OrderDetailModel> checkingList = [];
     List<OrderDetailModel> waitingList = [];
     var resChecking = await http.get(
-      Uri.parse(
-          BASE_URL + "orders?status=Kiểm tra"),
+      Uri.parse(BASE_URL + "orders?status=Kiểm tra"),
       headers: headers,
     );
     var resWaitingConfirm = await http.get(
-      Uri.parse(
-          BASE_URL + "orders?status=Đợi phản hồi"),
+      Uri.parse(BASE_URL + "orders?status=Đợi phản hồi"),
       headers: headers,
     );
     if (resChecking.statusCode == 200 && resWaitingConfirm.statusCode == 200) {
@@ -214,13 +210,11 @@ class ManagerRepository {
     List<OrderDetailModel> acceptedList = [];
 
     var resAccepted = await http.get(
-      Uri.parse(
-          BASE_URL + "orders?status=Đã xác nhận"),
+      Uri.parse(BASE_URL + "orders?status=Đã xác nhận"),
       headers: headers,
     );
     var resCheckin = await http.get(
-      Uri.parse(
-          BASE_URL + "orders?status=Đã nhận xe"),
+      Uri.parse(BASE_URL + "orders?status=Đã nhận xe"),
       headers: headers,
     );
 
@@ -258,8 +252,7 @@ class ManagerRepository {
     List<OrderDetailModel> processList = [];
 
     var resProcessing = await http.get(
-      Uri.parse(
-          BASE_URL + "Orders?status=Đang tiến hành"),
+      Uri.parse(BASE_URL + "Orders?status=Đang tiến hành"),
       headers: headers,
     );
     if (resProcessing.statusCode == 200) {
@@ -285,8 +278,7 @@ class ManagerRepository {
   Future<List<OrderDetailModel>> getTestList() async {
     List<OrderDetailModel> orderLists = [];
     var res = await http.get(
-      Uri.parse(
-          BASE_URL + "Orders?status=Đợi xác nhận"),
+      Uri.parse(BASE_URL + "Orders?status=Đợi xác nhận"),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -443,6 +435,26 @@ class ManagerRepository {
     }
   }
 
+  updateStatusWithNote(String id, String status, String note) async {
+    var body = {
+      "id": '$id',
+      "status": '$status',
+      "managerNote": '$note',
+    };
+    var res = await http.post(
+      Uri.parse(BASE_URL + "orders/confirm/customer"),
+      headers: headers,
+      body: json.encode(body),
+    );
+    if (res.statusCode != null) {
+      if (res.statusCode == 200) {
+        return res.body;
+      }
+    } else {
+      return null;
+    }
+  }
+
   deleteItemById(String detailId) async {
     var res = await http.delete(
       Uri.parse(BASE_URL + 'orders/details?orderDetailId=' + detailId),
@@ -528,8 +540,7 @@ class ManagerRepository {
     };
 
     var res = await http.put(
-      Uri.parse(
-          BASE_URL + "orders/details"),
+      Uri.parse(BASE_URL + "orders/details"),
       headers: headers,
       body: json.encode(body),
     );
@@ -551,13 +562,11 @@ class ManagerRepository {
     List<OrderDetailModel> deniedList = [];
 
     var resAccepted = await http.get(
-      Uri.parse(
-          BASE_URL + "Orders?status=Đã đồng ý"),
+      Uri.parse(BASE_URL + "Orders?status=Đã đồng ý"),
       headers: headers,
     );
     var resDenied = await http.get(
-      Uri.parse(
-          BASE_URL + "Orders?status=Đã từ chối"),
+      Uri.parse(BASE_URL + "Orders?status=Đã từ chối"),
       headers: headers,
     );
 
@@ -622,13 +631,11 @@ class ManagerRepository {
     List<OrderDetailModel> deniedList = [];
 
     var resAccepted = await http.get(
-      Uri.parse(
-          BASE_URL + "Orders?status=Đợi thanh toán"),
+      Uri.parse(BASE_URL + "Orders?status=Đợi thanh toán"),
       headers: headers,
     );
     var resDenied = await http.get(
-      Uri.parse(
-          BASE_URL + "Orders?status=Đã thanh toán"),
+      Uri.parse(BASE_URL + "Orders?status=Đã thanh toán"),
       headers: headers,
     );
 
@@ -666,18 +673,15 @@ class ManagerRepository {
     List<OrderDetailModel> cancelBookingList = [];
 
     var resAccepted = await http.get(
-      Uri.parse(
-          BASE_URL + "Orders?status=Hoàn thành"),
+      Uri.parse(BASE_URL + "Orders?status=Hoàn thành"),
       headers: headers,
     );
     var resCheckin = await http.get(
-      Uri.parse(
-          BASE_URL + "Orders?status=Hủy đơn"),
+      Uri.parse(BASE_URL + "Orders?status=Hủy đơn"),
       headers: headers,
     );
     var resCancel = await http.get(
-      Uri.parse(
-          BASE_URL + "Orders?status=Hủy đặt lịch"),
+      Uri.parse(BASE_URL + "Orders?status=Từ chối đặt lịch"),
       headers: headers,
     );
 
