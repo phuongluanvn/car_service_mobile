@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:car_service/blocs/manager/Accessories/accessory_bloc.dart';
 import 'package:car_service/blocs/manager/Accessories/accessory_event.dart';
 import 'package:car_service/blocs/manager/Accessories/accessory_state.dart';
@@ -43,6 +41,7 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
   String selectItem;
   String holder = '';
   int countPrice = 0;
+  int total = 0;
   @override
   void initState() {
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
@@ -247,7 +246,13 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
                                       children: state
                                           .processDetail[0].orderDetails
                                           .map((service) {
-                                        countPrice += service.price;
+                                        total = state
+                                            .processDetail[0].orderDetails
+                                            .fold(
+                                                0,
+                                                (sum, element) =>
+                                                    sum + element.price);
+                                        // countPrice += service.price;
                                         return BlocBuilder<AccessoryBloc,
                                                 AccessoryState>(
                                             // ignore: missing_return
@@ -315,10 +320,9 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
                                               fontWeight: FontWeight.w900),
                                         ),
                                         trailing: Text(
-                                          _convertMoney(
-                                              countPrice.toDouble() != 0
-                                                  ? countPrice.toDouble()
-                                                  : 0),
+                                          _convertMoney(total.toDouble() != 0
+                                              ? total.toDouble()
+                                              : 0),
                                         )),
                                   ],
                                 ),

@@ -84,8 +84,11 @@ class _ExpansionListState extends State<ExpansionList> {
                         child: Text(state
                             .processDetail[0].orderDetails[widget.index].name),
                       ),
-                      Text(
-                          '${state.processDetail[0].orderDetails[widget.index].price}'),
+                      Text(state.processDetail[0].orderDetails[widget.index]
+                                  .price !=
+                              0
+                          ? '${state.processDetail[0].orderDetails[widget.index].price}'
+                          : '   '),
                     ],
                   ),
                   children: [
@@ -212,25 +215,7 @@ class _ExpansionListState extends State<ExpansionList> {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   children: [
-                                                    // ElevatedButton(
-                                                    //     style: ElevatedButton
-                                                    //         .styleFrom(
-                                                    //             primary:
-                                                    //                 AppTheme
-                                                    //                     .colors
-                                                    //                     .blue),
-                                                    //     onPressed: () {
-                                                    //       setState(() {
-                                                    //         quantity++;
-                                                    //       });
-                                                    //       // processBloc.add(UpdateTest(orderId: widget.orderId, acc: state
-                                                    //       //     .processDetail[0].orderDetails));
-
-                                                    //       // print(_accId);
-                                                    //     },
-                                                    //     child: Text('x ' +
-                                                    //         quantity
-                                                    //             .toString())),
+                                                  
                                                     ElevatedButton(
                                                         style: ElevatedButton
                                                             .styleFrom(
@@ -243,10 +228,7 @@ class _ExpansionListState extends State<ExpansionList> {
                                                             isEditTextField =
                                                                 false;
                                                           });
-                                                          // processBloc.add(UpdateTest(orderId: widget.orderId, acc: state
-                                                          //     .processDetail[0].orderDetails));
-                                                          print(
-                                                              'priceAcc:${_priceAcc}');
+                                                         
                                                           int _priceSrv = 0;
 
                                                           if (sstate.serviceLists.indexWhere((element) =>

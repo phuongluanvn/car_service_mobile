@@ -24,6 +24,7 @@ class OrderHistoryDetailUi extends StatefulWidget {
 }
 
 class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
+  int total = 0;
   // UpdateStatusOrderBloc updateStatusBloc;
   @override
   void initState() {
@@ -145,17 +146,20 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
                         ),
                         Container(height: 16),
                         cardInforService(
-                            state.historyDetail[0].vehicle.model,
-                            state.historyDetail[0].vehicle.model,
-                            state.historyDetail[0].vehicle.licensePlate,
-                            state.historyDetail[0].orderDetails,
-                            state.historyDetail[0].note == null ? false : true,
-                            state.historyDetail[0].note != null
-                                ? state.historyDetail[0].note
-                                : 'Không có ghi chú',
-                            state.historyDetail[0].note == null
-                                ? state.historyDetail[0].package.price
-                                : 0),
+                          state.historyDetail[0].vehicle.model,
+                          state.historyDetail[0].vehicle.model,
+                          state.historyDetail[0].vehicle.licensePlate,
+                          state.historyDetail[0].orderDetails,
+                          state.historyDetail[0].note == null ? false : true,
+                          state.historyDetail[0].note != null
+                              ? state.historyDetail[0].note
+                              : 'Không có ghi chú',
+                          // state.historyDetail[0].note == null
+                          //     ? state.historyDetail[0].package.price
+                          //     : 0
+                          total = state.historyDetail[0].orderDetails
+                              .fold(0, (sum, element) => sum + element.price),
+                        ),
                         state.historyDetail[0].feedbacks.isNotEmpty
                             ? _showFeedback(
                                 state.historyDetail[0].feedbacks.first.rating,

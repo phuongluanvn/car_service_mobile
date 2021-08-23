@@ -38,7 +38,7 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
   bool checkedValue = false;
   String selectItem;
   String holder = '';
-  int countPrice = 0;
+  int total = 0;
   @override
   void initState() {
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
@@ -93,6 +93,8 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                         children:
                             state.processDetail[0].orderDetails.map((service) {
                           // countPrice += service.price;
+                          total = state.processDetail[0].orderDetails
+                              .fold(0, (sum, element) => sum + element.price);
                           return BlocBuilder<AccessoryBloc, AccessoryState>(
                               // ignore: missing_return
                               builder: (context, accState) {
@@ -148,9 +150,8 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                                 fontSize: 16, fontWeight: FontWeight.w900),
                           ),
                           trailing: Text(
-                            _convertMoney(countPrice.toDouble() != 0
-                                ? countPrice.toDouble()
-                                : 0),
+                            _convertMoney(
+                                total.toDouble() != 0 ? total.toDouble() : 0),
                           )),
                       BlocListener<UpdateStatusOrderBloc,
                           UpdateStatusOrderState>(
@@ -172,17 +173,13 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                                 child: Text('Hoàn tất dịch vụ',
                                     style: TextStyle(color: Colors.white)),
                                 onPressed: () {
-                                   updateStatusBloc.add(
-                                                UpdateStatusStartAndWorkingButtonPressed(
-                                                    id: state
-                                                        .processDetail[0].id,
-                                                    listData: state
-                                                        .processDetail[0]
-                                                        .crew
-                                                        .members,
-                                                    status: processingStatus,
-                                                    workingStatus:
-                                                        workingStatus));
+                                  updateStatusBloc.add(
+                                      UpdateStatusStartAndWorkingButtonPressed(
+                                          id: state.processDetail[0].id,
+                                          listData: state
+                                              .processDetail[0].crew.members,
+                                          status: processingStatus,
+                                          workingStatus: workingStatus));
                                   // updateStatusBloc.add(
                                   //     UpdateStatusButtonPressed(
                                   //         id: state.processDetail[0].id,
