@@ -52,7 +52,7 @@ class ManagerRepository {
     List<StaffModel> staffList = [];
 
     var resStaff = await http.get(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/employees"),
+      Uri.parse(BASE_URL + "employees"),
       headers: headers,
     );
     if (resStaff.statusCode == 200) {
@@ -76,7 +76,7 @@ class ManagerRepository {
     List<StaffModel> staffList = [];
 
     var resStaff = await http.get(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/employees"),
+      Uri.parse(BASE_URL + "employees"),
       headers: headers,
     );
     if (resStaff.statusCode == 200) {
@@ -101,7 +101,7 @@ class ManagerRepository {
     List convertData = [];
 
     var res = await http.get(
-      Uri.parse('https://carservicesystem.azurewebsites.net/api/employees/' +
+      Uri.parse(BASE_URL+'employees/' +
           username),
       headers: headers,
     );
@@ -127,7 +127,7 @@ class ManagerRepository {
   Future<List<ServiceModel>> getServiceList() async {
     List<ServiceModel> serviceLists = [];
     var res = await http.get(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/Services"),
+      Uri.parse(BASE_URL + "Services"),
       headers: headers,
     );
     print(res);
@@ -150,7 +150,7 @@ class ManagerRepository {
 
     var res = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/orders?status=Accepted"),
+          BASE_URL + "orders?status=Accepted"),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -173,12 +173,12 @@ class ManagerRepository {
     List<OrderDetailModel> waitingList = [];
     var resChecking = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/orders?status=Kiểm tra"),
+          BASE_URL + "orders?status=Kiểm tra"),
       headers: headers,
     );
     var resWaitingConfirm = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/orders?status=Đợi phản hồi"),
+          BASE_URL + "orders?status=Đợi phản hồi"),
       headers: headers,
     );
     if (resChecking.statusCode == 200 && resWaitingConfirm.statusCode == 200) {
@@ -215,12 +215,12 @@ class ManagerRepository {
 
     var resAccepted = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/orders?status=Đã xác nhận"),
+          BASE_URL + "orders?status=Đã xác nhận"),
       headers: headers,
     );
     var resCheckin = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/orders?status=Đã nhận xe"),
+          BASE_URL + "orders?status=Đã nhận xe"),
       headers: headers,
     );
 
@@ -259,7 +259,7 @@ class ManagerRepository {
 
     var resProcessing = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Đang tiến hành"),
+          BASE_URL + "Orders?status=Đang tiến hành"),
       headers: headers,
     );
     if (resProcessing.statusCode == 200) {
@@ -286,7 +286,7 @@ class ManagerRepository {
     List<OrderDetailModel> orderLists = [];
     var res = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Đợi xác nhận"),
+          BASE_URL + "Orders?status=Đợi xác nhận"),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -307,7 +307,7 @@ class ManagerRepository {
   Future<List<AccessoryModel>> getAccessoryList() async {
     List<AccessoryModel> accLists = [];
     var res = await http.get(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/accessories"),
+      Uri.parse(BASE_URL + "accessories"),
       headers: headers,
     );
     if (res.statusCode == 200) {
@@ -360,11 +360,9 @@ class ManagerRepository {
       Uri.parse('https://carservicesystem.azurewebsites.net/api/orders/' + id),
       headers: headers,
     );
-    print(res.body);
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
       convertData.add(data); //thêm [] để dùng .map bêndưới
-
       try {
         if (data != null) {
           convertData
@@ -391,30 +389,22 @@ class ManagerRepository {
       "memberUsernameList": listName,
     };
     var res = await http.post(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/crews"),
+      Uri.parse(BASE_URL + "crews"),
       headers: headers,
       body: json.encode(body),
     );
     if (res.statusCode != null) {
-      print('Have data 1');
-      print(res.statusCode);
       if (res.statusCode == 200) {
-        print('Have data 2');
         return res.body;
       }
     } else {
-      print('repo no crew');
       return null;
     }
   }
 
   updateConfirmFromCustomer(
       String id, bool isAccept, String customerNote) async {
-    var body = {
-      "id": id,
-      "isAccept": isAccept,
-      "customerNote": customerNote
-    };
+    var body = {"id": id, "isAccept": isAccept, "customerNote": customerNote};
     var res = await http.put(
       Uri.parse(BASE_URL + "orders/confirm/manager"),
       headers: headers,
@@ -440,7 +430,7 @@ class ManagerRepository {
       "status": '$status',
     };
     var res = await http.put(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/orders/status"),
+      Uri.parse(BASE_URL + "orders/status"),
       headers: headers,
       body: json.encode(body),
     );
@@ -455,9 +445,7 @@ class ManagerRepository {
 
   deleteItemById(String detailId) async {
     var res = await http.delete(
-      Uri.parse(
-          'https://carservicesystem.azurewebsites.net/api/orders/details?orderDetailId=' +
-              detailId),
+      Uri.parse(BASE_URL + 'orders/details?orderDetailId=' + detailId),
       headers: headers,
     );
     if (res.statusCode != null) {
@@ -471,18 +459,14 @@ class ManagerRepository {
   }
 
   updateSelectedCrew(String crewid, List<StaffModel> selectedCrew) async {
-    // print(crewid);
     List<String> listName = List.generate(
         selectedCrew.length, (index) => selectedCrew[index].username);
-    // print('listname:');
-    // print(listName);
     var body = {"id": '$crewid', "memberUsernameList": listName};
     var res = await http.put(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/crews/members"),
+      Uri.parse(BASE_URL + "crews/members"),
       headers: headers,
       body: json.encode(body),
     );
-    print(json.encode(body));
     if (res.statusCode != null) {
       print(res.statusCode);
       if (res.statusCode == 200) {
@@ -496,11 +480,8 @@ class ManagerRepository {
   updateStatusTask(String id, bool selected) async {
     print(id);
     var body = {"id": '$id', "isFinished": selected};
-    var res = await http.put(
-        Uri.parse(
-            "https://carservicesystem.azurewebsites.net/api/orders/details/status"),
-        headers: headers,
-        body: json.encode([body]));
+    var res = await http.put(Uri.parse(BASE_URL + "orders/details/status"),
+        headers: headers, body: json.encode([body]));
     if (res.statusCode != null) {
       print(res.statusCode);
       if (res.statusCode == 200) {
@@ -518,7 +499,7 @@ class ManagerRepository {
       "status": '$status',
     };
     var res = await http.put(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/employees"),
+      Uri.parse(BASE_URL + "employees"),
       headers: headers,
       body: json.encode(body),
     );
@@ -548,7 +529,7 @@ class ManagerRepository {
 
     var res = await http.put(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/orders/details"),
+          BASE_URL + "orders/details"),
       headers: headers,
       body: json.encode(body),
     );
@@ -571,12 +552,12 @@ class ManagerRepository {
 
     var resAccepted = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Đã đồng ý"),
+          BASE_URL + "Orders?status=Đã đồng ý"),
       headers: headers,
     );
     var resDenied = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Đã từ chối"),
+          BASE_URL + "Orders?status=Đã từ chối"),
       headers: headers,
     );
 
@@ -642,12 +623,12 @@ class ManagerRepository {
 
     var resAccepted = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Đợi thanh toán"),
+          BASE_URL + "Orders?status=Đợi thanh toán"),
       headers: headers,
     );
     var resDenied = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Đã thanh toán"),
+          BASE_URL + "Orders?status=Đã thanh toán"),
       headers: headers,
     );
 
@@ -686,17 +667,17 @@ class ManagerRepository {
 
     var resAccepted = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Hoàn thành"),
+          BASE_URL + "Orders?status=Hoàn thành"),
       headers: headers,
     );
     var resCheckin = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Hủy đơn"),
+          BASE_URL + "Orders?status=Hủy đơn"),
       headers: headers,
     );
     var resCancel = await http.get(
       Uri.parse(
-          "https://carservicesystem.azurewebsites.net/api/Orders?status=Hủy đặt lịch"),
+          BASE_URL + "Orders?status=Hủy đặt lịch"),
       headers: headers,
     );
 

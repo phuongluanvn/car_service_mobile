@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:car_service/blocs/manager/Accessories/accessory_bloc.dart';
 import 'package:car_service/blocs/manager/Accessories/accessory_event.dart';
 import 'package:car_service/blocs/manager/Accessories/accessory_state.dart';
@@ -347,10 +349,11 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
                                               style: TextStyle(
                                                   color: Colors.white)),
                                           onPressed: () {
-                                           updateStatusBloc.add(
-                                      UpdateStatusButtonPressed(
-                                          id: state.processDetail[0].id,
-                                          status: processingStatus));
+                                            updateStatusBloc.add(
+                                                UpdateStatusButtonPressed(
+                                                    id: state
+                                                        .processDetail[0].id,
+                                                    status: processingStatus));
                                             Navigator.of(context).push(
                                                 MaterialPageRoute(
                                                     builder: (_) =>

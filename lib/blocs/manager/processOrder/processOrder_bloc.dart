@@ -26,13 +26,11 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
             processList: assignList,
             status: ProcessStatus.processSuccess,
           );
-          print('dada');
         } else {
           yield state.copyWith(
             status: ProcessStatus.error,
             message: 'Error',
           );
-          print('no data');
         }
       } catch (e) {
         yield state.copyWith(
@@ -46,8 +44,6 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
       try {
         List<OrderDetailModel> data =
             await _repo.getVerifyOrderDetail(event.email);
-        print('1');
-        print(data);
         if (data != null) {
           yield state.copyWith(
             updateAccIdStatus: UpdateAccIdStatus.init,
@@ -55,14 +51,12 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
             processDetail: data,
           );
         } else {
-          print('aaaa');
           yield state.copyWith(
             detailStatus: ProcessDetailStatus.error,
             message: 'Error',
           );
         }
       } catch (e) {
-        print('aa');
         yield state.copyWith(
             detailStatus: ProcessDetailStatus.error, message: e.toString());
       }
@@ -78,7 +72,6 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
           yield state.copyWith(
             updateAccIdStatus: UpdateAccIdStatus.success,
           );
-          print('AccId updated');
         } else {
           yield state.copyWith(
             updateAccIdStatus: UpdateAccIdStatus.error,
@@ -104,7 +97,6 @@ class ProcessOrderBloc extends Bloc<ProcessOrderEvent, ProcessOrderState> {
           yield state.copyWith(
             updateCrewStatus: UpdateCrewStatus.success,
           );
-          print('Crew updated');
         } else {
           yield state.copyWith(
             updateCrewStatus: UpdateCrewStatus.error,

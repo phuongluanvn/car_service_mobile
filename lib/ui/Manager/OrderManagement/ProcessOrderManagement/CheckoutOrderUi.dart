@@ -92,7 +92,7 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                       Column(
                         children:
                             state.processDetail[0].orderDetails.map((service) {
-                          countPrice += service.price;
+                          // countPrice += service.price;
                           return BlocBuilder<AccessoryBloc, AccessoryState>(
                               // ignore: missing_return
                               builder: (context, accState) {
@@ -105,10 +105,10 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                                 ListAccessoryStatus.success) {
                               return ExpansionTile(
                                 title: Text(service.name),
-                                trailing: Text(_convertMoney(
-                                    service.price.toDouble() != 0
-                                        ? service.price.toDouble()
-                                        : 0)),
+                                // trailing: Text(_convertMoney(
+                                //     service.price.toDouble() != 0
+                                //         ? service.price.toDouble()
+                                //         : 0)),
                                 children: [
                                   accState.accessoryList.indexWhere((element) =>
                                               element.id ==

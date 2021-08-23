@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:equatable/equatable.dart';
 
@@ -210,8 +212,8 @@ class Package extends Equatable {
   String id;
   String name;
   String description;
-  int price;
-  Null services;
+  var price;
+  String services;
 
   Package({this.id, this.name, this.description, this.price, this.services});
 
@@ -328,8 +330,8 @@ class OrderDetails extends Equatable {
   String serviceId;
   String accessoryId;
   String name;
-  int quantity;
-  int price;
+  var quantity;
+  var price;
   bool isIncurred;
   bool isFinished;
   String timeFinished;
