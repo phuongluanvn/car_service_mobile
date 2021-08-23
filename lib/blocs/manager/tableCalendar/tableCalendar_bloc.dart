@@ -18,13 +18,34 @@ class TableCalendarBloc extends Bloc<TableCalendarEvent, TableCalendarState> {
   @override
   Stream<TableCalendarState> mapEventToState(TableCalendarEvent event) async* {
     if (event is DoListTableCalendarEvent) {
+      List<CrewModel> finishList = [];
+      List<CrewModel> processList = [];
       yield state.copyWith(status: TableCalendarStatus.loading);
       try {
-        List<CrewModel> historyList = await _repo.getCalendarList(event.username);
+        List<CrewModel> historyList =
+            await _repo.getCalendarList(event.username);
+        // print(historyList);
+        historyList
+            .map((orderT) => {
+                  if (orderT.order.status == 'Đang tiến hành' ||
+                      orderT.order.status == 'Kiểm tra')
+                    {
+                      processList.add(orderT),
+                      print(orderT.order.status),
+                    }
+                  else if (orderT.order.status == 'Hoàn thành')
+                    {
+                      finishList.add(orderT),
+                      print(finishList),
+                    }
+                })
+            .toList();
+
         if (historyList != null) {
-          print(historyList);
           yield state.copyWith(
               tableCalendarList: historyList,
+              finishList: finishList,
+              processList: processList,
               status: TableCalendarStatus.tableCalendarSuccess);
         } else {
           yield state.copyWith(
@@ -34,6 +55,7 @@ class TableCalendarBloc extends Bloc<TableCalendarEvent, TableCalendarState> {
           print('no data');
         }
       } catch (e) {
+        print(e);
         yield state.copyWith(
           status: TableCalendarStatus.error,
           message: e.toString(),

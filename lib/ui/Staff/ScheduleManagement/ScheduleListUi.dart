@@ -20,6 +20,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class ScheduleListUi extends StatefulWidget {
   @override
@@ -63,30 +64,6 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
     return formatDate(DateTime.parse(dateInput), [yyyy]);
   }
 
-  // Future<Map<DateTime, List>> getTask1() async {
-  //   Map<DateTime, List> mapFetch = {};
-  //   List<OrderDetailModel> list =
-  //       await ManagerRepository().getBookingOrderList();
-  //   for (int i = 0; i < list.length; i++) {
-  //     var createTime = DateTime(
-  //       _getYear(list[i].bookingTime),
-  //       _getMonth(list[i].bookingTime),
-  //       _getDay(list[i].bookingTime),
-  //     );
-  //     var original = mapFetch[createTime];
-  //     if (original == null) {
-  //       print("null");
-  //       mapFetch[createTime] = [DateTime.parse(list[i].bookingTime)];
-  //     } else {
-  //       print(DateTime.parse(list[i].bookingTime));
-  //       mapFetch[createTime] = List.from(original)
-  //         ..addAll([DateTime.parse(list[i].bookingTime)]);
-  //     }
-  //   }
-
-  //   return mapFetch;
-  // }
-
   void _onDaySelected(DateTime day, List events) {
     print('CALLBACK: _onDaySelected');
     setState(() {
@@ -120,6 +97,7 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
 
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting('vi_VN', null);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
@@ -131,6 +109,7 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
         child: Column(
           children: [
             TableCalendar(
+              locale: 'vi_VN',
               focusedDay: focusedDay,
               firstDay: DateTime(1990),
               lastDay: DateTime(2050),
@@ -182,14 +161,14 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
                   return CircularProgressIndicator();
                 } else if (state.status ==
                     TableCalendarStatus.tableCalendarSuccess) {
-                  if (state.tableCalendarList != null &&
-                      state.tableCalendarList.isNotEmpty) {
+                  if (state.processList != null &&
+                      state.processList.isNotEmpty) {
+                    print(state);
                     return Column(
-                      children: List.generate(state.tableCalendarList.length,
-                          (index) {
+                      children:
+                          List.generate(state.processList.length, (index) {
                         DateTime bookingTime = DateFormat('yyyy-MM-ddTHH:mm:ss')
-                            .parse(state
-                                .tableCalendarList[index].order.bookingTime);
+                            .parse(state.processList[index].order.bookingTime);
 
                         if (isSameDay(selectedDay, bookingTime)) {
                           return Card(
@@ -204,23 +183,22 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
                                       Icons.circle,
                                       color: Colors.yellow,
                                     ),
-                                    Text(state
-                                        .tableCalendarList[index].order.status),
+                                    Text(state.processList[index].order.status),
                                   ]),
                               leading:
                                   Image.asset('lib/images/order_small.png'),
-                              title: Text(state.tableCalendarList[index].order
-                                  .vehicle.licensePlate),
+                              title: Text(state.processList[index].order.vehicle
+                                  .licensePlate),
                               subtitle: Text(
-                                _convertDate(state.tableCalendarList[index]
-                                    .order.bookingTime),
+                                _convertDate(
+                                    state.processList[index].order.bookingTime),
                               ),
                               onTap: () {
-                                print(state.tableCalendarList[index].order.id);
+                                print(state.processList[index].order.id);
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (_) => ScheduleDetailUi(
-                                        orderId: state.tableCalendarList[index]
-                                            .order.id)));
+                                        orderId: state
+                                            .processList[index].order.id)));
                               },
                             ),
                           ])
@@ -242,104 +220,6 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
           ],
         ),
       ),
-      // floatingActionButton: FloatingActionButton.extended(
-      //   onPressed: () => showDialog(
-      //     context: context,
-      //     builder: (context) => AlertDialog(
-      //       title: Text("Add Event"),
-      //       content: TextFormField(
-      //         controller: _eventController,
-      //       ),
-      //       actions: [
-      //         TextButton(
-      //           child: Text("Cancel"),
-      //           onPressed: () => Navigator.pop(context),
-      //         ),
-      //         TextButton(
-      //           child: Text("Ok"),
-      //           onPressed: () {
-      //             if (_eventController.text.isEmpty) {
-      //             } else {
-      //               if (selectedEvents[selectedDay] != null) {
-      //                 selectedEvents[selectedDay].add(
-      //                   Event(title: _eventController.text),
-      //                 );
-      //               } else {
-      //                 selectedEvents[selectedDay] = [
-      //                   Event(title: _eventController.text)
-      //                 ];
-      //               }
-      //             }
-      //             Navigator.pop(context);
-      //             _eventController.clear();
-      //             setState(() {});
-      //             return;
-      //           },
-      //         ),
-      //       ],
-      //     ),
-      //   ),
-      //   label: Text("Add Event"),
-      //   icon: Icon(Icons.add),
-      // ),
-
-      // Center(
-      //   child:
-
-      //  BlocBuilder<OrderHistoryBloc, OrderHistoryState>(
-      //   // ignore: missing_return
-      //   builder: (context, state) {
-      //     if (state.status == OrderHistoryStatus.init) {
-      //       return CircularProgressIndicator();
-      //     } else if (state.status == OrderHistoryStatus.loading) {
-      //       return CircularProgressIndicator();
-      //     } else if (state.status == OrderHistoryStatus.historySuccess) {
-      //       if (state.historyList != null && state.historyList.isNotEmpty)
-      //         return ListView.builder(
-      //           itemCount: state.historyList.length,
-      //           shrinkWrap: true,
-      //           itemBuilder: (context, index) {
-      //             return Card(
-      //                 child: Column(children: [
-      //               ListTile(
-      //                 trailing: Column(
-      //                     mainAxisSize: MainAxisSize.min,
-      //                     children: <Widget>[
-      //                       Icon(
-      //                         Icons.circle,
-      //                         color: Colors.red,
-      //                       ),
-      //                       Text(state.historyList[index].status),
-      //                     ]),
-      //                 leading: Image.asset('lib/images/order_small.png'),
-      //                 title:
-      //                     Text(state.historyList[index].vehicle.licensePlate),
-      //                 subtitle: Text(
-      //                   _convertDate(state.historyList[index].createdTime),
-      //                 ),
-      //                 onTap: () {
-      //                   Navigator.of(context).push(MaterialPageRoute(
-      //                       builder: (_) => OrderHistoryDetailUi(
-      //                           orderId: state.historyList[index].id)));
-      //                 },
-      //               ),
-      //             ])
-
-      //                 );
-
-      //           },
-      //         );
-      //       else
-      //         return Center(
-      //           child: Text('Hiện tại không có đơn'),
-      //         );
-      //     } else if (state.status == OrderHistoryStatus.error) {
-      //       return ErrorWidget(state.message.toString());
-      //     }
-      //   },
-      // ),
-
-      // );
     );
   }
 

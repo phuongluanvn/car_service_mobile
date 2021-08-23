@@ -27,6 +27,8 @@ import 'package:money_formatter/money_formatter.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'dart:async';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class CreateBookingOrderUI extends StatefulWidget {
   @override
@@ -240,6 +242,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
 
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting('vi_VN', null);
     return Scaffold(
       backgroundColor: AppTheme.colors.lightblue,
       appBar: AppBar(
@@ -610,6 +613,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                       ),
                       Container(
                         child: TableCalendar(
+                          locale: 'vi_VN',
                           firstDay: DateTime.utc(2020),
                           lastDay: DateTime.utc(2030),
                           currentDay: DateTime.now(),
@@ -753,7 +757,9 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                     // );
                                     Navigator.of(context).pop();
                                     Navigator.pop(context);
-                                    context.read<CustomerOrderBloc>().add(DoOrderListEvent());
+                                    context
+                                        .read<CustomerOrderBloc>()
+                                        .add(DoOrderListEvent());
                                   },
                                   child: Text('Đồng ý'))
                             ],

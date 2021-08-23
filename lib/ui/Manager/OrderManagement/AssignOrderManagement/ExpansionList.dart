@@ -80,8 +80,10 @@ class _ExpansionListState extends State<ExpansionList> {
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(state
-                          .processDetail[0].orderDetails[widget.index].name),
+                      Flexible(
+                        child: Text(state
+                            .processDetail[0].orderDetails[widget.index].name),
+                      ),
                       Text(
                           '${state.processDetail[0].orderDetails[widget.index].price}'),
                     ],

@@ -78,7 +78,8 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
         .add(DoVerifyBookingDetailEvent(email: widget.userId));
     BlocProvider.of<OrderHistoryBloc>(context)
         .add(DoOrderHistoryDetailEvent(id: widget.userId));
-    BlocProvider.of<ManageStaffBloc>(context).add(DoListStaffEvent());
+    BlocProvider.of<ManageStaffBloc>(context)
+        .add(DoListStaffWithAvaiStatusEvent());
   }
 
   @override
@@ -625,7 +626,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                       StaffStatus.loading) {
                                     return CircularProgressIndicator();
                                   } else if (staffState.status ==
-                                      StaffStatus.staffListsuccess) {
+                                      StaffStatus.staffListAvaisuccess) {
                                     return Column(
                                       children: [
                                         // Container(

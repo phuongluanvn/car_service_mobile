@@ -27,6 +27,8 @@ class TableCalendarState extends Equatable {
   final TableCalendarStatus status;
   final TableCalendarDetailStatus detailStatus;
   final List<CrewModel> tableCalendarList;
+  final List<CrewModel> processList;
+  final List<CrewModel> finishList;
   final List<OrderDetailModel> tableCalendarDetail;
   final String message;
   const TableCalendarState({
@@ -34,6 +36,8 @@ class TableCalendarState extends Equatable {
     this.detailStatus: TableCalendarDetailStatus.init,
     this.tableCalendarDetail: const [],
     this.tableCalendarList: const [],
+    this.processList: const [],
+    this.finishList: const [],
     this.message: '',
   });
 
@@ -42,6 +46,8 @@ class TableCalendarState extends Equatable {
     TableCalendarDetailStatus detailStatus,
     List<CrewModel> tableCalendarList,
     List<OrderDetailModel> tableCalendarDetail,
+    List<CrewModel> processList,
+    List<CrewModel> finishList,
     String message,
   }) =>
       TableCalendarState(
@@ -50,6 +56,8 @@ class TableCalendarState extends Equatable {
         tableCalendarList: tableCalendarList ?? this.tableCalendarList,
         tableCalendarDetail: tableCalendarDetail ?? this.tableCalendarDetail,
         message: message ?? this.message,
+        processList: processList?? this.processList,
+        finishList: finishList?? this.finishList,
       );
   @override
   List<Object> get props => [
@@ -57,25 +65,10 @@ class TableCalendarState extends Equatable {
         detailStatus,
         tableCalendarList,
         tableCalendarDetail,
+        processList,
+        finishList,
         message,
       ];
 }
 
-// class VerifyBookingInitState extends VerifyBookingState {}
 
-// class VerifyBookingLoadingState extends VerifyBookingState {}
-
-// class VerifyBookingSuccessState extends VerifyBookingState {
-//   List<BookingModel> bookingList;
-//   VerifyBookingSuccessState({this.bookingList});
-// }
-
-// class VerifyBookingDetailSucessState extends VerifyBookingState {
-//   List<BookingModel> data;
-//   VerifyBookingDetailSucessState({this.data});
-// }
-
-// class VerifyBookingErrorState extends VerifyBookingState {
-//   final String message;
-//   VerifyBookingErrorState({this.message});
-// }

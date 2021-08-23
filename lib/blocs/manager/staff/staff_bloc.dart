@@ -91,7 +91,8 @@ class ManageStaffBloc extends Bloc<ManageStaffEvent, ManageStaffState> {
         var staffList = await _repo.getStaffList();
         staffList
             .map((e) => {
-                  if (e.role == 'staff') {listTest.add(e)}
+                  if (e.role == 'staff' && e.status == 'Đang hoạt động')
+                    {listTest.add(e)}
                 })
             .toList();
         print(listTest);

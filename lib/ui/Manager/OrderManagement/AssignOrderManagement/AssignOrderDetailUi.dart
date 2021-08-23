@@ -44,7 +44,6 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
   ProcessOrderBloc processOrderBloc;
   bool _checkStatusCheckin = true;
   OrderHistoryBloc orderHistoryBloc;
-  
 
   @override
   void initState() {
@@ -66,17 +65,18 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
     });
   }
 
-  Future<void> _getData() async{
+  Future<void> _getData() async {
     setState(() {
-          BlocProvider.of<OrderHistoryBloc>(context)
-        .add(DoOrderHistoryDetailEvent(id: widget.orderId));
-        });
+      BlocProvider.of<OrderHistoryBloc>(context)
+          .add(DoOrderHistoryDetailEvent(id: widget.orderId));
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final String checkinStatus = 'Đã nhận xe';
     final String checkingStatus = 'Kiểm tra';
+    final String cancelStatus = 'Hủy đơn';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
@@ -85,6 +85,50 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 15, top: 5),
+            child: BlocListener<UpdateStatusOrderBloc, UpdateStatusOrderState>(
+              // ignore: missing_return
+              listener: (builder, statusState) {
+                if (statusState.status ==
+                    UpdateStatus.updateStatusCancelSuccess) {
+                  setState(() {
+                    Navigator.of(context).pop();
+                  });
+                }
+              },
+              child: Center(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.15,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.red[800]),
+                            child: Center(
+                              child: Text('Hủy đơn',
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                            onPressed: () {
+                              updateStatusBloc.add(
+                                  UpdateStatusCancelButtonPressed(
+                                      id: widget.orderId,
+                                      status: cancelStatus));
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          )
+        ],
       ),
       backgroundColor: AppTheme.colors.lightblue,
       body: SingleChildScrollView(
@@ -120,18 +164,20 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                 Text(
                                   'Thông tin khách hàng',
                                   style: TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600),
                                 ),
                                 SizedBox(
                                   height: 10,
                                 ),
                                 Row(
-                                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
                                   textBaseline: TextBaseline.alphabetic,
                                   children: [
                                     Container(
-                                      width:
-                                          MediaQuery.of(context).size.width * 0.2,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2,
                                       child: Text(
                                         'Họ tên:',
                                         style: TextStyle(fontSize: 16.0),
@@ -147,12 +193,13 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                 ),
                                 Container(height: 16),
                                 Row(
-                                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
                                   textBaseline: TextBaseline.alphabetic,
                                   children: [
                                     Container(
-                                      width:
-                                          MediaQuery.of(context).size.width * 0.2,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2,
                                       child: Text(
                                         'Email:',
                                         style: TextStyle(fontSize: 16.0),
@@ -168,7 +215,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                 ),
                                 Container(height: 16),
                                 Row(
-                                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
                                   textBaseline: TextBaseline.alphabetic,
                                   children: [
                                     Container(
@@ -189,13 +237,13 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                   ],
                                 ),
                                 Container(height: 16),
-
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 20, horizontal: 5),
                                   child: Container(
                                     decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.black26),
+                                        border:
+                                            Border.all(color: Colors.black26),
                                         borderRadius: BorderRadius.circular(5)),
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 5, vertical: 10),
@@ -220,14 +268,16 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                   0.2,
                                               child: Text(
                                                 'Biển số xe:',
-                                                style: TextStyle(fontSize: 16.0),
+                                                style:
+                                                    TextStyle(fontSize: 16.0),
                                               ),
                                             ),
                                             Container(
                                               child: Text(
                                                 state.assignDetail[0].vehicle
                                                     .licensePlate,
-                                                style: TextStyle(fontSize: 15.0),
+                                                style:
+                                                    TextStyle(fontSize: 15.0),
                                               ),
                                             ),
                                           ],
@@ -245,14 +295,16 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                   0.2,
                                               child: Text(
                                                 'Hãng xe:',
-                                                style: TextStyle(fontSize: 16.0),
+                                                style:
+                                                    TextStyle(fontSize: 16.0),
                                               ),
                                             ),
                                             Container(
                                               child: Text(
                                                 state.assignDetail[0].vehicle
                                                     .manufacturer,
-                                                style: TextStyle(fontSize: 15.0),
+                                                style:
+                                                    TextStyle(fontSize: 15.0),
                                               ),
                                             ),
                                           ],
@@ -270,14 +322,16 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                   0.2,
                                               child: Text(
                                                 'Mã xe:',
-                                                style: TextStyle(fontSize: 16.0),
+                                                style:
+                                                    TextStyle(fontSize: 16.0),
                                               ),
                                             ),
                                             Container(
                                               child: Text(
                                                 state.assignDetail[0].vehicle
                                                     .model,
-                                                style: TextStyle(fontSize: 15.0),
+                                                style:
+                                                    TextStyle(fontSize: 15.0),
                                               ),
                                             ),
                                           ],
@@ -286,43 +340,13 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                     ),
                                   ),
                                 ),
-                                // Padding(
-                                //   padding: const EdgeInsets.symmetric(
-                                //       vertical: 5, horizontal: 5),
-                                //   child: Container(
-                                //     decoration: BoxDecoration(
-                                //         border: Border.all(color: Colors.black26),
-                                //         borderRadius: BorderRadius.circular(5)),
-                                //     padding: EdgeInsets.symmetric(
-                                //         horizontal: 5, vertical: 10),
-                                //     child: Column(
-                                //       children: [
-                                //         Text(
-                                //           'Thông tin gói dịch vụ',
-                                //           style: TextStyle(
-                                //               fontSize: 16,
-                                //               fontWeight: FontWeight.w600),
-                                //         ),
-                                //         ListView(
-                                //           shrinkWrap: true,
-                                //           children: state
-                                //               .bookingDetail[0].orderDetails
-                                //               .map((service) {
-                                //             return ListTile(
-                                //               title: Text(service.name),
-                                //             );
-                                //           }).toList(),
-                                //         ),
-                                //       ],
-                                //     ),
-                                //   ),
-                                // ),
                                 BlocListener<UpdateStatusOrderBloc,
                                     UpdateStatusOrderState>(
                                   // ignore: missing_return
                                   listener: (builder, statusState) {
                                     if (statusState.status ==
-                                        UpdateStatus.updateStatusCheckinSuccess) {
+                                        UpdateStatus
+                                            .updateStatusCheckinSuccess) {
                                       setState(() {
                                         _visible = true;
                                         _checkStatusCheckin = false;
@@ -365,8 +389,10 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                       child: ElevatedButton(
                                                         style: ElevatedButton
                                                             .styleFrom(
-                                                                primary: AppTheme
-                                                                    .colors.blue),
+                                                                primary:
+                                                                    AppTheme
+                                                                        .colors
+                                                                        .blue),
                                                         child: Text('Nhận xe',
                                                             style: TextStyle(
                                                                 color: Colors
@@ -400,7 +426,6 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                               ],
                             ),
                           ),
-                          
                           const Divider(
                             color: Colors.black87,
                             height: 20,
@@ -423,7 +448,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                             ManageStaffState>(
                                         // ignore: missing_return
                                         builder: (builder, staffState) {
-                                      if (staffState.status == StaffStatus.init) {
+                                      if (staffState.status ==
+                                          StaffStatus.init) {
                                         return CircularProgressIndicator();
                                       } else if (staffState.status ==
                                           StaffStatus.loading) {
@@ -512,8 +538,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                           .styleFrom(
                                                               primary: AppTheme
                                                                   .colors.blue),
-                                                      child:
-                                                          Text('Chọn nhân viên'),
+                                                      child: Text(
+                                                          'Chọn nhân viên'),
                                                       onPressed: () =>
                                                           setState(() {
                                                             showInformationDialog(
@@ -553,7 +579,8 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                   updateStatusBloc.add(
                                                       UpdateStatusCheckingButtonPressed(
                                                           id: state
-                                                              .assignDetail[0].id,
+                                                              .assignDetail[0]
+                                                              .id,
                                                           status:
                                                               checkingStatus));
                                                   // getDropDownItem,

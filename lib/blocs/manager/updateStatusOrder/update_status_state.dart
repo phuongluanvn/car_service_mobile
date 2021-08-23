@@ -11,6 +11,7 @@ enum UpdateStatus {
   updateStatusWorkingSuccess,
   updateStatusWaitConfirmSuccess,
   updateStatusConfirmAcceptedSuccess,
+  updateStatusCancelSuccess,
   error,
 }
 

@@ -47,51 +47,49 @@ class _AssignReviewUiState extends State<AssignReviewUi> {
               return Center(child: CircularProgressIndicator());
             } else if (state.status == AssignReviewStatus.assignSuccess) {
               if (state.assignList != null && state.assignList.isNotEmpty) {
-                return SingleChildScrollView(
-                  child: ListView.builder(
-                    physics: const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
-                    itemCount: state.assignList.length,
-                    shrinkWrap: true,
-                    // ignore: missing_return
-                    itemBuilder: (context, index) {
-                      // if (state.assignList[index].status == 'Accepted') {
-                      return Card(
-                          // child: (state.assignList[0].status == 'Checkin')
-                          //     ?
-                          child: Column(children: [
-                        ListTile(
-                          trailing: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.circle,
-                                  color: Colors.yellow,
-                                ),
-                                Text(state.assignList[index].status),
-                              ]),
-                          leading: Image.asset('lib/images/order_small.png'),
-                          title: Text(
-                              state.assignList[index].vehicle.licensePlate),
-                          subtitle: Text(
-                            _convertDate(state.assignList[index].bookingTime),
-                          ),
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => AssignOrderReviewUi(
-                                    userId: state.assignList[index].id)));
-                          },
+                return ListView.builder(
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  itemCount: state.assignList.length,
+                  shrinkWrap: true,
+                  // ignore: missing_return
+                  itemBuilder: (context, index) {
+                    // if (state.assignList[index].status == 'Accepted') {
+                    return Card(
+                        // child: (state.assignList[0].status == 'Checkin')
+                        //     ?
+                        child: Column(children: [
+                      ListTile(
+                        trailing: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Icon(
+                                Icons.circle,
+                                color: Colors.yellow,
+                              ),
+                              Text(state.assignList[index].status),
+                            ]),
+                        leading: Image.asset('lib/images/order_small.png'),
+                        title:
+                            Text(state.assignList[index].vehicle.licensePlate),
+                        subtitle: Text(
+                          _convertDate(state.assignList[index].bookingTime),
                         ),
-                      ])
-                          // : SizedBox(),
-                          );
-                      // } else {
-                      //   return Center(
-                      //     child: Text('Empty'),
-                      //   );
-                      // }
-                    },
-                  ),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => AssignOrderReviewUi(
+                                  userId: state.assignList[index].id)));
+                        },
+                      ),
+                    ])
+                        // : SizedBox(),
+                        );
+                    // } else {
+                    //   return Center(
+                    //     child: Text('Empty'),
+                    //   );
+                    // }
+                  },
                 );
               } else
                 return Stack(

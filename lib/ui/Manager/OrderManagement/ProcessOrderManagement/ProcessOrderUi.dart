@@ -39,19 +39,19 @@ class _ProcessOrderUiState extends State<ProcessOrderUi> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.colors.lightblue,
-      body: SingleChildScrollView(
-        child: RefreshIndicator(
-          onRefresh: _getData,
-          child: BlocBuilder<ProcessOrderBloc, ProcessOrderState>(
-            // ignore: missing_return
-            builder: (context, state) {
-              if (state.status == ProcessStatus.init) {
-                return Center(child: CircularProgressIndicator());
-              } else if (state.status == ProcessStatus.loading) {
-                return Center(child: CircularProgressIndicator());
-              } else if (state.status == ProcessStatus.processSuccess) {
-                if (state.processList != null && state.processList.isNotEmpty)
-                  return ListView.builder(
+      body: RefreshIndicator(
+        onRefresh: _getData,
+        child: BlocBuilder<ProcessOrderBloc, ProcessOrderState>(
+          // ignore: missing_return
+          builder: (context, state) {
+            if (state.status == ProcessStatus.init) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state.status == ProcessStatus.loading) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state.status == ProcessStatus.processSuccess) {
+              if (state.processList != null && state.processList.isNotEmpty)
+                return SingleChildScrollView(
+                  child: ListView.builder(
                     physics: const BouncingScrollPhysics(
                         parent: AlwaysScrollableScrollPhysics()),
                     itemCount: state.processList.length,
@@ -93,33 +93,33 @@ class _ProcessOrderUiState extends State<ProcessOrderUi> {
                       //   );
                       // }
                     },
-                  );
-                else
-                  return Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(
-                            parent: AlwaysScrollableScrollPhysics()),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                                padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height *
-                                        0.35),
-                                child: Text('Hiện tại không có đơn')),
-                          ],
-                        ),
+                  ),
+                );
+              else
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics()),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height *
+                                      0.35),
+                              child: Text('Hiện tại không có đơn')),
+                        ],
                       ),
-                    ],
-                  );
-              } else if (state.status == ProcessStatus.error) {
-                return ErrorWidget(state.message.toString());
-              }
-            },
-          ),
+                    ),
+                  ],
+                );
+            } else if (state.status == ProcessStatus.error) {
+              return ErrorWidget(state.message.toString());
+            }
+          },
         ),
       ),
     );

@@ -85,3 +85,10 @@ class UpdateStatusConfirmAcceptedButtonPressed extends UpdateStatusOrderEvent {
 
   UpdateStatusConfirmAcceptedButtonPressed({this.id, this.status});
 }
+
+class UpdateStatusCancelButtonPressed extends UpdateStatusOrderEvent {
+  final String id;
+  final String status;
+
+  UpdateStatusCancelButtonPressed({this.id, this.status});
+}

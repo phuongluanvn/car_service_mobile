@@ -39,7 +39,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
   @override
   Widget build(BuildContext context) {
     final String acceptStatus = 'Đã xác nhận';
-    final String denyStatus = 'Hủy đơn';
+    final String denyStatus = 'Từ chối đặt lịch';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
@@ -357,7 +357,6 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                             ],
                           ),
                         ),
-                       
                         BlocListener<UpdateStatusOrderBloc,
                             UpdateStatusOrderState>(
                           // ignore: missing_return

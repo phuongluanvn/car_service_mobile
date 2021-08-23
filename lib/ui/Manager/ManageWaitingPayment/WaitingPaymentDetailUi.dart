@@ -1,3 +1,6 @@
+import 'package:car_service/blocs/manager/Accessories/accessory_bloc.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_event.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_state.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
@@ -18,6 +21,7 @@ import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/Ass
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:money_formatter/money_formatter.dart';
 
 class WaitingPaymentDetailUi extends StatefulWidget {
   final String orderId;
@@ -30,11 +34,13 @@ class WaitingPaymentDetailUi extends StatefulWidget {
 
 class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
   final String processingStatus = 'Hoàn thành';
+  final String workingStatus = 'Đang hoạt động';
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visible = false;
   bool checkedValue = false;
   String selectItem;
   String holder = '';
+  int countPrice = 0;
   @override
   void initState() {
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
@@ -42,6 +48,7 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
 
     BlocProvider.of<ProcessOrderBloc>(context)
         .add(DoProcessOrderDetailEvent(email: widget.orderId));
+    BlocProvider.of<AccessoryBloc>(context).add(DoListAccessories());
     // BlocProvider.of<StaffBloc>(context).add(DoListStaffEvent());
   }
 
@@ -94,7 +101,7 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
                               Text(
                                 'Thông tin khách hàng',
                                 style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w600),
+                                    fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
                                 height: 10,
@@ -217,158 +224,145 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
                             ],
                           ),
                         ),
-                        Center(
-                          child: FittedBox(
-                            child: Row(
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5)),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Center(
+                            child: Column(
                               children: [
-                                Container(
-                                  width: MediaQuery.of(context).size.width * 1,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.55,
-                                  child: Column(
-                                    children: [
-                                      Expanded(
-                                        child: SingleChildScrollView(
-                                          scrollDirection: Axis.horizontal,
-                                          child: DataTable(
-                                            columnSpacing: 70.0,
-                                            columns: [
-                                              DataColumn(
-                                                  label: Text(
-                                                'Tên dịch vụ',
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              )),
-                                              DataColumn(
-                                                  label: Text(
-                                                'Số lượng',
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              )),
-                                              DataColumn(
-                                                  label: Text(
-                                                'Giá',
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              )),
-                                            ],
-                                            rows: List.generate(
-                                                state
-                                                    .processDetail[0]
-                                                    .orderDetails
-                                                    .length, (index) {
-                                              final y = state.processDetail[0]
-                                                  .orderDetails[index].name;
-
-                                              final x = state.processDetail[0]
-                                                  .orderDetails[index].quantity;
-                                              final z =
-                                                  state.processDetail[0].note ==
-                                                          null
-                                                      ? state
-                                                          .processDetail[0]
-                                                          .orderDetails[index]
-                                                          .price
-                                                      : 0;
-
-                                              return DataRow(cells: [
-                                                DataCell(Container(
-                                                    width: 75, child: Text(y))),
-                                                DataCell(Container(
-                                                    child: Text(x.toString()))),
-                                                DataCell(Container(
-                                                    child: Text(z.toString()))),
-                                              ]);
-                                            }),
-                                          ),
-                                        ),
-                                      ),
-                                      const Divider(
-                                        color: Colors.black87,
-                                        height: 20,
-                                        thickness: 1,
-                                        indent: 10,
-                                        endIndent: 10,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 10, right: 40),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              'Tổng cộng:',
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              state.processDetail[0].note ==
-                                                      null
-                                                  ? state.processDetail[0]
-                                                      .package.price
-                                                      .toString()
-                                                  : '',
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      BlocListener<UpdateStatusOrderBloc,
-                                          UpdateStatusOrderState>(
-                                        // ignore: missing_return
-                                        listener: (builder, statusState) {
-                                          if (statusState.status ==
-                                              UpdateStatus
-                                                  .updateStatusStartSuccess) {
-                                            Navigator.pushNamed(
-                                                context, '/manager');
+                                Column(
+                                  children: [
+                                    Text(
+                                      'Thông tin hóa đơn',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Column(
+                                      children: state
+                                          .processDetail[0].orderDetails
+                                          .map((service) {
+                                        countPrice += service.price;
+                                        return BlocBuilder<AccessoryBloc,
+                                                AccessoryState>(
+                                            // ignore: missing_return
+                                            builder: (context, accState) {
+                                          if (accState.status ==
+                                              ListAccessoryStatus.init) {
+                                            return CircularProgressIndicator();
+                                          } else if (accState.status ==
+                                              ListAccessoryStatus.loading) {
+                                            return CircularProgressIndicator();
+                                          } else if (accState.status ==
+                                              ListAccessoryStatus.success) {
+                                            return ExpansionTile(
+                                              title: Text(service.name),
+                                              trailing: Text(_convertMoney(
+                                                  service.price.toDouble() != 0
+                                                      ? service.price.toDouble()
+                                                      : 0)),
+                                              children: [
+                                                accState.accessoryList.indexWhere(
+                                                            (element) =>
+                                                                element.id ==
+                                                                service
+                                                                    .accessoryId) >=
+                                                        0
+                                                    ? ListTile(
+                                                        title: Text(accState
+                                                            .accessoryList
+                                                            .firstWhere((element) =>
+                                                                element.id ==
+                                                                service
+                                                                    .accessoryId)
+                                                            .name),
+                                                        trailing: Image.network(
+                                                            accState
+                                                                .accessoryList
+                                                                .firstWhere(
+                                                                    (element) =>
+                                                                        element
+                                                                            .id ==
+                                                                        service
+                                                                            .accessoryId)
+                                                                .imageUrl),
+                                                      )
+                                                    : Text(
+                                                        'Hiện tại không có phụ tùng'),
+                                              ],
+                                            );
                                           }
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            SizedBox(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.45,
-                                              child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    primary:
-                                                        AppTheme.colors.blue),
-                                                child: Text('Hoàn thành',
-                                                    style: TextStyle(
-                                                        color: Colors.white)),
-                                                onPressed: () {
-                                                  updateStatusBloc.add(
-                                                      UpdateStatusButtonPressed(
-                                                          id: state
-                                                              .processDetail[0]
-                                                              .id,
-                                                          status:
-                                                              processingStatus));
-                                                  Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                          builder: (_) =>
-                                                              ManagerMain()));
-                                                },
-                                              ),
-                                            ),
-                                          ],
+                                          ;
+                                        });
+                                      }).toList(),
+                                    ),
+                                    Divider(
+                                      color: Colors.black,
+                                      thickness: 2,
+                                      indent: 20,
+                                      endIndent: 20,
+                                    ),
+                                    ListTile(
+                                        title: Text(
+                                          'Tổng cộng: ',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w900),
+                                        ),
+                                        trailing: Text(
+                                          _convertMoney(
+                                              countPrice.toDouble() != 0
+                                                  ? countPrice.toDouble()
+                                                  : 0),
+                                        )),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                BlocListener<UpdateStatusOrderBloc,
+                                    UpdateStatusOrderState>(
+                                  // ignore: missing_return
+                                  listener: (builder, statusState) {
+                                    if (statusState.status ==
+                                        UpdateStatus.updateStatusStartSuccess) {
+                                      // Navigator.pushNamed(
+                                      //     context, '/manager');
+                                    }
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.45,
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                              primary: AppTheme.colors.blue),
+                                          child: Text('Hoàn thành',
+                                              style: TextStyle(
+                                                  color: Colors.white)),
+                                          onPressed: () {
+                                            updateStatusBloc.add(
+                                                UpdateStatusStartAndWorkingButtonPressed(
+                                                    id: state
+                                                        .processDetail[0].id,
+                                                    listData: state
+                                                        .processDetail[0]
+                                                        .crew
+                                                        .members,
+                                                    status: processingStatus,
+                                                    workingStatus:
+                                                        workingStatus));
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        ManagerMain()));
+                                          },
                                         ),
                                       ),
                                     ],
@@ -399,5 +393,20 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
   _convertDate(dateInput) {
     return formatDate(DateTime.parse(dateInput),
         [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
+  }
+
+  _convertMoney(double money) {
+    MoneyFormatter fmf = new MoneyFormatter(
+        amount: money,
+        settings: MoneyFormatterSettings(
+          symbol: 'VND',
+          thousandSeparator: '.',
+          decimalSeparator: ',',
+          symbolAndNumberSeparator: ' ',
+          fractionDigits: 0,
+          // compactFormatType: CompactFormatType.sort
+        ));
+    print(fmf.output.symbolOnRight);
+    return fmf.output.symbolOnRight.toString();
   }
 }

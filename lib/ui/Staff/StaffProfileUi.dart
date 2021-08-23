@@ -2,6 +2,7 @@ import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/LoginUi.dart';
 import 'package:car_service/ui/Manager/ManagerAccountUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/OrderHistory/OrderHistoryUi.dart';
+import 'package:car_service/ui/Staff/StaffOrderHistory/StaffOrderHistoryUi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -117,8 +118,8 @@ class _StaffProfileUiState extends State<StaffProfileUi> {
                   style: ElevatedButton.styleFrom(
                       primary: AppTheme.colors.lightblue),
                   onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => OrderHistoryUi()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => StaffOrderHistoryUi()));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

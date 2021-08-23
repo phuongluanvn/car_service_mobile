@@ -1,4 +1,5 @@
 import 'package:car_service/blocs/manager/Accessories/accessory_bloc.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_event.dart';
 import 'package:car_service/blocs/manager/Accessories/accessory_state.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
@@ -30,6 +31,8 @@ class CheckoutOrderUi extends StatefulWidget {
 
 class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
   final String processingStatus = 'Đợi thanh toán';
+  final String workingStatus = 'Đang hoạt động';
+
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visible = false;
   bool checkedValue = false;
@@ -40,7 +43,7 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
   void initState() {
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     super.initState();
-
+    BlocProvider.of<AccessoryBloc>(context).add(DoListAccessories());
     // BlocProvider.of<ProcessOrderBloc>(context)
     //     .add(DoProcessOrderDetailEvent(email: widget.orderId));
     // BlocProvider.of<StaffBloc>(context).add(DoListStaffEvent());
@@ -89,7 +92,7 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                       Column(
                         children:
                             state.processDetail[0].orderDetails.map((service) {
-                          countPrice += service.price != 0 ? countPrice : 0;
+                          countPrice += service.price;
                           return BlocBuilder<AccessoryBloc, AccessoryState>(
                               // ignore: missing_return
                               builder: (context, accState) {
@@ -144,23 +147,10 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w900),
                           ),
-                          trailing: Column(
-                            children: [
-                              Text(
-                                _convertMoney(countPrice.toDouble() != 0
-                                    ? countPrice.toDouble()
-                                    : 0),
-                                style: TextStyle(
-                                    decoration: TextDecoration.lineThrough),
-                              ),
-                              Text(_convertMoney(state
-                                          .processDetail[0].package.price
-                                          .toDouble() !=
-                                      0
-                                  ? state.processDetail[0].package.price
-                                      .toDouble()
-                                  : 0)),
-                            ],
+                          trailing: Text(
+                            _convertMoney(countPrice.toDouble() != 0
+                                ? countPrice.toDouble()
+                                : 0),
                           )),
                       BlocListener<UpdateStatusOrderBloc,
                           UpdateStatusOrderState>(
