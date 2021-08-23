@@ -6,3 +6,15 @@ abstract class CouponEvent extends Equatable {
 }
 
 class DoListCouponEvent extends CouponEvent {}
+
+class DoApplyCouponEvent extends CouponEvent {
+  final String id;
+  final String orderDetailId;
+
+  DoApplyCouponEvent({this.id, this.orderDetailId});
+}
+
+class DoRemoveCouponEvent extends CouponEvent {
+  final String orderDetailId;
+  DoRemoveCouponEvent({this.orderDetailId});
+}

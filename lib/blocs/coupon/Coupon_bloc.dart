@@ -31,6 +31,34 @@ class CouponBloc extends Bloc<CouponEvent, CouponState> {
           message: e.toString(),
         );
       }
-    }
+    } else if (event is DoApplyCouponEvent) {
+      yield state.copyWith(applyStatus: ApplyCouponStatus.loading);
+      try {
+        var couponList = await _repo.applyCoupon(event.id, event.orderDetailId)();
+        if (couponList != null) {
+          yield state.copyWith(
+              couponLists: couponList, applyStatus: ApplyCouponStatus.applyCouponSuccess);
+        }
+      } catch (e) {
+        yield state.copyWith(
+          applyStatus: ApplyCouponStatus.error,
+          message: e.toString(),
+        );
+      }
+    } else if (event is DoRemoveCouponEvent) {
+      yield state.copyWith(removeStatus: RemoveCouponStatus.loading);
+      try {
+        var couponList = await _repo.removeCoupon(event.orderDetailId);
+        if (couponList != null) {
+          yield state.copyWith(
+              couponLists: couponList, removeStatus: RemoveCouponStatus.removeCouponSuccess);
+        }
+      } catch (e) {
+        yield state.copyWith(
+          removeStatus: RemoveCouponStatus.error,
+          message: e.toString(),
+        );
+      }
+    } 
   }
 }

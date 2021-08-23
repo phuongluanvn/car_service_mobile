@@ -11,6 +11,7 @@ import 'package:car_service/blocs/customer/manufacturers/Manufacturer_bloc.dart'
 import 'package:car_service/blocs/customer/manufacturers/Manufacturer_event.dart';
 import 'package:car_service/blocs/customer/manufacturers/Manufacturer_state.dart';
 import 'package:car_service/theme/app_theme.dart';
+import 'package:date_format/date_format.dart';
 // import 'package:car_service/ui/Customer/CarManagement/EditInforOfCarUI.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,6 +37,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
   String manuName;
   bool _isChangeValueModelName = false;
   bool _isChangeLicensePlate = false;
+  bool _isEditButton = false;
 
   @override
   void initState() {
@@ -139,10 +141,10 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
             icon: Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
+              context.read<CustomerCarBloc>().add(DoCarListEvent());
             },
           ),
           actions: [
-            IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
             IconButton(
                 onPressed: () {
                   _showDeleteDialog();
@@ -264,8 +266,8 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                         );
                         var repairTime = TextFormField(
                           readOnly: true,
-                          initialValue:
-                              state.vehicleDetail[0].dateOfLastMaintenance,
+                          initialValue: state.vehicleDetail[0].dateOfLastMaintenance != null ?
+                              _convertDate(state.vehicleDetail[0].dateOfLastMaintenance) : '',
                           keyboardType: TextInputType.text,
                           autofocus: false,
                           decoration: InputDecoration(
@@ -332,20 +334,21 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                                 Container(height: 18),
                                 manufacturer,
                                 Container(height: 14),
-                                // modelOfManu,
+                                // _isEditButton
+                                //     ?
                                 BlocBuilder<ManufacturerBloc,
                                         ManufacturerState>(
                                     // ignore: missing_return
                                     builder: (context, manuState) {
-                                  if (manuState.status ==
-                                      ManufacturerStatus.init) {
+                                  if (manuState.modelStatus ==
+                                      ModelOfManufacturerStatus.init) {
                                     return CircularProgressIndicator();
-                                  } else if (manuState.status ==
-                                      ManufacturerStatus.loading) {
+                                  } else if (manuState.modelStatus ==
+                                      ModelOfManufacturerStatus.loading) {
                                     return CircularProgressIndicator();
-                                  } else if (manuState.status ==
-                                      ManufacturerStatus
-                                          .loadedManufacturerSuccess) {
+                                  } else if (manuState.modelStatus ==
+                                      ModelOfManufacturerStatus
+                                          .loadedModelOfManufacturerSuccess) {
                                     return Column(
                                       children: [
                                         TypeAheadField(
@@ -406,6 +409,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                                     );
                                   }
                                 }),
+                                // : modelOfManu,
                                 Container(height: 14),
                                 licenNumber,
                                 Container(height: 14),
@@ -436,5 +440,10 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
         ),
       ),
     );
+  }
+
+    _convertDate(dateInput) {
+    return formatDate(DateTime.parse(dateInput),
+        [dd, '/', mm, '/', yyyy]);
   }
 }

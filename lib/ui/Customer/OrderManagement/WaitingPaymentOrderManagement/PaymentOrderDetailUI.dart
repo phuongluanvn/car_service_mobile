@@ -49,16 +49,18 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
-
           IconButton(
             color: AppTheme.colors.white,
             icon: Icon(Icons.card_giftcard),
             onPressed: () {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => CouponUI()));
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CouponUI(
+                            orderId: widget.orderId,
+                          )));
             },
           )
-
         ],
       ),
       body: Center(
@@ -91,7 +93,8 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                               : 'Không có ghi chú',
                           state.orderDetail[0].note == null
                               ? state.orderDetail[0].package.price
-                              : 0),
+                              : 0,
+                          state.orderDetail[0].id),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Visibility(
@@ -122,31 +125,35 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                           if (statusState.status ==
                               UpdateStatus.updateStatusConfirmAcceptedSuccess) {
                             showDialog(
-                        context: context,
-                        builder: (BuildContext ctx) {
-                          return AlertDialog(
-                            title: Text(
-                              'Thông báo!',
-                              style: TextStyle(color: Colors.greenAccent),
-                            ),
-                            content: Text('Cảm ơn bạn đã xử dụng dịch vụ!'),
-                            actions: [
-                              TextButton(
-                                  onPressed: () {
-                                    // Close the dialog
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //       builder: (context) => CustomerHome()),
-                                    // );
-                                    Navigator.of(context).pop();
-                                    Navigator.pop(context);
-                                    context.read<CustomerOrderBloc>().add(DoOrderListEvent());
-                                  },
-                                  child: Text('Đồng ý'))
-                            ],
-                          );
-                        });
+                                context: context,
+                                builder: (BuildContext ctx) {
+                                  return AlertDialog(
+                                    title: Text(
+                                      'Thông báo!',
+                                      style:
+                                          TextStyle(color: Colors.greenAccent),
+                                    ),
+                                    content:
+                                        Text('Cảm ơn bạn đã xử dụng dịch vụ!'),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            // Close the dialog
+                                            // Navigator.push(
+                                            //   context,
+                                            //   MaterialPageRoute(
+                                            //       builder: (context) => CustomerHome()),
+                                            // );
+                                            Navigator.of(context).pop();
+                                            Navigator.pop(context);
+                                            context
+                                                .read<CustomerOrderBloc>()
+                                                .add(DoOrderListEvent());
+                                          },
+                                          child: Text('Đồng ý'))
+                                    ],
+                                  );
+                                });
                           }
                         },
                         child: SizedBox(
@@ -242,7 +249,8 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
       List services,
       bool serviceType,
       String note,
-      int totalPrice) {
+      int totalPrice,
+      String orderDetailId) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       child: Container(
@@ -287,10 +295,20 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
               indent: 20,
               endIndent: 20,
             ),
-            ListTile(
-              title: Text('Khuyến mãi: '),
-              trailing: Text('0 VND'),
-            ),
+            // ListTile(
+            //   title: Text('Khuyến mãi: '),
+            //   trailing: IconButton(
+            //     color: AppTheme.colors.white,
+            //     icon: Icon(Icons.card_giftcard),
+            //     onPressed: () {
+            //       Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //               builder: (context) =>
+            //                   CouponUI(orderId: orderDetailId)));
+            //     },
+            //   ),
+            // ),
             ListTile(
               title: Text('Tổng: '),
               trailing: Text(_convertMoney(totalPrice.toDouble())),

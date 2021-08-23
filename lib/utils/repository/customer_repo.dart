@@ -1,6 +1,7 @@
 import 'package:car_service/utils/model/CarModel.dart';
 import 'package:car_service/utils/model/CouponModel.dart';
 import 'package:car_service/utils/model/CustomerProfileModel.dart';
+import 'package:car_service/utils/model/EmployeeProfileModel.dart';
 import 'package:car_service/utils/model/ManufacturerModel.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/OrderModel.dart';
@@ -376,6 +377,32 @@ class CustomerRepository {
     }
   }
 
+  getProfileEmployee(String username) async {
+    String message;
+    List convertData = [];
+    List<EmployeeProfileModel> cusProfile = [];
+    var res = await http.get(Uri.parse(BASE_URL + "employees/" + username),
+        headers: headers);
+    final data = json.decode(res.body);
+    convertData.add(data);
+    if (res.statusCode == 200) {
+      if (data != null) {
+        convertData
+            .map((e) => cusProfile.add(EmployeeProfileModel.fromJson(e)))
+            .toList();
+        return cusProfile;
+      } else {
+        return 'Không tìm thấy thông tin người dùng';
+      }
+    } else if (res.statusCode == 404) {
+      message =
+          'Không tìm thấy thông tin người dùng ' + res.statusCode.toString();
+      return message;
+    } else {
+      return res.body;
+    }
+  }
+
   getProfile(String username) async {
     String message;
     List convertData = [];
@@ -404,7 +431,6 @@ class CustomerRepository {
 
   getCoupon() async {
     String message;
-    // List convertData = [];
     List<CouponModel> couponsList = [];
     var res = await http.get(Uri.parse(BASE_URL + "coupons"), headers: headers);
     final data = json.decode(res.body);
@@ -414,12 +440,37 @@ class CustomerRepository {
         data.map((e) => couponsList.add(CouponModel.fromJson(e))).toList();
         return couponsList;
       } else {
-        return 'Không tìm thấy thông tin người dùng';
+        return 'Không tìm thấy thông tin gói khuyến mãi';
       }
     } else if (res.statusCode == 404) {
-      message =
-          'Không tìm thấy thông tin người dùng ' + res.statusCode.toString();
+      message = 'Không tìm thấy thông tin gói khuyến mãi ' +
+          res.statusCode.toString();
       return message;
+    } else {
+      return res.body;
+    }
+  }
+
+  applyCoupon(String id, String orderDetailId) async {
+    final body = jsonEncode({"id": id, "orderDetailId": orderDetailId});
+    var res = await http.post(Uri.parse(BASE_URL + "coupons/apply"),
+        headers: headers, body: body);
+    final data = (res.body);
+    print(data);
+    if (data != null) {
+      return data;
+    } else {
+      return res.body;
+    }
+  }
+
+  removeCoupon(String orderDetailId) async {
+    final body = jsonEncode({"orderDetailId": orderDetailId});
+    var res = await http.post(Uri.parse(BASE_URL + "coupons/remove"),
+        headers: headers, body: body);
+    final data = (res.body);
+    if (data != null) {
+      return data;
     } else {
       return res.body;
     }

@@ -45,7 +45,7 @@ class CustomerOrderBloc extends Bloc<CustomerOrderEvent, CustomerOrderState> {
                       {processingOrderList.add(order)}
                     else if (order.status == 'Đợi xác nhận')
                       {waittingConfirmOrderList.add(order)}
-                    else if (order.status == 'Đã xác nhận')
+                    else if (order.status == 'Đã xác nhận || Đã từ chối')
                       {acceptedOrderList.add(order)}
                     else if (order.status == 'Đợi thanh toán')
                       {waitingPaymentdOrderList.add(order)}
