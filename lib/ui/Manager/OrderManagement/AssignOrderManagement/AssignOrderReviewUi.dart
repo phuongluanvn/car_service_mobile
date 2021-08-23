@@ -48,7 +48,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   final String workingStatus = 'Đang làm việc';
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visible = false;
-  bool _visibleKm = false;
+  bool _visibleKm = true;
   List<StaffModel> selectData = [];
 
   // AssignorderCubit assignCubit;
@@ -298,22 +298,27 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                       BlocListener<CustomerCarBloc,
                                           CustomerCarState>(
                                         listener: (context, cstate) {
+                                          print(cstate);
                                           if (cstate.withIdstatus ==
-                                              CustomerCarWithIdStatus
-                                                  .loadedCarSuccess) {
+                                              CustomerCarWithIdStatus.init) {
+                                            print("object");
                                             setState(() {
-                                              _visibleKm = true;
+                                              _visibleKm = false;
+                                              orderHistoryBloc.add(
+                                                DoOrderHistoryDetailEvent(
+                                                    id: widget.userId),
+                                              );
                                             });
                                             orderHistoryBloc.add(
-                                              DoOrderHistoryDetailEvent(
-                                                  id: widget.userId),
-                                            );
+                                                DoOrderHistoryDetailEvent(
+                                                    id: widget.userId));
                                           }
                                         },
                                         child: BlocBuilder<OrderHistoryBloc,
                                                 OrderHistoryState>(
                                             // ignore: missing_return
                                             builder: (context, costate) {
+                                          print(costate);
                                           if (costate.detailStatus ==
                                               OrderHistoryDetailStatus.init) {
                                             return CircularProgressIndicator();
@@ -398,8 +403,12 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                                   0.82,
                                                               child:
                                                                   TextFormField(
-                                                                initialValue:
-                                                                    'Nhập số km',
+                                                                initialValue: costate
+                                                                    .historyDetail[
+                                                                        0]
+                                                                    .vehicle
+                                                                    .millageCount
+                                                                    .toString(),
                                                                 // controller: kmController,
                                                                 maxLines: null,
                                                                 autofocus:
@@ -436,16 +445,17 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                           ],
                                                         ),
                                                         ElevatedButton(
-                                                            style: ElevatedButton
-                                                                .styleFrom(
-                                                                    primary: AppTheme
-                                                                        .colors
-                                                                        .blue),
-                                                            onPressed: () {
-                                                              setState(() {
-                                                                _visibleKm =
-                                                                    true;
-                                                              });
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                                  primary:
+                                                                      AppTheme
+                                                                          .colors
+                                                                          .blue),
+                                                          child:
+                                                              Text('Cập nhật'),
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              _visibleKm = true;
                                                               customerCarBloc.add(
                                                                   DoUpdateInfoCarEvent(
                                                                       id: state
@@ -455,9 +465,17 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                                           .id,
                                                                       kilometer:
                                                                           kmRecord));
-                                                            },
-                                                            child: Text(
-                                                                'Cập nhật')),
+                                                            });
+                                                            orderHistoryBloc.add(
+                                                                DoOrderHistoryDetailEvent(
+                                                                    id: widget
+                                                                        .userId));
+                                                            orderHistoryBloc.add(
+                                                                DoOrderHistoryDetailEvent(
+                                                                    id: widget
+                                                                        .userId));
+                                                          },
+                                                        ),
                                                       ],
                                                     );
                                             } else

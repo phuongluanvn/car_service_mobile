@@ -95,14 +95,12 @@ class CustomerCarBloc extends Bloc<CustomerCarEvent, CustomerCarState> {
       try {
         var data = await _repo.updateKilometToCar(event.id, event.kilometer);
 
-        // String jsonsDataString = data.toString();
         print(data);
-        // final jsonData = jsonDecode(jsonsDataString);
-        // print(jsonData);
         if (data != null) {
+          print('vo k');
           yield state.copyWith(
+              // message: data,
               withIdstatus: CustomerCarWithIdStatus.loadedCarSuccess);
-          // print('Send confirm Success');
         } else {
           yield state.copyWith(
               withIdstatus: CustomerCarWithIdStatus.error,

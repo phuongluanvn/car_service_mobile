@@ -160,6 +160,8 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                                 child: Text(textButton ? 'Đồng ý' : 'Xác nhận',
                                     style: TextStyle(color: Colors.white)),
                                 onPressed: () {
+                                  print(state.orderDetail[0].id);
+                                  print(reasonReject);
                                   if (textButton == false &&
                                       reasonReject != null) {
                                     updateStatusBloc.add(

@@ -405,7 +405,7 @@ class ManagerRepository {
   updateConfirmFromCustomer(
       String id, bool isAccept, String customerNote) async {
     var body = {"id": id, "isAccept": isAccept, "customerNote": customerNote};
-    var res = await http.put(
+    var res = await http.post(
       Uri.parse(BASE_URL + "orders/confirm/manager"),
       headers: headers,
       body: json.encode(body),

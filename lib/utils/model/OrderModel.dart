@@ -55,7 +55,7 @@ class Vehicle {
   String manufacturer;
   String model;
   String licensePlate;
-  DateTime dateOfLastMaintenance;
+  String dateOfLastMaintenance;
   int millageCount;
 
   Vehicle(
