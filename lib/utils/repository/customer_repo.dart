@@ -173,6 +173,25 @@ class CustomerRepository {
     }
   }
 
+  updateKilometToCar(String id, int kilo) async {
+    var body = {
+      "id": '$id',
+      "millage": kilo,
+    };
+    var res = await http.put(
+      Uri.parse("https://carservicesystem.azurewebsites.net/api/vehicles/millage"),
+      headers: headers,
+      body: json.encode(body),
+    );
+    if (res.statusCode != null) {
+      if (res.statusCode == 200) {
+        return res.body;
+      }
+    } else {
+      return res.body;
+    }
+  }
+
   getOrderList(String username) async {
     List<OrderModel> orderLists = [];
     var res = await http.get(

@@ -89,7 +89,7 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                       Column(
                         children:
                             state.processDetail[0].orderDetails.map((service) {
-                          countPrice += service.price;
+                          countPrice += service.price != 0 ? countPrice : 0;
                           return BlocBuilder<AccessoryBloc, AccessoryState>(
                               // ignore: missing_return
                               builder: (context, accState) {
@@ -102,8 +102,10 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                                 ListAccessoryStatus.success) {
                               return ExpansionTile(
                                 title: Text(service.name),
-                                trailing: Text(
-                                    _convertMoney(service.price.toDouble())),
+                                trailing: Text(_convertMoney(
+                                    service.price.toDouble() != 0
+                                        ? service.price.toDouble()
+                                        : 0)),
                                 children: [
                                   accState.accessoryList.indexWhere((element) =>
                                               element.id ==
@@ -145,13 +147,19 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                           trailing: Column(
                             children: [
                               Text(
-                                _convertMoney(countPrice.toDouble()),
+                                _convertMoney(countPrice.toDouble() != 0
+                                    ? countPrice.toDouble()
+                                    : 0),
                                 style: TextStyle(
                                     decoration: TextDecoration.lineThrough),
                               ),
                               Text(_convertMoney(state
-                                  .processDetail[0].package.price
-                                  .toDouble())),
+                                          .processDetail[0].package.price
+                                          .toDouble() !=
+                                      0
+                                  ? state.processDetail[0].package.price
+                                      .toDouble()
+                                  : 0)),
                             ],
                           )),
                       BlocListener<UpdateStatusOrderBloc,

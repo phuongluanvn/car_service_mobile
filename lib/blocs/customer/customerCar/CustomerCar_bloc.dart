@@ -91,22 +91,29 @@ class CustomerCarBloc extends Bloc<CustomerCarEvent, CustomerCarState> {
         );
       }
     } else if (event is DoUpdateInfoCarEvent) {
-      // yield state.copyWith(withIdstatus: CustomerCarWithIdStatus.loading);
-      // try {
-      //   final prefs = await SharedPreferences.getInstance();
+      yield state.copyWith(withIdstatus: CustomerCarWithIdStatus.loading);
+      try {
+        var data = await _repo.updateKilometToCar(event.id, event.kilometer);
 
-      //   var carLists = await _repo.getCarListOfCustomer(event.vehicleId);
-      //   if (carLists != null) {
-      //     yield state.copyWith(
-      //         vehicleLists: carLists,
-      //         withIdstatus: CustomerCarWithIdStatus.loadedCarSuccess);
-      //   }
-      // } catch (e) {
-      //   yield state.copyWith(
-      //     withIdstatus: CustomerCarWithIdStatus.error,
-      //     message: e.toString(),
-      //   );
-      // }
+        // String jsonsDataString = data.toString();
+        print(data);
+        // final jsonData = jsonDecode(jsonsDataString);
+        // print(jsonData);
+        if (data != null) {
+          yield state.copyWith(
+              withIdstatus: CustomerCarWithIdStatus.loadedCarSuccess);
+          // print('Send confirm Success');
+        } else {
+          yield state.copyWith(
+              withIdstatus: CustomerCarWithIdStatus.error,
+              message: 'Error Update');
+        }
+      } catch (e) {
+        yield state.copyWith(
+          withIdstatus: CustomerCarWithIdStatus.error,
+          message: e.toString(),
+        );
+      }
     }
   }
 }
