@@ -408,6 +408,32 @@ class ManagerRepository {
     }
   }
 
+  updateConfirmFromCustomer(
+      String id, bool isAccept, String customerNote) async {
+    var body = {
+      "id": id,
+      "isAccept": isAccept,
+      "customerNote": customerNote
+    };
+    var res = await http.put(
+      Uri.parse(BASE_URL + "orders/confirm/manager"),
+      headers: headers,
+      body: json.encode(body),
+    );
+    if (res.statusCode != null) {
+      if (res.statusCode == 200) {
+        print(res.statusCode);
+        print('update confirm');
+        print(res.body);
+        return res;
+      } else {
+        return res;
+      }
+    } else {
+      return null;
+    }
+  }
+
   updateStatusOrder(String id, String status) async {
     var body = {
       "id": '$id',

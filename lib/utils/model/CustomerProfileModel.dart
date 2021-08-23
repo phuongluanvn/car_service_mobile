@@ -7,6 +7,7 @@ class CustomerProfileModel {
   int accumulatedPoint;
   bool isBanned;
   List<Vehicles> vehicles;
+  List<Notifications> notifications;
 
   CustomerProfileModel(
       {this.username,
@@ -16,7 +17,8 @@ class CustomerProfileModel {
       this.address,
       this.accumulatedPoint,
       this.isBanned,
-      this.vehicles});
+      this.vehicles,
+      this.notifications});
 
   CustomerProfileModel.fromJson(Map<String, dynamic> json) {
     username = json['username'];
@@ -30,6 +32,12 @@ class CustomerProfileModel {
       vehicles = new List<Vehicles>();
       json['vehicles'].forEach((v) {
         vehicles.add(new Vehicles.fromJson(v));
+      });
+    }
+    if (json['notifications'] != null) {
+      notifications = new List<Notifications>();
+      json['notifications'].forEach((v) {
+        notifications.add(new Notifications.fromJson(v));
       });
     }
   }
@@ -46,6 +54,10 @@ class CustomerProfileModel {
     if (this.vehicles != null) {
       data['vehicles'] = this.vehicles.map((v) => v.toJson()).toList();
     }
+    if (this.notifications != null) {
+      data['notifications'] =
+          this.notifications.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
@@ -55,8 +67,8 @@ class Vehicles {
   String manufacturer;
   String model;
   String licensePlate;
-  Null imageUrl;
-  Null dateOfLastMaintenance;
+  String imageUrl;
+  String dateOfLastMaintenance;
   int millageCount;
 
   Vehicles(
@@ -87,6 +99,31 @@ class Vehicles {
     data['imageUrl'] = this.imageUrl;
     data['dateOfLastMaintenance'] = this.dateOfLastMaintenance;
     data['millageCount'] = this.millageCount;
+    return data;
+  }
+}
+
+class Notifications {
+  String id;
+  String title;
+  String message;
+  String createdAt;
+
+  Notifications({this.id, this.title, this.message, this.createdAt});
+
+  Notifications.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    title = json['title'];
+    message = json['message'];
+    createdAt = json['createdAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['title'] = this.title;
+    data['message'] = this.message;
+    data['createdAt'] = this.createdAt;
     return data;
   }
 }

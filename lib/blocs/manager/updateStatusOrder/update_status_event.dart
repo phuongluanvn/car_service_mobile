@@ -71,7 +71,6 @@ class UpdateStatusFinishAndAvailableButtonPressed
       {this.id, this.listData, this.status, this.availableStatus});
 }
 
-
 class UpdateStatusSendConfirmButtonPressed extends UpdateStatusOrderEvent {
   final String id;
   final String status;
@@ -91,4 +90,12 @@ class UpdateStatusCancelButtonPressed extends UpdateStatusOrderEvent {
   final String status;
 
   UpdateStatusCancelButtonPressed({this.id, this.status});
+}
+
+class UpdateConfirmFromCustomerButtonPressed extends UpdateStatusOrderEvent {
+  final String id;
+  final bool isAccept;
+  final String customerNote;
+  UpdateConfirmFromCustomerButtonPressed(
+      {this.id, this.isAccept, this.customerNote});
 }

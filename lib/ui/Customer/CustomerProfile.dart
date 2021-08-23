@@ -36,15 +36,17 @@ class _CustomerProfileState extends State<CustomerProfile> {
       appBar: AppBar(
         title: Text('Thông tin người dùng'),
         automaticallyImplyLeading: false,
+        foregroundColor: AppTheme.colors.deepBlue,
         backgroundColor: AppTheme.colors.deepBlue,
+        shadowColor: AppTheme.colors.deepBlue,
       ),
-      backgroundColor: AppTheme.colors.lightblue,
+      backgroundColor: AppTheme.colors.deepBlue,
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(vertical: 5),
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 30),
               child: SizedBox(
                 height: 115,
                 width: 115,
@@ -53,8 +55,12 @@ class _CustomerProfileState extends State<CustomerProfile> {
                   overflow: Overflow.visible,
                   children: [
                     CircleAvatar(
-                      child: Icon(Icons.person),
-                      backgroundColor: AppTheme.colors.deepBlue,
+                      child: Icon(
+                        Icons.person,
+                        color: AppTheme.colors.deepBlue,
+                        size: 45,
+                      ),
+                      backgroundColor: AppTheme.colors.lightblue,
                     ),
                   ],
                 ),
@@ -66,7 +72,10 @@ class _CustomerProfileState extends State<CustomerProfile> {
                 height: 50,
                 child: Text(
                   _fullName,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.colors.lightblue),
                 ),
               ),
             ),
@@ -75,16 +84,26 @@ class _CustomerProfileState extends State<CustomerProfile> {
               child: Container(
                 height: 50,
                 child: ElevatedButton(
-                  style:
-                      ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
+                  style: ElevatedButton.styleFrom(
+                      primary: AppTheme.colors.lightblue),
                   onPressed: () {
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => CustomerAccountUi()));
                   },
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(child: Text('Tài khoản')),
-                      Icon(Icons.arrow_forward_ios),
+                      Icon(Icons.person, color: AppTheme.colors.deepBlue),
+                      Padding(
+                        padding: EdgeInsets.only(right: 150),
+                        child: Text(
+                          'Tài khoản',
+                          style: TextStyle(
+                              fontSize: 20, color: AppTheme.colors.deepBlue),
+                        ),
+                      ),
+                      Icon(Icons.arrow_forward_ios,
+                          color: AppTheme.colors.deepBlue),
                     ],
                   ),
                 ),
@@ -95,33 +114,73 @@ class _CustomerProfileState extends State<CustomerProfile> {
               child: Container(
                 height: 50,
                 child: ElevatedButton(
-                  style:
-                      ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
+                  style: ElevatedButton.styleFrom(
+                      primary: AppTheme.colors.lightblue),
                   onPressed: () {
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => OrderHistoryUi()));
                   },
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(child: Text('Lịch sử đơn hàng')),
-                      Icon(Icons.arrow_forward_ios),
+                      Icon(
+                        Icons.history,
+                        color: AppTheme.colors.deepBlue,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(right: 80),
+                        child: Text(
+                          'Lịch sử đơn hàng',
+                          style: TextStyle(
+                              fontSize: 20, color: AppTheme.colors.deepBlue),
+                        ),
+                      ),
+                      Icon(Icons.arrow_forward_ios,
+                          color: AppTheme.colors.deepBlue),
                     ],
                   ),
                 ),
               ),
             ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            //   child: Container(
+            //     height: 50,
+            //     child: ElevatedButton(
+            //       style:
+            //           ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
+            //       onPressed: () {},
+            //       child: Row(
+            //         children: [
+            //           Expanded(child: Text('Đánh giá')),
+            //           Icon(Icons.arrow_forward_ios),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: Container(
                 height: 50,
                 child: ElevatedButton(
-                  style:
-                      ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
+                  style: ElevatedButton.styleFrom(
+                      primary: AppTheme.colors.lightblue),
                   onPressed: _isShown == true ? () => _logout(context) : null,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(child: Text('Đăng xuất')),
-                      Icon(Icons.arrow_forward_ios),
+                      Icon(Icons.logout, color: AppTheme.colors.deepBlue),
+                      Padding(
+                        padding: EdgeInsets.only(right: 150),
+                        child: Text(
+                          'Đăng xuất',
+                          style: TextStyle(
+                              fontSize: 20, color: AppTheme.colors.deepBlue),
+                        ),
+                      ),
+                      Icon(Icons.arrow_forward_ios,
+                          color: AppTheme.colors.deepBlue),
                     ],
                   ),
                 ),
@@ -150,7 +209,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                     });
 
                     // Close the dialog
-                   Navigator.pushAndRemoveUntil(
+                    Navigator.pushAndRemoveUntil(
                         context,
                         CupertinoPageRoute(
                           builder: (context) => LoginUi(),

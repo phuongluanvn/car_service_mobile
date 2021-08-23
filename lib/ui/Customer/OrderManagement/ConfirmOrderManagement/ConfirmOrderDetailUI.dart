@@ -122,7 +122,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                           UpdateStatusOrderState>(
                         listener: (builder, statusState) {
                           if (statusState.status ==
-                              UpdateStatus.updateStatusConfirmAcceptedSuccess) {
+                              UpdateStatus.updateConfirmFromCustomerSuccess) {
                             showDialog(
                                 context: context,
                                 builder: (BuildContext ctx) {
@@ -163,14 +163,16 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                                   if (textButton == false &&
                                       reasonReject != null) {
                                     updateStatusBloc.add(
-                                        UpdateStatusConfirmAcceptedButtonPressed(
+                                        UpdateConfirmFromCustomerButtonPressed(
                                             id: state.orderDetail[0].id,
-                                            status: rejectStatus));
+                                            isAccept: false,
+                                            customerNote: reasonReject));
                                   } else {
                                     updateStatusBloc.add(
-                                        UpdateStatusConfirmAcceptedButtonPressed(
+                                        UpdateConfirmFromCustomerButtonPressed(
                                             id: state.orderDetail[0].id,
-                                            status: acceptStatus));
+                                            isAccept: true,
+                                            customerNote: null));
                                   }
                                 },
                               ),

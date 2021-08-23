@@ -179,7 +179,8 @@ class CustomerRepository {
       "millage": kilo,
     };
     var res = await http.put(
-      Uri.parse("https://carservicesystem.azurewebsites.net/api/vehicles/millage"),
+      Uri.parse(
+          "https://carservicesystem.azurewebsites.net/api/vehicles/millage"),
       headers: headers,
       body: json.encode(body),
     );
@@ -221,17 +222,16 @@ class CustomerRepository {
       Uri.parse(BASE_URL + 'orders/' + id),
       headers: headers,
     );
-    print(res.body);
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
       convertData.add(data);
-      print(convertData);
       try {
         if (data != null) {
           convertData
               .map((orderDetail) =>
                   orderDetails.add(OrderDetailModel.fromJson(orderDetail)))
               .toList();
+
           return orderDetails;
         } else {
           res.body;

@@ -119,10 +119,10 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
                             state.orderDetail[0].vehicle.manufacturer,
                             state.orderDetail[0].vehicle.model,
                             state.orderDetail[0].vehicle.licensePlate),
-                        state.orderDetail[0].feedbacks != null
+                        (state.orderDetail[0].feedbacks.isNotEmpty && state.orderDetail[0].status != 'Hủy đơn')
                             ? _showFeedback(
-                                state.orderDetail[0].feedbacks[0].rating,
-                                state.orderDetail[0].feedbacks[0].description)
+                                state.orderDetail[0].feedbacks.first.rating,
+                                state.orderDetail[0].feedbacks.first.description)
                             : BlocListener<UpdateStatusOrderBloc,
                                 UpdateStatusOrderState>(
                                 listener: (builder, statusState) {

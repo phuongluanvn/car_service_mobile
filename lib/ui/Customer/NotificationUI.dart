@@ -1,14 +1,19 @@
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_event.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
+import 'package:car_service/blocs/customer/customerProfile/CustomerProfile_bloc.dart';
+import 'package:car_service/blocs/customer/customerProfile/CustomerProfile_event.dart';
+import 'package:car_service/blocs/customer/customerProfile/CustomerProfile_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/CarManagement/CustomerCarDetailUI.dart';
 import 'package:car_service/ui/Customer/message.dart';
+import 'package:date_format/date_format.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 int _counter = 0;
 AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -52,6 +57,8 @@ class NotificationUI extends StatefulWidget {
 class _NotificationUIState extends State<NotificationUI> {
   @override
   void initState() {
+    _getStringFromSharedPref();
+    BlocProvider.of<ProfileBloc>(context);
     main();
     super.initState();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -95,6 +102,13 @@ class _NotificationUIState extends State<NotificationUI> {
             });
       }
     });
+  }
+
+  _getStringFromSharedPref() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    BlocProvider.of<ProfileBloc>(context)
+        .add(GetProfileByUsername(username: prefs.getString('Username')));
   }
 
   void _showNotification() {
@@ -152,99 +166,67 @@ class _NotificationUIState extends State<NotificationUI> {
       ),
       backgroundColor: AppTheme.colors.lightblue,
       body: Center(
-        child: Text('Chưa có thông báo mới'),
-        // child: BlocBuilder<VerifyBookingBloc, VerifyBookingState>(
-        //   // ignore: missing_return
-        //   builder: (context, state) {
-        //     if (state.status == BookingStatus.init) {
-        //       return CircularProgressIndicator();
-        //     } else if (state.status == BookingStatus.loading) {
-        //       return CircularProgressIndicator();
-        //     } else if (state.status == BookingStatus.bookingSuccess) {
-        //       if (state.bookingList != null && state.bookingList.isNotEmpty)
-        //         return ListView.builder(
-        //           itemCount: state.bookingList.length,
-        //           shrinkWrap: true,
-        //           itemBuilder: (context, index) {
-        //             return Card(
-        //               child: (state.bookingList[index].status == 'Booked')
-        //                   ? Column(children: [
-        //                       ListTile(
-        //                         trailing: Column(
-        //                             mainAxisSize: MainAxisSize.min,
-        //                             children: <Widget>[
-        //                               Icon(
-        //                                 Icons.circle,
-        //                                 color: Colors.red,
-        //                               ),
-        //                               Text('Booked'),
-        //                             ]),
-        //                         leading: FlutterLogo(),
-        //                         title: Text(state
-        //                             .bookingList[index].vehicle.licensePlate),
-        //                         subtitle:
-        //                             Text(state.bookingList[index].bookingTime),
-        //                         onTap: () {
-        //                           Navigator.of(context).push(MaterialPageRoute(
-        //                               builder: (_) => VerifyBookingDetailUi(
-        //                                   orderId:
-        //                                       state.bookingList[index].id)));
-        //                         },
-        //                       ),
-        //                     ])
-        //                   : SizedBox(),
-        //               // : Column(children: [
-        //               //     ListTile(
-        //               //       trailing: Column(
-        //               //           mainAxisSize: MainAxisSize.min,
-        //               //           children: <Widget>[
-        //               //             Icon(
-        //               //               Icons.circle,
-        //               //               color: Colors.green,
-        //               //             ),
-        //               //             Text('Đợi xác nhận'),
-        //               //           ]),
-        //               //       leading: FlutterLogo(),
-        //               //       title: Text(
-        //               //           state.orderLists[index].taiKhoan),
-        //               //       subtitle:
-        //               //           Text(state.orderLists[index].hoTen),
-        //               //       onTap: () {
-        //               //         Navigator.of(context).push(
-        //               //             MaterialPageRoute(
-        //               //                 builder: (_) =>
-        //               //                     CustomerCarDetailUi(
-        //               //                         emailId: state
-        //               //                             .orderLists[index]
-        //               //                             .taiKhoan)));
-        //               //       },
-        //               //     ),
-        //               //   ]),
-        //             );
-        //             // ListTile(
-        //             //   title: Text(state.bookingList[index].customer.fullname),
-        //             //   onTap: () {
-        //             //     Navigator.of(context).push(MaterialPageRoute(
-        //             //         builder: (_) => VerifyBookingDetailUi(
-        //             //             emailId: state.bookingList[index].id)));
-        //             //   },
-        //             // );
-        //           },
-        //         );
-        //       else
-        //         return Center(
-        //           child: Text('Hiện tại không có đơn'),
-        //         );
-        //     } else if (state.status == BookingStatus.error) {
-        //       return ErrorWidget(state.message.toString());
-        //     }
-        //   },
-        // ),
+        child: BlocBuilder<ProfileBloc, ProfileState>(
+          // ignore: missing_return
+          builder: (context, state) {
+            if (state.status == ProfileStatus.init) {
+              return CircularProgressIndicator();
+            } else if (state.status == ProfileStatus.loading) {
+              return CircularProgressIndicator();
+            } else if (state.status == ProfileStatus.getProflieSuccess) {
+              if (state.cusProfile != null && state.cusProfile.isNotEmpty)
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        // color: Colors.white,
+                        border: Border.all(color: Colors.black26),
+                        borderRadius: BorderRadius.circular(5)),
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                    child: ListView.builder(
+                      itemCount: state.cusProfile[0].notifications.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        //hiển thị list xe
+                        return Card(
+                          child: Column(children: [
+                            ListTile(
+                              leading: Column(
+                                children: [
+                                  Image.asset('lib/images/logo_blue.png', width: 30, height: 30,),
+                                  Text(_convertDate(state.cusProfile.first
+                                      .notifications[index].createdAt))
+                                ],
+                              ),
+                              title: Text(state
+                                  .cusProfile.first.notifications[index].title),
+                              subtitle: Text(state.cusProfile.first
+                                  .notifications[index].message),
+                            ),
+                          ]),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              //   ],
+              // );
+              else
+                return Center(
+                  child: Text('Không có thông báo'),
+                );
+            } else if (state.status == ProfileStatus.error) {
+              return ErrorWidget(state.message.toString());
+            }
+          },
+        ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _showNotification,
-      //   child: Icon(Icons.add),
-      // ),
     );
+  }
+
+    _convertDate(dateInput) {
+    return formatDate(DateTime.parse(dateInput),
+        [dd, '/', mm, '/', yyyy]);
   }
 }

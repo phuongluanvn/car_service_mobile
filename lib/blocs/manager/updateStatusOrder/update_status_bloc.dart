@@ -245,9 +245,29 @@ class UpdateStatusOrderBloc
         // final jsonData = jsonDecode(jsonsDataString);
         // print(jsonData);
         if (data != null) {
-          yield state.copyWith(
-              status: UpdateStatus.updateStatusCancelSuccess);
+          yield state.copyWith(status: UpdateStatus.updateStatusCancelSuccess);
           print('Cancel Success');
+        } else {
+          yield state.copyWith(
+              status: UpdateStatus.error, message: 'Error Update');
+        }
+      } catch (e) {
+        yield state.copyWith(
+          status: UpdateStatus.error,
+          message: e.toString(),
+        );
+      }
+    } else if (event is UpdateConfirmFromCustomerButtonPressed) {
+      yield state.copyWith(status: UpdateStatus.loading);
+      try {
+        var data = await _repo.updateConfirmFromCustomer(
+            event.id, event.isAccept, event.customerNote);
+        print(data);
+        if (data != null) {
+          yield state.copyWith(
+              message: data.body,
+              status: UpdateStatus.updateConfirmFromCustomerSuccess);
+          print('update ne Success');
         } else {
           yield state.copyWith(
               status: UpdateStatus.error, message: 'Error Update');
