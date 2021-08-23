@@ -30,7 +30,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
   String acceptStatus = 'Đã đồng ý';
   String rejectStatus = 'Đã từ chối';
   String reasonReject;
-
+  int total = 0;
   @override
   void initState() {
     super.initState();
@@ -90,9 +90,8 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].note
                               : 'Không có ghi chú',
-                          state.orderDetail[0].note == null
-                              ? state.orderDetail[0].package.price
-                              : 0),
+                          total = state.orderDetail[0].orderDetails
+                              .fold(0, (sum, element) => sum + element.price)),
 
                       Padding(
                         padding: const EdgeInsets.all(8.0),

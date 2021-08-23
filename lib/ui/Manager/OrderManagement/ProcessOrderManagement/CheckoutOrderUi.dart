@@ -107,10 +107,10 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                                 ListAccessoryStatus.success) {
                               return ExpansionTile(
                                 title: Text(service.name),
-                                // trailing: Text(_convertMoney(
-                                //     service.price.toDouble() != 0
-                                //         ? service.price.toDouble()
-                                //         : 0)),
+                                trailing: Text(_convertMoney(
+                                    service.price.toDouble() != 0
+                                        ? service.price.toDouble()
+                                        : 0)),
                                 children: [
                                   accState.accessoryList.indexWhere((element) =>
                                               element.id ==

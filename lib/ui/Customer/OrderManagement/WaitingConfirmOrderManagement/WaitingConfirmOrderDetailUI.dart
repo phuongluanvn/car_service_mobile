@@ -27,7 +27,7 @@ class _WaitingConfirmOrderDetailUiState
   bool textButton = true;
   String reasonReject;
   String cancelBooking = 'Hủy đặt lịch';
-
+  int total = 0;
   @override
   void initState() {
     super.initState();
@@ -81,9 +81,8 @@ class _WaitingConfirmOrderDetailUiState
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].note
                               : 'Không có ghi chú',
-                          state.orderDetail[0].note == null
-                              ? state.orderDetail[0].package.price
-                              : 0),
+                          total = state.orderDetail[0].orderDetails
+                              .fold(0, (sum, element) => sum + element.price)),
                       cardInforCar(
                           state.orderDetail[0].vehicle.manufacturer,
                           state.orderDetail[0].vehicle.model,

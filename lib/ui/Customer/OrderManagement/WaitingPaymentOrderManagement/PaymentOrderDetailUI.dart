@@ -27,6 +27,7 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
   bool textButton = true;
   String reasonReject;
   String paymentCompleted = 'Đã thanh toán';
+  int total = 0;
 
   @override
   void initState() {
@@ -91,9 +92,8 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].note
                               : 'Không có ghi chú',
-                          state.orderDetail[0].note == null
-                              ? state.orderDetail[0].package.price
-                              : 0,
+                          total = state.orderDetail[0].orderDetails
+                              .fold(0, (sum, element) => sum + element.price),
                           state.orderDetail[0].id),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
