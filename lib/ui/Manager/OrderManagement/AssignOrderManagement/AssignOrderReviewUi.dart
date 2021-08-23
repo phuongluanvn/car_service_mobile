@@ -50,6 +50,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   bool _visible = false;
   bool _visibleKm = true;
   List<StaffModel> selectData = [];
+  String description;
 
   // AssignorderCubit assignCubit;
   CrewBloc crewBloc;
@@ -633,14 +634,69 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                                 color: Colors
                                                                     .white)),
                                                         onPressed: () {
-                                                          updateStatusBloc.add(
-                                                              UpdateStatusSendConfirmButtonPressed(
-                                                                  id: state
-                                                                      .assignDetail[
-                                                                          0]
-                                                                      .id,
-                                                                  status:
-                                                                      sendConfirmStatus));
+                                                          // updateStatusBloc.add(
+                                                          //     UpdateStatusSendConfirmButtonPressed(
+                                                          //         id: state
+                                                          //             .assignDetail[
+                                                          //                 0]
+                                                          //             .id,
+                                                          //         status:
+                                                          //             sendConfirmStatus));
+                                                          showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (BuildContext
+                                                                      ctx) {
+                                                                return AlertDialog(
+                                                                  title: Text(
+                                                                    'Thông báo!',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .redAccent),
+                                                                  ),
+                                                                  content:
+                                                                      TextField(
+                                                                    onChanged:
+                                                                        (noteValue) {
+                                                                      setState(
+                                                                          () {
+                                                                        description =
+                                                                            noteValue;
+                                                                      });
+                                                                    },
+                                                                    maxLines: 3,
+                                                                    decoration: InputDecoration.collapsed(
+                                                                        hintText:
+                                                                            'Mô tả'),
+                                                                  ),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.of(context)
+                                                                              .pop();
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                          print(
+                                                                              description);
+                                                                          updateStatusBloc.add(UpdateStatusDenyWithReasonButtonPressed(
+                                                                              id: state.assignDetail[0].id,
+                                                                              status: sendConfirmStatus,
+                                                                              reason: description));
+                                                                        },
+                                                                        child: Text(
+                                                                            'Xác nhận')),
+                                                                    TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.of(context)
+                                                                              .pop();
+                                                                        },
+                                                                        child: Text(
+                                                                            'Hùy bỏ')),
+                                                                  ],
+                                                                );
+                                                              });
                                                         },
                                                       ),
                                               );
