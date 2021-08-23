@@ -22,23 +22,26 @@ class ManagerRepository {
   createOrder(String vehicleId, String packageId, String note,
       String bookingTime) async {
     var body = {
-      "vehicleId": '$vehicleId',
-      "packageId": '$packageId',
-      "note": '$note',
-      "bookingTime": '$bookingTime'
+      "vehicleId": vehicleId,
+      "packageId": packageId,
+      "note": note,
+      "bookingTime": bookingTime
     };
     var res = await http.post(
       Uri.parse(BASE_URL + "orders"),
       headers: headers,
       body: json.encode(body),
     );
+    print(json.encode(body));
     if (res.statusCode != null) {
       if (res.statusCode == 200) {
         var id = json.decode(res.body);
         updateStatusOrder(id['orderId'].toString(), 'Đã nhận xe');
-        return res.body;
+        return res;
       } else if (res.statusCode == 404) {
-        return res.body;
+        return res;
+      } else {
+        return res;
       }
     } else {
       return null;

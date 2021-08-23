@@ -183,7 +183,9 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: List.generate(5, (index) {
-                  return index < rating ? Icon(Icons.star) : Icon(Icons.star_border);
+                  return index < rating
+                      ? Icon(Icons.star)
+                      : Icon(Icons.star_border);
                 }),
               ),
             ),
@@ -201,7 +203,12 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
     return Card(
       child: Column(
         children: [
-          Text('Thông tin xe'),
+          Text('Thông tin xe',
+          style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.start,),
           ListTile(
             title: Text('Biển số xe'),
             trailing: Text(licensePlace),
@@ -224,7 +231,14 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
     return Card(
       child: Column(
         children: [
-          Text('Thông tin đơn hàng'),
+          Text(
+            'Thông tin đơn hàng',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+            textAlign: TextAlign.start,
+          ),
           ListTile(
             title: Text('Trạng thái đơn hàng: '),
             trailing: Text(stautus),

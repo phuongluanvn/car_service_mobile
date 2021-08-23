@@ -20,15 +20,15 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
       try {
         var data = await _repo.createOrder(
             event.carId, event.serviceId, event.note, event.timeBooking);
-            print('object');
-            print(data);
         String jsonsDataString = data.toString();
         // final jsonData = jsonDecode(jsonsDataString);
         if (data != null) {
-          yield state.copyWith(status: CreateOrderStatus.createOrderSuccess);
+          yield state.copyWith(
+            message: data.body,
+            status: CreateOrderStatus.createOrderSuccess);
         } else {
           yield state.copyWith(
-              status: CreateOrderStatus.error, message: 'Error SignUp');
+              status: CreateOrderStatus.error, message: 'Không thêm được lịch');
         }
       } catch (e) {
         yield state.copyWith(
