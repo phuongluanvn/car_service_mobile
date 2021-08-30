@@ -1,4 +1,3 @@
-
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/NotificationUI.dart';
 import 'package:car_service/ui/Manager/OrderManagement/ManagementBookingOrder.dart';
@@ -8,7 +7,6 @@ import 'package:car_service/ui/Manager/StaffManagement/StaffUi.dart';
 import 'package:car_service/ui/Staff/ScheduleManagement/ScheduleListUi.dart';
 import 'package:car_service/ui/Staff/StaffProfileUi.dart';
 import 'package:flutter/material.dart';
-
 
 class NavBar extends StatefulWidget {
   @override
@@ -20,7 +18,6 @@ class _NavBarState extends State<NavBar> {
   List<Widget> _widgetOptions = <Widget>[
     ScheduleListUi(),
     StaffProfileUi(),
-    NotificationUI(),
   ];
 
   void _onItemTap(int index) {
@@ -50,13 +47,6 @@ class _NavBarState extends State<NavBar> {
               color: AppTheme.colors.deepBlue,
             ),
             label: 'Thông tin',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.notifications,
-              color: AppTheme.colors.deepBlue,
-            ),
-            label: 'Thông báo',
           ),
         ],
         currentIndex: _selectedIndex,

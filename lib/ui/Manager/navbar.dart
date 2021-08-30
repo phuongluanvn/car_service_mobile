@@ -16,7 +16,6 @@ class _NavBarState extends State<NavBar> {
     StaffUi(),
     ManagementBookingOrder(),
     ManagerProfile(),
-    NotificationUI(),
   ];
 
   void _onItemTap(int index) {
@@ -53,13 +52,6 @@ class _NavBarState extends State<NavBar> {
               color: AppTheme.colors.deepBlue,
             ),
             label: 'Thông tin',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.notifications,
-              color: AppTheme.colors.deepBlue,
-            ),
-            label: 'Thông báo',
           ),
         ],
         currentIndex: _selectedIndex,
