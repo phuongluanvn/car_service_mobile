@@ -10,6 +10,7 @@ import 'package:car_service/ui/Customer/OrderManagement/WaitingPaymentOrderManag
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_braintree/flutter_braintree.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -119,6 +120,26 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                           ),
                         ),
                       ),
+                      ElevatedButton(
+                          onPressed: () async {
+                            var request = BraintreeDropInRequest(
+                              tokenizationKey:
+                                  'sandbox_rzktbfv9_qgn7c8w395dwxz6h',
+                              collectDeviceData: true,
+                              paypalRequest: BraintreePayPalRequest(
+                                amount: '10.00',
+                                displayName: 'TestPay',
+                              ),
+                              cardEnabled: true,
+                            );
+                            BraintreeDropInResult result =
+                                await BraintreeDropIn.start(request);
+                            if (result != null) {
+                              print(result.paymentMethodNonce.description);
+                              print(result.paymentMethodNonce.nonce);
+                            }
+                          },
+                          child: Text('Thanh toán')),
                       BlocListener<UpdateStatusOrderBloc,
                           UpdateStatusOrderState>(
                         listener: (builder, statusState) {

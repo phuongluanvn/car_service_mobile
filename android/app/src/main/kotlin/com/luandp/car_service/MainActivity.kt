@@ -1,4 +1,4 @@
-package com.luandp.car_service
+package com.luandp.carservice
 
 import io.flutter.embedding.android.FlutterActivity
 

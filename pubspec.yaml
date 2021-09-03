@@ -54,6 +54,7 @@ dependencies:
   smooth_star_rating:
   rating_dialog:
   jwt_decoder: ^2.0.1
+  flutter_braintree: ^2.0.0+1
 
 dev_dependencies:
   intl:
