@@ -1,5 +1,6 @@
 import 'package:car_service/utils/model/AssignOrderModel.dart';
 import 'package:car_service/utils/model/BookingModel.dart';
+import 'package:car_service/utils/model/CalendarModel.dart';
 import 'package:car_service/utils/model/CrewModel.dart';
 import 'package:car_service/utils/model/CustomerModel.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
@@ -761,6 +762,29 @@ class ManagerRepository {
       }
     } else {
       return res.body;
+    }
+  }
+
+  getTaskListNew(String username) async {
+    List<CalendarModel> listTasks = [];
+    var res = await http.get(
+        Uri.parse(BASE_URL + "employees/" + username + "/tasks"),
+        headers: headers);
+    final data = (res.body);
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      try {
+        if (data != null) {
+          data
+              .map((order) => listTasks.add(CalendarModel.fromJson(order)))
+              .toList();
+          return listTasks;
+        } else {
+          print('No calendar data');
+        }
+      } catch (e) {
+        print(e.toString());
+      }
     }
   }
 }

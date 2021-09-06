@@ -55,7 +55,10 @@ dependencies:
   rating_dialog:
   jwt_decoder: ^2.0.1
   flutter_braintree: ^2.0.0+1
-
+  syncfusion_flutter_calendar: ^19.2.57
+  syncfusion_flutter_datepicker: ^19.2.59
+  timelines: ^0.1.0
+  
 dev_dependencies:
   intl:
   flutter_launcher_icons:
