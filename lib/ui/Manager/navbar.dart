@@ -1,4 +1,5 @@
 import 'package:car_service/theme/app_theme.dart';
+import 'package:car_service/ui/Manager/CrewManagement/CrewUi.dart';
 import 'package:car_service/ui/Manager/NotificationUI.dart';
 import 'package:car_service/ui/Manager/OrderManagement/ManagementBookingOrder.dart';
 import 'package:car_service/ui/Manager/ManagerProfileUi.dart';
@@ -14,6 +15,7 @@ class _NavBarState extends State<NavBar> {
   int _selectedIndex = 1;
   List<Widget> _widgetOptions = <Widget>[
     StaffUi(),
+    CrewUi(),
     ManagementBookingOrder(),
     ManagerProfile(),
   ];
@@ -38,6 +40,13 @@ class _NavBarState extends State<NavBar> {
               color: AppTheme.colors.deepBlue,
             ),
             label: 'Nhân viên',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.group,
+              color: AppTheme.colors.deepBlue,
+            ),
+            label: 'Tổ đội',
           ),
           BottomNavigationBarItem(
             icon: Icon(

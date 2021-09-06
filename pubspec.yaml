@@ -83,6 +83,7 @@ flutter:
     - lib/images/order.png
     - lib/images/order_small.png
     - lib/images/mechanic.png
+    - lib/images/networking.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
