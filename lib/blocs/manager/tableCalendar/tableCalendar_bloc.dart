@@ -1,6 +1,7 @@
 import 'package:car_service/blocs/manager/tableCalendar/tableCalendar_events.dart';
 import 'package:car_service/blocs/manager/tableCalendar/tableCalendar_state.dart';
 import 'package:car_service/utils/model/BookingModel.dart';
+import 'package:car_service/utils/model/CalendarModel.dart';
 import 'package:car_service/utils/model/CrewModel.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
@@ -84,6 +85,33 @@ class TableCalendarBloc extends Bloc<TableCalendarEvent, TableCalendarState> {
         yield state.copyWith(
             detailStatus: TableCalendarDetailStatus.error,
             message: e.toString());
+      }
+    } else if (event is DoListTaskEvent) {
+      // List<CalendarModel> allTasks = [];
+      yield state.copyWith(status: TableCalendarStatus.loading);
+      try {
+        List<CalendarModel> allTasks =
+            await _repo.getTaskListNew(event.username);
+        // allTasks.map((orderT) => {}).toList();
+        print(allTasks);
+        if (allTasks != null) {
+          yield state.copyWith(
+              taskLists: allTasks,
+              status: TableCalendarStatus.tableCalendarSuccess);
+        } else {
+          yield state.copyWith(
+            status: TableCalendarStatus.error,
+            message: 'Error',
+          );
+          print('no data');
+        }
+      } catch (e) {
+        print(e);
+        yield state.copyWith(
+          status: TableCalendarStatus.error,
+          message: e.toString(),
+        );
+        ;
       }
     }
   }

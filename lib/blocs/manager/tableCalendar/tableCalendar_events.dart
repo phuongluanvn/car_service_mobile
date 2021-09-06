@@ -20,6 +20,13 @@ class DoTableCalendarDetailEvent extends TableCalendarEvent {
   List<Object> get props => [id];
 }
 
+class DoListTaskEvent extends TableCalendarEvent {
+   final String username;
+  DoListTaskEvent({this.username});
+  @override
+  List<Object> get props => [username];
+}
+
 // class UpdateStatusButtonPressed extends VerifyBookingEvent {
 //   final String id;
 //   final String status;

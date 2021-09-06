@@ -4,6 +4,7 @@ import 'package:car_service/ui/Manager/OrderManagement/ManagementBookingOrder.da
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingUi.dart';
 import 'package:car_service/ui/Manager/ManagerProfileUi.dart';
 import 'package:car_service/ui/Manager/StaffManagement/StaffUi.dart';
+import 'package:car_service/ui/Staff/ScheduleManagement/CalendarUI.dart';
 import 'package:car_service/ui/Staff/ScheduleManagement/ScheduleListUi.dart';
 import 'package:car_service/ui/Staff/StaffProfileUi.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class _NavBarState extends State<NavBar> {
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = <Widget>[
     ScheduleListUi(),
+    CalendarUI(),
     StaffProfileUi(),
   ];
 
@@ -40,6 +42,13 @@ class _NavBarState extends State<NavBar> {
               color: AppTheme.colors.deepBlue,
             ),
             label: 'Đơn hàng',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.calendar_today,
+              color: AppTheme.colors.deepBlue,
+            ),
+            label: 'Lịch',
           ),
           BottomNavigationBarItem(
             icon: Icon(
