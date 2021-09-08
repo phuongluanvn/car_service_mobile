@@ -318,6 +318,25 @@ class ManagerRepository {
     }
   }
 
+  Future<List<CrewModel>> getCrewList() async {
+    List<CrewModel> crewLists = [];
+    var res = await http.get(
+      Uri.parse(BASE_URL + "crews"),
+      headers: headers,
+    );
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      if (data != null) {
+        data.map((order) => crewLists.add(CrewModel.fromJson(order))).toList();
+        return crewLists;
+      } else {
+        print('No crew data');
+      }
+    } else {
+      return null;
+    }
+  }
+
   Future<List<AccessoryModel>> getAccessoryByName(String name) async {
     List<AccessoryModel> listdata = [];
     List convertData = [];

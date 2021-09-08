@@ -7,7 +7,7 @@ abstract class CrewEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class DoListAccessories extends CrewEvent {}
+class DoListCrew extends CrewEvent {}
 
 class DoCrewDetailEvent extends CrewEvent {
   final String name;

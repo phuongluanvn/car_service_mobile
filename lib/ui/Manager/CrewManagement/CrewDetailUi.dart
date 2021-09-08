@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CrewDetailUi extends StatefulWidget {
-  final String username;
-  CrewDetailUi({@required this.username});
+  final String id;
+  CrewDetailUi({@required this.id});
 
   @override
   _CrewDetailUiState createState() => _CrewDetailUiState();
@@ -24,8 +24,8 @@ class _CrewDetailUiState extends State<CrewDetailUi> {
     super.initState();
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     BlocProvider.of<ManageStaffBloc>(context)
-        .add(DoStaffDetailEvent(username: widget.username));
-    print(widget.username);
+        .add(DoStaffDetailEvent(username: widget.id));
+    print(widget.id);
   }
 
   @override

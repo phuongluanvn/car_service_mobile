@@ -1,4 +1,5 @@
 import 'package:car_service/blocs/manager/Accessories/accessory_event.dart';
+import 'package:car_service/utils/model/CrewModel.dart';
 import 'package:car_service/utils/model/accessory_model.dart';
 import 'package:equatable/equatable.dart';
 
@@ -27,7 +28,7 @@ class CrewState extends Equatable {
   final ListCrewStatus status;
   final DoCrewDetailStatus statusDetail;
   final DoUpdateStatus updateStatus;
-  final List<AccessoryModel> crewList;
+  final List<CrewModel> crewList;
   final String message;
   CrewState(
       {this.status: ListCrewStatus.init,
@@ -40,7 +41,7 @@ class CrewState extends Equatable {
     ListCrewStatus status,
     DoCrewDetailStatus statusDetail,
     DoUpdateStatus updateStatus,
-    List<AccessoryModel> crewList,
+    List<CrewModel> crewList,
     String message,
   }) =>
       CrewState(
