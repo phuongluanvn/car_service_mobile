@@ -117,8 +117,8 @@ class _CustomerProfileState extends State<CustomerProfile> {
                   style: ElevatedButton.styleFrom(
                       primary: AppTheme.colors.lightblue),
                   onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => OrderHistoryUi()));
+                    // Navigator.of(context).push(
+                    //     MaterialPageRoute(builder: (_) => OrderHistoryUi()));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -6,7 +6,8 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_formatter/money_formatter.dart';
-
+import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
+    as cusConstants;
 class CustomerOrderDetailUi extends StatefulWidget {
   final String orderId;
   CustomerOrderDetailUi({@required this.orderId});
@@ -112,9 +113,10 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].note
                               : 'Không có ghi chú',
-                          state.orderDetail[0].package != null
-                              ? state.orderDetail[0].package.price
-                              : 0),
+                          // state.orderDetail[0].package != null
+                          //     ? state.orderDetail[0].package.price
+                          //     : 0
+                              ),
                       cardInforCar(
                           state.orderDetail[0].vehicle.manufacturer,
                           state.orderDetail[0].vehicle.model,
@@ -226,7 +228,8 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
       List services,
       bool serviceType,
       String note,
-      int totalPrice) {
+      // int totalPrice
+      ) {
     int countPrice = 0;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
@@ -284,7 +287,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                       _convertMoney(countPrice.toDouble()),
                       style: TextStyle(decoration: TextDecoration.lineThrough),
                     ),
-                    Text(_convertMoney(totalPrice.toDouble())),
+                    // Text(_convertMoney(totalPrice.toDouble())),
                   ],
                 )),
           ],

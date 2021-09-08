@@ -8,6 +8,8 @@ import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderDetailUI.da
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
+    as cusConstants;
 
 class CheckingOrderUI extends StatefulWidget {
   @override
@@ -66,7 +68,7 @@ class _CheckingOrderUIState extends State<CheckingOrderUI> {
                             itemBuilder: (context, index) {
                               assert(context != null);
                               if (state.orderCheckingLists[index].status ==
-                                  'Kiểm tra') {
+                                  cusConstants.CHECKING_ORDER_STATUS) {
                                 return Card(
                                     child: Column(children: [
                                   ListTile(
@@ -85,7 +87,7 @@ class _CheckingOrderUIState extends State<CheckingOrderUI> {
                                           ),
                                         ]),
                                     leading: Image.asset(
-                                        'lib/images/order_small.png'),
+                                        cusConstants.IMAGE_URL_ORDER_LOGO_SMALL),
                                     title: Text(state.orderCheckingLists[index]
                                         .vehicle.licensePlate),
                                     subtitle: Text(
@@ -119,7 +121,7 @@ class _CheckingOrderUIState extends State<CheckingOrderUI> {
                 );
               else
                 return Center(
-                  child: Text('Hiện tại không có đơn'),
+                  child: Text(cusConstants.NOT_FOUND_ORDER),
                 );
             } else if (state.status == CustomerOrderStatus.error) {
               return ErrorWidget(state.message.toString());

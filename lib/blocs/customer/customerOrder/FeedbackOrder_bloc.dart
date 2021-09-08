@@ -2,7 +2,6 @@ import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_event.dar
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dart';
 import 'package:car_service/blocs/customer/customerOrder/FeedbackOrder_event.dart';
 import 'package:car_service/blocs/customer/customerOrder/FeedbackOrder_state.dart';
-import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/OrderModel.dart';
 import 'package:car_service/utils/repository/customer_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -6,6 +6,8 @@ import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderDetailUI.da
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
+    as cusConstants;
 
 class AcceptedOrderUI extends StatefulWidget {
   @override
@@ -59,7 +61,7 @@ class _AcceptedOrderUIState extends State<AcceptedOrderUI> {
                             itemBuilder: (context, index) {
                               assert(context != null);
                               if (state.orderAcceptedLists[index].status ==
-                                  'Đã xác nhận') {
+                                  cusConstants.ACCEPTED_ORDER_STATUS) {
                                 return Card(
                                     child: Column(children: [
                                   ListTile(
@@ -77,8 +79,8 @@ class _AcceptedOrderUIState extends State<AcceptedOrderUI> {
                                                 color: Colors.green[200]),
                                           ),
                                         ]),
-                                    leading: Image.asset(
-                                        'lib/images/order_small.png'),
+                                    leading: Image.asset(cusConstants
+                                        .IMAGE_URL_ORDER_LOGO_SMALL),
                                     title: Text(state.orderAcceptedLists[index]
                                         .vehicle.licensePlate),
                                     subtitle: Text(
@@ -112,7 +114,7 @@ class _AcceptedOrderUIState extends State<AcceptedOrderUI> {
                 );
               else
                 return Center(
-                  child: Text('Hiện tại không có đơn'),
+                  child: Text(cusConstants.NOT_FOUND_ORDER),
                 );
             } else if (state.status == CustomerOrderStatus.error) {
               return ErrorWidget(state.message.toString());

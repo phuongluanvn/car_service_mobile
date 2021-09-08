@@ -1,7 +1,6 @@
 import 'package:car_service/blocs/manager/staff/staff_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/utils/model/BookingModel.dart';
-import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:car_service/utils/repository/manager_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

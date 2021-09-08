@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:car_service/blocs/customer/customerCar/CreateCar_bloc.dart';
-import 'package:car_service/blocs/customer/customerCar/CreateCar_state.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
 import 'package:car_service/blocs/customer/customerOrder/CreateBooking_bloc.dart';
@@ -9,15 +7,11 @@ import 'package:car_service/blocs/customer/customerOrder/CreateBooking_event.dar
 import 'package:car_service/blocs/customer/customerOrder/CreateBooking_state.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_event.dart';
-import 'package:car_service/blocs/customer/customerService/CustomerService_bloc.dart';
-import 'package:car_service/blocs/customer/customerService/CustomerService_event.dart';
 import 'package:car_service/blocs/packageService/PackageService_bloc.dart';
 import 'package:car_service/blocs/packageService/PackageService_event.dart';
 import 'package:car_service/blocs/packageService/PackageService_state.dart';
 import 'package:car_service/theme/app_theme.dart';
-import 'package:car_service/ui/Customer/CustomerMainUI.dart';
-import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderUI.dart';
-import 'package:car_service/ui/Customer/OrderManagement/tabbar.dart';
+import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/ExpansionList.dart';
 import 'package:date_format/date_format.dart';
 // import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
@@ -27,9 +21,9 @@ import 'package:money_formatter/money_formatter.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'dart:async';
-import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
-
+import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
+    as cusConstants;
 class CreateBookingOrderUI extends StatefulWidget {
   @override
   _CreateBookingOrderUIState createState() => _CreateBookingOrderUIState();
@@ -57,6 +51,8 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
   String _timeSelected;
   Color _colorBgrBtn;
   bool _isTimeBooking = false;
+  List _packageIdList = [];
+  bool _isOpen = false;
 
   Map<String, bool> checkboxListValues = {};
 
@@ -435,49 +431,61 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                                   stateOfPackage
                                                       .packageServiceLists
                                                       .isNotEmpty)
-                                                return ExpansionPanelList.radio(
+                                                return 
+                                                ExpansionPanelList(
+                                                  expansionCallback: (int item, bool status) {
+                                                    setState(() {
+                                                      _isOpen = !_isOpen;
+                                                    });
+                                                  },
                                                   children: stateOfPackage
                                                       .packageServiceLists
-                                                      .map<ExpansionPanelRadio>(
+                                                      .map<ExpansionPanel>(
                                                     (e) {
-                                                      return ExpansionPanelRadio(
-                                                          value: e.id,
+                                                      return ExpansionPanel(
+                                                          canTapOnHeader: true,
+                                                          isExpanded: _isOpen,
+                                                          // value: _packageIdList.indexWhere((element) => element.id == e.id) >= 0,
                                                           headerBuilder:
-                                                              (context,
-                                                                  isExpanded) {
+                                                              (context, isExpanded) {
                                                             return ListTile(
+                                                              leading: Checkbox(
+                                                                value: _packageIdList.indexWhere(
+                                                                  (element) => element ==  e.id) >= 0,
+                                                                onChanged: (selected) {
+                                                                  if (selected) {
+                                                                    setState(() {
+                                                                      _packageIdList.add(e.id);
+                                                                    });
+                                                                  } else {
+                                                                    setState(() {
+                                                                      _packageIdList.remove(e.id);
+                                                                    });
+                                                                  }
+                                                                },
+                                                              ),
                                                               title: Text(
                                                                 e.name,
                                                                 style: TextStyle(
-                                                                    color: (_valueSelectedPackageService ==
-                                                                            e
-                                                                                .id)
-                                                                        ? Colors
-                                                                            .blue
-                                                                        : Colors
-                                                                            .grey),
-                                                              ),
-                                                              trailing: Text(
-                                                                _convertMoney(e
-                                                                    .price
-                                                                    .toDouble()),
-                                                                style: TextStyle(
-                                                                    color: (_valueSelectedPackageService ==
-                                                                            e
-                                                                                .id)
-                                                                        ? Colors
-                                                                            .blue
-                                                                        : Colors
-                                                                            .grey),
+                                                                    color: (_valueSelectedPackageService == e.id)
+                                                                        ? Colors.blue
+                                                                        : Colors.grey),
                                                               ),
                                                               onTap: () {
                                                                 setState(() {
-                                                                  _valueSelectedPackageService =
-                                                                      e.id;
-                                                                  _packageId =
-                                                                      e.id;
-                                                                  _note = null;
+                                                                  isExpanded =
+                                                                      true;
                                                                 });
+                                                                // setState(() {
+                                                                //   _packageIdList
+                                                                //       .add(
+                                                                //           e.id);
+                                                                //   _valueSelectedPackageService =
+                                                                //       e.id;
+                                                                //   _packageId =
+                                                                //       e.id;
+                                                                //   _note = null;
+                                                                // });
                                                               },
                                                             );
                                                           },
@@ -485,20 +493,11 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                                               SingleChildScrollView(
                                                             child: ListView(
                                                               shrinkWrap: true,
-                                                              children: e
-                                                                  .services
-                                                                  .map(
-                                                                      (service) {
+                                                              children: e.services.map((service) {
                                                                 return ListTile(
-                                                                  title: Text(
-                                                                      service
-                                                                          .name),
-                                                                  trailing:
-                                                                      Text(
-                                                                    _convertMoney(
-                                                                        service
-                                                                            .price
-                                                                            .toDouble()),
+                                                                  title: Text(service.name),
+                                                                  trailing: Text(
+                                                                    _convertMoney(service.price.toDouble()),
                                                                   ),
                                                                 );
                                                               }).toList(),
@@ -749,7 +748,8 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                             actions: [
                               TextButton(
                                   onPressed: () {
-                                    if (state.message == 'Đặt lịch hẹn thành công') {
+                                    if (state.message ==
+                                        'Đặt lịch hẹn thành công') {
                                       Navigator.of(context).pop();
                                       Navigator.pop(context);
                                       context
@@ -806,7 +806,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                       _createBookingBloc.add(
                         CreateBookingButtonPressed(
                             carId: _carId,
-                            serviceId: _packageId,
+                            packageLists: _packageIdList,
                             note: null,
                             timeBooking: _timeSelected,
                             imageUrl: null),
@@ -814,7 +814,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                     } else if (_packageId == null) {
                       _createBookingBloc.add(CreateBookingButtonPressed(
                           carId: _carId,
-                          serviceId: null,
+                          packageLists: null,
                           note: _note,
                           timeBooking: _timeSelected,
                           imageUrl: null));

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:equatable/equatable.dart';
 
@@ -17,8 +15,8 @@ class OrderDetailModel extends Equatable {
   String imageUrl;
   Customer customer;
   Vehicle vehicle;
-  Package package;
   Crew crew;
+  List<Packages> packages;
   List<OrderDetails> orderDetails;
   List<Feedbacks> feedbacks;
 
@@ -36,8 +34,8 @@ class OrderDetailModel extends Equatable {
       this.imageUrl,
       this.customer,
       this.vehicle,
-      this.package,
       this.crew,
+      this.packages,
       this.orderDetails,
       this.feedbacks});
 
@@ -58,9 +56,13 @@ class OrderDetailModel extends Equatable {
         : null;
     vehicle =
         json['vehicle'] != null ? new Vehicle.fromJson(json['vehicle']) : null;
-    package =
-        json['package'] != null ? new Package.fromJson(json['package']) : null;
     crew = json['crew'] != null ? new Crew.fromJson(json['crew']) : null;
+    if (json['packages'] != null) {
+      packages = new List<Packages>();
+      json['packages'].forEach((v) {
+        packages.add(new Packages.fromJson(v));
+      });
+    }
     if (json['orderDetails'] != null) {
       orderDetails = new List<OrderDetails>();
       json['orderDetails'].forEach((v) {
@@ -94,11 +96,11 @@ class OrderDetailModel extends Equatable {
     if (this.vehicle != null) {
       data['vehicle'] = this.vehicle.toJson();
     }
-    if (this.package != null) {
-      data['package'] = this.package.toJson();
-    }
     if (this.crew != null) {
       data['crew'] = this.crew.toJson();
+    }
+    if (this.packages != null) {
+      data['packages'] = this.packages.map((v) => v.toJson()).toList();
     }
     if (this.orderDetails != null) {
       data['orderDetails'] = this.orderDetails.map((v) => v.toJson()).toList();
@@ -122,7 +124,7 @@ class Customer extends Equatable {
   String address;
   int accumulatedPoint;
   bool isBanned;
-  Vehicle vehicles;
+  String vehicles;
 
   Customer(
       {this.username,
@@ -208,50 +210,14 @@ class Vehicle extends Equatable {
   List<Object> get props => [];
 }
 
-class Package extends Equatable {
-  String id;
-  String name;
-  String description;
-  var price;
-  String services;
-
-  Package({this.id, this.name, this.description, this.price, this.services});
-
-  Package.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    description = json['description'];
-    price = json['price'];
-    services = json['services'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['description'] = this.description;
-    data['price'] = this.price;
-    data['services'] = this.services;
-    return data;
-  }
-
-  @override
-  // TODO: implement props
-  List<Object> get props => [];
-}
-
 class Crew extends Equatable {
   String id;
-  String timeAssigned;
-  String timeFinished;
   List<StaffModel> members;
 
-  Crew({this.id, this.timeAssigned, this.timeFinished, this.members});
+  Crew({this.id, this.members});
 
   Crew.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    timeAssigned = json['timeAssigned'];
-    timeFinished = json['timeFinished'];
     if (json['members'] != null) {
       members = new List<StaffModel>();
       json['members'].forEach((v) {
@@ -263,8 +229,6 @@ class Crew extends Equatable {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['timeAssigned'] = this.timeAssigned;
-    data['timeFinished'] = this.timeFinished;
     if (this.members != null) {
       data['members'] = this.members.map((v) => v.toJson()).toList();
     }
@@ -285,6 +249,7 @@ class Members extends Equatable {
   String address;
   String dateOfBirth;
   String status;
+  bool isLeader;
 
   Members(
       {this.username,
@@ -294,7 +259,8 @@ class Members extends Equatable {
       this.email,
       this.address,
       this.dateOfBirth,
-      this.status});
+      this.status,
+      this.isLeader});
 
   Members.fromJson(Map<String, dynamic> json) {
     username = json['username'];
@@ -305,6 +271,7 @@ class Members extends Equatable {
     address = json['address'];
     dateOfBirth = json['dateOfBirth'];
     status = json['status'];
+    isLeader = json['isLeader'];
   }
 
   Map<String, dynamic> toJson() {
@@ -317,6 +284,47 @@ class Members extends Equatable {
     data['address'] = this.address;
     data['dateOfBirth'] = this.dateOfBirth;
     data['status'] = this.status;
+    data['isLeader'] = this.isLeader;
+    return data;
+  }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+}
+
+class Packages extends Equatable {
+  String id;
+  String name;
+  String description;
+  int price;
+  List<OrderDetails> orderDetails;
+
+  Packages(
+      {this.id, this.name, this.description, this.price, this.orderDetails});
+
+  Packages.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    description = json['description'];
+    price = json['price'];
+    if (json['orderDetails'] != null) {
+      orderDetails = new List<OrderDetails>();
+      json['orderDetails'].forEach((v) {
+        orderDetails.add(new OrderDetails.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['description'] = this.description;
+    data['price'] = this.price;
+    if (this.orderDetails != null) {
+      data['orderDetails'] = this.orderDetails.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 
@@ -330,11 +338,12 @@ class OrderDetails extends Equatable {
   String serviceId;
   String accessoryId;
   String name;
-  var quantity;
-  var price;
+  int quantity;
+  int price;
   bool isIncurred;
   bool isFinished;
   String timeFinished;
+  String coupon;
 
   OrderDetails(
       {this.id,
@@ -345,7 +354,8 @@ class OrderDetails extends Equatable {
       this.price,
       this.isIncurred,
       this.isFinished,
-      this.timeFinished});
+      this.timeFinished,
+      this.coupon});
 
   OrderDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -357,6 +367,7 @@ class OrderDetails extends Equatable {
     isIncurred = json['isIncurred'];
     isFinished = json['isFinished'];
     timeFinished = json['timeFinished'];
+    coupon = json['coupon'];
   }
 
   Map<String, dynamic> toJson() {
@@ -370,6 +381,7 @@ class OrderDetails extends Equatable {
     data['isIncurred'] = this.isIncurred;
     data['isFinished'] = this.isFinished;
     data['timeFinished'] = this.timeFinished;
+    data['coupon'] = this.coupon;
     return data;
   }
 

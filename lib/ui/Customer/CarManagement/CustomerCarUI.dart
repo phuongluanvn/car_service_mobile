@@ -7,6 +7,8 @@ import 'package:car_service/ui/Customer/CarManagement/CustomerCarDetailUI.dart';
 import 'package:car_service/utils/model/VehicleModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
+    as cusConstants;
 
 class CustomerCarUi extends StatefulWidget {
   @override
@@ -33,7 +35,7 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Danh sách xe'),
+        title: Text(cusConstants.MANAGE_VEHICLE_WIDGET_TITLE),
         automaticallyImplyLeading: false,
         backgroundColor: AppTheme.colors.deepBlue,
         actions: <Widget>[
@@ -71,20 +73,27 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
                       return Card(
                         child: Column(children: [
                           ListTile(
-                            leading: Image.asset('lib/images/logo_blue.png'),
+                            leading:
+                                Image.asset(cusConstants.IMAGE_URL_LOGO_BLUE),
                             title: Text(_textEditingController.text.isNotEmpty
                                 ? vehicleListsOnSearch[index].licensePlate
                                 : state.vehicleLists[index].licensePlate),
                             subtitle: Text(
                                 _textEditingController.text.isNotEmpty
-                                    ? vehicleListsOnSearch[index].manufacturer + ' - ' + state.vehicleLists[index].model
-                                    : state.vehicleLists[index].manufacturer+ ' - ' + state.vehicleLists[index].model),
+                                    ? vehicleListsOnSearch[index].manufacturer +
+                                        ' - ' +
+                                        state.vehicleLists[index].model
+                                    : state.vehicleLists[index].manufacturer +
+                                        ' - ' +
+                                        state.vehicleLists[index].model),
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (_) => CustomerCarDetailUi(
                                       id: state.vehicleLists[index].id,
-                                      manuName: state.vehicleLists[index].manufacturer,
-                                      modelName: state.vehicleLists[index].model)));
+                                      manuName: state
+                                          .vehicleLists[index].manufacturer,
+                                      modelName:
+                                          state.vehicleLists[index].model)));
                             },
                           ),
                         ]),
@@ -96,7 +105,7 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
               // );
               else
                 return Center(
-                  child: Text('Không có thông tin xe'),
+                  child: Text(cusConstants.NOT_FOUND_INFO_VEHICLE),
                 );
             } else if (state.status == CustomerCarStatus.error) {
               return ErrorWidget(state.message.toString());
@@ -104,22 +113,6 @@ class _CustomerCarUiState extends State<CustomerCarUi> {
           },
         ),
       ),
-
-      //thêm mới xe
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     Navigator.of(context)
-      //         .push(MaterialPageRoute(builder: (_) => CreateCustomerCarUI()));
-      //   },
-      //   child: const Icon(Icons.add),
-      //   backgroundColor: Colors.blue[600],
-      // ),
     );
   }
-
-  // Widget _buildSearch() => SearchWidget(
-  //   dataList: dataList,
-  //   popupListItemBuilder: popupListItemBuilder,
-  //   selectedItemBuilder: selectedItemBuilder,
-  //   queryBuilder: queryBuilder)
 }

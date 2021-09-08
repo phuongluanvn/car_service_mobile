@@ -37,7 +37,7 @@ class CreateBookingNoteChanged extends CreateBookingEvent {
 
 class CreateBookingButtonPressed extends CreateBookingEvent {
   final String carId;
-  final String serviceId;
+  final List packageLists;
   final String note;
   final String timeBooking;
   final String imageUrl;
@@ -45,7 +45,7 @@ class CreateBookingButtonPressed extends CreateBookingEvent {
   // final String imageUrl;
 
   CreateBookingButtonPressed(
-      {this.carId, this.serviceId, this.note, this.timeBooking, this.imageUrl});
+      {this.carId, this.packageLists, this.note, this.timeBooking, this.imageUrl});
 }
 
 // class OpenImagePicker extends CreateBookingEvent {

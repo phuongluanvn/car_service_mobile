@@ -10,7 +10,6 @@ import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/OrderHistory/OrderHistoryDetailUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/VerifyBookingManagement/VerifyBookingDetailUi.dart';
 import 'package:car_service/ui/Staff/ScheduleManagement/ScheduleDetailUi.dart';
-import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

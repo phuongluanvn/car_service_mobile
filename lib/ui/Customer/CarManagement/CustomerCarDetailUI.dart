@@ -16,6 +16,8 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
+    as cusConstants;
 
 class CustomerCarDetailUi extends StatefulWidget {
   final String id;
@@ -60,10 +62,10 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
         builder: (BuildContext ctx) {
           return AlertDialog(
             title: Text(
-              'Thông báo!',
+              cusConstants.NOTI_TITLE,
               style: TextStyle(color: Colors.greenAccent),
             ),
-            content: Text('Cập nhật thông tin xe thành công!'),
+            content: Text(cusConstants.UPDATE_VEHICLE_SUCCESS),
             actions: [
               TextButton(
                   onPressed: () {
@@ -73,7 +75,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                         DoModelListOfManufacturerEvent(
                             manuName: widget.manuName));
                   },
-                  child: Text('Đồng ý'))
+                  child: Text(cusConstants.BUTTON_OK_TITLE))
             ],
           );
         });
@@ -85,57 +87,57 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
         builder: (BuildContext ctx) {
           return AlertDialog(
             title: Text(
-              'Thông báo!',
+              cusConstants.NOTI_TITLE,
               style: TextStyle(color: Colors.redAccent),
             ),
-            content: Text('Bạn có chắc muốn xóa xe này?'),
+            content: Text(cusConstants.DELETE_VEHICLE_REQUEST),
             actions: [
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Hủy')),
+                  child: Text(cusConstants.BUTTON_CANCEL_TITLE)),
               TextButton(
                   onPressed: () {
                     // Close the dialog
                     BlocProvider.of<DeleteCarBloc>(context)
                         .add(DoDeleteCarEvent(vehicleId: widget.id));
                   },
-                  child: Text('Đồng ý'))
+                  child: Text(cusConstants.BUTTON_OK_TITLE))
             ],
           );
         });
   }
 
-  _showDelSuccessDialog() {
-    showDialog(
-        context: context,
-        builder: (BuildContext ctx) {
-          return AlertDialog(
-            title: Text(
-              'Thông báo!',
-              style: TextStyle(color: Colors.greenAccent),
-            ),
-            content: Text('Xóa thông tin xe thành công!'),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    // Close the dialog
-                    // Navigator.of(context).pop();
-                    Navigator.pushNamed(context, '/customer');
-                  },
-                  child: Text('Đồng ý'))
-            ],
-          );
-        });
-  }
+  // _showDelSuccessDialog() {
+  //   showDialog(
+  //       context: context,
+  //       builder: (BuildContext ctx) {
+  //         return AlertDialog(
+  //           title: Text(
+  //             ,
+  //             style: TextStyle(color: Colors.greenAccent),
+  //           ),
+  //           content: Text(),
+  //           actions: [
+  //             TextButton(
+  //                 onPressed: () {
+  //                   // Close the dialog
+  //                   // Navigator.of(context).pop();
+  //                   Navigator.pushNamed(context, );
+  //                 },
+  //                 child: Text())
+  //           ],
+  //         );
+  //       });
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.colors.lightblue,
       appBar: AppBar(
-          title: Text('Thông tin xe'),
+          title: Text(cusConstants.UPDATE_VEHICLE_TITLE_WIDGET),
           backgroundColor: AppTheme.colors.deepBlue,
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
@@ -160,18 +162,19 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                   builder: (BuildContext ctx) {
                     return AlertDialog(
                       title: Text(
-                        'Thông báo!',
+                        cusConstants.NOTI_TITLE,
                         style: TextStyle(color: Colors.greenAccent),
                       ),
-                      content: Text('Xóa thông tin xe thành công!'),
+                      content: Text(cusConstants.DELETE_VEHICLE_SUCCESS),
                       actions: [
                         TextButton(
                             onPressed: () {
                               // Close the dialog
                               // Navigator.of(context).pop();
-                              Navigator.pushNamed(context, '/customer');
+                              Navigator.pushNamed(
+                                  context, cusConstants.PATH_CUSTOMER_HOME);
                             },
-                            child: Text('Đồng ý'))
+                            child: Text(cusConstants.BUTTON_OK_TITLE))
                       ],
                     );
                   });
@@ -200,11 +203,11 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                         switch (state.vehicleDetail[0].manufacturer) {
                           case 'Axa':
                             image = Image.network(
-                                'https://picsum.photos/400/200?image=1070');
+                                cusConstants.IMAGE_URL_UPDATE_VEHICLE_FIRST);
                             break;
                           default:
                             image = Image.network(
-                                'https://picsum.photos/400/200?image=1071');
+                                cusConstants.IMAGE_URL_UPDATE_VEHICLE_SECOND);
                         }
                         var manufacturer = TextFormField(
                           readOnly: true,
@@ -218,7 +221,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                             hintStyle: TextStyle(color: Colors.black54),
                             // hintText: state.vehicleDetail[0].taiKhoan,
                             // text
-                            labelText: 'Hãng xe',
+                            labelText: cusConstants.MANU_LABLE,
                             contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)),
@@ -235,7 +238,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                             hintStyle: TextStyle(color: Colors.black54),
                             // hintText: state.vehicleDetail[0].taiKhoan,
                             // text
-                            labelText: 'Mẫu xe',
+                            labelText: cusConstants.MODEL_LABLE,
                             contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)),
@@ -258,7 +261,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                             hintStyle: TextStyle(color: Colors.black54),
                             // hintText: state.vehicleDetail[0].taiKhoan,
                             // text
-                            labelText: 'Biển số',
+                            labelText: cusConstants.LICENSE_PLATE_LABLE,
                             contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)),
@@ -266,8 +269,12 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                         );
                         var repairTime = TextFormField(
                           readOnly: true,
-                          initialValue: state.vehicleDetail[0].dateOfLastMaintenance != null ?
-                              _convertDate(state.vehicleDetail[0].dateOfLastMaintenance) : '',
+                          initialValue: state
+                                      .vehicleDetail[0].dateOfLastMaintenance !=
+                                  null
+                              ? _convertDate(
+                                  state.vehicleDetail[0].dateOfLastMaintenance)
+                              : '',
                           keyboardType: TextInputType.text,
                           autofocus: false,
                           decoration: InputDecoration(
@@ -277,7 +284,8 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                             hintStyle: TextStyle(color: Colors.black54),
                             // hintText: state.vehicleDetail[0].taiKhoan,
                             // text
-                            labelText: 'Bảo dưỡng lần cuối',
+                            labelText:
+                                cusConstants.UPDATE_LAST_OF_MAINTENANCE_LABLE,
                             contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)),
@@ -296,7 +304,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                             hintStyle: TextStyle(color: Colors.black54),
                             // hintText: state.vehicleDetail[0].taiKhoan,
                             // text
-                            labelText: 'Số km ghi nhận gần nhất',
+                            labelText: cusConstants.UPDATE_MILLAGE_COUNT_LABLE,
                             contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)),
@@ -305,16 +313,9 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                         var elevatedButton = ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               primary: AppTheme.colors.blue),
-                          child: Text('Lưu',
+                          child: Text(cusConstants.BUTTON_SAVE_UPDATE,
                               style: TextStyle(color: Colors.white)),
                           onPressed: () {
-                            print(widget.id);
-                            print(widget.manuName);
-                            print(this._modelName.text);
-                            print(_isChangeLicensePlate
-                                ? _licensePlate
-                                : state.vehicleDetail[0].licensePlate);
-
                             _updateCarButton.add(UpdateCarButtonPressed(
                               carId: widget.id,
                               manufacturer: widget.manuName,
@@ -361,7 +362,8 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                                                 fillColor: Colors.white,
                                                 hintStyle: TextStyle(
                                                     color: Colors.black54),
-                                                labelText: 'Mẫu xe',
+                                                labelText: cusConstants
+                                                    .MODEL_LABLE,
                                                 contentPadding:
                                                     EdgeInsets.fromLTRB(
                                                         20, 10, 20, 10),
@@ -392,8 +394,8 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                                             },
                                             noItemsFoundBuilder: (context) =>
                                                 Center(
-                                                  child: Text(
-                                                      'Không tìm thấy mẫu xe'),
+                                                  child: Text(cusConstants
+                                                      .NOT_FOUND_MODEL_SEARCH),
                                                 ),
                                             onSuggestionSelected: (suggestion) {
                                               this._typeAheadController.text =
@@ -427,7 +429,8 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
                           ),
                         );
                       } else
-                        return Center(child: Text('Empty'));
+                        return Center(
+                            child: Text(cusConstants.NOT_FOUND_INFO_VEHICLE));
                     } else if (state.detailStatus ==
                         CustomerCarDetailStatus.error) {
                       return ErrorWidget(state.message.toString());
@@ -442,8 +445,7 @@ class _CustomerCarDetailUiState extends State<CustomerCarDetailUi> {
     );
   }
 
-    _convertDate(dateInput) {
-    return formatDate(DateTime.parse(dateInput),
-        [dd, '/', mm, '/', yyyy]);
+  _convertDate(dateInput) {
+    return formatDate(DateTime.parse(dateInput), [dd, '/', mm, '/', yyyy]);
   }
 }

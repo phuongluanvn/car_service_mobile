@@ -16,7 +16,6 @@ import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
 import 'package:car_service/ui/Manager/OrderManagement/ProcessOrderManagement/CheckoutOrderUi.dart';
-import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';

@@ -9,7 +9,8 @@ import 'package:car_service/ui/Customer/OrderManagement/WaitingPaymentOrderManag
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
+    as cusConstants;
 class WaitingPaymentUI extends StatefulWidget {
   @override
   _WaitingPaymentUIState createState() => _WaitingPaymentUIState();

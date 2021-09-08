@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:car_service/blocs/customer/customerOrder/CreateBooking_event.dart';
 import 'package:car_service/blocs/customer/customerOrder/CreateBooking_state.dart';
 import 'package:car_service/utils/repository/customer_repo.dart';
@@ -17,7 +15,7 @@ class CreateBookingBloc extends Bloc<CreateBookingEvent, CreateBookingState> {
     if (event is CreateBookingButtonPressed) {
       yield state.copyWith(status: CreateBookingStatus.loading);
       try {
-        var data = await _repo.createNewBooking(event.carId, event.serviceId,
+        var data = await _repo.createNewBooking(event.carId, event.packageLists,
             event.note, event.timeBooking, event.imageUrl);
         print(data);
         if (data != null) {

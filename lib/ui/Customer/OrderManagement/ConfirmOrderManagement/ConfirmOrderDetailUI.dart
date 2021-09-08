@@ -14,6 +14,8 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_formatter/money_formatter.dart';
+import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
+    as cusConstants;
 
 class ConfirmOrderDetailUi extends StatefulWidget {
   final String orderId;
@@ -46,7 +48,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
       backgroundColor: AppTheme.colors.lightblue,
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Chi tiết đơn hàng'),
+        title: Text(cusConstants.ORDER_DETAIL_TITLE),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -76,10 +78,10 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                           _convertDate(state.orderDetail[0].bookingTime),
                           state.orderDetail[0].checkinTime != null
                               ? state.orderDetail[0].checkinTime
-                              : 'Chưa nhận xe',
+                              : cusConstants.CHECKIN_NOT_YET_STATUS,
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].checkinTime
-                              : 'Không có ghi chú'),
+                              : cusConstants.NOT_FOUND_NOTE),
                       cardInforService(
                           state.orderDetail[0].vehicle.model,
                           state.orderDetail[0].vehicle.model,
@@ -89,7 +91,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                           state.orderDetail[0].note == null ? false : true,
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].note
-                              : 'Không có ghi chú',
+                              : cusConstants.NOT_FOUND_NOTE,
                           total = state.orderDetail[0].orderDetails
                               .fold(0, (sum, element) => sum + element.price)),
 
@@ -112,7 +114,8 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                               },
                               maxLines: 3,
                               decoration: InputDecoration.collapsed(
-                                  hintText: 'Lý do từ chối'),
+                                  hintText: cusConstants
+                                      .CONFIRM_ORDER_REASON_REJECTED),
                             ),
                           ),
                         ),
@@ -127,11 +130,11 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                                 builder: (BuildContext ctx) {
                                   return AlertDialog(
                                     title: Text(
-                                      'Thông báo!',
+                                      cusConstants.NOTI_TITLE,
                                       style:
                                           TextStyle(color: Colors.greenAccent),
                                     ),
-                                    content: Text('Phản hồi đơn thành công!'),
+                                    content: Text(cusConstants.CONFIRM_ORDER_SUCCESS_MESSAGE),
                                     actions: [
                                       TextButton(
                                           onPressed: () {
@@ -142,7 +145,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                                                 .read<CustomerOrderBloc>()
                                                 .add(DoOrderListEvent());
                                           },
-                                          child: Text('Đồng ý'))
+                                          child: Text(cusConstants.BUTTON_OK_TITLE))
                                     ],
                                   );
                                 });
@@ -156,11 +159,9 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     primary: AppTheme.colors.blue),
-                                child: Text(textButton ? 'Đồng ý' : 'Xác nhận',
+                                child: Text(textButton ? cusConstants.BUTTON_OK_TITLE : cusConstants.BUTTON_ACCEPT_TITLE,
                                     style: TextStyle(color: Colors.white)),
                                 onPressed: () {
-                                  print(state.orderDetail[0].id);
-                                  print(reasonReject);
                                   if (textButton == false &&
                                       reasonReject != null) {
                                     updateStatusBloc.add(
@@ -184,9 +185,9 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                                 style: ElevatedButton.styleFrom(
                                     primary: Colors.red),
                                 child: _visibleByDenied == false
-                                    ? Text('Từ chối',
+                                    ? Text(cusConstants.BUTTON_DENY_TITLE,
                                         style: TextStyle(color: Colors.white))
-                                    : Text('Hủy',
+                                    : Text(cusConstants.BUTTON_CANCEL_TITLE,
                                         style: TextStyle(color: Colors.white)),
                                 onPressed: () {
                                   setState(() {
@@ -204,7 +205,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                   ),
                 );
               else
-                return Center(child: Text('Không có chi tiết đơn hàng'));
+                return Center(child: Text(cusConstants.NOT_FOUND_DETAIL_ORDER));
             } else if (state.detailStatus == CustomerOrderDetailStatus.error) {
               return ErrorWidget(state.message.toString());
             }
@@ -218,17 +219,17 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
     return Card(
       child: Column(
         children: [
-          Text('Thông tin xe'),
+          Text(cusConstants.VEHICLE_INFO_CARD_TITLE),
           ListTile(
-            title: Text('Biển số xe'),
+            title: Text(cusConstants.LICENSE_PLATE_LABLE),
             trailing: Text(licensePlace),
           ),
           ListTile(
-            title: Text('Hãng xe'),
+            title: Text(cusConstants.MANU_LABLE),
             trailing: Text(manuName),
           ),
           ListTile(
-            title: Text('Mẫu xe'),
+            title: Text(cusConstants.MODEL_LABLE),
             trailing: Text(modelName),
           ),
         ],
@@ -242,7 +243,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
       child: Column(
         children: [
           Text(
-            'Thông tin đơn hàng',
+            cusConstants.SERVICE_INFO_CARD_TITLE,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -250,19 +251,19 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
             textAlign: TextAlign.start,
           ),
           ListTile(
-            title: Text('Trạng thái đơn hàng: '),
+            title: Text(cusConstants.ORDER_INFO_CARD_STATUS),
             trailing: Text(stautus),
           ),
           ListTile(
-            title: Text('Thời gian đặt hẹn: '),
+            title: Text(cusConstants.ORDER_INFO_CARD_TIME_CREATE),
             trailing: Text(createTime),
           ),
           ListTile(
-            title: Text('Thời gian nhận xe: '),
+            title: Text(cusConstants.ORDER_INFO_CARD_TIME_CHECKIN),
             trailing: Text(checkinTime),
           ),
           ListTile(
-            title: Text('Ghi chú từ người dùng: '),
+            title: Text(cusConstants.ORDER_INFO_CARD_CUS_NOTE),
             trailing: Text(note),
           ),
         ],
@@ -356,7 +357,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                       endIndent: 20,
                     ),
                     ListTile(
-                      title: Text('Tổng: '),
+                      title: Text(cusConstants.SERVICE_INFO_CARD_PRICE_TOTAL),
                       trailing: Text(_convertMoney(totalPrice.toDouble())),
                     ),
                   ],

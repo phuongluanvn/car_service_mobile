@@ -16,6 +16,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as path;
+import 'package:car_service/utils/helpers/constants/CusConstansts.dart' as cusConstants;
 
 class CreateCustomerCarUI extends StatefulWidget {
   @override
@@ -79,10 +80,10 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
         builder: (BuildContext ctx) {
           return AlertDialog(
             title: Text(
-              'Thông báo!',
+              cusConstants.NOTI_TITLE,
               style: TextStyle(color: Colors.redAccent),
             ),
-            content: Text('Thêm mới xe không thành công!'),
+            content: Text(cusConstants.CREATE_CAR_SUCCESS),
             actions: [
               TextButton(
                   onPressed: () {
@@ -147,7 +148,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
         filled: true,
         fillColor: Colors.white,
         hintStyle: TextStyle(fontWeight: FontWeight.w600),
-        hintText: 'Biển số xe',
+        hintText: cusConstants.LICENSE_PLATE_LABLE,
         // contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
         // border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -157,11 +158,10 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
       String fileName = path.basename(_image.path);
       FirebaseStorage storage = FirebaseStorage.instance;
       Reference ref =
-          storage.ref().child('mobile_customer/cars/add_new_car/$fileName');
+          storage.ref().child(cusConstants.IMAGE_URL_CUS + '$fileName');
       UploadTask uploadTask = ref.putFile(_image);
       uploadTask.then((res) {
         res.ref.getDownloadURL();
-        print('Done: $res');
       });
     }
 
@@ -178,7 +178,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
           ));
         },
         child: Text(
-          'Thêm xe',
+          cusConstants.BUTTON_CREATE_TITLE,
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -186,7 +186,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
 
     return Scaffold(
       appBar: AppBar(
-          title: Text('Thêm mới xe'),
+          title: Text(cusConstants.CREATE_CAR_TITLE_WIDGET),
           backgroundColor: AppTheme.colors.deepBlue),
       backgroundColor: AppTheme.colors.lightblue,
       body: Center(
@@ -257,7 +257,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                     //     ),
                     //   ),
                     // ),
-                    Image.network('https://picsum.photos/400/200?image=1070'),
+                    Image.network(cusConstants.IMAGE_URL_CREATE_VEHICLE),
                     SizedBox(
                       height: 30,
                     ),
@@ -287,7 +287,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                             fontSize: 16,
                                           ),
                                           hint: Text(
-                                            'Chọn hãng xe',
+                                            cusConstants.SELECT_MANU_TITLE,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600),
                                           ),
@@ -320,7 +320,8 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                             color: Colors.black,
                                             fontSize: 16,
                                           ),
-                                          hint: Text('Chọn hãng xe',
+                                          hint: Text(
+                                            cusConstants.SELECT_MANU_TITLE,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600)),
                                           items: [],
@@ -352,7 +353,8 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                             color: Colors.black,
                                             fontSize: 16,
                                           ),
-                                          hint: Text('Chọn hãng xe',
+                                          hint: Text(
+                                            cusConstants.SELECT_MANU_TITLE,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold)),
                                           items: manufacturerState
@@ -417,7 +419,8 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                       color: Colors.black,
                                       fontSize: 16,
                                     ),
-                                    hint: Text('Chọn mẫu xe',
+                                    hint: Text(
+                                      cusConstants.SELECT_MODEL_TITLE,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w600)),
                                     items: [],
@@ -444,7 +447,8 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                       color: Colors.black,
                                       fontSize: 16,
                                     ),
-                                    hint: Text('Chọn mẫu xe',
+                                    hint: Text(
+                                      cusConstants.SELECT_MODEL_TITLE,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w600)),
                                     items: [],
@@ -473,10 +477,12 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                       fontSize: 16,
                                     ),
                                     hint: modelState.modelOfManu != []
-                                        ? Text('Chọn mẫu xe',
+                                        ? Text(
+                                          cusConstants.SELECT_MODEL_TITLE,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600))
-                                        : Text('Không có mẫu xe cho hãng này',
+                                        : Text(
+                                          cusConstants.NOT_FOUND_MODEL,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600)),
                                     items:
@@ -511,7 +517,6 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                     SizedBox(
                       height: 30,
                     ),
-
                     createCarButton,
                   ],
                 ),
@@ -527,17 +532,17 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
         builder: (BuildContext ctx) {
           return AlertDialog(
             title: Text(
-              'Thông báo!',
+              cusConstants.NOTI_TITLE,
               style: TextStyle(color: Colors.greenAccent),
             ),
-            content: Text('Bạn đã thêm mới xe thành công!'),
+            content: Text(cusConstants.CREATE_CAR_SUCCESS),
             actions: [
               TextButton(
                   onPressed: () {
                     // Close the dialog
-                    Navigator.pushNamed(context, '/customer');
+                    Navigator.pushNamed(context, cusConstants.PATH_CUSTOMER_HOME);
                   },
-                  child: Text('Đồng ý'))
+                  child: Text(cusConstants.BUTTON_OK_TITLE))
             ],
           );
         });

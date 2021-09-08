@@ -1,4 +1,6 @@
-class PackageServiceModel {
+import 'package:equatable/equatable.dart';
+
+class PackageServiceModel extends Equatable{
   String id;
   String name;
   String description;
@@ -32,6 +34,9 @@ class PackageServiceModel {
     }
     return data;
   }
+
+  @override
+  List<Object> get props => [this.id];
 }
 
 class Services {

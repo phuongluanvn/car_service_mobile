@@ -1,5 +1,4 @@
 import 'package:car_service/utils/model/CustomerModel.dart';
-import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/PackageServiceModel.dart';
 import 'package:car_service/utils/model/UserModel.dart';
 import 'package:equatable/equatable.dart';

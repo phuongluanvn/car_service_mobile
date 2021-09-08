@@ -20,11 +20,11 @@ class CustomerRepository {
 
   String BASE_URL = 'https://carservicesystem.azurewebsites.net/api/';
 
-  createNewBooking(String vehicleId, String packageId, String note,
+  createNewBooking(String vehicleId, List packageLists, String note,
       String bookingTime, String imageUrl) async {
     var body = {
       "vehicleId": vehicleId,
-      "packageId": packageId,
+      "packageIdList": packageLists,
       "note": note,
       "bookingTime": bookingTime,
       "imageurl": imageUrl

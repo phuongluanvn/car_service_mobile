@@ -10,7 +10,8 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_formatter/money_formatter.dart';
-
+import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
+    as cusConstants;
 class WaitingConfirmOrderDetailUi extends StatefulWidget {
   final String orderId;
   WaitingConfirmOrderDetailUi({@required this.orderId});

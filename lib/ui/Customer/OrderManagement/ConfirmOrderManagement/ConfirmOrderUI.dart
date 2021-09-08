@@ -8,7 +8,8 @@ import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderDetailUI.da
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
+    as cusConstants;
 class ConfirmOrderUI extends StatefulWidget {
   @override
   _ConfirmOrderUIState createState() => _ConfirmOrderUIState();
@@ -54,7 +55,7 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
                     child: Column(
                       children: [
                         Text(
-                          'Đơn cần phản hồi',
+                          cusConstants.CONFIRM_ORDER_TITLE,
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w600),
                         ),
@@ -66,7 +67,7 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
                             itemBuilder: (context, index) {
                               assert(context != null);
                               if (state.orderCurrentLists[index].status ==
-                                  'Đợi phản hồi') {
+                                  cusConstants.CONFIRM_ORDER_STATUS) {
                                 return Card(
                                     child: Column(children: [
                                   ListTile(
@@ -85,7 +86,7 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
                                           ),
                                         ]),
                                     leading: Image.asset(
-                                        'lib/images/order_small.png'),
+                                        cusConstants.IMAGE_URL_ORDER_LOGO_SMALL),
                                     title: Text(state.orderCurrentLists[index]
                                         .vehicle.licensePlate),
                                     subtitle: Text(
@@ -119,7 +120,7 @@ class _ConfirmOrderUIState extends State<ConfirmOrderUI> {
                 );
               else
                 return Center(
-                  child: Text('Hiện tại không có đơn'),
+                  child: Text(cusConstants.NOT_FOUND_ORDER),
                 );
             } else if (state.status == CustomerOrderStatus.error) {
               return ErrorWidget(state.message.toString());
