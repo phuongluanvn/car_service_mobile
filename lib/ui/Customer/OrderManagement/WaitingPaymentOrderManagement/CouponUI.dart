@@ -58,7 +58,7 @@ class _CouponUIState extends State<CouponUI> {
       backgroundColor: AppTheme.colors.lightblue,
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Khuyến mãi'),
+        title: Text(cusConstants.OFFER_TITLE),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -99,16 +99,16 @@ class _CouponUIState extends State<CouponUI> {
                               children: [
                                 ListTile(
                                   title: Text(state.couponLists[index].name +
-                                      ' (' +
+                                      cusConstants.PRE_PARENTHESES +
                                       state.couponLists[index].pointRequired
                                           .toString() +
-                                      ' điểm)'),
+                                      cusConstants.NEXT_PARENTHESES),
                                   subtitle: Text(
                                       state.couponLists[index].description),
                                   trailing: (_point -
                                               state.couponLists[index]
                                                   .pointRequired) >=
-                                          0
+                                          cusConstants.POINT_BEGIN
                                       ? ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                               primary: AppTheme.colors.blue),
@@ -118,13 +118,13 @@ class _CouponUIState extends State<CouponUI> {
                                                 id: state.couponLists[index].id,
                                                 orderDetailId: widget.orderId));
                                           },
-                                          child: Text('Áp dụng'),
+                                          child: Text(cusConstants.APPLY_TITLE),
                                         )
                                       : ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                               primary: Colors.grey),
                                           onPressed: () {},
-                                          child: Text('Áp dụng'),
+                                          child: Text(cusConstants.APPLY_TITLE),
                                         ),
                                 )
                               ],
@@ -134,7 +134,7 @@ class _CouponUIState extends State<CouponUI> {
                   );
                 else
                   return Center(
-                    child: Text('Hiện tại không có đơn'),
+                    child: Text(cusConstants.NOT_FOUND_OFFER),
                   );
               } else if (state.status == CouponStatus.error) {
                 return ErrorWidget(state.message.toString());

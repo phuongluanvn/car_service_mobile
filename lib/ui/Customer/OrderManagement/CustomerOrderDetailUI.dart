@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
     as cusConstants;
+
 class CustomerOrderDetailUi extends StatefulWidget {
   final String orderId;
   CustomerOrderDetailUi({@required this.orderId});
@@ -91,6 +92,9 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
               return CircularProgressIndicator();
             } else if (state.detailStatus ==
                 CustomerOrderDetailStatus.success) {
+              print(state.orderDetail[0].packageLists
+                  .map((e) => e.name)
+                  .toList());
               if (state.orderDetail != null && state.orderDetail.isNotEmpty)
                 return SingleChildScrollView(
                   child: Column(
@@ -104,19 +108,21 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].note
                               : 'Không có ghi chú'),
+                      // Text(state.orderDetail[0].orderDetails.last.name),
+
                       cardInforService(
-                          state.orderDetail[0].vehicle.model,
-                          state.orderDetail[0].vehicle.model,
-                          state.orderDetail[0].vehicle.licensePlate,
-                          state.orderDetail[0].orderDetails,
-                          state.orderDetail[0].note == null ? false : true,
-                          state.orderDetail[0].note != null
-                              ? state.orderDetail[0].note
-                              : 'Không có ghi chú',
-                          // state.orderDetail[0].package != null
-                          //     ? state.orderDetail[0].package.price
-                          //     : 0
-                              ),
+                        state.orderDetail[0].vehicle.model,
+                        state.orderDetail[0].vehicle.model,
+                        state.orderDetail[0].vehicle.licensePlate,
+                        state.orderDetail[0].packageLists,
+                        state.orderDetail[0].note == null ? false : true,
+                        state.orderDetail[0].note != null
+                            ? state.orderDetail[0].note
+                            : 'Không có ghi chú',
+                        // state.orderDetail[0].package != null
+                        //     ? state.orderDetail[0].package.price
+                        //     : 0
+                      ),
                       cardInforCar(
                           state.orderDetail[0].vehicle.manufacturer,
                           state.orderDetail[0].vehicle.model,
@@ -222,14 +228,14 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
   }
 
   Widget cardInforService(
-      String servicePackageName,
-      String serviceName,
-      String price,
-      List services,
-      bool serviceType,
-      String note,
-      // int totalPrice
-      ) {
+    String servicePackageName,
+    String serviceName,
+    String price,
+    List packages,
+    bool serviceType,
+    String note,
+    // int totalPrice
+  ) {
     int countPrice = 0;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
@@ -261,18 +267,21 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.black),
                     ))
-                : ExpansionTile(
-                    title: Text('Chi tiết:'),
-                    children: services.map((service) {
-                      countPrice += service.price;
-                      // print('object');
-                      // print(_convertMoney(countPrice.toDouble()));
-                      return ListTile(
-                        title: Text(service.name),
-                        trailing: Text(_convertMoney(service.price.toDouble())),
-                      );
-                    }).toList(),
-                  ),
+                : Column(
+                    children: packages.map((e) {
+                    // return Text(e.orderDetails);
+                    return ExpansionTile(
+                      title: Text(e.name),
+                      children: e.orderDetails.map<Widget>((service) {
+                        countPrice += service.price;
+                        return ListTile(
+                          title: Text(service.name),
+                          trailing:
+                              Text(_convertMoney(service.price.toDouble())),
+                        );
+                      }).toList(),
+                    );
+                  }).toList()),
             Divider(
               color: Colors.black,
               thickness: 2,

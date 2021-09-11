@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
     as cusConstants;
+
 class CustomerOrderUi extends StatefulWidget {
   @override
   _CustomerOrderUiState createState() => _CustomerOrderUiState();
@@ -84,7 +85,7 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                         // ),
 
                         Text(
-                          'Thông tin đơn hàng',
+                          cusConstants.ORDER_DETAIL_TITLE,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -107,41 +108,48 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                                     Color color;
                                     var status = state.orderLists[index].status;
                                     switch (status) {
-                                      case 'Đợi xác nhận':
+                                      case cusConstants
+                                          .WAITING_CONFIRM_ORDER_STATUS:
                                         color = Colors.orange[600];
                                         break;
-                                      case 'Đã xác nhận':
+                                      case cusConstants.ACCEPTED_ORDER_STATUS:
                                         color = Colors.green[200];
                                         break;
-                                      case 'Đã nhận xe':
+                                      case cusConstants.CHECKIN_ORDER_STATUS:
                                         color = Colors.blue[400];
                                         break;
-                                      case 'Kiểm tra':
+                                      case cusConstants.CHECKING_ORDER_STATUS:
                                         color = Colors.blue[700];
                                         break;
-                                      case 'Đang tiến hành':
+                                      case cusConstants.IN_PROCESS_ORDER_STATUS:
                                         color = Colors.green[300];
                                         break;
-                                      case 'Đợi phản hồi':
+                                      case cusConstants.CONFIRM_ORDER_STATUS:
                                         color = Colors.orange;
                                         break;
-                                      case 'Được phản hồi':
+                                      case cusConstants.CONFIRMED_ORDER_STATUS:
                                         color = Colors.teal[300];
                                         break;
-                                      case 'Từ chối':
+                                      case cusConstants.DENY_ORDER_STATUS:
                                         color = Colors.red[600];
                                         break;
-                                      case 'Đang xử lý':
+                                      case cusConstants.PROCESSING_ORDER_STATUS:
                                         color = Colors.green[300];
                                         break;
-                                      case 'Hoàn thành':
+                                      case cusConstants.COMPLETED_ORDER_STATUS:
                                         color = Colors.green[600];
                                         break;
-                                      case 'Hủy đơn':
+                                      case cusConstants.CANCEL_ORDER_STATUS:
                                         color = Colors.red;
                                         break;
-                                      case 'Hủy đặt lịch':
+                                      case cusConstants.CANCEL_BOOKING_STATUS:
                                         color = Colors.red[400];
+                                        break;
+                                      case cusConstants.WAITING_PAYMENT_ORDER_STATUS:
+                                        color = Colors.orange[400];
+                                        break;
+                                      case cusConstants.COMPLETED_PAYMENT_ORDER_STATUS:
+                                        color = Colors.green[600];
                                         break;
                                       default:
                                         color = Colors.black;
@@ -162,7 +170,7 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                                               ),
                                             ]),
                                         leading: Image.asset(
-                                            'lib/images/order_small.png'),
+                                            cusConstants.IMAGE_URL_ORDER_LOGO_SMALL),
                                         title: Text(
                                             _textEditingController
                                                     .text.isNotEmpty
@@ -211,14 +219,6 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
           },
         ),
       ), //thêm mới xe
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     Navigator.of(context)
-      //         .push(MaterialPageRoute(builder: (_) => CreateBookingOrderUI()));
-      //   },
-      //   child: const Icon(Icons.add),
-      //   backgroundColor: Colors.blue[600],
-      // ),
     );
   }
 

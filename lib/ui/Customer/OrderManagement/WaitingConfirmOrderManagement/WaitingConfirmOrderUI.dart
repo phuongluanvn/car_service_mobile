@@ -55,11 +55,6 @@ class _WaitingConfirmOrderUIState extends State<WaitingConfirmOrderUI> {
                     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                     child: Column(
                       children: [
-                        // Text(
-                        //   'Đơn cần phản hồi',
-                        //   style: TextStyle(
-                        //       fontSize: 16, fontWeight: FontWeight.w600),
-                        // ),
                         Expanded(
                           child: ListView.builder(
                             itemCount: state.orderWaitingConfirmLists.length,
@@ -69,7 +64,7 @@ class _WaitingConfirmOrderUIState extends State<WaitingConfirmOrderUI> {
                               assert(context != null);
                               if (state
                                       .orderWaitingConfirmLists[index].status ==
-                                  'Đợi xác nhận') {
+                                  cusConstants.WAITING_CONFIRM_ORDER_STATUS) {
                                 return Card(
                                     child: Column(children: [
                                   ListTile(
@@ -89,7 +84,7 @@ class _WaitingConfirmOrderUIState extends State<WaitingConfirmOrderUI> {
                                           ),
                                         ]),
                                     leading: Image.asset(
-                                        'lib/images/order_small.png'),
+                                        cusConstants.IMAGE_URL_ORDER_LOGO_SMALL),
                                     title: Text(state
                                         .orderWaitingConfirmLists[index]
                                         .vehicle
@@ -123,7 +118,7 @@ class _WaitingConfirmOrderUIState extends State<WaitingConfirmOrderUI> {
                 );
               else
                 return Center(
-                  child: Text('Hiện tại không có đơn'),
+                  child: Text(cusConstants.NOT_FOUND_ORDER),
                 );
             } else if (state.status == CustomerOrderStatus.error) {
               return ErrorWidget(state.message.toString());

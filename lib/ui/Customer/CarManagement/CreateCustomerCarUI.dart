@@ -16,7 +16,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as path;
-import 'package:car_service/utils/helpers/constants/CusConstansts.dart' as cusConstants;
+import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
+    as cusConstants;
 
 class CreateCustomerCarUI extends StatefulWidget {
   @override
@@ -51,80 +52,6 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
     });
   }
 
-  _imageFromCamera() async {
-    PickedFile image = await ImagePicker()
-        .getImage(source: ImageSource.camera, imageQuality: 50);
-
-    if (image != null) {
-      setState(() {
-        _image = File(image.path);
-      });
-    }
-  }
-
-  _imageFromGallery() async {
-    PickedFile image = await ImagePicker()
-        .getImage(source: ImageSource.gallery, imageQuality: 50);
-    print(image.path);
-
-    if (image != null) {
-      setState(() {
-        _image = File(image.path);
-      });
-    }
-  }
-
-  void _showSuccessDialog() {
-    showDialog(
-        context: context,
-        builder: (BuildContext ctx) {
-          return AlertDialog(
-            title: Text(
-              cusConstants.NOTI_TITLE,
-              style: TextStyle(color: Colors.redAccent),
-            ),
-            content: Text(cusConstants.CREATE_CAR_SUCCESS),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    // Close the dialog
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Đồng ý'))
-            ],
-          );
-        });
-  }
-
-//option
-  void _showPicker(context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return SafeArea(
-              child: Wrap(
-            children: [
-              ListTile(
-                leading: Icon(Icons.photo_library),
-                title: Text('Gallery'),
-                onTap: () {
-                  _imageFromGallery();
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.camera_alt),
-                title: Text('Camera'),
-                onTap: () {
-                  _imageFromCamera();
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          ));
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     final msg =
@@ -153,17 +80,6 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
         // border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
-
-    Future uploadImageToFirebase(BuildContext context) async {
-      String fileName = path.basename(_image.path);
-      FirebaseStorage storage = FirebaseStorage.instance;
-      Reference ref =
-          storage.ref().child(cusConstants.IMAGE_URL_CUS + '$fileName');
-      UploadTask uploadTask = ref.putFile(_image);
-      uploadTask.then((res) {
-        res.ref.getDownloadURL();
-      });
-    }
 
     final createCarButton = Padding(
       padding: EdgeInsets.only(left: 90, right: 90),
@@ -207,56 +123,6 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                   shrinkWrap: true,
                   padding: EdgeInsets.only(left: 24, right: 24),
                   children: <Widget>[
-                    // manufacturerText,
-
-                    //    Padding(
-                    //   padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                    //   child: Container(
-                    //     decoration: BoxDecoration(
-                    //         color: Colors.white60,
-                    //         border: Border.all(color: Colors.black26),
-                    //         borderRadius: BorderRadius.circular(5)),
-                    //     padding:
-                    //         EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                    //     child: Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.center,
-                    //       children: [
-                    //         Align(
-                    //           alignment: Alignment.centerLeft,
-                    //           child: Text(
-                    //             'Hình ảnh xe (nếu có)',
-                    //             style: TextStyle(
-                    //               fontSize: 14,
-                    //               fontWeight: FontWeight.w600,
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         SizedBox(
-                    //           height: 10,
-                    //         ),
-                    //         Center(
-                    //           child: GestureDetector(
-                    //             child: Container(
-                    //               color: Colors.white,
-                    //               height: 150,
-                    //               width: 300,
-                    //               child: _image != null
-                    //                   ? Image.file(
-                    //                       _image,
-                    //                       fit: BoxFit.fill,
-                    //                     )
-                    //                   : Icon(Icons.add_a_photo),
-                    //               alignment: Alignment.center,
-                    //             ),
-                    //             onTap: () {
-                    //               _showPicker(context);
-                    //             },
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
                     Image.network(cusConstants.IMAGE_URL_CREATE_VEHICLE),
                     SizedBox(
                       height: 30,
@@ -321,7 +187,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                             fontSize: 16,
                                           ),
                                           hint: Text(
-                                            cusConstants.SELECT_MANU_TITLE,
+                                              cusConstants.SELECT_MANU_TITLE,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600)),
                                           items: [],
@@ -354,7 +220,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                             fontSize: 16,
                                           ),
                                           hint: Text(
-                                            cusConstants.SELECT_MANU_TITLE,
+                                              cusConstants.SELECT_MANU_TITLE,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold)),
                                           items: manufacturerState
@@ -419,8 +285,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                       color: Colors.black,
                                       fontSize: 16,
                                     ),
-                                    hint: Text(
-                                      cusConstants.SELECT_MODEL_TITLE,
+                                    hint: Text(cusConstants.SELECT_MODEL_TITLE,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w600)),
                                     items: [],
@@ -447,8 +312,7 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                       color: Colors.black,
                                       fontSize: 16,
                                     ),
-                                    hint: Text(
-                                      cusConstants.SELECT_MODEL_TITLE,
+                                    hint: Text(cusConstants.SELECT_MODEL_TITLE,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w600)),
                                     items: [],
@@ -477,12 +341,10 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
                                       fontSize: 16,
                                     ),
                                     hint: modelState.modelOfManu != []
-                                        ? Text(
-                                          cusConstants.SELECT_MODEL_TITLE,
+                                        ? Text(cusConstants.SELECT_MODEL_TITLE,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600))
-                                        : Text(
-                                          cusConstants.NOT_FOUND_MODEL,
+                                        : Text(cusConstants.NOT_FOUND_MODEL,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600)),
                                     items:
@@ -540,7 +402,8 @@ class _CreateCustomerCarUIState extends State<CreateCustomerCarUI> {
               TextButton(
                   onPressed: () {
                     // Close the dialog
-                    Navigator.pushNamed(context, cusConstants.PATH_CUSTOMER_HOME);
+                    Navigator.pushNamed(
+                        context, cusConstants.PATH_CUSTOMER_HOME);
                   },
                   child: Text(cusConstants.BUTTON_OK_TITLE))
             ],

@@ -5,7 +5,8 @@ import 'package:car_service/ui/LoginUi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
+    as cusConstants;
 class CustomerProfile extends StatefulWidget {
   @override
   _CustomerProfileState createState() => _CustomerProfileState();
@@ -34,7 +35,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Thông tin người dùng'),
+        title: Text(cusConstants.INFO_ACCOUNT_TITLE),
         automaticallyImplyLeading: false,
         foregroundColor: AppTheme.colors.deepBlue,
         backgroundColor: AppTheme.colors.deepBlue,
@@ -97,7 +98,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                       Padding(
                         padding: EdgeInsets.only(right: 150),
                         child: Text(
-                          'Tài khoản',
+                          cusConstants.ACCOUNT,
                           style: TextStyle(
                               fontSize: 20, color: AppTheme.colors.deepBlue),
                         ),
@@ -117,8 +118,8 @@ class _CustomerProfileState extends State<CustomerProfile> {
                   style: ElevatedButton.styleFrom(
                       primary: AppTheme.colors.lightblue),
                   onPressed: () {
-                    // Navigator.of(context).push(
-                    //     MaterialPageRoute(builder: (_) => OrderHistoryUi()));
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => OrderHistoryUi()));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -130,7 +131,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                       Padding(
                         padding: EdgeInsets.only(right: 80),
                         child: Text(
-                          'Lịch sử đơn hàng',
+                          cusConstants.HISTORY_ORDER,
                           style: TextStyle(
                               fontSize: 20, color: AppTheme.colors.deepBlue),
                         ),
@@ -142,23 +143,6 @@ class _CustomerProfileState extends State<CustomerProfile> {
                 ),
               ),
             ),
-            // Padding(
-            //   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            //   child: Container(
-            //     height: 50,
-            //     child: ElevatedButton(
-            //       style:
-            //           ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
-            //       onPressed: () {},
-            //       child: Row(
-            //         children: [
-            //           Expanded(child: Text('Đánh giá')),
-            //           Icon(Icons.arrow_forward_ios),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: Container(
@@ -174,7 +158,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                       Padding(
                         padding: EdgeInsets.only(right: 150),
                         child: Text(
-                          'Đăng xuất',
+                          cusConstants.LOG_OUT_LABLE,
                           style: TextStyle(
                               fontSize: 20, color: AppTheme.colors.deepBlue),
                         ),
@@ -197,8 +181,8 @@ class _CustomerProfileState extends State<CustomerProfile> {
         context: context,
         builder: (BuildContext ctx) {
           return AlertDialog(
-            title: Text('Xác nhận'),
-            content: Text('Bạn xác nhận muốn thoát ứng dụng?'),
+            title: Text(cusConstants.BUTTON_ACCEPT_TITLE),
+            content: Text(cusConstants.LOG_OUT_QUESTION),
             actions: [
               // The "Yes" button
               TextButton(
@@ -216,13 +200,13 @@ class _CustomerProfileState extends State<CustomerProfile> {
                         ),
                         (route) => false);
                   },
-                  child: Text('Có')),
+                  child: Text(cusConstants.BUTTON_YES)),
               TextButton(
                   onPressed: () {
                     // Close the dialog
                     Navigator.of(context).pop();
                   },
-                  child: Text('Không'))
+                  child: Text(cusConstants.BUTTON_NO))
             ],
           );
         });

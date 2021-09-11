@@ -14,6 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
+    as cusConstants;
 
 int _counter = 0;
 AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -194,7 +196,7 @@ class _NotificationUIState extends State<NotificationUI> {
                             ListTile(
                               leading: Column(
                                 children: [
-                                  Image.asset('lib/images/logo_blue.png', width: 30, height: 30,),
+                                  Image.asset(cusConstants.IMAGE_URL_LOGO_BLUE, width: 30, height: 30,),
                                   Text(_convertDate(state.cusProfile.first
                                       .notifications[index].createdAt))
                                 ],
@@ -214,7 +216,7 @@ class _NotificationUIState extends State<NotificationUI> {
               // );
               else
                 return Center(
-                  child: Text('Không có thông báo'),
+                  child: Text(cusConstants.NOT_FOUND_NOTI),
                 );
             } else if (state.status == ProfileStatus.error) {
               return ErrorWidget(state.message.toString());

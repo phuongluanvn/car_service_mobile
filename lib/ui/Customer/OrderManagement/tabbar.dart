@@ -8,7 +8,8 @@ import 'package:car_service/ui/Customer/OrderManagement/ProcessingOrderManagemen
 import 'package:car_service/ui/Customer/OrderManagement/WaitingConfirmOrderManagement/WaitingConfirmOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/WaitingPaymentOrderManagement/WaitingPayment.dart';
 import 'package:flutter/material.dart';
-
+import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
+    as cusConstants;
 class TabOrderCustomer extends StatefulWidget {
   @override
   _TabOrderState createState() => _TabOrderState();
@@ -38,7 +39,7 @@ class _TabOrderState extends State<TabOrderCustomer> {
       length: 7,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Đơn hàng'),
+          title: Text(cusConstants.TABAR_TITLE),
           backgroundColor: AppTheme.colors.deepBlue,
           automaticallyImplyLeading: false,
           actions: <Widget>[
@@ -57,25 +58,25 @@ class _TabOrderState extends State<TabOrderCustomer> {
             isScrollable: true,
             tabs: <Widget>[
               Tab(
-                text: 'Đợi xác nhận',
+                text: cusConstants.WAITING_CONFIRM_ORDER_STATUS,
               ),
               Tab(
-                text: 'Đã xác nhận',
+                text: cusConstants.ACCEPTED_ORDER_STATUS,
               ),
               Tab(
-                text: 'Kiểm tra',
+                text:cusConstants.CHECKING_ORDER_STATUS,
               ),
               Tab(
-                text: 'Đang tiến hành',
+                text: cusConstants.IN_PROCESS_ORDER_STATUS,
               ),
               Tab(
-                text: 'Đợi phản hồi',
+                text: cusConstants.CONFIRM_ORDER_STATUS,
               ),
               Tab(
-                text: 'Đợi thanh toán',
+                text: cusConstants.WAITING_PAYMENT_ORDER_STATUS,
               ),
               Tab(
-                text: 'Tất cả đơn hàng',
+                text: cusConstants.ALL_ORDER,
               ),
             ],
           ),

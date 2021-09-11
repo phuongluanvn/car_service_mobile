@@ -16,7 +16,7 @@ class OrderDetailModel extends Equatable {
   Customer customer;
   Vehicle vehicle;
   Crew crew;
-  List<Packages> packages;
+  List<Packages> packageLists;
   List<OrderDetails> orderDetails;
   List<Feedbacks> feedbacks;
 
@@ -35,7 +35,7 @@ class OrderDetailModel extends Equatable {
       this.customer,
       this.vehicle,
       this.crew,
-      this.packages,
+      this.packageLists,
       this.orderDetails,
       this.feedbacks});
 
@@ -58,9 +58,9 @@ class OrderDetailModel extends Equatable {
         json['vehicle'] != null ? new Vehicle.fromJson(json['vehicle']) : null;
     crew = json['crew'] != null ? new Crew.fromJson(json['crew']) : null;
     if (json['packages'] != null) {
-      packages = new List<Packages>();
+      packageLists = new List<Packages>();
       json['packages'].forEach((v) {
-        packages.add(new Packages.fromJson(v));
+        packageLists.add(new Packages.fromJson(v));
       });
     }
     if (json['orderDetails'] != null) {
@@ -99,8 +99,8 @@ class OrderDetailModel extends Equatable {
     if (this.crew != null) {
       data['crew'] = this.crew.toJson();
     }
-    if (this.packages != null) {
-      data['packages'] = this.packages.map((v) => v.toJson()).toList();
+    if (this.packageLists != null) {
+      data['packages'] = this.packageLists.map((v) => v.toJson()).toList();
     }
     if (this.orderDetails != null) {
       data['orderDetails'] = this.orderDetails.map((v) => v.toJson()).toList();

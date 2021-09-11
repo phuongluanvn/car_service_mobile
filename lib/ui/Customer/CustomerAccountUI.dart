@@ -4,13 +4,14 @@ import 'package:car_service/blocs/customer/customerProfile/CustomerEditProfile_s
 import 'package:car_service/blocs/customer/customerProfile/CustomerProfile_bloc.dart';
 import 'package:car_service/blocs/customer/customerProfile/CustomerProfile_event.dart';
 import 'package:car_service/blocs/customer/customerProfile/CustomerProfile_state.dart';
-
 import 'package:car_service/blocs/login/auth_bloc.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/LoginUi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
+    as cusConstants;
 
 class CustomerAccountUi extends StatefulWidget {
   // CustomerAccountUi() : super(key: key);
@@ -36,22 +37,21 @@ class _CustomerAccountUiState extends State<CustomerAccountUi> {
     _getStringFromSharedPref();
   }
 
-_getStringFromSharedPref() async {
-      final prefs = await SharedPreferences.getInstance();
-      username = prefs.getString('Username');
+  _getStringFromSharedPref() async {
+    final prefs = await SharedPreferences.getInstance();
+    username = prefs.getString('Username');
 
-     _editProfileBloc = BlocProvider.of<EditProfileBloc>(context);
-      BlocProvider.of<ProfileBloc>(context)
-          .add(GetProfileByUsername(username: prefs.getString('Username')));
-    }
+    _editProfileBloc = BlocProvider.of<EditProfileBloc>(context);
+    BlocProvider.of<ProfileBloc>(context)
+        .add(GetProfileByUsername(username: prefs.getString('Username')));
+  }
 
-    
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Thông tin cá nhân'),
+        title: Text(cusConstants.INFO_ACCOUNT),
         actions: [
           _isEdit
               ? Text('')
@@ -126,7 +126,8 @@ _getStringFromSharedPref() async {
                               children: [
                                 TextFormField(
                                   onChanged: (newUserName) {
-                                    stateProfile.cusProfile.last.username = newUserName;
+                                    stateProfile.cusProfile.last.username =
+                                        newUserName;
                                   },
                                   initialValue:
                                       stateProfile.cusProfile.last.username,
@@ -135,7 +136,7 @@ _getStringFromSharedPref() async {
                                     filled: true,
                                     fillColor: Colors.white,
                                     hintStyle: TextStyle(color: Colors.black54),
-                                    labelText: 'Tài khoản',
+                                    labelText: cusConstants.ACCOUNT,
                                     contentPadding:
                                         EdgeInsets.fromLTRB(20, 10, 20, 10),
                                     border: OutlineInputBorder(
@@ -148,7 +149,8 @@ _getStringFromSharedPref() async {
                                 ),
                                 TextFormField(
                                   onChanged: (newFullname) {
-                                    stateProfile.cusProfile.last.fullname = newFullname;
+                                    stateProfile.cusProfile.last.fullname =
+                                        newFullname;
                                   },
                                   initialValue:
                                       stateProfile.cusProfile.last.fullname,
@@ -157,7 +159,7 @@ _getStringFromSharedPref() async {
                                     filled: true,
                                     fillColor: Colors.white,
                                     hintStyle: TextStyle(color: Colors.black54),
-                                    labelText: 'Họ tên',
+                                    labelText: cusConstants.FULL_NAME,
                                     contentPadding:
                                         EdgeInsets.fromLTRB(20, 10, 20, 10),
                                     border: OutlineInputBorder(
@@ -170,7 +172,8 @@ _getStringFromSharedPref() async {
                                 ),
                                 TextFormField(
                                   onChanged: (newPhone) {
-                                    stateProfile.cusProfile.last.phoneNumber = newPhone;
+                                    stateProfile.cusProfile.last.phoneNumber =
+                                        newPhone;
                                   },
                                   initialValue:
                                       stateProfile.cusProfile.last.phoneNumber,
@@ -179,7 +182,7 @@ _getStringFromSharedPref() async {
                                     filled: true,
                                     fillColor: Colors.white,
                                     hintStyle: TextStyle(color: Colors.black54),
-                                    labelText: 'Điện thoại',
+                                    labelText: cusConstants.PHONE_NUMBER,
                                     contentPadding:
                                         EdgeInsets.fromLTRB(20, 10, 20, 10),
                                     border: OutlineInputBorder(
@@ -192,7 +195,8 @@ _getStringFromSharedPref() async {
                                 ),
                                 TextFormField(
                                   onChanged: (newEmail) {
-                                    stateProfile.cusProfile.last.email = newEmail;
+                                    stateProfile.cusProfile.last.email =
+                                        newEmail;
                                   },
                                   initialValue:
                                       stateProfile.cusProfile.last.email,
@@ -201,7 +205,7 @@ _getStringFromSharedPref() async {
                                     filled: true,
                                     fillColor: Colors.white,
                                     hintStyle: TextStyle(color: Colors.black54),
-                                    labelText: 'Email',
+                                    labelText: cusConstants.EMAIL,
                                     contentPadding:
                                         EdgeInsets.fromLTRB(20, 10, 20, 10),
                                     border: OutlineInputBorder(
@@ -214,7 +218,8 @@ _getStringFromSharedPref() async {
                                 ),
                                 TextFormField(
                                   onChanged: (newAddress) {
-                                    stateProfile.cusProfile.last.address = newAddress;
+                                    stateProfile.cusProfile.last.address =
+                                        newAddress;
                                   },
                                   initialValue:
                                       stateProfile.cusProfile.last.address,
@@ -223,7 +228,7 @@ _getStringFromSharedPref() async {
                                     filled: true,
                                     fillColor: Colors.white,
                                     hintStyle: TextStyle(color: Colors.black54),
-                                    labelText: 'Địa chỉ',
+                                    labelText: cusConstants.ADDRESS,
                                     contentPadding:
                                         EdgeInsets.fromLTRB(20, 10, 20, 10),
                                     border: OutlineInputBorder(
@@ -237,22 +242,21 @@ _getStringFromSharedPref() async {
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       primary: AppTheme.colors.blue),
-                                  child: Text('Lưu',
+                                  child: Text(cusConstants.BUTTON_SAVE_UPDATE,
                                       style: TextStyle(color: Colors.white)),
                                   onPressed: () {
-                                    print(stateProfile.cusProfile.last.username);
-                                    print(stateProfile.cusProfile.last.address);
-                                    print(_fullName);
-                                    print(_email);
-                                    print(_address);
-
                                     _editProfileBloc.add(
                                         EditProfileButtonPressed(
-                                            username: stateProfile.cusProfile.last.username,
-                                            fullname: stateProfile.cusProfile.last.fullname,
-                                            phoneNumber: stateProfile.cusProfile.last.phoneNumber,
-                                            email: stateProfile.cusProfile.last.email,
-                                            address: stateProfile.cusProfile.last.address));
+                                            username: stateProfile
+                                                .cusProfile.last.username,
+                                            fullname: stateProfile
+                                                .cusProfile.last.fullname,
+                                            phoneNumber: stateProfile
+                                                .cusProfile.last.phoneNumber,
+                                            email: stateProfile
+                                                .cusProfile.last.email,
+                                            address: stateProfile
+                                                .cusProfile.last.address));
                                     setState(() {
                                       _isEdit = false;
                                     });
@@ -275,7 +279,7 @@ _getStringFromSharedPref() async {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Họ tên:',
+                                      cusConstants.FULL_NAME_LABLE,
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500),
@@ -296,7 +300,7 @@ _getStringFromSharedPref() async {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Email:',
+                                      cusConstants.PHONE_NUMBER_LABLE,
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500),
@@ -317,7 +321,7 @@ _getStringFromSharedPref() async {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Điện thoại:',
+                                      cusConstants.PHONE_NUMBER_LABLE,
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500),
@@ -338,7 +342,7 @@ _getStringFromSharedPref() async {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Địa chỉ:',
+                                      cusConstants.ADDRESS_LABLE,
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500),
@@ -359,13 +363,15 @@ _getStringFromSharedPref() async {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Điểm:',
+                                      cusConstants.POINT_LABLE,
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500),
                                     ),
                                     Text(
-                                      stateProfile.cusProfile.first.accumulatedPoint.toString(),
+                                      stateProfile
+                                          .cusProfile.first.accumulatedPoint
+                                          .toString(),
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w600),
@@ -379,7 +385,7 @@ _getStringFromSharedPref() async {
                       }
                     } else {
                       return Center(
-                        child: Text('Không có thông tin người dùng'),
+                        child: Text(cusConstants.NOT_FOUND_INFO_ACCOUNT),
                       );
                     }
                   }

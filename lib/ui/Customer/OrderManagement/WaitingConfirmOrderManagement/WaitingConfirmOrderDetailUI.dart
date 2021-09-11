@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
     as cusConstants;
+
 class WaitingConfirmOrderDetailUi extends StatefulWidget {
   final String orderId;
   WaitingConfirmOrderDetailUi({@required this.orderId});
@@ -27,8 +28,8 @@ class _WaitingConfirmOrderDetailUiState
   bool _visibleByDenied = false;
   bool textButton = true;
   String reasonReject;
-  String cancelBooking = 'Hủy đặt lịch';
-  int total = 0;
+  int total = cusConstants.TOTAL_PRICE;
+
   @override
   void initState() {
     super.initState();
@@ -43,7 +44,7 @@ class _WaitingConfirmOrderDetailUiState
       backgroundColor: AppTheme.colors.lightblue,
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Chi tiết đơn hàng'),
+        title: Text(cusConstants.ORDER_DETAIL_TITLE),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -69,19 +70,19 @@ class _WaitingConfirmOrderDetailUiState
                           _convertDate(state.orderDetail[0].bookingTime),
                           state.orderDetail[0].checkinTime != null
                               ? state.orderDetail[0].checkinTime
-                              : 'Chưa nhận xe',
+                              : cusConstants.CHECKIN_NOT_YET_STATUS,
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].note
-                              : 'Không có ghi chú'),
+                              : cusConstants.NOT_FOUND_NOTE),
                       cardInforService(
                           state.orderDetail[0].vehicle.model,
                           state.orderDetail[0].vehicle.model,
                           state.orderDetail[0].vehicle.licensePlate,
-                          state.orderDetail[0].orderDetails,
+                          state.orderDetail[0].packageLists,
                           state.orderDetail[0].note == null ? false : true,
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].note
-                              : 'Không có ghi chú',
+                              : cusConstants.NOT_FOUND_NOTE,
                           total = state.orderDetail[0].orderDetails
                               .fold(0, (sum, element) => sum + element.price)),
                       cardInforCar(
@@ -107,7 +108,7 @@ class _WaitingConfirmOrderDetailUiState
                               },
                               maxLines: 3,
                               decoration: InputDecoration.collapsed(
-                                  hintText: 'Lý do từ chối'),
+                                  hintText: cusConstants.REASON_REJECTED_LABLE),
                             ),
                           ),
                         ),
@@ -132,25 +133,17 @@ class _WaitingConfirmOrderDetailUiState
                                       primary: Colors.red)
                                   : ElevatedButton.styleFrom(
                                       primary: AppTheme.colors.blue),
-                              child: Text(textButton ? 'Hủy đơn' : 'Xác nhận',
+                              child: Text(cusConstants.CANCEL_BOOKING_STATUS,
                                   style: TextStyle(color: Colors.white)),
                               onPressed: () {
-                                if (textButton == false &&
-                                    reasonReject != null) {
-                                  //xác nhận hủy
-                                  setState(() {
-                                    updateStatusBloc.add(
-                                        UpdateStatusConfirmAcceptedButtonPressed(
-                                            id: state.orderDetail[0].id,
-                                            status: cancelBooking));
-                                  });
-                                } else {
-                                  //Hủy đơn
-                                  setState(() {
-                                    _visibleByDenied = !_visibleByDenied;
-                                    textButton = !textButton;
-                                  });
-                                }
+                                //xác nhận hủy
+                                setState(() {
+                                  updateStatusBloc.add(
+                                      UpdateStatusConfirmAcceptedButtonPressed(
+                                          id: state.orderDetail[0].id,
+                                          status: cusConstants
+                                              .CANCEL_BOOKING_STATUS));
+                                });
                               }),
                         ),
                       )
@@ -158,7 +151,7 @@ class _WaitingConfirmOrderDetailUiState
                   ),
                 );
               else
-                return Center(child: Text('Không có chi tiết đơn hàng'));
+                return Center(child: Text(cusConstants.NOT_FOUND_DETAIL_ORDER));
             } else if (state.detailStatus == CustomerOrderDetailStatus.error) {
               return ErrorWidget(state.message.toString());
             }
@@ -172,17 +165,22 @@ class _WaitingConfirmOrderDetailUiState
     return Card(
       child: Column(
         children: [
-          Text('Thông tin xe'),
+          Text(cusConstants.VEHICLE_INFO_CARD_TITLE,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.start),
           ListTile(
-            title: Text('Biển số xe'),
+            title: Text(cusConstants.LICENSE_PLATE_LABLE),
             trailing: Text(licensePlace),
           ),
           ListTile(
-            title: Text('Hãng xe'),
+            title: Text(cusConstants.MANU_LABLE),
             trailing: Text(manuName),
           ),
           ListTile(
-            title: Text('Mẫu xe'),
+            title: Text(cusConstants.MODEL_LABLE),
             trailing: Text(modelName),
           ),
         ],
@@ -191,25 +189,32 @@ class _WaitingConfirmOrderDetailUiState
   }
 
   Widget cardInforOrder(
-      String stautus, String bookingTime, String checkinTime, String note) {
+      String stautus, String createTime, String checkinTime, String note) {
     return Card(
       child: Column(
         children: [
-          Text('Thông tin đơn hàng'),
+          Text(
+            cusConstants.SERVICE_INFO_CARD_TITLE,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+            textAlign: TextAlign.start,
+          ),
           ListTile(
-            title: Text('Trạng thái đơn hàng: '),
+            title: Text(cusConstants.ORDER_INFO_CARD_STATUS),
             trailing: Text(stautus),
           ),
           ListTile(
-            title: Text('Thời gian đặt hẹn: '),
-            trailing: Text(bookingTime),
+            title: Text(cusConstants.ORDER_INFO_CARD_TIME_CREATE),
+            trailing: Text(createTime),
           ),
           ListTile(
-            title: Text('Thời gian nhận xe: '),
+            title: Text(cusConstants.ORDER_INFO_CARD_TIME_CHECKIN),
             trailing: Text(checkinTime),
           ),
           ListTile(
-            title: Text('Ghi chú từ người dùng: '),
+            title: Text(cusConstants.ORDER_INFO_CARD_CUS_NOTE),
             trailing: Text(note),
           ),
         ],
@@ -221,7 +226,7 @@ class _WaitingConfirmOrderDetailUiState
       String servicePackageName,
       String serviceName,
       String price,
-      List services,
+      List packages,
       bool serviceType,
       String note,
       int totalPrice) {
@@ -236,7 +241,7 @@ class _WaitingConfirmOrderDetailUiState
         child: Column(
           children: [
             Text(
-              'Thông tin dịch vụ',
+              cusConstants.SERVICE_INFO_CARD_TITLE,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -244,26 +249,32 @@ class _WaitingConfirmOrderDetailUiState
               textAlign: TextAlign.start,
             ),
             ListTile(
-              title: Text('Loại dịch vụ: '),
-              trailing: serviceType ? Text('Sửa chữa') : Text('Bảo dưỡng'),
+              title: Text(cusConstants.SERVICE_INFO_CARD_TYPE_LABLE),
+              trailing: serviceType ? Text(cusConstants.SERVICE_INFO_CARD_TYPE_REPAIR) : Text(cusConstants.SERVICE_INFO_CARD_TYPE_MANTAIN),
             ),
             serviceType
                 ? ListTile(
-                    title: Text('Tình trạng xe từ người dùng: '),
+                    title: Text(cusConstants.SERVICE_INFO_CARD_CUS_NOTE),
                     subtitle: Text(
                       note,
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.black),
                     ))
-                : ExpansionTile(
-                    title: Text('Chi tiết:'),
-                    children: services.map((service) {
-                      return ListTile(
-                        title: Text(service.name),
-                        trailing: Text(_convertMoney(service.price.toDouble())),
-                      );
-                    }).toList(),
-                  ),
+                : Column(
+                    children: packages.map((e) {
+                    // return Text(e.orderDetails);
+                    return ExpansionTile(
+                      title: Text(e.name),
+                      children: e.orderDetails.map<Widget>((service) {
+                        // countPrice += service.price;
+                        return ListTile(
+                          title: Text(service.name),
+                          trailing:
+                              Text(_convertMoney(service.price.toDouble())),
+                        );
+                      }).toList(),
+                    );
+                  }).toList()),
             Divider(
               color: Colors.black,
               thickness: 2,
@@ -271,7 +282,7 @@ class _WaitingConfirmOrderDetailUiState
               endIndent: 20,
             ),
             ListTile(
-              title: Text('Tổng: '),
+              title: Text(cusConstants.SERVICE_INFO_CARD_PRICE_TOTAL),
               trailing: Text(_convertMoney(totalPrice.toDouble())),
             ),
           ],

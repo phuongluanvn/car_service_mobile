@@ -24,6 +24,7 @@ import 'dart:async';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
     as cusConstants;
+
 class CreateBookingOrderUI extends StatefulWidget {
   @override
   _CreateBookingOrderUIState createState() => _CreateBookingOrderUIState();
@@ -431,81 +432,47 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                                   stateOfPackage
                                                       .packageServiceLists
                                                       .isNotEmpty)
-                                                return 
-                                                ExpansionPanelList(
-                                                  expansionCallback: (int item, bool status) {
-                                                    setState(() {
-                                                      _isOpen = !_isOpen;
-                                                    });
-                                                  },
+                                                return Column(
                                                   children: stateOfPackage
                                                       .packageServiceLists
-                                                      .map<ExpansionPanel>(
-                                                    (e) {
-                                                      return ExpansionPanel(
-                                                          canTapOnHeader: true,
-                                                          isExpanded: _isOpen,
-                                                          // value: _packageIdList.indexWhere((element) => element.id == e.id) >= 0,
-                                                          headerBuilder:
-                                                              (context, isExpanded) {
-                                                            return ListTile(
-                                                              leading: Checkbox(
-                                                                value: _packageIdList.indexWhere(
-                                                                  (element) => element ==  e.id) >= 0,
-                                                                onChanged: (selected) {
-                                                                  if (selected) {
-                                                                    setState(() {
-                                                                      _packageIdList.add(e.id);
-                                                                    });
-                                                                  } else {
-                                                                    setState(() {
-                                                                      _packageIdList.remove(e.id);
-                                                                    });
-                                                                  }
-                                                                },
-                                                              ),
-                                                              title: Text(
-                                                                e.name,
-                                                                style: TextStyle(
-                                                                    color: (_valueSelectedPackageService == e.id)
-                                                                        ? Colors.blue
-                                                                        : Colors.grey),
-                                                              ),
-                                                              onTap: () {
-                                                                setState(() {
-                                                                  isExpanded =
-                                                                      true;
-                                                                });
-                                                                // setState(() {
-                                                                //   _packageIdList
-                                                                //       .add(
-                                                                //           e.id);
-                                                                //   _valueSelectedPackageService =
-                                                                //       e.id;
-                                                                //   _packageId =
-                                                                //       e.id;
-                                                                //   _note = null;
-                                                                // });
-                                                              },
-                                                            );
-                                                          },
-                                                          body:
-                                                              SingleChildScrollView(
-                                                            child: ListView(
-                                                              shrinkWrap: true,
-                                                              children: e.services.map((service) {
-                                                                return ListTile(
-                                                                  title: Text(service.name),
-                                                                  trailing: Text(
-                                                                    _convertMoney(service.price.toDouble()),
-                                                                  ),
-                                                                );
-                                                              }).toList(),
-                                                            ),
-                                                          ));
-                                                      // );
-                                                    },
-                                                  ).toList(),
+                                                      .map<Widget>(
+                                                          (packageService) {
+                                                    return ExpansionTile(
+                                                      title: Text(
+                                                          packageService.name),
+                                                      leading: Checkbox(
+                                                        value: _packageIdList.indexWhere(
+                                                                (packageId) =>
+                                                                    packageId ==
+                                                                    packageService
+                                                                        .id) >=
+                                                            0,
+                                                        onChanged: (selected) {
+                                                          if (selected) {
+                                                            setState(() {
+                                                              _packageIdList.add(
+                                                                  packageService
+                                                                      .id);
+                                                            });
+                                                          } else {
+                                                            setState(() {
+                                                              _packageIdList.remove(
+                                                                  packageService
+                                                                      .id);
+                                                            });
+                                                          }
+                                                        },
+                                                      ),
+                                                      children: packageService
+                                                          .services
+                                                          .map((service) {
+                                                        return ListTile(
+                                                          title: Text(
+                                                              service.name),
+                                                        );
+                                                      }).toList(),
+                                                    );
+                                                  }).toList(),
                                                 );
                                               else //nếu không có xe nào
                                                 return Text(

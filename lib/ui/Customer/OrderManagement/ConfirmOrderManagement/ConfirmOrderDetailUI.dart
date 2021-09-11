@@ -29,10 +29,9 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visibleByDenied = false;
   bool textButton = true;
-  String acceptStatus = 'Đã đồng ý';
-  String rejectStatus = 'Đã từ chối';
   String reasonReject;
-  int total = 0;
+  int total = cusConstants.TOTAL_PRICE;
+
   @override
   void initState() {
     super.initState();
@@ -69,10 +68,6 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                 return SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      // cardInforCar(
-                      //     state.orderDetail[0].vehicle.manufacturer,
-                      //     state.orderDetail[0].vehicle.model,
-                      //     state.orderDetail[0].vehicle.licensePlate),
                       cardInforOrder(
                           state.orderDetail[0].status,
                           _convertDate(state.orderDetail[0].bookingTime),
@@ -87,14 +82,12 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                           state.orderDetail[0].vehicle.model,
                           state.orderDetail[0].vehicle.licensePlate,
                           state.orderDetail[0].orderDetails,
-                          // state.orderDetail[0].orderDetails[0].accessoryId,
                           state.orderDetail[0].note == null ? false : true,
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].note
                               : cusConstants.NOT_FOUND_NOTE,
                           total = state.orderDetail[0].orderDetails
                               .fold(0, (sum, element) => sum + element.price)),
-
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Visibility(
@@ -114,8 +107,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                               },
                               maxLines: 3,
                               decoration: InputDecoration.collapsed(
-                                  hintText: cusConstants
-                                      .CONFIRM_ORDER_REASON_REJECTED),
+                                  hintText: cusConstants.REASON_REJECTED_LABLE),
                             ),
                           ),
                         ),
@@ -134,7 +126,8 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                                       style:
                                           TextStyle(color: Colors.greenAccent),
                                     ),
-                                    content: Text(cusConstants.CONFIRM_ORDER_SUCCESS_MESSAGE),
+                                    content: Text(cusConstants
+                                        .CONFIRM_ORDER_SUCCESS_MESSAGE),
                                     actions: [
                                       TextButton(
                                           onPressed: () {
@@ -145,7 +138,8 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                                                 .read<CustomerOrderBloc>()
                                                 .add(DoOrderListEvent());
                                           },
-                                          child: Text(cusConstants.BUTTON_OK_TITLE))
+                                          child: Text(
+                                              cusConstants.BUTTON_OK_TITLE))
                                     ],
                                   );
                                 });
@@ -159,7 +153,10 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     primary: AppTheme.colors.blue),
-                                child: Text(textButton ? cusConstants.BUTTON_OK_TITLE : cusConstants.BUTTON_ACCEPT_TITLE,
+                                child: Text(
+                                    textButton
+                                        ? cusConstants.BUTTON_OK_TITLE
+                                        : cusConstants.BUTTON_ACCEPT_TITLE,
                                     style: TextStyle(color: Colors.white)),
                                 onPressed: () {
                                   if (textButton == false &&
@@ -219,7 +216,12 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
     return Card(
       child: Column(
         children: [
-          Text(cusConstants.VEHICLE_INFO_CARD_TITLE),
+          Text(cusConstants.VEHICLE_INFO_CARD_TITLE,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.start),
           ListTile(
             title: Text(cusConstants.LICENSE_PLATE_LABLE),
             trailing: Text(licensePlace),
@@ -299,7 +301,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                 return Column(
                   children: [
                     Text(
-                      'Thông tin dịch vụ',
+                      cusConstants.SERVICE_INFO_CARD_TITLE,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -307,13 +309,13 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                       textAlign: TextAlign.start,
                     ),
                     ListTile(
-                      title: Text('Loại dịch vụ: '),
+                      title: Text(cusConstants.SERVICE_INFO_CARD_TYPE_LABLE),
                       trailing:
-                          serviceType ? Text('Sửa chữa') : Text('Bảo dưỡng'),
+                          serviceType ? Text(cusConstants.SERVICE_INFO_CARD_TYPE_REPAIR) : Text(cusConstants.SERVICE_INFO_CARD_TYPE_MANTAIN),
                     ),
                     serviceType
                         ? ListTile(
-                            title: Text('Tình trạng xe từ người dùng: '),
+                            title: Text(cusConstants.SERVICE_INFO_CARD_CUS_NOTE),
                             subtitle: Text(
                               note,
                               style: TextStyle(
@@ -345,7 +347,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                                                   service.accessoryId)
                                               .imageUrl),
                                         )
-                                      : Text('Hiện tại không có phụ tùng'),
+                                      : Text(cusConstants.NOT_FOUND_ACCESSORY_IN_SERVICE),
                                 ],
                               );
                             }).toList(),

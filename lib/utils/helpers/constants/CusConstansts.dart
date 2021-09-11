@@ -18,6 +18,10 @@ const String LICENSE_PLATE_LABLE = 'Biển số xe';
 const String IMAGE_URL_CREATE_VEHICLE =
     'https://picsum.photos/400/200?image=1070';
 
+//CREATE VEHICLE
+const String BUTTON_GALLERY_LABLE = 'Gallery';
+const String BUTTON_CAMERA_LABLE = 'Gallery';
+
 //Update Vehicle
 const String UPDATE_VEHICLE_SUCCESS = 'Cập nhật thông tin xe thành công!';
 const String DELETE_VEHICLE_REQUEST = 'Bạn có chắc muốn xóa xe này?';
@@ -39,15 +43,31 @@ const String MANAGE_VEHICLE_WIDGET_TITLE = 'Danh sách xe';
 const String IMAGE_URL_LOGO_BLUE = 'lib/images/logo_blue.png';
 
 //Manage order
+const int TOTAL_PRICE = 0;
 const String ORDER_DETAIL_TITLE = 'Chi tiết đơn hàng';
 const String IMAGE_URL_ORDER_LOGO_SMALL = 'lib/images/order_small.png';
 const String NOT_FOUND_ORDER = 'Hiện tại không có đơn!';
-const String CHECKIN_NOT_YET_STATUS = 'Chưa nhận xe';
 const String NOT_FOUND_NOTE = 'Không có ghi chú';
 const String NOT_FOUND_DETAIL_ORDER = 'Không có chi tiết đơn hàng!';
+const String NOT_FOUND_ACCESSORY_IN_SERVICE = 'Hiện tại không có phụ tùng';
 
+//STATUS OF ORDER
+const String WAITING_CONFIRM_ORDER_STATUS = 'Đợi xác nhận';
 const String ACCEPTED_ORDER_STATUS = 'Đã xác nhận';
+const String CHECKIN_ORDER_STATUS = 'Đã nhận xe';
 const String CHECKING_ORDER_STATUS = 'Kiểm tra';
+const String IN_PROCESS_ORDER_STATUS = 'Đang tiến hành';
+const String CONFIRM_ORDER_STATUS = 'Đợi phản hồi';
+const String CONFIRMED_ORDER_STATUS = 'Đã phản hồi';
+const String DENY_ORDER_STATUS = 'Từ chối';
+const String PROCESSING_ORDER_STATUS = 'Đang xử lý';
+const String COMPLETED_ORDER_STATUS = 'Hoàn thành';
+const String CANCEL_ORDER_STATUS = 'Hủy đơn';
+const String CANCEL_BOOKING_STATUS = 'Hủy đặt lịch';
+const String WAITING_PAYMENT_ORDER_STATUS = 'Đợi thanh toán';
+const String COMPLETED_PAYMENT_ORDER_STATUS = 'Đã thanh toán';
+
+const String CHECKIN_NOT_YET_STATUS = 'Chưa nhận xe';
 
 //Card infor vehicle
 const String VEHICLE_INFO_CARD_TITLE = 'Thông tin xe';
@@ -60,44 +80,74 @@ const String ORDER_INFO_CARD_TIME_CHECKIN = 'Thời gian nhận xe: ';
 const String ORDER_INFO_CARD_CUS_NOTE = 'Ghi chú từ người dùng: ';
 
 //Card Info service
-const String SERVICE_INFO_CARD_TITLE = 'Thông tin đơn hàng';
-const String SERVICE_INFO_CARD_TYPE_LABLE = 'Trạng thái đơn hàng: ';
-const String SERVICE_INFO_CARD_TYPE_REPAIR = 'Thời gian đặt hẹn: ';
-const String SERVICE_INFO_CARD_TYPE_MANTAIN = 'Thời gian nhận xe: ';
-const String SERVICE_INFO_CARD_CUS_NOTE = 'Ghi chú từ người dùng: ';
+const String SERVICE_INFO_CARD_TITLE = 'Thông tin dịch vụ';
+const String SERVICE_INFO_CARD_TYPE_LABLE = 'Loại dịch vụ: ';
+const String SERVICE_INFO_CARD_TYPE_REPAIR = 'Sửa chữa';
+const String SERVICE_INFO_CARD_TYPE_MANTAIN = 'Bảo dưỡng';
+const String SERVICE_INFO_CARD_CUS_NOTE = 'Tình trạng xe từ người dùng: ';
 const String SERVICE_INFO_CARD_DETAIL_LABLE = 'Ghi chú từ người dùng: ';
 const String SERVICE_INFO_CARD_NOT_FOUND_ACCESSORY = 'Ghi chú từ người dùng: ';
 const String SERVICE_INFO_CARD_PRICE_TOTAL = 'Tổng: ';
 
-
 //CONFIRM ORDER
 const String CONFIRM_ORDER_TITLE = 'Đơn cần phản hồi';
-const String CONFIRM_ORDER_STATUS = 'Đợi phản hồi';
 const String CONFIRM_ORDER_ACCEPTED_STATUS = 'Đã đồng ý';
 const String CONFIRM_ORDER_REJECTED_STATUS = 'Đã từ chối';
-const String CONFIRM_ORDER_REASON_REJECTED = 'Lý do từ chối';
 const String CONFIRM_ORDER_SUCCESS_MESSAGE = 'Phản hồi đơn thành công!';
 
+//WAITING CONFIRM ORDER
+const String REASON_REJECTED_LABLE = 'Lý do từ chối';
 
-// const String 
-// const String 
-// const String 
-// const String 
-// const String 
-// const String 
-// const String 
-// const String 
-// const String 
-// const String 
-// const String 
-// const String 
-// const String 
-// const String 
-// const String 
-// const String 
-// const String 
-// const String 
-// const String 
-// const String 
-// const String 
-// const String 
+//WAITING PAYMENT
+const String BUTTON_PAYMENT_TITLE = 'Thanh toán';
+const String THANKYOU_USE_SERVICE = 'Cảm ơn bạn đã xử dụng dịch vụ!';
+const String OFFER_TITLE = 'Khuyến mãi';
+const String PRE_PARENTHESES = ' (';
+const String NEXT_PARENTHESES = ' điểm)';
+const int POINT_BEGIN = 0;
+const String APPLY_TITLE = 'Áp dụng';
+const String NOT_FOUND_OFFER = 'Không tìm thấy khuyến mãi!';
+
+//ORDER HISTORY
+const String ORDER_HISTORY_TITLE = 'Lịch sử đơn hàng';
+const String THANKYOU_FOR_FEEDBACK = 'Cảm ơn bạn đã đánh giá!';
+const String BUTTON_FEEDBACK_LABLE = 'Đánh giá đơn';
+const String FEEDBACK_CARD_TITLE = 'Đánh giá của khách hàng';
+const String STAR_LABLE = 'Số sao';
+const String DESCRIPTION_LABLE = 'Nội dung';
+const String FEEDBACK_COMMENT_HINT = 'Hãy nhập đánh giá của bạn';
+const String FEEDBACK_MESSAGE = 'Bạn có hài lòng với dịch vụ của chúng tôi?';
+const String SEND = 'Gửi';
+
+//ACCOUNT
+const String INFO_ACCOUNT_TITLE = 'Thông tin người dùng';
+const String INFO_ACCOUNT = 'Thông tin cá nhân';
+const String ACCOUNT = 'Tài khoản';
+const String FULL_NAME = 'Họ tên';
+const String PHONE_NUMBER = 'Điện thoại';
+const String EMAIL = 'Email';
+const String ADDRESS = 'Địa chỉ';
+const String FULL_NAME_LABLE = 'Họ tên:';
+const String EMAIL_LABLE = 'Email:';
+const String PHONE_NUMBER_LABLE = 'Điện thoại:';
+const String ADDRESS_LABLE = 'Địa chỉ:';
+const String POINT_LABLE = 'Điểm:';
+const String NOT_FOUND_INFO_ACCOUNT = 'Không có thông tin người dùng';
+const String HISTORY_ORDER = 'Lịch sử đơn hàng';
+const String LOG_OUT_LABLE = 'Đăng xuất';
+const String LOG_OUT_QUESTION = 'Bạn xác nhận muốn thoát ứng dụng?';
+const String BUTTON_YES = 'Có';
+const String BUTTON_NO = 'Không';
+
+//TABBAR
+const String TABAR_TITLE = 'Đơn hàng';
+const String ALL_ORDER = 'Tất cả đơn hàng';
+
+//NAVBAR
+const String ORDER_LABLE='Đơn hàng'; 
+const String MY_VEHICLE_LABLE='Xe của tôi';
+const String ACCOUNT_INFO_LABLE='Thông tin';
+const String NOTI_LABLE='Thông báo';
+
+const String NOT_FOUND_NOTI ='Không có thông báo';
+

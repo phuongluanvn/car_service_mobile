@@ -5,6 +5,8 @@ import 'package:car_service/ui/Customer/NotificationUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/ManageOrderTab.dart';
 import 'package:flutter/material.dart';
+import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
+    as cusConstants;
 
 class Nav extends StatefulWidget {
   @override
@@ -39,28 +41,28 @@ class _NavState extends State<Nav> {
               Icons.description,
               color: AppTheme.colors.deepBlue,
             ),
-            label: 'Đơn hàng',
+            label: cusConstants.ORDER_LABLE,
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.drive_eta,
               color: AppTheme.colors.deepBlue,
             ),
-            label: 'Xe của tôi',
+            label: cusConstants.MY_VEHICLE_LABLE,
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person,
               color: AppTheme.colors.deepBlue,
             ),
-            label: 'Thông tin',
+            label: cusConstants.ACCOUNT_INFO_LABLE,
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.notifications,
               color: AppTheme.colors.deepBlue,
             ),
-            label: 'Thông báo',
+            label: cusConstants.NOTI_LABLE,
             // backgroundColor: Colors.blue87,
           ),
         ],

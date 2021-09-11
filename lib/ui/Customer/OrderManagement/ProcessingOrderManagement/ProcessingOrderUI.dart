@@ -67,7 +67,7 @@ class _ProcessingOrderUIState extends State<ProcessingOrderUI> {
                             itemBuilder: (context, index) {
                               assert(context != null);
                               if (state.orderProcessingLists[index].status ==
-                                  'Đang tiến hành') {
+                                  cusConstants.PROCESSING_ORDER_STATUS) {
                                 return Card(
                                     child: Column(children: [
                                   ListTile(
@@ -86,7 +86,7 @@ class _ProcessingOrderUIState extends State<ProcessingOrderUI> {
                                           ),
                                         ]),
                                     leading: Image.asset(
-                                        'lib/images/order_small.png'),
+                                        cusConstants.IMAGE_URL_ORDER_LOGO_SMALL),
                                     title: Text(state
                                         .orderProcessingLists[index]
                                         .vehicle
@@ -122,7 +122,7 @@ class _ProcessingOrderUIState extends State<ProcessingOrderUI> {
                 );
               else
                 return Center(
-                  child: Text('Hiện tại không có đơn'),
+                  child: Text(cusConstants.NOT_FOUND_ORDER),
                 );
             } else if (state.status == CustomerOrderStatus.error) {
               return ErrorWidget(state.message.toString());
