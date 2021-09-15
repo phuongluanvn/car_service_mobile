@@ -43,7 +43,6 @@ class _LeaderCrewDetailUiState extends State<LeaderCrewDetailUi> {
   // List<String> _listStaff = [];
 
   String selectItem;
-  List<CustomerModel> listload;
 
   final Color selectedColor = AppTheme.colors.lightblue;
   final Color unselectedColor = Colors.black;
@@ -51,7 +50,6 @@ class _LeaderCrewDetailUiState extends State<LeaderCrewDetailUi> {
   int _crewId = 0;
   @override
   void initState() {
-    BlocProvider.of<ManageStaffBloc>(context).add(DoListStaffEvent());
     crewBloc = BlocProvider.of<CrewBloc>(context);
 
     super.initState();
@@ -82,7 +80,31 @@ class _LeaderCrewDetailUiState extends State<LeaderCrewDetailUi> {
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                   child: BlocListener<CrewBloc, CrewState>(
                     listener: (context, state) {
-                      // TODO: implement listener
+                      print(state.message);
+                      if (state.createStatus == CreateCrewStatus.success) {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext ctx) {
+                              return AlertDialog(
+                                title: Text(
+                                  'Thông báo!',
+                                  style: TextStyle(color: Colors.greenAccent),
+                                ),
+                                content: Text(state.message),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                        // BlocProvider.of<CrewBloc>(context)
+                                        //     .add(DoListCrew());
+                                      },
+                                      child: Text('Đồng ý'))
+                                ],
+                              );
+                            });
+                      }
                     },
                     child: Column(
                       children: [
@@ -114,16 +136,13 @@ class _LeaderCrewDetailUiState extends State<LeaderCrewDetailUi> {
                                           title: Text(
                                             widget.choosingCrew[index].username,
                                             style: TextStyle(
-                                                color: (_crewId ==
-                                                        index)
+                                                color: (_crewId == index)
                                                     ? AppTheme.colors.deepBlue
                                                     : Colors.grey),
                                           ),
                                           onTap: () {
                                             setState(() {
-                                              _crewId = index
-                                                 ;
-                                              print(_crewId);
+                                              _crewId = index;
                                             });
                                           },
                                         ),
@@ -138,9 +157,12 @@ class _LeaderCrewDetailUiState extends State<LeaderCrewDetailUi> {
                           ),
                         ),
                         ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                primary: AppTheme.colors.blue),
                             onPressed: () {
                               widget.choosingCrew[_crewId].isLeader = true;
-                              crewBloc.add(CreateCrewEvent(listUsername: widget.choosingCrew));
+                              crewBloc.add(CreateCrewEvent(
+                                  listUsername: widget.choosingCrew));
                             },
                             child: Text('Tạo tổ đội'))
                       ],

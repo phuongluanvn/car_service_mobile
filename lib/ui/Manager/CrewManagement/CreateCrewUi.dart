@@ -37,14 +37,15 @@ class _CreateCrewUiState extends State<CreateCrewUi> {
 
   List<CreateCrewModel> _listStaff = [];
   String selectItem;
-  List<CustomerModel> listload;
+  // List<CustomerModel> listload;
   final Color selectedColor = AppTheme.colors.lightblue;
   final Color unselectedColor = Colors.black;
   CrewBloc crewBloc;
 
   @override
   void initState() {
-    BlocProvider.of<ManageStaffBloc>(context).add(DoListStaffEvent());
+    BlocProvider.of<ManageStaffBloc>(context)
+        .add(DoListStaffWithAvaiStatusEvent());
     crewBloc = BlocProvider.of<CrewBloc>(context);
     super.initState();
   }
@@ -88,7 +89,7 @@ class _CreateCrewUiState extends State<CreateCrewUi> {
                                 return Center(
                                     child: CircularProgressIndicator());
                               } else if (state.status ==
-                                  StaffStatus.staffListsuccess) {
+                                  StaffStatus.staffListAvaisuccess) {
                                 if (state.avaiList != null &&
                                     state.avaiList.isNotEmpty) {
                                   return Container(
@@ -141,8 +142,10 @@ class _CreateCrewUiState extends State<CreateCrewUi> {
                                                     : Colors.white,
                                                 child: ListTile(
                                                   leading: CircleAvatar(
+                                                    backgroundColor:
+                                                        Colors.white,
                                                     backgroundImage: AssetImage(
-                                                        'lib/images/car_default.png'),
+                                                        'lib/images/mechanic.png'),
                                                   ),
                                                   title: Text(
                                                     state.avaiList[index]
@@ -238,7 +241,11 @@ class _CreateCrewUiState extends State<CreateCrewUi> {
                                             );
                                           },
                                         ),
+                                       
                                         ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            primary: AppTheme.colors.blue
+                                          ),
                                             onPressed: () {
                                               Navigator.of(context).push(
                                                   MaterialPageRoute(
@@ -350,7 +357,7 @@ class _CreateCrewUiState extends State<CreateCrewUi> {
                                     ),
                                   );
                                 } else //nếu không có xe nào
-                                  return Text('Không có thông tin xe');
+                                  return Text('Không có thông tin nhân viên');
                               } else if (state.status == StaffStatus.error) {
                                 return Text('Không tìm thấy xe');
                               }

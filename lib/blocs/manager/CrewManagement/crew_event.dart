@@ -12,10 +12,10 @@ abstract class CrewEvent extends Equatable {
 class DoListCrew extends CrewEvent {}
 
 class DoCrewDetailEvent extends CrewEvent {
-  final String name;
-  DoCrewDetailEvent({this.name});
+  final String id;
+  DoCrewDetailEvent({this.id});
   @override
-  List<Object> get props => [name];
+  List<Object> get props => [id];
 }
 class CreateCrewEvent extends CrewEvent {
   final List<CreateCrewModel> listUsername;

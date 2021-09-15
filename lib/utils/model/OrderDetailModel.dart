@@ -212,12 +212,14 @@ class Vehicle extends Equatable {
 
 class Crew extends Equatable {
   String id;
+  String leaderFullname;
   List<StaffModel> members;
 
-  Crew({this.id, this.members});
+  Crew({this.id, this.leaderFullname, this.members});
 
   Crew.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    leaderFullname = json['leaderFullname'];
     if (json['members'] != null) {
       members = new List<StaffModel>();
       json['members'].forEach((v) {
@@ -229,6 +231,7 @@ class Crew extends Equatable {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['leaderFullname'] = this.leaderFullname;
     if (this.members != null) {
       data['members'] = this.members.map((v) => v.toJson()).toList();
     }

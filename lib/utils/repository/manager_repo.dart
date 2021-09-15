@@ -74,11 +74,11 @@ class ManagerRepository {
     }
   }
 
-  Future<List<StaffModel>> getStaffAvailList() async {
+  Future<List<StaffModel>> getAvailStaffList() async {
     List<StaffModel> staffList = [];
 
     var resStaff = await http.get(
-      Uri.parse(BASE_URL + "employees"),
+      Uri.parse(BASE_URL + "employees/available"),
       headers: headers,
     );
     if (resStaff.statusCode == 200) {
@@ -97,6 +97,8 @@ class ManagerRepository {
       return null;
     }
   }
+
+ 
 
   Future<List<StaffModel>> getStaffDetail(String username) async {
     List<StaffModel> listdata = [];
@@ -118,6 +120,33 @@ class ManagerRepository {
           return listdata;
         } else {
           print('No detail order data');
+        }
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+  }
+
+  Future<List<CrewModel>> getCrewDetail(String id) async {
+    List<CrewModel> listdata = [];
+    List convertData = [];
+
+    var res = await http.get(
+      Uri.parse(BASE_URL + 'crews/' + id),
+      headers: headers,
+    );
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      convertData.add(data); //thêm [] để dùng .map bêndưới
+
+      try {
+        if (data != null) {
+          convertData
+              .map((element) => listdata.add(CrewModel.fromJson(element)))
+              .toList();
+          return listdata;
+        } else {
+          print('No crew data');
         }
       } catch (e) {
         print(e.toString());

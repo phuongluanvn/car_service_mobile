@@ -1,3 +1,6 @@
+import 'package:car_service/blocs/manager/CrewManagement/crew_bloc.dart';
+import 'package:car_service/blocs/manager/CrewManagement/crew_event.dart';
+import 'package:car_service/blocs/manager/CrewManagement/crew_state.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
@@ -22,30 +25,30 @@ class _CrewDetailUiState extends State<CrewDetailUi> {
   @override
   void initState() {
     super.initState();
-    updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
-    BlocProvider.of<ManageStaffBloc>(context)
-        .add(DoStaffDetailEvent(username: widget.id));
+    // updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
+    BlocProvider.of<CrewBloc>(context).add(DoCrewDetailEvent(id: widget.id));
     print(widget.id);
   }
 
   @override
   Widget build(BuildContext context) {
-    final String absentStatus = 'absent';
+    // final String absentStatus = 'absent';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Quản lý nhân viên'),
+        title: Text('Quản lý tổ đội'),
       ),
       backgroundColor: AppTheme.colors.lightblue,
       body: Center(
-        child: BlocBuilder<ManageStaffBloc, ManageStaffState>(
+        child: BlocBuilder<CrewBloc, CrewState>(
+          // ignore: missing_return
           builder: (context, state) {
-            if (state.detailStatus == StaffDetailStatus.init) {
+            if (state.statusDetail == DoCrewDetailStatus.init) {
               return CircularProgressIndicator();
-            } else if (state.detailStatus == StaffDetailStatus.loading) {
+            } else if (state.statusDetail == DoCrewDetailStatus.loading) {
               return CircularProgressIndicator();
-            } else if (state.detailStatus == StaffDetailStatus.success) {
-              if (state.staffDetail != null && state.staffDetail.isNotEmpty)
+            } else if (state.statusDetail == DoCrewDetailStatus.success) {
+              if (state.crewList != null && state.crewList.isNotEmpty)
                 return Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
@@ -66,125 +69,62 @@ class _CrewDetailUiState extends State<CrewDetailUi> {
                             SizedBox(
                               height: 10,
                             ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.baseline,
-                              textBaseline: TextBaseline.alphabetic,
-                              children: [
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  child: Text(
-                                    'Fullname:',
-                                    style: TextStyle(fontSize: 16.0),
-                                  ),
-                                ),
-                                Container(
-                                  child: Text(
-                                    state.staffDetail[0].fullname,
-                                    style: TextStyle(fontSize: 15.0),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Container(height: 16),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.baseline,
-                              textBaseline: TextBaseline.alphabetic,
-                              children: [
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  child: Text(
-                                    'Email:',
-                                    style: TextStyle(fontSize: 16.0),
-                                  ),
-                                ),
-                                Container(
-                                  child: Text(
-                                    state.staffDetail[0].email,
-                                    style: TextStyle(fontSize: 15.0),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Container(height: 16),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.baseline,
-                              textBaseline: TextBaseline.alphabetic,
-                              children: [
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.3,
-                                  child: Text(
-                                    'Phone number:',
-                                    style: TextStyle(fontSize: 16.0),
-                                  ),
-                                ),
-                                Container(
-                                  child: Text(
-                                    state.staffDetail[0].phoneNumber,
-                                    style: TextStyle(fontSize: 15.0),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Container(height: 16),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.baseline,
-                              textBaseline: TextBaseline.alphabetic,
-                              children: [
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  child: Text(
-                                    'Status:',
-                                    style: TextStyle(fontSize: 16.0),
-                                  ),
-                                ),
-                                Container(
-                                  child: Text(
-                                    state.staffDetail[0].status,
-                                    style: TextStyle(fontSize: 15.0),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            BlocListener<UpdateStatusOrderBloc,
-                                UpdateStatusOrderState>(
+                            GridView.builder(
+                              itemCount: state.crewList[0].members.length,
+                              shrinkWrap: true,
                               // ignore: missing_return
-                              listener: (builder, statusState) {
-                                if (statusState.status ==
-                                    UpdateStatus.updateStatusAbsentSuccess) {
-                                  Navigator.pushNamed(context, '/manager');
-                                }
-                              },
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.45,
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          primary: AppTheme.colors.blue),
-                                      child: Text('Nghỉ phép',
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                      onPressed: () {
-                                        updateStatusBloc.add(
-                                            UpdateAbsentStatusButtonPressed(
-                                                username: state
-                                                    .staffDetail[0].username,
-                                                status: absentStatus));
-                                      },
-                                    ),
-                                  ),
-                                ],
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                childAspectRatio:
+                                    1.6, // Tỉ lệ chiều-ngang/chiều-rộng của một item trong grid, ở đây width = 1.6 * height
+                                crossAxisCount:
+                                    2, // Số item trên một hàng ngang
+                                crossAxisSpacing:
+                                    5, // Khoảng cách giữa các item trong hàng ngang
+                                mainAxisSpacing: 0,
+                                // Khoảng cách giữa các hàng (giữa các item trong cột dọc)
                               ),
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  child: Card(
+                                    color: Colors.white,
+                                    child: ListTile(
+                                      leading: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        backgroundImage: AssetImage(
+                                            'lib/images/mechanic.png'),
+                                      ),
+                                      title: Text(
+                                        state.crewList[0].members[index]
+                                            .fullname,
+                                        style: TextStyle(
+                                          color: (AppTheme.colors.deepBlue),
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        state.crewList[0].members[index]
+                                                    .isLeader ==
+                                                true
+                                            ? 'Tổ trưởng'
+                                            : 'Nhân viên',
+                                        //  +
+                                        // " - " +
+                                        // state
+                                        //     .vehicleLists[
+                                        //         index]
+                                        //     .model,
+                                        style: TextStyle(
+                                          color: (AppTheme.colors.deepBlue),
+                                        ),
+                                      ),
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5)),
+                                    margin: EdgeInsets.only(
+                                        top: 0, left: 2, right: 2, bottom: 30),
+                                  ),
+                                );
+                              },
                             ),
                           ],
                         ),

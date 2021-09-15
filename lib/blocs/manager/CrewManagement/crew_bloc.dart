@@ -66,28 +66,44 @@ class CrewBloc extends Bloc<CrewEvent, CrewState> {
     }
     if (event is CreateCrewEvent) {
       print(event.listUsername);
-      yield state.copyWith(updateStatus: DoUpdateStatus.loading);
+      yield state.copyWith(createStatus: CreateCrewStatus.loading);
       try {
         // print(event.listName);
         var data = await _repo.createCrew(event.listUsername);
         if (data != null) {
-          print(data);
           yield state.copyWith(
-              crewList: data, updateStatus: DoUpdateStatus.success);
-          print('Update Crew success');
+              message: data, createStatus: CreateCrewStatus.success);
         } else {
           yield state.copyWith(
-            updateStatus: DoUpdateStatus.error,
-            message: 'Assin Error',
-          );
-          print('no data');
+              createStatus: CreateCrewStatus.error, message: data);
         }
       } catch (e) {
         yield state.copyWith(
-          updateStatus: DoUpdateStatus.error,
+          createStatus: CreateCrewStatus.error,
           message: e.toString(),
         );
       }
-    }
+    } else if (event is DoCrewDetailEvent) {
+      yield state.copyWith(statusDetail: DoCrewDetailStatus.loading);
+      try {
+        // print('check 1: ' + event.username);
+        List<CrewModel> data = await _repo.getCrewDetail(event.id);
+        if (data != null) {
+          print("Not null");
+          yield state.copyWith(
+            statusDetail: DoCrewDetailStatus.success,
+            crewList: data,
+          );
+        } else {
+          yield state.copyWith(
+            statusDetail: DoCrewDetailStatus.error,
+            message: 'Detail Error',
+          );
+        }
+      } catch (e) {
+        yield state.copyWith(
+            statusDetail: DoCrewDetailStatus.error, message: e.toString());
+      }
   }
+}
 }

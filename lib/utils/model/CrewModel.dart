@@ -91,13 +91,13 @@ class Orders {
   String createdTime;
   String bookingTime;
   String checkinTime;
-  Null completeTime;
-  Null cancelTime;
-  Null note;
-  Null noteCustomer;
-  Null noteManager;
+  String completeTime;
+  String cancelTime;
+  String note;
+  String noteCustomer;
+  String noteManager;
   String status;
-  Null imageUrl;
+  String imageUrl;
   Vehicle vehicle;
   List<OrderDetails> orderDetails;
 
@@ -166,8 +166,8 @@ class Vehicle {
   String manufacturer;
   String model;
   String licensePlate;
-  Null imageUrl;
-  Null dateOfLastMaintenance;
+  String imageUrl;
+  String dateOfLastMaintenance;
   int millageCount;
 
   Vehicle(
@@ -205,14 +205,14 @@ class Vehicle {
 class OrderDetails {
   String id;
   String serviceId;
-  Null accessoryId;
+  String accessoryId;
   String name;
   int quantity;
   int price;
   bool isIncurred;
   bool isFinished;
-  Null timeFinished;
-  Null coupon;
+  String timeFinished;
+  String coupon;
 
   OrderDetails(
       {this.id,

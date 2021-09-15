@@ -29,6 +29,12 @@ class _CrewUiState extends State<CrewUi> {
     super.dispose();
   }
 
+  Future<void> _getData() async {
+    setState(() {
+      BlocProvider.of<CrewBloc>(context).add(DoListCrew());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,64 +56,95 @@ class _CrewUiState extends State<CrewUi> {
         ],
       ),
       backgroundColor: AppTheme.colors.lightblue,
-      body: Center(
+      body: RefreshIndicator(
+        onRefresh: _getData,
         child: BlocBuilder<CrewBloc, CrewState>(
           // ignore: missing_return
           builder: (context, state) {
             if (state.status == ListCrewStatus.init) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             } else if (state.status == ListCrewStatus.loading) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             } else if (state.status == ListCrewStatus.success) {
-              return ListView.builder(
-                itemCount: state.crewList.length,
-                shrinkWrap: true,
-                // ignore: missing_return
+              if (state.crewList != null && state.crewList.isNotEmpty) {
+                return ListView.builder(
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  itemCount: state.crewList.length,
+                  shrinkWrap: true,
+                  // ignore: missing_return
 
-                itemBuilder: (context, index) {
-                  Color color;
+                  itemBuilder: (context, index) {
+                    Color color;
 
-                  // if (state.assignList[index].status == 'Accepted') {
-                  return Card(
-                      // child: (state.assignList[0].status == 'Checkin')
-                      //     ?
-                      child: Column(children: [
-                    ListTile(
-                      trailing: Padding(
-                        padding: const EdgeInsets.only(right: 15),
-                        child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Icon(
-                                Icons.circle,
-                                color: color,
-                              ),
-                            ]),
+                    // if (state.assignList[index].status == 'Accepted') {
+                    return Card(
+                        // child: (state.assignList[0].status == 'Checkin')
+                        //     ?
+                        child: Column(children: [
+                      ListTile(
+                        trailing: Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.circle,
+                                  color: color,
+                                ),
+                              ]),
+                        ),
+                        leading: Image.asset(
+                          'lib/images/networking.png',
+                        ),
+                        title: Text(state.crewList[index].leaderFullname ?? ''),
+                        subtitle: Row(
+                          children: [
+                            Text('Số người: '),
+                            Text(state.crewList[index].members.length
+                                .toString()),
+                          ],
+                        ),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) =>
+                                  CrewDetailUi(id: state.crewList[index].id)));
+                        },
                       ),
-                      leading: Image.asset(
-                        'lib/images/networking.png',
+                    ])
+                        // : SizedBox(),
+                        );
+                    // } else {
+                    //   return Center(
+                    //     child: Text('Empty'),
+                    //   );
+                    // }
+                  },
+                );
+              } else
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics()),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height *
+                                      0.35),
+                              child: Text('Hiện tại không có tổ đội')),
+                        ],
                       ),
-                      title: Text(state.crewList[index].id),
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) =>
-                                CrewDetailUi(id: state.crewList[index].id)));
-                      },
                     ),
-                  ])
-                      // : SizedBox(),
-                      );
-                  // } else {
-                  //   return Center(
-                  //     child: Text('Empty'),
-                  //   );
-                  // }
-                },
-              );
+                  ],
+                );
             } else if (state.status == ListCrewStatus.error) {
               return ErrorWidget(state.message.toString());
             }
-            return SizedBox();
           },
         ),
       ),
