@@ -75,30 +75,30 @@ class _StaffOrderHistoryUiState extends State<StaffOrderHistoryUi> {
                         // child: (state.assignList[0].status == 'Checkin')
                         //     ?
                         child: Column(children: [
-                      ListTile(
-                        trailing: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Icon(
-                                Icons.circle,
-                                color: Colors.yellow,
-                              ),
-                              Text(state.finishList[index].order.status),
-                            ]),
-                        leading: Image.asset('lib/images/order_small.png'),
-                        title: Text(
-                            state.finishList[index].order.vehicle.licensePlate),
-                        subtitle: Text(
-                          _convertDate(
-                              state.finishList[index].order.bookingTime),
-                        ),
-                        onTap: () {
-                          print(state.finishList[index].order.id);
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (_) => ScheduleDetailUi(
-                                  orderId: state.finishList[index].order.id)));
-                        },
-                      ),
+                      // ListTile(
+                      //   trailing: Column(
+                      //       mainAxisSize: MainAxisSize.min,
+                      //       children: <Widget>[
+                      //         Icon(
+                      //           Icons.circle,
+                      //           color: Colors.yellow,
+                      //         ),
+                      //         Text(state.finishList[index].order.status),
+                      //       ]),
+                      //   leading: Image.asset('lib/images/order_small.png'),
+                      //   title: Text(
+                      //       state.finishList[index].order.vehicle.licensePlate),
+                      //   subtitle: Text(
+                      //     _convertDate(
+                      //         state.finishList[index].order.bookingTime),
+                      //   ),
+                      //   onTap: () {
+                      //     print(state.finishList[index].order.id);
+                      //     Navigator.of(context).push(MaterialPageRoute(
+                      //         builder: (_) => ScheduleDetailUi(
+                      //             orderId: state.finishList[index].order.id)));
+                      //   },
+                      // ),
                     ])
                         // : SizedBox(),
                         );

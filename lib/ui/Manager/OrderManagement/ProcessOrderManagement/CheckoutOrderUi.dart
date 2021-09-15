@@ -173,13 +173,13 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                                 child: Text('Hoàn tất dịch vụ',
                                     style: TextStyle(color: Colors.white)),
                                 onPressed: () {
-                                  updateStatusBloc.add(
-                                      UpdateStatusStartAndWorkingButtonPressed(
-                                          id: state.processDetail[0].id,
-                                          listData: state
-                                              .processDetail[0].crew.members,
-                                          status: processingStatus,
-                                          workingStatus: workingStatus));
+                                  // updateStatusBloc.add(
+                                  //     UpdateStatusStartAndWorkingButtonPressed(
+                                  //         id: state.processDetail[0].id,
+                                  //         listData: state
+                                  //             .processDetail[0].crew.members,
+                                  //         status: processingStatus,
+                                  //         workingStatus: workingStatus));
                                   // updateStatusBloc.add(
                                   //     UpdateStatusButtonPressed(
                                   //         id: state.processDetail[0].id,

@@ -17,18 +17,30 @@ class ManageStaffBloc extends Bloc<ManageStaffEvent, ManageStaffState> {
   Stream<ManageStaffState> mapEventToState(ManageStaffEvent event) async* {
     if (event is DoListStaffEvent) {
       List<StaffModel> listTest = [];
+      List<StaffModel> listAvailable = [];
       yield state.copyWith(status: StaffStatus.loading);
       try {
         var staffList = await _repo.getStaffList();
         staffList
             .map((e) => {
-                  if (e.role == 'staff') {listTest.add(e)}
+                  if (e.role == 'staff')
+                    {
+                      listTest.add(e),
+                      if (e.status == 'Đang hoạt động')
+                        {
+                          listAvailable.add(e),
+                        }
+                    },
                 })
             .toList();
-        print(listTest);
+        // print(listTest);
+        print('testlist: ${listTest}');
+        print('availist: ${listAvailable}');
         if (staffList != null) {
           yield state.copyWith(
-              staffList: listTest, status: StaffStatus.staffListsuccess);
+              staffList: listTest,
+              status: StaffStatus.staffListsuccess,
+              avaiList: listAvailable);
         } else {
           yield state.copyWith(
             status: StaffStatus.error,

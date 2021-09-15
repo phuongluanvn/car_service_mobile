@@ -6,6 +6,7 @@ import 'package:car_service/blocs/customer/customerCar/CustomerCar_event.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_bloc.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_event.dart';
+import 'package:car_service/blocs/manager/CrewManagement/crew_state.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
@@ -28,6 +29,7 @@ import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/ReviewTaskUi.dart';
+import 'package:car_service/utils/model/CrewModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
@@ -63,6 +65,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   TextEditingController kmController = TextEditingController();
   int kmRecord = 0;
   int kmCheck = 0;
+  String _crewId = '';
   @override
   void initState() {
     super.initState();
@@ -109,7 +112,8 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                     state.assignDetail.isNotEmpty &&
                     state.assignDetail[0].crew?.members != null &&
                     state.assignDetail[0].crew != null) {
-                  selectCrew = state.assignDetail[0].crew.members;
+                  _crewId = state.assignDetail[0].crew.id;
+                  // selectCrew = state.assignDetail[0].crew.members;
                   if (state.assignDetail[0].status == 'Đợi phản hồi' ||
                       // state.assignDetail[0].status == 'Đã từ chối' ||
                       state.assignDetail[0].status == 'Đã đồng ý') {
@@ -733,17 +737,17 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                           child: Column(
                             children: <Widget>[
                               Container(
-                                child: BlocBuilder<ManageStaffBloc,
-                                        ManageStaffState>(
+                                child: BlocBuilder<CrewBloc, CrewState>(
                                     // ignore: missing_return
                                     builder: (builder, staffState) {
-                                  if (staffState.status == StaffStatus.init) {
+                                  if (staffState.status ==
+                                      ListCrewStatus.init) {
                                     return CircularProgressIndicator();
                                   } else if (staffState.status ==
-                                      StaffStatus.loading) {
+                                      ListCrewStatus.loading) {
                                     return CircularProgressIndicator();
                                   } else if (staffState.status ==
-                                      StaffStatus.staffListsuccess) {
+                                      ListCrewStatus.success) {
                                     return Column(
                                       children: [
                                         // Container(
@@ -767,7 +771,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                           child: Column(
                                             children: [
                                               Text(
-                                                'Nhân viên phụ trách',
+                                                'Tổ đội phụ trách',
                                                 style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight:
@@ -777,12 +781,13 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                 height: 20,
                                               ),
 
-                                              ListView.builder(
-                                                shrinkWrap: true,
-                                                itemCount: state.assignDetail[0]
-                                                    .crew.members?.length,
-                                                itemBuilder: (context, index) {
-                                                  return Card(
+                                              Column(
+                                                children: [
+                                                  // Text(_crewId),
+                                                  // for (int i = 0;
+                                                  //     i < selectCrew.length;
+                                                  //     i++)
+                                                  Card(
                                                     child: Column(children: [
                                                       ListTile(
                                                         leading: Image.asset(
@@ -790,12 +795,11 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                         title: Text(state
                                                             .assignDetail[0]
                                                             .crew
-                                                            .members[index]
-                                                            .fullname),
+                                                            .id),
                                                       ),
                                                     ]),
-                                                  );
-                                                },
+                                                  ),
+                                                ],
                                               ),
                                               // ),
                                               SizedBox(
@@ -807,17 +811,12 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                     primary:
                                                         AppTheme.colors.blue,
                                                   ),
-                                                  child: Text('Chọn nhân viên'),
+                                                  child: Text('Chọn tổ đội'),
                                                   onPressed: () => setState(() {
                                                         showInformationDialog(
                                                                 context,
                                                                 staffState
-                                                                    .staffList,
-                                                                state
-                                                                    .assignDetail[
-                                                                        0]
-                                                                    .crew
-                                                                    .id,
+                                                                    .crewList,
                                                                 widget.userId)
                                                             .then((value) {
                                                           setState(() {
@@ -872,20 +871,20 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                             //         .userId,
                                                             //     listName:
                                                             //         widget.selectCrewName));
-                                                            updateStatusBloc.add(UpdateStatusStartAndWorkingButtonPressed(
-                                                                id: state
-                                                                    .assignDetail[
-                                                                        0]
-                                                                    .id,
-                                                                listData: state
-                                                                    .assignDetail[
-                                                                        0]
-                                                                    .crew
-                                                                    .members,
-                                                                status:
-                                                                    processingStatus,
-                                                                workingStatus:
-                                                                    workingStatus));
+                                                            // updateStatusBloc.add(UpdateStatusStartAndWorkingButtonPressed(
+                                                            //     id: state
+                                                            //         .assignDetail[
+                                                            //             0]
+                                                            //         .id,
+                                                            //     listData: state
+                                                            //         .assignDetail[
+                                                            //             0]
+                                                            //         .crew
+                                                            //         .members,
+                                                            //     status:
+                                                            //         processingStatus,
+                                                            //     workingStatus:
+                                                            //         workingStatus));
 
                                                             Navigator.pushNamed(
                                                                 context,
@@ -907,7 +906,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                       ],
                                     );
                                   } else if (staffState.status ==
-                                      StaffStatus.error) {
+                                      ListCrewStatus.error) {
                                     return ErrorWidget(
                                         state.message.toString());
                                   }
@@ -932,8 +931,8 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
     );
   }
 
-  Future showInformationDialog(BuildContext context, List<StaffModel> stafflist,
-      String crewId, String orderId) async {
+  Future showInformationDialog(
+      BuildContext context, List<CrewModel> crewlist, String orderId) async {
     return showDialog(
         context: context,
         builder: (context) {
@@ -948,94 +947,73 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                       child: Column(
                         children: [
                           Text(
-                            'Chọn nhân viên',
+                            'Chọn tổ đội',
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w600),
                           ),
                           Container(
                             height: MediaQuery.of(context).size.height * 0.5,
                             width: MediaQuery.of(context).size.width * 0.7,
-                            child:
-                                // BlocBuilder<AssignorderCubit,
-                                //     AssignorderCubitState>(
-                                //   builder: (context, state) {
-                                //     return
-                                ListView.builder(
-                                    itemCount: stafflist.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return CheckboxListTile(
-                                        value: selectCrew.indexWhere(
-                                                (element) =>
-                                                    element.username ==
-                                                    stafflist[index]
-                                                        .username) >=
-                                            0,
-                                        onChanged: (bool selected) {
-                                          if (selected) {
-                                            setState(() {
-                                              // BlocProvider.of<AssignorderCubit>(
-                                              //         context)
-                                              //     .addItem(stafflist[index]);
-                                              selectCrew.add(stafflist[index]);
-                                              // selectCrewName.add(
-                                              //     stafflist[index].username);
-                                              // print('select crew name 1');
-                                              // print(selectCrew);
-                                            });
-                                          } else {
-                                            setState(() {
-                                              // BlocProvider.of<AssignorderCubit>(
-                                              //         context)
-                                              //     .removeItem(stafflist[index]);
-                                              // selectCrewName.remove(
-                                              //     stafflist[index].username);
-                                              selectCrew
-                                                  .remove(stafflist[index]);
-                                              print('select crew name 2');
-                                              print(selectCrew);
-                                            });
-                                          }
-                                        },
-                                        title: Text(stafflist[index].fullname),
-                                      );
-                                    }),
-                            //   },
+                            // child: SingleChildScrollView(
+                            child: BlocBuilder<CrewBloc, CrewState>(
+                              // ignore: missing_return
+                              builder: (context, stateOfPackage) {
+                                if (stateOfPackage.status ==
+                                    ListCrewStatus.init) {
+                                  return CircularProgressIndicator();
+                                } else if (stateOfPackage.status ==
+                                    ListCrewStatus.loading) {
+                                  return CircularProgressIndicator();
+                                } else if (stateOfPackage.status ==
+                                    ListCrewStatus.success) {
+                                  if (stateOfPackage.crewList != null &&
+                                      stateOfPackage.crewList.isNotEmpty)
+                                    return ListView.builder(
+                                      itemCount: stateOfPackage.crewList.length,
+                                      shrinkWrap: true,
+                                      // ignore: missing_return
+                                      itemBuilder: (context, index) {
+                                        return Card(
+                                          child: ListTile(
+                                            title: Text(
+                                              stateOfPackage.crewList[index]
+                                                  .leaderFullname,
+                                              style: TextStyle(
+                                                  color: (_crewId ==
+                                                              stateOfPackage
+                                                                  .crewList[
+                                                                      index]
+                                                                  .id ||
+                                                          _crewId != '')
+                                                      ? AppTheme.colors.deepBlue
+                                                      : Colors.grey),
+                                            ),
+                                            subtitle: Text(stateOfPackage
+                                                .crewList[index]
+                                                .leaderFullname),
+                                            onTap: () {
+                                              setState(() {
+                                                _crewId = stateOfPackage
+                                                    .crewList[index].id;
+                                                print(_crewId);
+                                              });
+                                            },
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  else //nếu không có xe nào
+                                    return Text('Hiện tại không có tổ đội');
+                                } else if (stateOfPackage.status ==
+                                    ListCrewStatus.error) {
+                                  return ErrorWidget(
+                                      stateOfPackage.message.toString());
+                                }
+                              },
+                            ),
                             // ),
-                          ),
+                          )
                         ],
-                        //  stafflist.map((e) {
-                        //   return CheckboxListTile(
-                        //       activeColor: AppTheme.colors.deepBlue,
-
-                        //       //font change
-                        //       title: new Text(
-                        //         e.username,
-                        //       ),
-                        //       value: selectData.indexOf(e) < 0 ? false : true,
-                        //       secondary: Container(
-                        //         height: 50,
-                        //         width: 50,
-                        //         child: Image.asset(
-                        //           'lib/images/logo_blue.png',
-                        //           fit: BoxFit.cover,
-                        //         ),
-                        //       ),
-                        //       onChanged: (bool val) {
-                        //         if (selectData.indexOf(e) < 0) {
-                        //           setState(() {
-                        //             selectData.add(e);
-                        //             _selectStaff = true;
-                        //           });
-                        //         } else {
-                        //           setState(() {
-                        //             selectData
-                        //                 .removeWhere((element) => element == e);
-                        //           });
-                        //         }
-                        //         print(selectData);
-                        //       });
-                        // }).toList(),
                       ),
                     ),
                   ),
@@ -1048,12 +1026,13 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                     style: TextStyle(color: AppTheme.colors.blue),
                   ),
                   onPressed: () {
-                    processOrderBloc.add(UpdateSelectCrewEvent(
-                        crewId: crewId,
-                        selectCrew: selectCrew,
-                        orderId: orderId));
+                    // processOrderBloc.add(UpdateSelectCrewEvent(
+                    //     crewId: crewId,
+                    //     selectCrew: selectCrew,
+                    //     orderId: orderId));
                     // Do something like updating SharedPreferences or User Settings etc.
-
+                    crewBloc.add(UpdateCrewToListEvent(
+                        id: widget.userId, crewId: _crewId));
                     Navigator.pop(context);
                   },
                 ),

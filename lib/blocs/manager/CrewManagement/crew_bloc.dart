@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:car_service/blocs/manager/CrewManagement/crew_event.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_state.dart';
@@ -20,7 +21,7 @@ class CrewBloc extends Bloc<CrewEvent, CrewState> {
       yield state.copyWith(updateStatus: DoUpdateStatus.loading);
       try {
         // print(event.listName);
-        var data = await _repo.updateCrewByName(event.id, event.selectCrew);
+        var data = await _repo.updateCrewByName(event.id, event.crewId);
         if (data != null) {
           print(data);
           yield state.copyWith(
@@ -61,6 +62,31 @@ class CrewBloc extends Bloc<CrewEvent, CrewState> {
           message: e.toString(),
         );
         ;
+      }
+    }
+    if (event is CreateCrewEvent) {
+      print(event.listUsername);
+      yield state.copyWith(updateStatus: DoUpdateStatus.loading);
+      try {
+        // print(event.listName);
+        var data = await _repo.createCrew(event.listUsername);
+        if (data != null) {
+          print(data);
+          yield state.copyWith(
+              crewList: data, updateStatus: DoUpdateStatus.success);
+          print('Update Crew success');
+        } else {
+          yield state.copyWith(
+            updateStatus: DoUpdateStatus.error,
+            message: 'Assin Error',
+          );
+          print('no data');
+        }
+      } catch (e) {
+        yield state.copyWith(
+          updateStatus: DoUpdateStatus.error,
+          message: e.toString(),
+        );
       }
     }
   }

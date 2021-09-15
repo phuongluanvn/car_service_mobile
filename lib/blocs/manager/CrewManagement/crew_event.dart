@@ -1,5 +1,7 @@
 import 'package:car_service/blocs/manager/booking/booking_state.dart';
+import 'package:car_service/utils/model/CrewModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
+import 'package:car_service/utils/model/createCrewModel.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class CrewEvent extends Equatable {
@@ -15,11 +17,16 @@ class DoCrewDetailEvent extends CrewEvent {
   @override
   List<Object> get props => [name];
 }
-
+class CreateCrewEvent extends CrewEvent {
+  final List<CreateCrewModel> listUsername;
+  CreateCrewEvent({this.listUsername});
+  @override
+  List<Object> get props => [listUsername];
+}
 class UpdateCrewToListEvent extends CrewEvent {
   final String id;
-  final List<StaffModel> selectCrew;
-  UpdateCrewToListEvent({this.id, this.selectCrew});
+  final String crewId;
+  UpdateCrewToListEvent({this.id, this.crewId});
   @override
-  List<Object> get props => [id, selectCrew];
+  List<Object> get props => [id, crewId];
 }

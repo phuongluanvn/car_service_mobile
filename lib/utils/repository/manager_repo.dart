@@ -8,6 +8,7 @@ import 'package:car_service/utils/model/ServiceModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:car_service/utils/model/TestOrderModel.dart';
 import 'package:car_service/utils/model/accessory_model.dart';
+import 'package:car_service/utils/model/createCrewModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -391,20 +392,43 @@ class ManagerRepository {
     }
   }
 
-  updateCrewByName(String id, List<StaffModel> selectName) async {
+  updateCrewByName(String id, String crewId) async {
     print('lololo');
-    print(selectName);
-    List<String> listName =
-        List.generate(selectName.length, (index) => selectName[index].username);
+    // print(selectName);
+
     var body = {
-      "orderId": '$id',
-      "memberUsernameList": listName,
+      "id": '$id',
+      "crewId": '$crewId',
+    };
+    var res = await http.put(
+      Uri.parse(BASE_URL + "orders/crew"),
+      headers: headers,
+      body: json.encode(body),
+    );
+    print(res.statusCode);
+    if (res.statusCode != null) {
+      if (res.statusCode == 200) {
+        return res.body;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  createCrew(List<CreateCrewModel> listUsername) async {
+    // print('lololo');
+    // print(selectName);
+
+    var body = {
+      "members": List.generate(
+          listUsername.length, (index) => listUsername[index].toJson())
     };
     var res = await http.post(
       Uri.parse(BASE_URL + "crews"),
       headers: headers,
       body: json.encode(body),
     );
+    print(res.statusCode);
     if (res.statusCode != null) {
       if (res.statusCode == 200) {
         return res.body;

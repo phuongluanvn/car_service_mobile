@@ -28,7 +28,7 @@ class ManageStaffState extends Equatable {
   final StaffStatus status;
   final StaffDetailStatus detailStatus;
   final StaffSelectStatus staffSelectStt;
-
+  final List<StaffModel> avaiList;
   final List<StaffModel> staffList;
   final List<StaffModel> staffDetail;
   final List<StaffModel> staffSelect;
@@ -38,6 +38,7 @@ class ManageStaffState extends Equatable {
     this.status: StaffStatus.init,
     this.detailStatus: StaffDetailStatus.init,
     this.staffSelectStt: StaffSelectStatus.init,
+    this.avaiList: const [],
     this.staffSelect: const [],
     this.staffDetail: const [],
     this.staffList: const [],
@@ -48,6 +49,7 @@ class ManageStaffState extends Equatable {
     StaffStatus status,
     StaffDetailStatus detailStatus,
     StaffSelectStatus staffSelectStt,
+    List<StaffModel> avaiList,
     List<StaffModel> staffList,
     List<StaffModel> staffDetail,
     List<StaffModel> staffSelect,
@@ -57,6 +59,7 @@ class ManageStaffState extends Equatable {
         status: status ?? this.status,
         detailStatus: detailStatus ?? this.detailStatus,
         staffSelectStt: staffSelectStt ?? this.staffSelectStt,
+        avaiList: avaiList?? this.avaiList,
         staffList: staffList ?? this.staffList,
         staffDetail: staffDetail ?? this.staffDetail,
         staffSelect: staffSelect ?? this.staffSelect,
@@ -67,6 +70,7 @@ class ManageStaffState extends Equatable {
         status,
         detailStatus,
         staffSelectStt,
+        avaiList,
         staffList,
         staffDetail,
         staffSelect,

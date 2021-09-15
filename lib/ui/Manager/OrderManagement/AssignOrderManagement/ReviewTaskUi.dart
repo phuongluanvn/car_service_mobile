@@ -25,6 +25,7 @@ import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:money_formatter/money_formatter.dart';
 import 'package:sizer/sizer.dart';
 
 class ReviewTaskUi extends StatefulWidget {
@@ -128,7 +129,99 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                   child: Column(
                                     children: [
                                       Text(
-                                        'Cập nhật thông tin dịch vụ',
+                                        'Thông tin gói bảo dưỡng',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(
+                                            'Tên gói',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          Text(
+                                            'Giá tiền',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ],
+                                      ),
+                                      Center(
+                                        child: Column(
+                                          children: state
+                                              .processDetail[0].packageLists
+                                              .map((package) {
+                                            return ExpansionTile(
+                                              title: Text(package.name),
+                                              trailing: Text(_convertMoney(
+                                                  package.price.toDouble())),
+                                              children: state.processDetail[0]
+                                                  .packageLists[0].orderDetails
+                                                  .map((service) {
+                                                return ExpansionTile(
+                                                  title: Text(service.name),
+                                                  trailing: Text(_convertMoney(
+                                                      service.price
+                                                          .toDouble())),
+                                                  children: [
+                                                    ListTile(
+                                                      title: Text(state
+                                                              .processDetail[0]
+                                                              .packageLists[0]
+                                                              .orderDetails[0]
+                                                              .accessoryId ??
+                                                          ''),
+                                                      // trailing: Image.network(accState
+                                                      //     .accessoryList
+                                                      //     .firstWhere((element) =>
+                                                      //         element.id ==
+                                                      //         service.accessoryId)
+                                                      //     .imageUrl),
+                                                    ),
+                                                  ],
+                                                );
+                                              }).toList(),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Center(
+                        child: FittedBox(
+                          child: Row(
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width * 1,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.5,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(color: Colors.black26),
+                                    borderRadius: BorderRadius.circular(5)),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 10),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        'Cập nhật dịch vụ',
                                         style: TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.w800),
@@ -393,5 +486,20 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
             );
           });
         });
+  }
+
+  _convertMoney(double money) {
+    MoneyFormatter fmf = new MoneyFormatter(
+        amount: money,
+        settings: MoneyFormatterSettings(
+          symbol: 'VND',
+          thousandSeparator: '.',
+          decimalSeparator: ',',
+          symbolAndNumberSeparator: ' ',
+          fractionDigits: 0,
+          // compactFormatType: CompactFormatType.sort
+        ));
+    print(fmf.output.symbolOnRight);
+    return fmf.output.symbolOnRight.toString();
   }
 }

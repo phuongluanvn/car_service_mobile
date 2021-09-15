@@ -352,6 +352,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                               );
                             }).toList(),
                           ),
+                   
                     Divider(
                       color: Colors.black,
                       thickness: 2,

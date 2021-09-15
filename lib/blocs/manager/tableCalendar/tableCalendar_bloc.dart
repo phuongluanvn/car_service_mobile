@@ -28,17 +28,17 @@ class TableCalendarBloc extends Bloc<TableCalendarEvent, TableCalendarState> {
         // print(historyList);
         historyList
             .map((orderT) => {
-                  if (orderT.order.status == 'Đang tiến hành' ||
-                      orderT.order.status == 'Kiểm tra')
-                    {
-                      processList.add(orderT),
-                      print(orderT.order.status),
-                    }
-                  else if (orderT.order.status == 'Hoàn thành')
-                    {
-                      finishList.add(orderT),
-                      print(finishList),
-                    }
+                  // if (orderT.order.status == 'Đang tiến hành' ||
+                  //     orderT.order.status == 'Kiểm tra')
+                  //   {
+                  //     processList.add(orderT),
+                  //     print(orderT.order.status),
+                  //   }
+                  // else if (orderT.order.status == 'Hoàn thành')
+                  //   {
+                  //     finishList.add(orderT),
+                  //     print(finishList),
+                  //   }
                 })
             .toList();
 

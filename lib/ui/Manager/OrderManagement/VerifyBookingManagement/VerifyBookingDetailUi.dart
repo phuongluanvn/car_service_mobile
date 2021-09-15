@@ -345,7 +345,7 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                                             ListView(
                                               shrinkWrap: true,
                                               children: state
-                                                  .bookingDetail[0].orderDetails
+                                                  .bookingDetail[0].packageLists
                                                   .map((service) {
                                                 return ListTile(
                                                   title: Text(service.name),
@@ -371,21 +371,6 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.45,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      primary: AppTheme.colors.blue),
-                                  child: Text('Đồng ý',
-                                      style: TextStyle(color: Colors.white)),
-                                  onPressed: () {
-                                    updateStatusBloc.add(
-                                        UpdateStatusButtonPressed(
-                                            id: state.bookingDetail[0].id,
-                                            status: acceptStatus));
-                                  },
-                                ),
-                              ),
                               SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.45,
                                 child: ElevatedButton(
@@ -440,6 +425,21 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                                             ],
                                           );
                                         });
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.45,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      primary: AppTheme.colors.blue),
+                                  child: Text('Đồng ý',
+                                      style: TextStyle(color: Colors.white)),
+                                  onPressed: () {
+                                    updateStatusBloc.add(
+                                        UpdateStatusButtonPressed(
+                                            id: state.bookingDetail[0].id,
+                                            status: acceptStatus));
                                   },
                                 ),
                               ),

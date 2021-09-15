@@ -5,6 +5,7 @@ import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/theme/app_theme.dart';
+import 'package:car_service/ui/Manager/CrewManagement/CreateCrewUi.dart';
 import 'package:car_service/ui/Manager/CrewManagement/CrewDetailUi.dart';
 import 'package:car_service/ui/Manager/StaffManagement/StaffDetailUi.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
@@ -35,6 +36,18 @@ class _CrewUiState extends State<CrewUi> {
         backgroundColor: AppTheme.colors.deepBlue,
         title: Text('Quản lý tổ đội'),
         automaticallyImplyLeading: false,
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 20),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (_) => CreateCrewUi()));
+              },
+              child: Icon(Icons.add),
+            ),
+          )
+        ],
       ),
       backgroundColor: AppTheme.colors.lightblue,
       body: Center(
@@ -77,8 +90,8 @@ class _CrewUiState extends State<CrewUi> {
                       title: Text(state.crewList[index].id),
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => CrewDetailUi(
-                                id: state.crewList[index].id)));
+                            builder: (_) =>
+                                CrewDetailUi(id: state.crewList[index].id)));
                       },
                     ),
                   ])

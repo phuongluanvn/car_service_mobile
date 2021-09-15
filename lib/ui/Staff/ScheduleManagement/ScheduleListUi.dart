@@ -163,50 +163,51 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
                   if (state.processList != null &&
                       state.processList.isNotEmpty) {
                     print(state);
-                    return Column(
-                      children:
-                          List.generate(state.processList.length, (index) {
-                        DateTime bookingTime = DateFormat('yyyy-MM-ddTHH:mm:ss')
-                            .parse(state.processList[index].order.bookingTime);
+                    // return Column(
+                    //   children:
+                    //       List.generate(state.processList.length, (index) {
+                    //     DateTime bookingTime = DateFormat('yyyy-MM-ddTHH:mm:ss')
+                    //         .parse(state.processList[index].order.bookingTime);
 
-                        if (isSameDay(selectedDay, bookingTime)) {
-                          return Card(
-                              // child: (state.assignList[0].status == 'Checkin')
-                              //     ?
-                              child: Column(children: [
-                            ListTile(
-                              trailing: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.circle,
-                                      color: Colors.yellow,
-                                    ),
-                                    Text(state.processList[index].order.status),
-                                  ]),
-                              leading:
-                                  Image.asset('lib/images/order_small.png'),
-                              title: Text(state.processList[index].order.vehicle
-                                  .licensePlate),
-                              subtitle: Text(
-                                _convertDate(
-                                    state.processList[index].order.bookingTime),
-                              ),
-                              onTap: () {
-                                print(state.processList[index].order.id);
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) => ScheduleDetailUi(
-                                        orderId: state
-                                            .processList[index].order.id)));
-                              },
-                            ),
-                          ])
-                              // : SizedBox(),
-                              );
-                        } else
-                          return SizedBox();
-                      }),
-                    );
+                    //     if (isSameDay(selectedDay, bookingTime)) {
+                    //       return Card(
+                    //           // child: (state.assignList[0].status == 'Checkin')
+                    //           //     ?
+                    //           child: Column(children: [
+                    //         ListTile(
+                    //           trailing: Column(
+                    //               mainAxisSize: MainAxisSize.min,
+                    //               children: <Widget>[
+                    //                 Icon(
+                    //                   Icons.circle,
+                    //                   color: Colors.yellow,
+                    //                 ),
+                    //                 // Text(state.processList[index].order.status),
+                    //               ]),
+                    //           leading:
+                    //               Image.asset('lib/images/order_small.png'),
+                    //           // title: Text(state.processList[index].order.vehicle
+                    //           //     .licensePlate),
+                    //           // subtitle: Text(
+                    //           //   _convertDate(
+                    //           //       state.processList[index].order.bookingTime),
+                    //           // ),
+                    //           onTap: () {
+                    //             // print(state.processList[index].order.id);
+                    //             // Navigator.of(context).push(MaterialPageRoute(
+                    //             //     builder: (_) => ScheduleDetailUi(
+                    //             //         orderId: state
+                    //             //             .processList[index].order.id)));
+                    //           },
+                    //         ),
+                    //       ])
+                    //           // : SizedBox(),
+                    //           );
+                    //     } else
+                    //       return SizedBox();
+                    //   }),
+                    // );
+
                   } else
                     return Center(
                       child: Text('Hiện tại không có đơn'),
