@@ -18,7 +18,7 @@ class _NavBarState extends State<NavBar> {
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = <Widget>[
     ScheduleListUi(),
-    CalendarUI(),
+    // CalendarUI(),
     StaffProfileUi(),
   ];
 
@@ -43,13 +43,13 @@ class _NavBarState extends State<NavBar> {
             ),
             label: 'Đơn hàng',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.calendar_today,
-              color: AppTheme.colors.deepBlue,
-            ),
-            label: 'Lịch',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(
+          //     Icons.calendar_today,
+          //     color: AppTheme.colors.deepBlue,
+          //   ),
+          //   label: 'Lịch',
+          // ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person,

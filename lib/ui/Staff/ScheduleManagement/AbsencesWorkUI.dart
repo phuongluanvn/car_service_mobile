@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-
+import 'package:car_service/utils/helpers/constants/StaffConstants.dart' as staffConstants;
 class AbsencesWorkUI extends StatefulWidget {
   @override
   _AbsencesWorkUIState createState() => _AbsencesWorkUIState();
@@ -27,27 +27,27 @@ class _AbsencesWorkUIState extends State<AbsencesWorkUI> {
   String _statusChanged;
   AbsencesWorkBloc _absencesWorkBloc;
   String _username;
-  String timeStart = 'T08:00:00';
-  String timeEnd = 'T17:00:00';
   List<DateTime> _selectedDayList = [];
   DateTime date;
   int _valueSelected = 0;
   DateTimeRange dateRange;
   List<Absences> _listAbsences = [];
   Absences _absences = Absences();
-String _empNote;
+  String _empNote;
+  bool _isShowOneDay = false;
+  bool _isShowRangeDay = false;
+
   _convertDate(dateInput) {
     return formatDate(DateTime.parse(dateInput),
         [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
   }
 
   _startDate(String date) {
-    print(timeEnd);
-    return date + timeStart;
+    return date + staffConstants.TIME_STATR;
   }
 
   _endDate(String date) {
-    return date + timeEnd;
+    return date + staffConstants.TIME_END;
   }
 
   _getStringFromSharedPref() async {
@@ -80,7 +80,7 @@ String _empNote;
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
         automaticallyImplyLeading: false,
-        title: Text('Đăng ký nghỉ'),
+        title: Text(staffConstants.REGISTER_ABSENCES_TITLE),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -111,84 +111,94 @@ String _empNote;
               child: Column(
                 children: [
                   Text(
-                    'Chọn ngày nghỉ',
+                    staffConstants.CHOOSE_ABSENCES_TITLE,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   Container(
                     child: Column(
                       children: <Widget>[
                         RadioListTile(
-                            title: Text('Một ngày'),
+                            title: Text(staffConstants.ONE_DAY),
                             value: 1,
                             groupValue: _valueSelected,
                             onChanged: (value) {
                               setState(() {
                                 _valueSelected = value;
+                                _isShowOneDay = true;
+                                _isShowRangeDay = false;
                               });
                             }),
-                        _valueSelected == 1
-                            ? ElevatedButton(
-                                onPressed: () {
-                                  pickDate(context);
-                                },
-                                child: Text(getText()))
-                            : ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    primary: Colors.grey),
-                                // onPressed: () {
-                                //   // pickDate(context);
-                                // },
-                                child: Text(getText(),
-                                    style: TextStyle(color: Colors.white))),
+                        Visibility(
+                          visible: _isShowOneDay,
+                          child: _valueSelected == 1
+                              ? ElevatedButton(
+                                  onPressed: () {
+                                    pickDate(context);
+                                  },
+                                  child: Text(getText()))
+                              : ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Colors.grey),
+                                  // onPressed: () {
+                                  //   // pickDate(context);
+                                  // },
+                                  child: Text(getText(),
+                                      style: TextStyle(color: Colors.white))),
+                        ),
                         RadioListTile(
-                            title: Text('Dài ngày'),
+                            title: Text(staffConstants.RANGE_DAY),
                             value: 2,
                             groupValue: _valueSelected,
                             onChanged: (value) {
                               setState(() {
                                 _valueSelected = value;
+                                _isShowOneDay = false;
+                                _isShowRangeDay = true;
                               });
                             }),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _valueSelected == 2
-                                  ? ElevatedButton(
-                                      onPressed: () {
-                                        pickDateRange(context);
-                                      },
-                                      child: Text(getFrom()))
-                                  : ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          primary: Colors.grey),
-                                      // onPressed: () {
-                                      //   // pickDate(context);
-                                      // },
-                                      child: Text(getFrom(),
-                                          style:
-                                              TextStyle(color: Colors.white))),
-                            ),
-                            const SizedBox(width: 8),
-                            Icon(Icons.arrow_forward, color: Colors.white),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: _valueSelected == 2
-                                  ? ElevatedButton(
-                                      onPressed: () {
-                                        pickDateRange(context);
-                                      },
-                                      child: Text(getUntil()))
-                                  : ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          primary: Colors.grey),
-                                      // onPressed: () {
-                                      //   // pickDate(context);
-                                      // },
-                                      child: Text(getUntil(),
-                                          style:
-                                              TextStyle(color: Colors.white))),
-                            ),
-                          ],
+                        Visibility(
+                          visible: _isShowRangeDay,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: _valueSelected == 2
+                                    ? ElevatedButton(
+                                        onPressed: () {
+                                          pickDateRange(context);
+                                        },
+                                        child: Text(getFrom()))
+                                    : ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            primary: Colors.grey),
+                                        // onPressed: () {
+                                        //   // pickDate(context);
+                                        // },
+                                        child: Text(getFrom(),
+                                            style: TextStyle(
+                                                color: Colors.white))),
+                              ),
+                              const SizedBox(width: 8),
+                              Icon(Icons.arrow_forward, color: Colors.white),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: _valueSelected == 2
+                                    ? ElevatedButton(
+                                        onPressed: () {
+                                          pickDateRange(context);
+                                        },
+                                        child: Text(getUntil()))
+                                    : ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            primary: Colors.grey),
+                                        // onPressed: () {
+                                        //   // pickDate(context);
+                                        // },
+                                        child: Text(getUntil(),
+                                            style: TextStyle(
+                                                color: Colors.white))),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -207,13 +217,13 @@ String _empNote;
                       },
                       maxLines: 3,
                       decoration:
-                          InputDecoration.collapsed(hintText: 'Lý do xin nghỉ'),
+                          InputDecoration.collapsed(hintText: staffConstants.REASON_REGISTER),
                     ),
                   ),
                   ElevatedButton(
                     style:
                         ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
-                    child: Text('Xác nhận'),
+                    child: Text(staffConstants.CONFIRM_BUTTON),
                     onPressed: () {
                       _listAbsences = [];
                       _selectedDayList
@@ -221,9 +231,9 @@ String _empNote;
                                 _absences.empUsername = _username,
                                 _absences.noteEmp = _empNote,
                                 _absences.timeStart = _startDate(
-                                    e.toIso8601String().split("T")[0]),
+                                    e.toIso8601String().split(staffConstants.T_SPLIT)[0]),
                                 _absences.timeEnd =
-                                    _endDate(e.toIso8601String().split("T")[0]),
+                                    _endDate(e.toIso8601String().split(staffConstants.T_SPLIT)[0]),
                                 _listAbsences.add(_absences),
                               })
                           .toList();
@@ -276,9 +286,9 @@ String _empNote;
 
   String getText() {
     if (date == null) {
-      return 'Chọn ngày';
+      return staffConstants.SELECT_DAY;
     } else {
-      return DateFormat('dd/MM/yyyy').format(date);
+      return DateFormat().format(date);
       // return '${date.month}/${date.day}/${date.year}';
     }
   }
@@ -351,17 +361,17 @@ String _empNote;
 
   String getFrom() {
     if (dateRange == null) {
-      return 'From';
+      return 'Từ ngày';
     } else {
-      return DateFormat('MM/dd/yyyy').format(dateRange.start);
+      return DateFormat().format(dateRange.start);
     }
   }
 
   String getUntil() {
     if (dateRange == null) {
-      return 'Until';
+      return 'Đến ngày';
     } else {
-      return DateFormat('MM/dd/yyyy').format(dateRange.end);
+      return DateFormat().format(dateRange.end);
     }
   }
 }
