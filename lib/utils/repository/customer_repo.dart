@@ -29,7 +29,6 @@ class CustomerRepository {
       "bookingTime": bookingTime,
       "imageurl": imageUrl
     };
-    print(json.encode(body));
     var res = await http.post(
       Uri.parse(BASE_URL + "orders"),
       headers: headers,

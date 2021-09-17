@@ -54,7 +54,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
   bool _isTimeBooking = false;
   List _packageIdList = [];
   bool _isOpen = false;
-
+  bool _isSelectedStaff = false;
   Map<String, bool> checkboxListValues = {};
 
 //multi select - nhuwng ddang bug
@@ -322,7 +322,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                               fontSize: 15,
                                               color: (_carId ==
                                                       state.vehicleLists[index]
-                                                          .id)
+                                                          .id )
                                                   ? AppTheme.colors.white
                                                   : AppTheme.colors.deepBlue),
                                         ),
@@ -340,10 +340,17 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                                     : AppTheme
                                                         .colors.deepBlue)),
                                         onTap: () {
+                                          if(_carId == state.vehicleLists[index].id) {
+                                              setState(() {
+                                                print(null);
+                                              });
+                                                }
                                           setState(() {
                                             _carId =
                                                 state.vehicleLists[index].id;
                                             // _visible = !_visible;
+                                            _isSelectedStaff =
+                                                !_isSelectedStaff;
                                           });
                                         },
                                       ),

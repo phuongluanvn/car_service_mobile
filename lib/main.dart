@@ -34,6 +34,7 @@ import 'package:car_service/blocs/manager/waitingPayment/waitingPayment_bloc.dar
 import 'package:car_service/blocs/packageService/PackageService_bloc.dart';
 import 'package:car_service/blocs/sign_up/sign_up_bloc.dart';
 import 'package:car_service/blocs/sign_up/sign_up_state.dart';
+import 'package:car_service/blocs/staff/absencesWork/AbsencesWork_bloc.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/CustomerMainUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderUI.dart';
@@ -45,6 +46,7 @@ import 'package:car_service/utils/model/BookingModel.dart';
 import 'package:car_service/utils/repository/auth_repo.dart';
 import 'package:car_service/utils/repository/customer_repo.dart';
 import 'package:car_service/utils/repository/manager_repo.dart';
+import 'package:car_service/utils/repository/staff_repo.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -211,6 +213,8 @@ class _AuthState extends State<Auth> {
             create: (context) => WaitingPaymentBloc(repo: ManagerRepository())),
         BlocProvider(
             create: (context) => TableCalendarBloc(repo: ManagerRepository())),
+        BlocProvider(
+            create: (context) => AbsencesWorkBloc(repo: StaffRepository())),
         // BlocProvider(
         //     create: (context) =>
         //         BookingCubit(VerifyBookingInitState(), ManagerRepository())),

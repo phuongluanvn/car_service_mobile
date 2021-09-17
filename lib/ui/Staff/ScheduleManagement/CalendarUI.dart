@@ -4,6 +4,7 @@ import 'package:car_service/blocs/manager/tableCalendar/tableCalendar_bloc.dart'
 import 'package:car_service/blocs/manager/tableCalendar/tableCalendar_events.dart';
 import 'package:car_service/blocs/manager/tableCalendar/tableCalendar_state.dart';
 import 'package:car_service/theme/app_theme.dart';
+import 'package:car_service/ui/Staff/ScheduleManagement/AbsencesWorkUI.dart';
 import 'package:car_service/ui/Staff/ScheduleManagement/ScheduleDetailUi.dart';
 import 'package:car_service/ui/Staff/ScheduleManagement/event.dart';
 import 'package:car_service/utils/model/CalendarModel.dart';
@@ -14,7 +15,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:timelines/timelines.dart';
 
 class CalendarUI extends StatefulWidget {
   @override
@@ -25,12 +25,13 @@ class _CalendarUIState extends State<CalendarUI> {
   CalendarFormat formatT = CalendarFormat.month;
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
+  DateTime _toDay = DateTime.now();
   Map<DateTime, List<Event>> selectedEvents;
   TextEditingController _eventController = TextEditingController();
+  bool _isShowAbsButton = false;
   List _selectedEvents;
   int _counter = 0;
   Map<DateTime, List> _events;
-  String _username = '';
   String username;
   String _statusChanged;
   Map<DateTime, List<CalendarModel>> _loadedEvent;
@@ -160,6 +161,11 @@ class _CalendarUIState extends State<CalendarUI> {
                   selectedDay = selectDay;
                   focusedDay = focusDay;
                 });
+                if (selectedDay.day - _toDay.day > 0) {
+                  _isShowAbsButton = true;
+                } else {
+                  _isShowAbsButton = false;
+                }
               },
               selectedDayPredicate: (DateTime date) {
                 return isSameDay(selectedDay, date);
@@ -189,8 +195,6 @@ class _CalendarUIState extends State<CalendarUI> {
                       setState(() {
                         _listCalendars = state.taskLists;
                       });
-                      print('object');
-                      print(_listCalendars);
                       return Column(
                         children:
                             List.generate(state.taskLists.length, (index) {
@@ -250,10 +254,19 @@ class _CalendarUIState extends State<CalendarUI> {
           ],
         ),
       ),
-      // floatingActionButton: ElevatedButton(
-      //   child: Text('Xin nghỉ'),
-      //   onPressed: () {},
-      // ),
+      floatingActionButton: _isShowAbsButton
+          ? ElevatedButton(
+              child: Text('Xin nghỉ'),
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => AbsencesWorkUI()));
+              },
+            )
+          : ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: Colors.grey),
+              child: Text('Xin nghỉ'),
+              onPressed: () {},
+            ),
     );
   }
 }

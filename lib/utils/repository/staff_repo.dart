@@ -1,3 +1,5 @@
+import 'package:car_service/blocs/staff/absencesWork/AbsencesWork_event.dart';
+import 'package:car_service/utils/model/AbsencesModel.dart';
 import 'package:car_service/utils/model/CalendarModel.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
@@ -32,6 +34,63 @@ class StaffRepository {
       } catch (e) {
         print(e.toString());
       }
+    }
+  }
+
+  absentWork(String username, List<Absences> abs) async {
+    var body = {
+      "username": username,
+      "absences": List.generate(abs.length, (index) => abs[index].toJson())
+    };
+    print(json.encode(body));
+    var res = await http.post(
+        Uri.parse(
+            "https://carservicesystem.azurewebsites.net/api/employees/absences"),
+        headers: headers,
+        body: json.encode(body));
+    if (res.statusCode != null) {
+      if (res.statusCode == 200) {
+        return res.body;
+      } else if (res.statusCode == 404) {
+        return res.body;
+      } else if (res.statusCode == 400) {
+        return res.body;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  absentWorkTest(
+      String username, String timeStart, String timeEnd, String noteEmp) async {
+    var body = {
+      "username": username,
+      "absences": [
+        {
+          "empUsername": username,
+          "timeStart": timeStart,
+          "timeEnd": timeEnd,
+          "noteEmp": noteEmp
+        }
+      ]
+    };
+    print(json.encode(body));
+    var res = await http.post(
+        Uri.parse(
+            "https://carservicesystem.azurewebsites.net/api/employees/absences"),
+        headers: headers,
+        body: json.encode(body));
+    print(res.body);
+    if (res.statusCode != null) {
+      if (res.statusCode == 200) {
+        return res.body;
+      } else if (res.statusCode == 404) {
+        return res.body;
+      } else if (res.statusCode == 400) {
+        return res.body;
+      }
+    } else {
+      return null;
     }
   }
 }
