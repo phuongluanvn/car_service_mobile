@@ -2,6 +2,8 @@ import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_event.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
+import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
+import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
 // import 'package:car_service/blocs/customer/customerOrder/CreateBooking_bloc.dart';
 // import 'package:car_service/blocs/customer/customerOrder/CreateBooking_event.dart';
 // import 'package:car_service/blocs/customer/customerOrder/CreateBooking_state.dart';
@@ -43,6 +45,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
   DateTime _focusedDay = DateTime.now();
   bool _isSearchButton = false;
   String _valueSearch;
+  List _packageIdList = [];
 
   final Color selectedColor = AppTheme.colors.lightblue;
   final Color unselectedColor = Colors.black;
@@ -96,88 +99,88 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
       textInputAction: TextInputAction.search,
     );
 
-    final createOrderButton = BlocListener<CreateOrderBloc, CreateOrderState>(
-      listener: (context, state) {
-        if (state.status == CreateOrderStatus.createOrderSuccess) {
-          // Navigator.pop(context);
-          showDialog(
-              context: context,
-              builder: (BuildContext ctx) {
-                return AlertDialog(
-                  title: Text(
-                    'Thông báo!',
-                    style: TextStyle(color: Colors.greenAccent),
-                  ),
-                  content: Text(state.message),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          if (state.message == 'Đặt lịch hẹn thành công') {
-                            Navigator.of(context).pop();
-                          } else {
-                            Navigator.of(context).pop();
-                            Navigator.pop(context);
-                          }
+    // final createOrderButton = BlocListener<CreateOrderBloc, CreateOrderState>(
+    //   listener: (context, state) {
+    //     if (state.status == CreateOrderStatus.createOrderSuccess) {
+    //       // Navigator.pop(context);
+    //       showDialog(
+    //           context: context,
+    //           builder: (BuildContext ctx) {
+    //             return AlertDialog(
+    //               title: Text(
+    //                 'Thông báo!',
+    //                 style: TextStyle(color: Colors.greenAccent),
+    //               ),
+    //               content: Text(state.message),
+    //               actions: [
+    //                 TextButton(
+    //                     onPressed: () {
+    //                       if (state.message == 'Đặt lịch hẹn thành công') {
+    //                         Navigator.of(context).pop();
+    //                       } else {
+    //                         Navigator.of(context).pop();
+    //                         Navigator.pop(context);
+    //                       }
 
-                          // context
-                          //     .read<CustomerOrderBloc>()
-                          //     .add(DoOrderListEvent());
-                        },
-                        child: Text('Đồng ý'))
-                  ],
-                );
-              });
-        }
-      },
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          primary: AppTheme.colors.blue, // background
-          onPrimary: Colors.white, // foreground
-        ),
-        onPressed: () {
-          print(_carId);
-          print(_packageId);
-          print(_note);
-          print(_focusedDay.toIso8601String());
-          if (_carId == null) {
-            showDialog(
-                context: context,
-                builder: (BuildContext ctx) {
-                  return AlertDialog(
-                    title: Text(
-                      'Thông báo!',
-                      style: TextStyle(color: Colors.redAccent),
-                    ),
-                    content: Text('Vui lòng chọn xe!'),
-                    actions: [
-                      TextButton(
-                          onPressed: () {
-                            // Close the dialog
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('Đồng ý'))
-                    ],
-                  );
-                });
-          } else if (_note == null) {
-            _createBookingBloc.add(CreateOrderButtonPressed(
-              carId: _carId,
-              serviceId: _packageId,
-              note: null,
-              timeBooking: _focusedDay.toIso8601String(),
-            ));
-          } else if (_packageId == null) {
-            _createBookingBloc.add(CreateOrderButtonPressed(
-              carId: _carId,
-              serviceId: null,
-              note: _note,
-              timeBooking: _focusedDay.toIso8601String(),
-            ));
-          }
-        },
-        child: Text('Xác nhận'),
-      ),
-    );
+    //                       // context
+    //                       //     .read<CustomerOrderBloc>()
+    //                       //     .add(DoOrderListEvent());
+    //                     },
+    //                     child: Text('Đồng ý'))
+    //               ],
+    //             );
+    //           });
+    //     }
+    //   },
+    //   child: ElevatedButton(
+    //     style: ElevatedButton.styleFrom(
+    //       primary: AppTheme.colors.blue, // background
+    //       onPrimary: Colors.white, // foreground
+    //     ),
+    //     onPressed: () {
+    //       print(_carId);
+    //       print(_packageId);
+    //       print(_note);
+    //       print(_focusedDay.toIso8601String());
+    //       if (_carId == null) {
+    //         showDialog(
+    //             context: context,
+    //             builder: (BuildContext ctx) {
+    //               return AlertDialog(
+    //                 title: Text(
+    //                   'Thông báo!',
+    //                   style: TextStyle(color: Colors.redAccent),
+    //                 ),
+    //                 content: Text('Vui lòng chọn xe!'),
+    //                 actions: [
+    //                   TextButton(
+    //                       onPressed: () {
+    //                         // Close the dialog
+    //                         Navigator.of(context).pop();
+    //                       },
+    //                       child: Text('Đồng ý'))
+    //                 ],
+    //               );
+    //             });
+    //       } else if (_note == null) {
+    //         _createBookingBloc.add(CreateOrderButtonPressed(
+    //           carId: _carId,
+    //           serviceId: _packageId,
+    //           note: null,
+    //           timeBooking: _focusedDay.toIso8601String(),
+    //         ));
+    //       } else if (_packageId == null) {
+    //         _createBookingBloc.add(CreateOrderButtonPressed(
+    //           carId: _carId,
+    //           serviceId: null,
+    //           note: _note,
+    //           timeBooking: _focusedDay.toIso8601String(),
+    //         ));
+    //       }
+    //     },
+    //     child: Text('Xác nhận'),
+    //   ),
+    // );
 
     return Scaffold(
       appBar: AppBar(
@@ -516,6 +519,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                             fontSize: 16,
                                             fontWeight: FontWeight.w600),
                                       ),
+                                      //DỊCH VỤ BẢO DƯỠNG
                                       Container(
                                         child: Column(
                                           children: <Widget>[
@@ -535,99 +539,98 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                                 visible: _visibleBaoDuong,
                                                 child: Column(
                                                   children: <Widget>[
-                                                    Container(
-                                                      // child: SingleChildScrollView(
-                                                      child: BlocBuilder<
-                                                          PackageServiceBloc,
-                                                          PackageServiceState>(
-                                                        // ignore: missing_return
-                                                        builder: (context,
-                                                            stateOfPackage) {
-                                                          if (stateOfPackage
-                                                                  .status ==
-                                                              PackageServiceStatus
-                                                                  .init) {
-                                                            return CircularProgressIndicator();
-                                                          } else if (stateOfPackage
-                                                                  .status ==
-                                                              PackageServiceStatus
-                                                                  .loading) {
-                                                            return CircularProgressIndicator();
-                                                          } else if (stateOfPackage
-                                                                  .status ==
-                                                              PackageServiceStatus
-                                                                  .loadedPackagesSuccess) {
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsets.all(18.0),
+                                                      child: Container(
+                                                        // child: SingleChildScrollView(
+                                                        child: BlocBuilder<
+                                                            PackageServiceBloc,
+                                                            PackageServiceState>(
+                                                          // ignore: missing_return
+                                                          builder: (context,
+                                                              stateOfPackage) {
                                                             if (stateOfPackage
-                                                                        .packageServiceLists !=
-                                                                    null &&
-                                                                stateOfPackage
-                                                                    .packageServiceLists
-                                                                    .isNotEmpty)
-                                                              return ListView
-                                                                  .builder(
-                                                                itemCount:
-                                                                    stateOfPackage
-                                                                        .packageServiceLists
-                                                                        .length,
-                                                                shrinkWrap:
-                                                                    true,
-                                                                // ignore: missing_return
-                                                                itemBuilder:
-                                                                    (context,
-                                                                        index) {
-                                                                  return Card(
-                                                                    child:
-                                                                        ListTile(
-                                                                      title:
-                                                                          Text(
-                                                                        stateOfPackage
-                                                                            .packageServiceLists[index]
-                                                                            .name,
-                                                                        style: TextStyle(
-                                                                            color: (_packageId == stateOfPackage.packageServiceLists[index].id)
-                                                                                ? AppTheme.colors.deepBlue
-                                                                                : Colors.grey),
+                                                                    .status ==
+                                                                PackageServiceStatus
+                                                                    .init) {
+                                                              return CircularProgressIndicator();
+                                                            } else if (stateOfPackage
+                                                                    .status ==
+                                                                PackageServiceStatus
+                                                                    .loading) {
+                                                              return CircularProgressIndicator();
+                                                            } else if (stateOfPackage
+                                                                    .status ==
+                                                                PackageServiceStatus
+                                                                    .loadedPackagesSuccess) {
+                                                              if (stateOfPackage
+                                                                          .packageServiceLists !=
+                                                                      null &&
+                                                                  stateOfPackage
+                                                                      .packageServiceLists
+                                                                      .isNotEmpty)
+                                                                return Column(
+                                                                  children: stateOfPackage
+                                                                      .packageServiceLists
+                                                                      .map<Widget>(
+                                                                          (packageService) {
+                                                                    return ExpansionTile(
+                                                                      title: Text(
+                                                                          packageService
+                                                                              .name),
+                                                                      leading:
+                                                                          Checkbox(
+                                                                        value: _packageIdList.indexWhere((packageId) =>
+                                                                                packageId ==
+                                                                                packageService.id) >=
+                                                                            0,
+                                                                        onChanged:
+                                                                            (selected) {
+                                                                          if (selected) {
+                                                                            setState(() {
+                                                                              _packageIdList.add(packageService.id);
+                                                                            });
+                                                                          } else {
+                                                                            setState(() {
+                                                                              _packageIdList.remove(packageService.id);
+                                                                            });
+                                                                          }
+                                                                        },
                                                                       ),
-                                                                      subtitle: Text(stateOfPackage
-                                                                          .packageServiceLists[
-                                                                              index]
-                                                                          .name),
-                                                                      onTap:
-                                                                          () {
-                                                                        setState(
-                                                                            () {
-                                                                          _packageId = stateOfPackage
-                                                                              .packageServiceLists[index]
-                                                                              .id;
-                                                                          print(
-                                                                              _packageId);
-                                                                          _note =
-                                                                              null;
-                                                                        });
-                                                                      },
-                                                                    ),
-                                                                  );
-                                                                },
-                                                              );
-                                                            else //nếu không có xe nào
-                                                              return Text(
-                                                                  'Không có thông tin xe');
-                                                          } else if (stateOfPackage
-                                                                  .status ==
-                                                              PackageServiceStatus
-                                                                  .error) {
-                                                            return ErrorWidget(
-                                                                stateOfPackage
-                                                                    .message
-                                                                    .toString());
-                                                          }
-                                                        },
+                                                                      children: packageService
+                                                                          .services
+                                                                          .map(
+                                                                              (service) {
+                                                                        return ListTile(
+                                                                          title:
+                                                                              Text(service.name),
+                                                                        );
+                                                                      }).toList(),
+                                                                    );
+                                                                  }).toList(),
+                                                                );
+                                                              else //nếu không có xe nào
+                                                                return Text(
+                                                                    'Không có thông các gói dịch vụ');
+                                                            } else if (stateOfPackage
+                                                                    .status ==
+                                                                PackageServiceStatus
+                                                                    .error) {
+                                                              return ErrorWidget(
+                                                                  stateOfPackage
+                                                                      .message
+                                                                      .toString());
+                                                            }
+                                                          },
+                                                        ),
+                                                        // ),
                                                       ),
-                                                      // ),
                                                     )
-                                                  
                                                   ],
                                                 )),
+
+                                            // DỊCH VỤ SỬA CHỮA
                                             RadioListTile(
                                               value: 2,
                                               groupValue: _valueSelected,
@@ -645,34 +648,55 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.all(18.0),
-                                                child: Container(
-                                                    decoration: BoxDecoration(
-                                                        color: AppTheme
-                                                            .colors.white,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5)),
-                                                    child: InputDecorator(
-                                                      decoration:
-                                                          InputDecoration(
-                                                        labelText: 'Mô tả',
-                                                        border:
-                                                            OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            5)),
-                                                      ),
-                                                      child: TextFormField(
-                                                        maxLines: 6,
+                                                child: Column(
+                                                  children: [
+                                                    Container(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 10,
+                                                              vertical: 10),
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          border: Border.all(),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10)),
+                                                      child: TextField(
                                                         onChanged: (noteValue) {
                                                           setState(() {
                                                             _packageId = null;
                                                             _note = noteValue;
                                                           });
                                                         },
+                                                        maxLines: 3,
+                                                        decoration: InputDecoration
+                                                            .collapsed(
+                                                                hintText:
+                                                                    'Tình trạng xe'),
                                                       ),
-                                                    )),
+                                                    ),
+                                                    // Container(
+                                                    //   child: GestureDetector(
+                                                    //     child: Container(
+                                                    //       color: Colors.white24,
+                                                    //       height: 100,
+                                                    //       width: 100,
+                                                    //       child: _image != null
+                                                    //           ? Image.file(
+                                                    //               _image,
+                                                    //               fit: BoxFit.fill,
+                                                    //             )
+                                                    //           : Icon(Icons.add_a_photo),
+                                                    //       alignment: Alignment.center,
+                                                    //     ),
+                                                    //     onTap: () {
+                                                    //       _showPicker(context);
+                                                    //     },
+                                                    //   ),
+                                                    // )
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ],
@@ -682,7 +706,103 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                   )),
                                 ),
                               ),
-                              createOrderButton,
+                              BlocListener<CreateOrderBloc, CreateOrderState>(
+                                listener: (context, state) {
+                                  if (state.status ==
+                                      CreateOrderStatus.createOrderSuccess) {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext ctx) {
+                                          return AlertDialog(
+                                            title: Text(
+                                              'Thông báo!',
+                                              style: TextStyle(
+                                                  color: Colors.greenAccent),
+                                            ),
+                                            content: Text(state.message),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () {
+                                                    if (state.message ==
+                                                        'Đặt lịch hẹn thành công') {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      Navigator.pop(context);
+                                                      context
+                                                          .read<
+                                                              AssignOrderBloc>()
+                                                          .add(
+                                                              DoListAssignOrderEvent());
+                                                    } else {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    }
+                                                    // Close the dialog
+                                                    // Navigator.push(
+                                                    //   context,
+                                                    //   MaterialPageRoute(
+                                                    //       builder: (context) => CustomerHome()),
+                                                    // );
+                                                  },
+                                                  child: Text('Đồng ý'))
+                                            ],
+                                          );
+                                        });
+                                  }
+                                },
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: AppTheme.colors.blue, // background
+                                    onPrimary: Colors.white, // foreground
+                                  ),
+                                  onPressed: () {
+                                    if (_carId == null) {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext ctx) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                'Thông báo!',
+                                                style: TextStyle(
+                                                    color: Colors.redAccent),
+                                              ),
+                                              content:
+                                                  Text('Vui lòng chọn xe!'),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      // Close the dialog
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Text('Đồng ý'))
+                                              ],
+                                            );
+                                          });
+                                    } else if (_note == null) {
+                                      _createBookingBloc.add(
+                                        CreateOrderButtonPressed(
+                                            cusId: _carId,
+                                            packageList: _packageIdList,
+                                            note: null,
+                                            timeBooking:
+                                                _focusedDay.toIso8601String(),
+                                            imageUrl: null),
+                                      );
+                                    } else if (_packageId == null) {
+                                      _createBookingBloc.add(
+                                          CreateOrderButtonPressed(
+                                              cusId: _carId,
+                                              packageList: null,
+                                              note: _note,
+                                              timeBooking:
+                                                  _focusedDay.toIso8601String(),
+                                              imageUrl: null));
+                                    }
+                                  },
+                                  child: Text('Xác nhận'),
+                                ),
+                              )
                             ],
                           ),
                         );

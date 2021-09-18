@@ -795,7 +795,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                         title: Text(state
                                                             .assignDetail[0]
                                                             .crew
-                                                            .id),
+                                                            .leaderFullname),
                                                       ),
                                                     ]),
                                                   ),
@@ -871,20 +871,20 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                             //         .userId,
                                                             //     listName:
                                                             //         widget.selectCrewName));
-                                                            // updateStatusBloc.add(UpdateStatusStartAndWorkingButtonPressed(
-                                                            //     id: state
-                                                            //         .assignDetail[
-                                                            //             0]
-                                                            //         .id,
-                                                            //     listData: state
-                                                            //         .assignDetail[
-                                                            //             0]
-                                                            //         .crew
-                                                            //         .members,
-                                                            //     status:
-                                                            //         processingStatus,
-                                                            //     workingStatus:
-                                                            //         workingStatus));
+                                                            updateStatusBloc.add(UpdateStatusStartAndWorkingButtonPressed(
+                                                                id: state
+                                                                    .assignDetail[
+                                                                        0]
+                                                                    .id,
+                                                                listData: state
+                                                                    .assignDetail[
+                                                                        0]
+                                                                    .crew
+                                                                    .members,
+                                                                status:
+                                                                    processingStatus,
+                                                                workingStatus:
+                                                                    workingStatus));
 
                                                             Navigator.pushNamed(
                                                                 context,

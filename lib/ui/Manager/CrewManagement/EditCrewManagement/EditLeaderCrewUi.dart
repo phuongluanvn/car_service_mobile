@@ -26,15 +26,15 @@ import 'package:car_service/utils/model/createCrewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LeaderCrewDetailUi extends StatefulWidget {
+class EditLeaderCrewUi extends StatefulWidget {
   final List<CreateCrewModel> choosingCrew;
-
-  LeaderCrewDetailUi({@required this.choosingCrew});
+  final String id;
+  EditLeaderCrewUi({@required this.choosingCrew, this.id});
   @override
-  _LeaderCrewDetailUiState createState() => _LeaderCrewDetailUiState();
+  _EditLeaderCrewUiState createState() => _EditLeaderCrewUiState();
 }
 
-class _LeaderCrewDetailUiState extends State<LeaderCrewDetailUi> {
+class _EditLeaderCrewUiState extends State<EditLeaderCrewUi> {
   TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
   // CreateOrderBloc _createOrderBloc;
@@ -81,7 +81,7 @@ class _LeaderCrewDetailUiState extends State<LeaderCrewDetailUi> {
                   child: BlocListener<CrewBloc, CrewState>(
                     listener: (context, state) {
                       print(state.message);
-                      if (state.createStatus == CreateCrewStatus.success) {
+                      if (state.updateCrewStatus == UpdateCrewStatus.success) {
                         showDialog(
                             context: context,
                             builder: (BuildContext ctx) {
@@ -161,7 +161,8 @@ class _LeaderCrewDetailUiState extends State<LeaderCrewDetailUi> {
                                 primary: AppTheme.colors.blue),
                             onPressed: () {
                               widget.choosingCrew[_crewId].isLeader = true;
-                              crewBloc.add(CreateCrewEvent(
+                              crewBloc.add(EditCrewEvent(
+                                  id: widget.id,
                                   listUsername: widget.choosingCrew));
                             },
                             child: Text('Tạo tổ đội'))

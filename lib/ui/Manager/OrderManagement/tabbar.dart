@@ -22,8 +22,7 @@ class _TabManagerState extends State<TabManager> {
     AssignOrderUi(),
     AssignReviewUi(),
     ConfirmOrderListUi(),
-    ProcessOrderUi(),
-    WaitingPaymentUi()
+    ProcessOrderUi()
   ];
 
   void _onItemTap(int index) {
@@ -35,7 +34,7 @@ class _TabManagerState extends State<TabManager> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 6,
+      length: 5,
       child: Scaffold(
         appBar: AppBar(
           title: Text('Quản lý đơn hàng'),
@@ -70,9 +69,6 @@ class _TabManagerState extends State<TabManager> {
               ),
               Tab(
                 text: 'Đang tiến hành',
-              ),
-              Tab(
-                text: 'Đợi thanh toán',
               )
             ],
           ),

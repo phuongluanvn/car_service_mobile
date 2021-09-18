@@ -21,13 +21,14 @@ class ManagerRepository {
 
   String BASE_URL = 'https://carservicesystem.azurewebsites.net/api/';
 
-  createOrder(String vehicleId, String packageId, String note,
-      String bookingTime) async {
+  createOrder(String vehicleId, List packageLists, String note,
+      String bookingTime, String imageUrl) async {
     var body = {
       "vehicleId": vehicleId,
-      "packageId": packageId,
       "note": note,
-      "bookingTime": bookingTime
+      "imageurl": imageUrl,
+      "bookingTime": bookingTime,
+      "packageIdList": packageLists
     };
     var res = await http.post(
       Uri.parse(BASE_URL + "orders"),
@@ -97,8 +98,6 @@ class ManagerRepository {
       return null;
     }
   }
-
- 
 
   Future<List<StaffModel>> getStaffDetail(String username) async {
     List<StaffModel> listdata = [];
@@ -454,6 +453,30 @@ class ManagerRepository {
     };
     var res = await http.post(
       Uri.parse(BASE_URL + "crews"),
+      headers: headers,
+      body: json.encode(body),
+    );
+    print(res.statusCode);
+    if (res.statusCode != null) {
+      if (res.statusCode == 200) {
+        return res.body;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  updateCrew(String id, List<CreateCrewModel> listUsername) async {
+    // print('lololo');
+    // print(selectName);
+
+    var body = {
+      "id": "$id",
+      "members": List.generate(
+          listUsername.length, (index) => listUsername[index].toJson())
+    };
+    var res = await http.put(
+      Uri.parse(BASE_URL + "crews/members"),
       headers: headers,
       body: json.encode(body),
     );

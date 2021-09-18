@@ -51,15 +51,15 @@ class CreateOrderNoteChanged extends CreateOrderEvent {
 
 class CreateOrderButtonPressed extends CreateOrderEvent {
   final String cusId;
-  final String carId;
-  final String serviceId;
+  final List packageList;
+  final String imageUrl;
   final String note;
   final String timeBooking;
 
   // final String imageUrl;
 
   CreateOrderButtonPressed(
-      {this.cusId, this.carId, this.serviceId, this.note, this.timeBooking});
+      {this.cusId, this.packageList, this.imageUrl, this.note, this.timeBooking});
 }
 
 // class OpenImagePicker extends CreateBookingEvent {

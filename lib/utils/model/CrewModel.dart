@@ -1,4 +1,6 @@
-class CrewModel {
+import 'package:equatable/equatable.dart';
+
+class CrewModel extends Equatable {
   String id;
   String leaderFullname;
   List<Members> members;
@@ -35,6 +37,10 @@ class CrewModel {
     }
     return data;
   }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [this.id, this.leaderFullname, this.members];
 }
 
 class Members {

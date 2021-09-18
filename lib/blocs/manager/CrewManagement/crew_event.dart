@@ -17,9 +17,21 @@ class DoCrewDetailEvent extends CrewEvent {
   @override
   List<Object> get props => [id];
 }
+
+class DoReloadStatus extends CrewEvent{
+  
+}
 class CreateCrewEvent extends CrewEvent {
   final List<CreateCrewModel> listUsername;
   CreateCrewEvent({this.listUsername});
+  @override
+  List<Object> get props => [listUsername];
+}
+
+class EditCrewEvent extends CrewEvent {
+  final String id;
+  final List<CreateCrewModel> listUsername;
+  EditCrewEvent({this.id,this.listUsername});
   @override
   List<Object> get props => [listUsername];
 }

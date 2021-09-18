@@ -117,8 +117,6 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                             children: [
                               Container(
                                 width: MediaQuery.of(context).size.width * 1,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.5,
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     border: Border.all(color: Colors.black26),
@@ -209,8 +207,6 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                             children: [
                               Container(
                                 width: MediaQuery.of(context).size.width * 1,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.5,
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     border: Border.all(color: Colors.black26),

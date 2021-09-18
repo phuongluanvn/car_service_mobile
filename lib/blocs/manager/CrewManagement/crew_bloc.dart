@@ -92,7 +92,7 @@ class CrewBloc extends Bloc<CrewEvent, CrewState> {
           print("Not null");
           yield state.copyWith(
             statusDetail: DoCrewDetailStatus.success,
-            crewList: data,
+            crewDetails: data,
           );
         } else {
           yield state.copyWith(
@@ -104,6 +104,28 @@ class CrewBloc extends Bloc<CrewEvent, CrewState> {
         yield state.copyWith(
             statusDetail: DoCrewDetailStatus.error, message: e.toString());
       }
+    } else if (event is DoReloadStatus) {
+      yield (state.copyWith(statusDetail: DoCrewDetailStatus.loading));
+      yield (state.copyWith(statusDetail: DoCrewDetailStatus.success));
+    } else if (event is EditCrewEvent) {
+      print(event.listUsername);
+      yield state.copyWith(updateCrewStatus: UpdateCrewStatus.loading);
+      try {
+        // print(event.listName);
+        var data = await _repo.updateCrew(event.id, event.listUsername);
+        if (data != null) {
+          yield state.copyWith(
+              message: data, updateCrewStatus: UpdateCrewStatus.success);
+        } else {
+          yield state.copyWith(
+              updateCrewStatus: UpdateCrewStatus.error, message: data);
+        }
+      } catch (e) {
+        yield state.copyWith(
+          updateCrewStatus: UpdateCrewStatus.error,
+          message: e.toString(),
+        );
+      }
+    }
   }
-}
 }

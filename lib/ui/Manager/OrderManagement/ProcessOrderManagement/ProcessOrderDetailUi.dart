@@ -525,7 +525,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                                         title: Text(state
                                                             .processDetail[0]
                                                             .crew
-                                                            .id),
+                                                            .leaderFullname),
                                                       ),
                                                     ]),
                                                   ),
