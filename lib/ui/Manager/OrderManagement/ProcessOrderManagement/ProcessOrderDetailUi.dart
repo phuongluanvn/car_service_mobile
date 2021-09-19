@@ -344,13 +344,14 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                   // ignore: unrelated_type_equality_checks
                                   AssignDetailStatus.success) {
                                 return Container(
+                                  width: MediaQuery.of(context).size.width * 1,
                                   decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(5)),
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 10),
                                   child: Column(
-                                    children: <Widget>[
+                                    children: [
                                       Text(
                                         'Cập nhật quy trình xử lí',
                                         style: TextStyle(
@@ -361,24 +362,83 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                         height: 15,
                                       ),
                                       Center(
-                                        child: LimitedBox(
-                                          maxHeight: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.5,
-                                          maxWidth: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.8,
-                                          child: ListView.builder(
-                                            itemCount: pstate.assignDetail[0]
-                                                .orderDetails.length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return CheckboxListTile(
+                                        child: Column(
+                                          children: [
+                                            for (int j = 0;
+                                                j <
+                                                    pstate.assignDetail[0]
+                                                        .packageLists.length;
+                                                j++)
+                                              for (int k = 0;
+                                                  k <
+                                                      pstate
+                                                          .assignDetail[0]
+                                                          .packageLists[j]
+                                                          .orderDetails
+                                                          .length;
+                                                  k++)
+                                                CheckboxListTile(
+                                                  value: pstate
+                                                          .assignDetail[0]
+                                                          .packageLists[j]
+                                                          .orderDetails[k]
+                                                          .isFinished ==
+                                                      true,
+                                                  onChanged: (bool selected) {
+                                                    if (selected == true) {
+                                                      setState(() {
+                                                        updateFinishBloc.add(
+                                                            UpdateFinishedTaskOrderEvent(
+                                                                orderId: widget
+                                                                    .orderId,
+                                                                selectedTaskId: pstate
+                                                                    .assignDetail[
+                                                                        0]
+                                                                    .packageLists[
+                                                                        j]
+                                                                    .orderDetails[
+                                                                        k]
+                                                                    .id,
+                                                                selected:
+                                                                    true));
+                                                      });
+                                                    } else {
+                                                      setState(() {
+                                                        updateFinishBloc.add(
+                                                            UpdateFinishedTaskOrderEvent(
+                                                                orderId: widget
+                                                                    .orderId,
+                                                                selectedTaskId: pstate
+                                                                    .assignDetail[
+                                                                        0]
+                                                                    .packageLists[
+                                                                        j]
+                                                                    .orderDetails[
+                                                                        k]
+                                                                    .id,
+                                                                selected:
+                                                                    false));
+                                                        // selectService.remove(state
+                                                        //     .processDetail[0]
+                                                        //     .orderDetails[index]);
+                                                      });
+                                                    }
+                                                  },
+                                                  title: Text(pstate
+                                                      .assignDetail[0]
+                                                      .packageLists[j]
+                                                      .orderDetails[k]
+                                                      .name),
+                                                ),
+                                            for (int i = 0;
+                                                i <
+                                                    pstate.assignDetail[0]
+                                                        .orderDetails.length;
+                                                i++)
+                                              CheckboxListTile(
                                                 value: pstate
                                                         .assignDetail[0]
-                                                        .orderDetails[index]
+                                                        .orderDetails[i]
                                                         .isFinished ==
                                                     true,
                                                 onChanged: (bool selected) {
@@ -392,7 +452,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                                                   .assignDetail[
                                                                       0]
                                                                   .orderDetails[
-                                                                      index]
+                                                                      i]
                                                                   .id,
                                                               selected: true));
                                                       // selectService.add(state
@@ -413,7 +473,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                                                   .assignDetail[
                                                                       0]
                                                                   .orderDetails[
-                                                                      index]
+                                                                      i]
                                                                   .id,
                                                               selected: false));
                                                       // selectService.remove(state
@@ -424,11 +484,10 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                                 },
                                                 title: Text(pstate
                                                     .assignDetail[0]
-                                                    .orderDetails[index]
+                                                    .orderDetails[i]
                                                     .name),
-                                              );
-                                            },
-                                          ),
+                                              ),
+                                          ],
                                         ),
                                       ),
 

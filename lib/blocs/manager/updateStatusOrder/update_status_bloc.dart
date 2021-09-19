@@ -299,6 +299,36 @@ class UpdateStatusOrderBloc
           message: e.toString(),
         );
       }
+    }else if (event is UpdateStatusFinishAndAvailableButtonPressed) {
+      print('Vô');
+      var data2;
+      yield state.copyWith(status: UpdateStatus.loading);
+      try {
+        var data = await _repo.updateStatusOrder(event.id, event.status);
+        for (var i = 0; i <= event.listData.length; i++) {
+          data2 = await _repo.updateStaffStatusOrder(
+              event.listData[i].username, event.availableStatus);
+          print(data2);
+        }
+
+        // String jsonsDataString = data.toString();
+        print(data);
+        print(data2);
+        // final jsonData = jsonDecode(jsonsDataString);
+        // print(jsonData);
+        if (data != null && data2 != null) {
+          yield state.copyWith(status: UpdateStatus.updateWaitingAndAvailSuccess);
+          print('Start Success');
+        } else {
+          yield state.copyWith(
+              status: UpdateStatus.error, message: 'Error Update');
+        }
+      } catch (e) {
+        yield state.copyWith(
+          status: UpdateStatus.error,
+          message: e.toString(),
+        );
+      }
     }
   }
 }

@@ -337,20 +337,63 @@ class _VerifyBookingDetailUiState extends State<VerifyBookingDetailUi> {
                                       : Column(
                                           children: [
                                             Text(
-                                              'Thông tin gói dịch vụ',
+                                              'Thông tin gói bảo dưỡng',
                                               style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600),
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w800),
                                             ),
-                                            ListView(
-                                              shrinkWrap: true,
-                                              children: state
-                                                  .bookingDetail[0].packageLists
-                                                  .map((service) {
-                                                return ListTile(
-                                                  title: Text(service.name),
-                                                );
-                                              }).toList(),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Text(
+                                                  'Tên gói',
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                              ],
+                                            ),
+                                            Center(
+                                              child: Column(children: [
+                                                for (int i = 0;
+                                                    i <
+                                                        state
+                                                            .bookingDetail[0]
+                                                            .packageLists
+                                                            .length;
+                                                    i++)
+                                                  ExpansionTile(
+                                                      title: Text(state
+                                                          .bookingDetail[0]
+                                                          .packageLists[i]
+                                                          .name),
+                                                          
+                                                      children: [
+                                                        for (int j = 0;
+                                                            j <
+                                                                state
+                                                                    .bookingDetail[
+                                                                        0]
+                                                                    .packageLists[
+                                                                        i]
+                                                                    .orderDetails
+                                                                    .length;
+                                                            j++)
+                                                          ListTile(
+                                                            title: Text(state
+                                                                .bookingDetail[
+                                                                    0]
+                                                                .packageLists[i]
+                                                                .orderDetails[j]
+                                                                .name),
+                                                          ),
+                                                      ]),
+                                              ]),
                                             ),
                                           ],
                                         ),

@@ -30,8 +30,8 @@ class CheckoutOrderUi extends StatefulWidget {
 }
 
 class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
-  final String processingStatus = 'Đợi thanh toán';
-  final String workingStatus = 'Đang hoạt động';
+  final String waitingStatus = 'Đợi thanh toán';
+  final String availStatus = 'Đang hoạt động';
 
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visible = false;
@@ -39,6 +39,8 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
   String selectItem;
   String holder = '';
   int total = 0;
+  int toal2 = 0;
+  int total3 = 0;
   @override
   void initState() {
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
@@ -82,6 +84,11 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                 } else if (state.detailStatus == ProcessDetailStatus.loading) {
                   return CircularProgressIndicator();
                 } else if (state.detailStatus == ProcessDetailStatus.success) {
+                  total = state.processDetail[0].orderDetails
+                      .fold(0, (sum, element) => sum + element.price);
+                  toal2 = state.processDetail[0].packageLists
+                      .fold(0, (sum2, element) => sum2 + element.price);
+                  total3 = toal2 + total;
                   return Column(
                     children: [
                       Text(
@@ -89,54 +96,128 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                      Column(
-                        children:
-                            state.processDetail[0].orderDetails.map((service) {
-                          // countPrice += service.price;
-                          total = state.processDetail[0].orderDetails
-                              .fold(0, (sum, element) => sum + element.price);
-                          return BlocBuilder<AccessoryBloc, AccessoryState>(
-                              // ignore: missing_return
-                              builder: (context, accState) {
-                            if (accState.status == ListAccessoryStatus.init) {
-                              return CircularProgressIndicator();
-                            } else if (accState.status ==
-                                ListAccessoryStatus.loading) {
-                              return CircularProgressIndicator();
-                            } else if (accState.status ==
-                                ListAccessoryStatus.success) {
-                              return ExpansionTile(
-                                title: Text(service.name),
-                                trailing: Text(_convertMoney(
-                                    service.price.toDouble() != 0
-                                        ? service.price.toDouble()
-                                        : 0)),
+                      BlocBuilder<AccessoryBloc, AccessoryState>(
+                          // ignore: missing_return
+                          builder: (context, accState) {
+                        if (accState.status == ListAccessoryStatus.init) {
+                          return CircularProgressIndicator();
+                        } else if (accState.status ==
+                            ListAccessoryStatus.loading) {
+                          return CircularProgressIndicator();
+                        } else if (accState.status ==
+                            ListAccessoryStatus.success) {
+                          return Column(children: [
+                            state.processDetail[0].packageLists != null &&
+                                    state.processDetail[0].packageLists
+                                        .isNotEmpty
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Dịch vụ bảo dưỡng: ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  )
+                                : SizedBox(),
+                            for (int j = 0;
+                                j < state.processDetail[0].packageLists.length;
+                                j++)
+                              ExpansionTile(
+                                title: Text(state
+                                    .processDetail[0].packageLists[j].name),
+                                trailing: Text(_convertMoney(state
+                                    .processDetail[0].packageLists[j].price
+                                    .toDouble())),
                                 children: [
-                                  accState.accessoryList.indexWhere((element) =>
-                                              element.id ==
-                                              service.accessoryId) >=
-                                          0
-                                      ? ListTile(
-                                          title: Text(accState.accessoryList
-                                              .firstWhere((element) =>
-                                                  element.id ==
-                                                  service.accessoryId)
-                                              .name),
-                                          trailing: Image.network(accState
-                                              .accessoryList
-                                              .firstWhere((element) =>
-                                                  element.id ==
-                                                  service.accessoryId)
-                                              .imageUrl),
-                                        )
-                                      : Text('Hiện tại không có phụ tùng'),
+                                  for (int k = 0;
+                                      k <
+                                          state.processDetail[0].packageLists[j]
+                                              .orderDetails.length;
+                                      k++)
+                                    ListTile(
+                                      title: Text(state
+                                          .processDetail[0]
+                                          .packageLists[j]
+                                          .orderDetails[k]
+                                          .name),
+                                    ),
                                 ],
-                              );
-                            }
-                            ;
-                          });
-                        }).toList(),
-                      ),
+                              ),
+                            state.processDetail[0].orderDetails != null &&
+                                    state.processDetail[0].orderDetails
+                                        .isNotEmpty
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Dịch vụ bổ sung: ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  )
+                                : SizedBox(),
+                            for (int i = 0;
+                                i < state.processDetail[0].orderDetails.length;
+                                i++)
+                              // countPrice += service.price;
+
+                              state.processDetail[0].orderDetails != null &&
+                                      state.processDetail[0].orderDetails
+                                          .isNotEmpty
+                                  ? ExpansionTile(
+                                      title: Text(state.processDetail[0]
+                                          .orderDetails[i].name),
+                                      trailing: Text(_convertMoney(state
+                                                  .processDetail[0]
+                                                  .orderDetails[i]
+                                                  .price
+                                                  .toDouble() !=
+                                              0
+                                          ? state.processDetail[0]
+                                              .orderDetails[i].price
+                                              .toDouble()
+                                          : 0)),
+                                      children: [
+                                        accState.accessoryList.indexWhere(
+                                                    (element) =>
+                                                        element.id ==
+                                                        state
+                                                            .processDetail[0]
+                                                            .orderDetails[i]
+                                                            .accessoryId) >=
+                                                0
+                                            ? ListTile(
+                                                title: Text(accState
+                                                    .accessoryList
+                                                    .firstWhere((element) =>
+                                                        element.id ==
+                                                        state
+                                                            .processDetail[0]
+                                                            .orderDetails[i]
+                                                            .accessoryId)
+                                                    .name),
+                                                trailing: Image.network(accState
+                                                    .accessoryList
+                                                    .firstWhere((element) =>
+                                                        element.id ==
+                                                        state
+                                                            .processDetail[0]
+                                                            .orderDetails[i]
+                                                            .accessoryId)
+                                                    .imageUrl),
+                                              )
+                                            : Text(
+                                                'Hiện tại không có phụ tùng'),
+                                      ],
+                                    )
+                                  : Text('Không có dịch vụ bổ sung nào'),
+                          ]);
+                        }
+                        ;
+                      }),
                       Divider(
                         color: Colors.black,
                         thickness: 2,
@@ -151,14 +232,14 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                           ),
                           trailing: Text(
                             _convertMoney(
-                                total.toDouble() != 0 ? total.toDouble() : 0),
+                                total3.toDouble() != 0 ? total3.toDouble() : 0),
                           )),
                       BlocListener<UpdateStatusOrderBloc,
                           UpdateStatusOrderState>(
                         // ignore: missing_return
                         listener: (builder, statusState) {
                           if (statusState.status ==
-                              UpdateStatus.updateStatusStartSuccess) {
+                              UpdateStatus.updateWaitingAndAvailSuccess) {
                             Navigator.pushNamed(context, '/manager');
                           }
                         },
@@ -173,13 +254,13 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                                 child: Text('Hoàn tất dịch vụ',
                                     style: TextStyle(color: Colors.white)),
                                 onPressed: () {
-                                  // updateStatusBloc.add(
-                                  //     UpdateStatusStartAndWorkingButtonPressed(
-                                  //         id: state.processDetail[0].id,
-                                  //         listData: state
-                                  //             .processDetail[0].crew.members,
-                                  //         status: processingStatus,
-                                  //         workingStatus: workingStatus));
+                                  updateStatusBloc.add(
+                                      UpdateStatusFinishAndAvailableButtonPressed(
+                                          id: state.processDetail[0].id,
+                                          listData: state
+                                              .processDetail[0].crew.members,
+                                          status: waitingStatus,
+                                          availableStatus: availStatus));
                                   // updateStatusBloc.add(
                                   //     UpdateStatusButtonPressed(
                                   //         id: state.processDetail[0].id,

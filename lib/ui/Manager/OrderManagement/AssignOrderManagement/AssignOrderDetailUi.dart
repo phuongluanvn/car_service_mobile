@@ -134,492 +134,500 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
         ],
       ),
       backgroundColor: AppTheme.colors.lightblue,
-      body: SingleChildScrollView(
-        child: RefreshIndicator(
-          onRefresh: _getData,
-          child: Center(
-            child: BlocBuilder<AssignOrderBloc, AssignOrderState>(
-              // ignore: missing_return
-              builder: (context, state) {
-                if (state.detailStatus == AssignDetailStatus.init) {
-                  return CircularProgressIndicator();
-                } else if (state.detailStatus == AssignDetailStatus.loading) {
-                  return CircularProgressIndicator();
-                } else if (state.detailStatus == AssignDetailStatus.success) {
-                  if (state.assignDetail != null &&
-                      state.assignDetail.isNotEmpty) {
-                    if (state.assignDetail[0].crew != null &&
-                        state.assignDetail[0].crew.id != null &&
-                        state.assignDetail[0].crew.id.isNotEmpty) {
-                      _crewId = state.assignDetail[0].crew.id;
-                    }
-                    print('checkk' + _crewId);
-                    if (state.assignDetail[0].status == 'Đã nhận xe') {
-                      _visible = true;
-                      _checkStatusCheckin = false;
-                    }
-                    return Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(5)),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            child: Column(
-                              children: <Widget>[
-                                Text(
-                                  'Thông tin khách hàng',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.baseline,
-                                  textBaseline: TextBaseline.alphabetic,
-                                  children: [
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.2,
-                                      child: Text(
-                                        'Họ tên:',
-                                        style: TextStyle(fontSize: 16.0),
-                                      ),
-                                    ),
-                                    Container(
-                                      child: Text(
-                                        state.assignDetail[0].customer.fullname,
-                                        style: TextStyle(fontSize: 15.0),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Container(height: 16),
-                                Row(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.baseline,
-                                  textBaseline: TextBaseline.alphabetic,
-                                  children: [
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.2,
-                                      child: Text(
-                                        'Email:',
-                                        style: TextStyle(fontSize: 16.0),
-                                      ),
-                                    ),
-                                    Container(
-                                      child: Text(
-                                        state.assignDetail[0].customer.email,
-                                        style: TextStyle(fontSize: 15.0),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Container(height: 16),
-                                Row(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.baseline,
-                                  textBaseline: TextBaseline.alphabetic,
-                                  children: [
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.36,
-                                      child: Text(
-                                        'Thời gian xác nhận:',
-                                        style: TextStyle(fontSize: 16.0),
-                                      ),
-                                    ),
-                                    Container(
-                                      child: Text(
-                                        _convertDate(
-                                            state.assignDetail[0].bookingTime),
-                                        style: TextStyle(fontSize: 15.0),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Container(height: 16),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 20, horizontal: 5),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        border:
-                                            Border.all(color: Colors.black26),
-                                        borderRadius: BorderRadius.circular(5)),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 5, vertical: 10),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          'Thông tin xe',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w600),
+      body: BlocListener<CrewBloc, CrewState>(
+        listener: (context, crestate) {
+          if (crestate.updateStatus == DoUpdateStatus.success) {}
+        },
+        child: SingleChildScrollView(
+          child: RefreshIndicator(
+            onRefresh: _getData,
+            child: Center(
+              child: BlocBuilder<AssignOrderBloc, AssignOrderState>(
+                // ignore: missing_return
+                builder: (context, state) {
+                  if (state.detailStatus == AssignDetailStatus.init) {
+                    return CircularProgressIndicator();
+                  } else if (state.detailStatus == AssignDetailStatus.loading) {
+                    return CircularProgressIndicator();
+                  } else if (state.detailStatus == AssignDetailStatus.success) {
+                    if (state.assignDetail != null &&
+                        state.assignDetail.isNotEmpty) {
+                      if (state.assignDetail[0].crew != null &&
+                          state.assignDetail[0].crew.id != null &&
+                          state.assignDetail[0].crew.id.isNotEmpty) {
+                        _crewId = state.assignDetail[0].crew.id;
+                      }
+                      print('checkk' + _crewId);
+                      if (state.assignDetail[0].status == 'Đã nhận xe') {
+                        _visible = true;
+                        _checkStatusCheckin = false;
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(5)),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              child: Column(
+                                children: <Widget>[
+                                  Text(
+                                    'Thông tin khách hàng',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.baseline,
+                                    textBaseline: TextBaseline.alphabetic,
+                                    children: [
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.2,
+                                        child: Text(
+                                          'Họ tên:',
+                                          style: TextStyle(fontSize: 16.0),
                                         ),
-                                        Container(height: 10),
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.baseline,
-                                          textBaseline: TextBaseline.alphabetic,
-                                          children: [
-                                            Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.2,
-                                              child: Text(
-                                                'Biển số xe:',
-                                                style:
-                                                    TextStyle(fontSize: 16.0),
-                                              ),
-                                            ),
-                                            Container(
-                                              child: Text(
-                                                state.assignDetail[0].vehicle
-                                                    .licensePlate,
-                                                style:
-                                                    TextStyle(fontSize: 15.0),
-                                              ),
-                                            ),
-                                          ],
+                                      ),
+                                      Container(
+                                        child: Text(
+                                          state.assignDetail[0].customer
+                                              .fullname,
+                                          style: TextStyle(fontSize: 15.0),
                                         ),
-                                        Container(height: 10),
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.baseline,
-                                          textBaseline: TextBaseline.alphabetic,
-                                          children: [
-                                            Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.2,
-                                              child: Text(
-                                                'Hãng xe:',
-                                                style:
-                                                    TextStyle(fontSize: 16.0),
-                                              ),
-                                            ),
-                                            Container(
-                                              child: Text(
-                                                state.assignDetail[0].vehicle
-                                                    .manufacturer,
-                                                style:
-                                                    TextStyle(fontSize: 15.0),
-                                              ),
-                                            ),
-                                          ],
+                                      ),
+                                    ],
+                                  ),
+                                  Container(height: 16),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.baseline,
+                                    textBaseline: TextBaseline.alphabetic,
+                                    children: [
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.2,
+                                        child: Text(
+                                          'Email:',
+                                          style: TextStyle(fontSize: 16.0),
                                         ),
-                                        Container(height: 10),
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.baseline,
-                                          textBaseline: TextBaseline.alphabetic,
-                                          children: [
-                                            Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.2,
-                                              child: Text(
-                                                'Mã xe:',
-                                                style:
-                                                    TextStyle(fontSize: 16.0),
-                                              ),
-                                            ),
-                                            Container(
-                                              child: Text(
-                                                state.assignDetail[0].vehicle
-                                                    .model,
-                                                style:
-                                                    TextStyle(fontSize: 15.0),
-                                              ),
-                                            ),
-                                          ],
+                                      ),
+                                      Container(
+                                        child: Text(
+                                          state.assignDetail[0].customer.email,
+                                          style: TextStyle(fontSize: 15.0),
                                         ),
-                                      ],
+                                      ),
+                                    ],
+                                  ),
+                                  Container(height: 16),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.baseline,
+                                    textBaseline: TextBaseline.alphabetic,
+                                    children: [
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.36,
+                                        child: Text(
+                                          'Thời gian xác nhận:',
+                                          style: TextStyle(fontSize: 16.0),
+                                        ),
+                                      ),
+                                      Container(
+                                        child: Text(
+                                          _convertDate(state
+                                              .assignDetail[0].bookingTime),
+                                          style: TextStyle(fontSize: 15.0),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Container(height: 16),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 20, horizontal: 5),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          border:
+                                              Border.all(color: Colors.black26),
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 5, vertical: 10),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            'Thông tin xe',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          Container(height: 10),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.baseline,
+                                            textBaseline:
+                                                TextBaseline.alphabetic,
+                                            children: [
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.2,
+                                                child: Text(
+                                                  'Biển số xe:',
+                                                  style:
+                                                      TextStyle(fontSize: 16.0),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Text(
+                                                  state.assignDetail[0].vehicle
+                                                      .licensePlate,
+                                                  style:
+                                                      TextStyle(fontSize: 15.0),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Container(height: 10),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.baseline,
+                                            textBaseline:
+                                                TextBaseline.alphabetic,
+                                            children: [
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.2,
+                                                child: Text(
+                                                  'Hãng xe:',
+                                                  style:
+                                                      TextStyle(fontSize: 16.0),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Text(
+                                                  state.assignDetail[0].vehicle
+                                                      .manufacturer,
+                                                  style:
+                                                      TextStyle(fontSize: 15.0),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Container(height: 10),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.baseline,
+                                            textBaseline:
+                                                TextBaseline.alphabetic,
+                                            children: [
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.2,
+                                                child: Text(
+                                                  'Mã xe:',
+                                                  style:
+                                                      TextStyle(fontSize: 16.0),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Text(
+                                                  state.assignDetail[0].vehicle
+                                                      .model,
+                                                  style:
+                                                      TextStyle(fontSize: 15.0),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                                BlocListener<UpdateStatusOrderBloc,
-                                    UpdateStatusOrderState>(
-                                  // ignore: missing_return
-                                  listener: (builder, statusState) {
-                                    if (statusState.status ==
-                                        UpdateStatus
-                                            .updateStatusCheckinSuccess) {
-                                      setState(() {
-                                        _visible = true;
-                                        _checkStatusCheckin = false;
-                                        orderHistoryBloc.add(
-                                            DoOrderHistoryDetailEvent(
-                                                id: widget.orderId));
-                                      });
-                                    } else if (statusState.status ==
-                                        UpdateStatus
-                                            .updateStatusCheckingSuccess) {}
-                                  },
-                                  child: BlocBuilder<OrderHistoryBloc,
-                                      OrderHistoryState>(
+                                  BlocListener<UpdateStatusOrderBloc,
+                                      UpdateStatusOrderState>(
                                     // ignore: missing_return
-                                    builder: (context, hstate) {
-                                      if (hstate.detailStatus ==
-                                          OrderHistoryDetailStatus.init) {
-                                        return CircularProgressIndicator();
-                                      } else if (hstate.detailStatus ==
-                                          OrderHistoryDetailStatus.loading) {
-                                        return CircularProgressIndicator();
-                                      } else if (hstate.detailStatus ==
-                                          OrderHistoryDetailStatus.success) {
-                                        if (hstate.historyDetail != null &&
-                                            hstate.historyDetail.isNotEmpty) {
-                                          return Visibility(
-                                            visible: _checkStatusCheckin,
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
+                                    listener: (builder, statusState) {
+                                      if (statusState.status ==
+                                          UpdateStatus
+                                              .updateStatusCheckinSuccess) {
+                                        setState(() {
+                                          _visible = true;
+                                          _checkStatusCheckin = false;
+                                          orderHistoryBloc.add(
+                                              DoOrderHistoryDetailEvent(
+                                                  id: widget.orderId));
+                                        });
+                                      } else if (statusState.status ==
+                                          UpdateStatus
+                                              .updateStatusCheckingSuccess) {}
+                                    },
+                                    child: BlocBuilder<OrderHistoryBloc,
+                                        OrderHistoryState>(
+                                      // ignore: missing_return
+                                      builder: (context, hstate) {
+                                        if (hstate.detailStatus ==
+                                            OrderHistoryDetailStatus.init) {
+                                          return CircularProgressIndicator();
+                                        } else if (hstate.detailStatus ==
+                                            OrderHistoryDetailStatus.loading) {
+                                          return CircularProgressIndicator();
+                                        } else if (hstate.detailStatus ==
+                                            OrderHistoryDetailStatus.success) {
+                                          if (hstate.historyDetail != null &&
+                                              hstate.historyDetail.isNotEmpty) {
+                                            return Visibility(
+                                              visible: _checkStatusCheckin,
+                                              child: Column(
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      SizedBox(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.45,
+                                                        child: ElevatedButton(
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                                  primary:
+                                                                      AppTheme
+                                                                          .colors
+                                                                          .blue),
+                                                          child: Text('Nhận xe',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white)),
+                                                          onPressed: () {
+                                                            updateStatusBloc.add(
+                                                                UpdateStatusCheckinButtonPressed(
+                                                                    id: hstate
+                                                                        .historyDetail[
+                                                                            0]
+                                                                        .id,
+                                                                    status:
+                                                                        checkinStatus));
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          } else
+                                            return Center(child: Text('Empty'));
+                                        } else if (hstate.detailStatus ==
+                                            OrderHistoryDetailStatus.error) {
+                                          return Text(
+                                              hstate.message.toString());
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Divider(
+                              color: Colors.black87,
+                              height: 20,
+                              thickness: 1,
+                              indent: 10,
+                              endIndent: 10,
+                            ),
+                            Visibility(
+                              visible: _visible,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5)),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 20),
+                                child: Column(
+                                  children: <Widget>[
+                                    Container(
+                                      child: BlocBuilder<CrewBloc, CrewState>(
+                                          // ignore: missing_return
+                                          builder: (builder, staffState) {
+                                        if (staffState.status ==
+                                            ListCrewStatus.init) {
+                                          return CircularProgressIndicator();
+                                        } else if (staffState.status ==
+                                            ListCrewStatus.loading) {
+                                          return CircularProgressIndicator();
+                                        } else if (staffState.status ==
+                                            ListCrewStatus.success) {
+                                          return Column(
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: Colors.black26),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5)),
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 5,
+                                                    vertical: 10),
+                                                child: Column(
                                                   children: [
+                                                    Text(
+                                                      'Tổ đội phụ trách',
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                    ),
                                                     SizedBox(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.45,
-                                                      child: ElevatedButton(
+                                                      height: 20,
+                                                    ),
+                                                    Column(
+                                                      children: [
+                                                        // Text(_crewId),
+                                                        // for (int i = 0;
+                                                        //     i < selectCrew.length;
+                                                        //     i++)
+                                                        Card(
+                                                          child: Column(
+                                                              children: [
+                                                                state.assignDetail[0].crew != null &&
+                                                                        state.assignDetail[0].crew.id !=
+                                                                            null &&
+                                                                        state
+                                                                            .assignDetail[0]
+                                                                            .crew
+                                                                            .id
+                                                                            .isNotEmpty
+                                                                    // _crewId ==
+                                                                    //         state
+                                                                    //             .assignDetail[0]
+                                                                    //             .crew
+                                                                    //             .id
+                                                                    ? ListTile(
+                                                                        leading:
+                                                                            Image.asset('lib/images/logo_blue.png'),
+                                                                        title: Text(state
+                                                                            .assignDetail[0]
+                                                                            .crew
+                                                                            .leaderFullname),
+                                                                      )
+                                                                    : SizedBox(),
+                                                              ]),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    ElevatedButton(
                                                         style: ElevatedButton
                                                             .styleFrom(
                                                                 primary:
                                                                     AppTheme
                                                                         .colors
                                                                         .blue),
-                                                        child: Text('Nhận xe',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white)),
-                                                        onPressed: () {
-                                                          updateStatusBloc.add(
-                                                              UpdateStatusCheckinButtonPressed(
-                                                                  id: hstate
-                                                                      .historyDetail[
-                                                                          0]
-                                                                      .id,
-                                                                  status:
-                                                                      checkinStatus));
-                                                        },
-                                                      ),
-                                                    ),
+                                                        child:
+                                                            Text('Chọn tổ đội'),
+                                                        onPressed: () =>
+                                                            setState(() {
+                                                              showInformationDialog(
+                                                                      context,
+                                                                      staffState
+                                                                          .crewList,
+                                                                      widget
+                                                                          .orderId)
+                                                                  .then(
+                                                                      (value) {
+                                                                setState(() {
+                                                                  selectData =
+                                                                      value;
+                                                                });
+                                                              });
+                                                            })),
+                                                    Container(height: 10),
                                                   ],
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+
+                                              SizedBox(
+                                                height: 15,
+                                              ),
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.6,
+                                                child: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          primary: AppTheme
+                                                              .colors.blue),
+                                                  child: Text('Kiểm tra xe',
+                                                      style: TextStyle(
+                                                          color: Colors.white)),
+                                                  onPressed: () {
+                                                    updateStatusBloc.add(
+                                                        UpdateStatusCheckingButtonPressed(
+                                                            id: state
+                                                                .assignDetail[0]
+                                                                .id,
+                                                            status:
+                                                                checkingStatus));
+
+                                                    Navigator.pushNamed(
+                                                        context, '/manager');
+                                                  },
+                                                ),
+                                              ),
+
+                                              // Container(
+                                              //   child: Text(''),
+                                              // ),
+                                            ],
                                           );
-                                        } else
-                                          return Center(child: Text('Empty'));
-                                      } else if (hstate.detailStatus ==
-                                          OrderHistoryDetailStatus.error) {
-                                        return Text(hstate.message.toString());
-                                      }
-                                    },
-                                  ),
+                                        } else if (staffState.status ==
+                                            ListCrewStatus.error) {
+                                          return ErrorWidget(
+                                              state.message.toString());
+                                        }
+                                        ;
+                                      }),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
-                          const Divider(
-                            color: Colors.black87,
-                            height: 20,
-                            thickness: 1,
-                            indent: 10,
-                            endIndent: 10,
-                          ),
-                          Visibility(
-                            visible: _visible,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(5)),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 20),
-                              child: Column(
-                                children: <Widget>[
-                                  Container(
-                                    child: BlocBuilder<CrewBloc, CrewState>(
-                                        // ignore: missing_return
-                                        builder: (builder, staffState) {
-                                      if (staffState.status ==
-                                          ListCrewStatus.init) {
-                                        return CircularProgressIndicator();
-                                      } else if (staffState.status ==
-                                          ListCrewStatus.loading) {
-                                        return CircularProgressIndicator();
-                                      } else if (staffState.status ==
-                                          ListCrewStatus.success) {
-                                        return Column(
-                                          children: [
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: Colors.black26),
-                                                  borderRadius:
-                                                      BorderRadius.circular(5)),
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 5, vertical: 10),
-                                              child: Column(
-                                                children: [
-                                                  Text(
-                                                    'Tổ đội phụ trách',
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      // Text(_crewId),
-                                                      // for (int i = 0;
-                                                      //     i < selectCrew.length;
-                                                      //     i++)
-                                                      Card(
-                                                        child: Column(
-                                                            children: [
-                                                              state.assignDetail[0].crew != null &&
-                                                                      state.assignDetail[0].crew.id !=
-                                                                          null &&
-                                                                      state
-                                                                          .assignDetail[
-                                                                              0]
-                                                                          .crew
-                                                                          .id
-                                                                          .isNotEmpty
-                                                                  ? ListTile(
-                                                                      leading: Image
-                                                                          .asset(
-                                                                              'lib/images/logo_blue.png'),
-                                                                      title: Text(state
-                                                                          .assignDetail[
-                                                                              0]
-                                                                          .crew
-                                                                          .id),
-                                                                    )
-                                                                  : SizedBox(),
-                                                            ]),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  ElevatedButton(
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                              primary: AppTheme
-                                                                  .colors.blue),
-                                                      child:
-                                                          Text('Chọn tổ đội'),
-                                                      onPressed: () =>
-                                                          setState(() {
-                                                            showInformationDialog(
-                                                                    context,
-                                                                    staffState
-                                                                        .crewList,
-                                                                    widget
-                                                                        .orderId)
-                                                                .then((value) {
-                                                              setState(() {
-                                                                selectData =
-                                                                    value;
-                                                              });
-                                                            });
-                                                          })),
-                                                  Container(height: 10),
-                                                ],
-                                              ),
-                                            ),
-
-                                            SizedBox(
-                                              height: 15,
-                                            ),
-                                            SizedBox(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.6,
-                                              child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    primary:
-                                                        AppTheme.colors.blue),
-                                                child: Text('Kiểm tra xe',
-                                                    style: TextStyle(
-                                                        color: Colors.white)),
-                                                onPressed: () {
-                                                  updateStatusBloc.add(
-                                                      UpdateStatusCheckingButtonPressed(
-                                                          id: state
-                                                              .assignDetail[0]
-                                                              .id,
-                                                          status:
-                                                              checkingStatus));
-                                                  // getDropDownItem,
-                                                  // Navigator.of(context).push(
-                                                  //     MaterialPageRoute(
-                                                  //         builder: (_) =>
-                                                  //             BlocProvider
-                                                  //                 .value(
-                                                  //               value:
-                                                  //                   assignCubit,
-                                                  //               child:
-                                                  //                   AssignOrderReviewUi(
-                                                  //                 userId: state
-                                                  //                     .assignDetail[
-                                                  //                         0]
-                                                  //                     .id,
-                                                  //               ),
-                                                  //             )));
-                                                  Navigator.pushNamed(
-                                                      context, '/manager');
-                                                },
-                                              ),
-                                            ),
-
-                                            // Container(
-                                            //   child: Text(''),
-                                            // ),
-                                          ],
-                                        );
-                                      } else if (staffState.status ==
-                                          ListCrewStatus.error) {
-                                        return ErrorWidget(
-                                            state.message.toString());
-                                      }
-                                      ;
-                                    }),
-                                  ),
-                                ],
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else
-                    return Center(child: Text('Empty'));
-                } else if (state.detailStatus == AssignDetailStatus.error) {
-                  return Text(state.message.toString());
-                }
-              },
+                          ],
+                        ),
+                      );
+                    } else
+                      return Center(child: Text('Empty'));
+                  } else if (state.detailStatus == AssignDetailStatus.error) {
+                    return Text(state.message.toString());
+                  }
+                },
+              ),
             ),
           ),
         ),
