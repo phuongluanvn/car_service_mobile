@@ -80,6 +80,7 @@ class CustomerOrderBloc extends Bloc<CustomerOrderEvent, CustomerOrderState> {
       yield state.copyWith(detailStatus: CustomerOrderDetailStatus.loading);
       try {
         var data = await _repo.getOrderDetail(event.id);
+        print(event.id);
         print('object');
         print(data);
         if (data != null) {
@@ -90,7 +91,7 @@ class CustomerOrderBloc extends Bloc<CustomerOrderEvent, CustomerOrderState> {
         } else {
           yield state.copyWith(
             detailStatus: CustomerOrderDetailStatus.error,
-            message: 'Error ?????',
+            message: data,
           );
         }
       } catch (e) {
@@ -98,8 +99,6 @@ class CustomerOrderBloc extends Bloc<CustomerOrderEvent, CustomerOrderState> {
             detailStatus: CustomerOrderDetailStatus.error,
             message: e.toString());
       }
-    } else if (event is DoConfirmOrderEvent) {
-      print('vào đi được chưa');
     }
   }
 }

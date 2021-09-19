@@ -1,6 +1,8 @@
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_event.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_bloc.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,7 @@ class CustomerOrderDetailUi extends StatefulWidget {
 
 class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
   Color color;
+  int total = cusConstants.TOTAL_PRICE;
 
   @override
   void initState() {
@@ -56,7 +59,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
       case 'Hoàn thành':
         color = Colors.green[600];
         break;
-      case 'Hủy':
+      case 'Hủy đơn':
         color = Colors.red;
         break;
       case 'Hủy đặt lịch':
@@ -92,9 +95,8 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
               return CircularProgressIndicator();
             } else if (state.detailStatus ==
                 CustomerOrderDetailStatus.success) {
-              print(state.orderDetail[0].packageLists
-                  .map((e) => e.name)
-                  .toList());
+              print('????');
+              print(state.orderDetail[0].orderDetails);
               if (state.orderDetail != null && state.orderDetail.isNotEmpty)
                 return SingleChildScrollView(
                   child: Column(
@@ -104,29 +106,30 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                           _convertDate(state.orderDetail[0].bookingTime),
                           state.orderDetail[0].checkinTime != null
                               ? _convertDate(state.orderDetail[0].checkinTime)
-                              : 'Chưa nhận xe',
+                              : cusConstants.CHECKIN_NOT_YET_STATUS,
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].note
-                              : 'Không có ghi chú'),
-                      // Text(state.orderDetail[0].orderDetails.last.name),
-
+                              : cusConstants.NOT_FOUND_NOTE),
                       cardInforService(
-                        state.orderDetail[0].vehicle.model,
-                        state.orderDetail[0].vehicle.model,
-                        state.orderDetail[0].vehicle.licensePlate,
-                        state.orderDetail[0].packageLists,
-                        state.orderDetail[0].note == null ? false : true,
-                        state.orderDetail[0].note != null
-                            ? state.orderDetail[0].note
-                            : 'Không có ghi chú',
-                        // state.orderDetail[0].package != null
-                        //     ? state.orderDetail[0].package.price
-                        //     : 0
-                      ),
+                          state.orderDetail[0].vehicle.model,
+                          state.orderDetail[0].vehicle.model,
+                          state.orderDetail[0].vehicle.licensePlate,
+                          state.orderDetail[0].packageLists,
+                          state.orderDetail[0].orderDetails == []
+                              ? state.orderDetail[0].orderDetails == []
+                              : state.orderDetail[0].orderDetails,
+                          state.orderDetail[0].note == null ? false : true,
+                          state.orderDetail[0].note != null
+                              ? state.orderDetail[0].note
+                              : cusConstants.NOT_FOUND_NOTE,
+                          total = state.orderDetail[0].orderDetails
+                              .fold(0, (sum, element) => sum + element.price)),
                       cardInforCar(
                           state.orderDetail[0].vehicle.manufacturer,
                           state.orderDetail[0].vehicle.model,
                           state.orderDetail[0].vehicle.licensePlate),
+                      cardInforCrew(state.orderDetail[0].crew.leaderFullname,
+                          state.orderDetail[0].crew.members)
                     ],
                   ),
                 );
@@ -136,6 +139,36 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
               return ErrorWidget(state.message.toString());
             }
           },
+        ),
+      ),
+    );
+  }
+
+  Widget cardInforCrew(String leaderName, List members) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.black26),
+            borderRadius: BorderRadius.circular(5)),
+        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+        child: Column(
+          children: [
+            Text('Thông tin tổ đội',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+                textAlign: TextAlign.start),
+            Column(
+                children: members.map((e) {
+              return ListTile(
+                title: Text(e.fullname),
+                // trailing: Text(_convertMoney(service.price.toDouble())),
+              );
+            }).toList()),
+          ],
         ),
       ),
     );
@@ -152,24 +185,22 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
         child: Column(
           children: [
-            Text(
-              'Thông tin xe',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-              textAlign: TextAlign.start,
-            ),
+            Text(cusConstants.VEHICLE_INFO_CARD_TITLE,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+                textAlign: TextAlign.start),
             ListTile(
-              title: Text('Biển số xe'),
+              title: Text(cusConstants.LICENSE_PLATE_LABLE),
               trailing: Text(licensePlace),
             ),
             ListTile(
-              title: Text('Hãng xe'),
+              title: Text(cusConstants.MANU_LABLE),
               trailing: Text(manuName),
             ),
             ListTile(
-              title: Text('Mẫu xe'),
+              title: Text(cusConstants.MODEL_LABLE),
               trailing: Text(modelName),
             ),
           ],
@@ -191,7 +222,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
         child: Column(
           children: [
             Text(
-              'Thông tin đơn hàng',
+              cusConstants.ORDER_INFO_CARD_TITLE,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -199,21 +230,21 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
               textAlign: TextAlign.start,
             ),
             ListTile(
-                title: Text('Trạng thái đơn hàng: '),
+                title: Text(cusConstants.ORDER_INFO_CARD_STATUS),
                 trailing: Text(
                   status,
                   style: TextStyle(color: _changeColorStt(status)),
                 )),
             ListTile(
-              title: Text('Thời gian đặt hẹn: '),
+              title: Text(cusConstants.ORDER_INFO_CARD_TIME_CREATE),
               trailing: Text(bookingTime),
             ),
             ListTile(
-              title: Text('Thời gian nhận xe: '),
+              title: Text(cusConstants.ORDER_INFO_CARD_TIME_CHECKIN),
               trailing: Text(checkinTime),
             ),
             ListTile(
-              title: Text('Ghi chú từ người dùng: '),
+              title: Text(cusConstants.ORDER_INFO_CARD_CUS_NOTE),
               subtitle: Text(
                 note,
                 style:
@@ -228,14 +259,14 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
   }
 
   Widget cardInforService(
-    String servicePackageName,
-    String serviceName,
-    String price,
-    List packages,
-    bool serviceType,
-    String note,
-    // int totalPrice
-  ) {
+      String servicePackageName,
+      String serviceName,
+      String price,
+      List packages,
+      List orderDetails,
+      bool serviceType,
+      String note,
+      int totalPrice) {
     int countPrice = 0;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
@@ -245,61 +276,120 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
             border: Border.all(color: Colors.black26),
             borderRadius: BorderRadius.circular(5)),
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-        child: Column(
-          children: [
-            Text(
-              'Thông tin dịch vụ',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-              textAlign: TextAlign.start,
-            ),
-            ListTile(
-              title: Text('Loại dịch vụ: '),
-              trailing: serviceType ? Text('Sửa chữa') : Text('Bảo dưỡng'),
-            ),
-            serviceType
-                ? ListTile(
-                    title: Text('Tình trạng xe từ người dùng: '),
-                    subtitle: Text(
-                      note,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                    ))
-                : Column(
-                    children: packages.map((e) {
-                    // return Text(e.orderDetails);
-                    return ExpansionTile(
-                      title: Text(e.name),
-                      children: e.orderDetails.map<Widget>((service) {
-                        countPrice += service.price;
-                        return ListTile(
-                          title: Text(service.name),
-                          trailing:
-                              Text(_convertMoney(service.price.toDouble())),
-                        );
-                      }).toList(),
-                    );
-                  }).toList()),
-            Divider(
-              color: Colors.black,
-              thickness: 2,
-              indent: 20,
-              endIndent: 20,
-            ),
-            ListTile(
-                title: Text('Tổng: '),
-                trailing: Column(
-                  children: [
-                    Text(
-                      _convertMoney(countPrice.toDouble()),
-                      style: TextStyle(decoration: TextDecoration.lineThrough),
+        child: BlocBuilder<AccessoryBloc, AccessoryState>(
+          // ignore: missing_return
+          builder: (context, accState) {
+            if (accState.status == ListAccessoryStatus.init) {
+              return CircularProgressIndicator();
+            } else if (accState.status == ListAccessoryStatus.loading) {
+              return CircularProgressIndicator();
+            } else if (accState.status == ListAccessoryStatus.success) {
+              return Column(
+                children: [
+                  Text(
+                    cusConstants.SERVICE_INFO_CARD_TITLE,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
                     ),
-                    // Text(_convertMoney(totalPrice.toDouble())),
-                  ],
-                )),
-          ],
+                    textAlign: TextAlign.start,
+                  ),
+                  ListTile(
+                    title: Text(cusConstants.SERVICE_INFO_CARD_TYPE_LABLE),
+                    trailing: serviceType
+                        ? Text(cusConstants.SERVICE_INFO_CARD_TYPE_REPAIR)
+                        : Text(cusConstants.SERVICE_INFO_CARD_TYPE_MANTAIN),
+                  ),
+                  serviceType
+                      ? ListTile(
+                          title: Text(cusConstants.SERVICE_INFO_CARD_CUS_NOTE),
+                          subtitle: Text(
+                            note,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ))
+                      : Column(
+                          children: [
+                            Column(
+                                children: packages.map((e) {
+                              // return Text(e.orderDetails);
+                              return ExpansionTile(
+                                title: Text(e.name),
+                                children: e.orderDetails.map<Widget>((service) {
+                                  countPrice += service.price;
+                                  return ListTile(
+                                    title: Text(service.name),
+                                    trailing: Text(_convertMoney(
+                                        service.price.toDouble())),
+                                  );
+                                }).toList(),
+                              );
+                            }).toList()),
+                            orderDetails.isEmpty
+                                ? SizedBox()
+                                : ExpansionTile(
+                                    title: Text('Dịch vụ bổ sung: '),
+                                    children: orderDetails.map((service) {
+                                      return ExpansionTile(
+                                        title: Text(service.name),
+                                        trailing: Text(_convertMoney(
+                                            service.price.toDouble())),
+                                        children: [
+                                          accState.accessoryList.indexWhere(
+                                                      (element) =>
+                                                          element.id ==
+                                                          service
+                                                              .accessoryId) >=
+                                                  0
+                                              ? ListTile(
+                                                  title: Text(accState
+                                                      .accessoryList
+                                                      .firstWhere((element) =>
+                                                          element.id ==
+                                                          service.accessoryId)
+                                                      .name),
+                                                  trailing: Image.network(accState
+                                                      .accessoryList
+                                                      .firstWhere((element) =>
+                                                          element.id ==
+                                                          service.accessoryId)
+                                                      .imageUrl),
+                                                )
+                                              : Text(cusConstants
+                                                  .NOT_FOUND_ACCESSORY_IN_SERVICE),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ),
+                          ],
+                        ),
+                  Divider(
+                    color: Colors.black,
+                    thickness: 2,
+                    indent: 20,
+                    endIndent: 20,
+                  ),
+                  ListTile(
+                    title: Text(cusConstants.SERVICE_INFO_CARD_PRICE_TOTAL),
+                    trailing: Text(
+                      _convertMoney(countPrice.toDouble()),
+                      // style: TextStyle(decoration: TextDecoration.lineThrough),
+                    ),
+                    // Column(
+                    //   children: [
+                    //     Text(
+                    //       _convertMoney(countPrice.toDouble()),
+                    //       style: TextStyle(decoration: TextDecoration.lineThrough),
+                    //     ),
+                    //     // Text(_convertMoney(totalPrice.toDouble())),
+                    //   ],
+                    // )
+                  ),
+                ],
+              );
+            }
+          },
         ),
       ),
     );
