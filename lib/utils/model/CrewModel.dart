@@ -213,8 +213,8 @@ class OrderDetails {
   String serviceId;
   String accessoryId;
   String name;
-  int quantity;
-  int price;
+  num quantity;
+  num price;
   bool isIncurred;
   bool isFinished;
   String timeFinished;

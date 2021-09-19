@@ -300,7 +300,7 @@ class Packages extends Equatable {
   String id;
   String name;
   String description;
-  int price;
+  num price;
   List<OrderDetails> orderDetails;
 
   Packages(
@@ -341,8 +341,8 @@ class OrderDetails extends Equatable {
   String serviceId;
   String accessoryId;
   String name;
-  int quantity;
-  int price;
+  num quantity;
+  num price;
   bool isIncurred;
   bool isFinished;
   String timeFinished;
