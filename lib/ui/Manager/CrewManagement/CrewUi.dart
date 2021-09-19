@@ -1,17 +1,13 @@
 import 'package:car_service/blocs/manager/CrewManagement/crew_bloc.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_event.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_state.dart';
-import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
-import 'package:car_service/blocs/manager/staff/staff_events.dart';
-import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/CrewManagement/CreateCrewManagement/CreateCrewUi.dart';
 import 'package:car_service/ui/Manager/CrewManagement/CrewDetailUi.dart';
-import 'package:car_service/ui/Manager/StaffManagement/StaffDetailUi.dart';
-import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:car_service/utils/helpers/constants/ManagerConstants.dart'
+    as manaConstants;
 class CrewUi extends StatefulWidget {
   @override
   _CrewUiState createState() => _CrewUiState();
@@ -40,7 +36,7 @@ class _CrewUiState extends State<CrewUi> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Quản lý tổ đội'),
+        title: Text(manaConstants.MANAGE_CREW_TITLE),
         automaticallyImplyLeading: false,
         actions: <Widget>[
           Padding(
@@ -73,10 +69,8 @@ class _CrewUiState extends State<CrewUi> {
                   itemCount: state.crewList.length,
                   shrinkWrap: true,
                   // ignore: missing_return
-
                   itemBuilder: (context, index) {
                     Color color;
-
                     // if (state.assignList[index].status == 'Accepted') {
                     return Card(
                         // child: (state.assignList[0].status == 'Checkin')
@@ -95,12 +89,12 @@ class _CrewUiState extends State<CrewUi> {
                               ]),
                         ),
                         leading: Image.asset(
-                          'lib/images/networking.png',
+                          manaConstants.IMAGE_NETWORKING,
                         ),
                         title: Text(state.crewList[index].leaderFullname ?? ''),
                         subtitle: Row(
                           children: [
-                            Text('Số người: '),
+                            Text(manaConstants.NUMBER_OF_STAFF_LABLE),
                             Text(state.crewList[index].members.length
                                 .toString()),
                           ],
@@ -136,7 +130,7 @@ class _CrewUiState extends State<CrewUi> {
                               padding: EdgeInsets.only(
                                   top: MediaQuery.of(context).size.height *
                                       0.35),
-                              child: Text('Hiện tại không có tổ đội')),
+                              child: Text(manaConstants.NOT_FOUND_CREW)),
                         ],
                       ),
                     ),

@@ -1,15 +1,9 @@
 import 'package:car_service/blocs/manager/Accessories/accessory_bloc.dart';
 import 'package:car_service/blocs/manager/Accessories/accessory_event.dart';
 import 'package:car_service/blocs/manager/Accessories/accessory_state.dart';
-import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
-import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
-import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_bloc.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_events.dart';
 import 'package:car_service/blocs/manager/processOrder/processOrder_state.dart';
-import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
-import 'package:car_service/blocs/manager/staff/staff_events.dart';
-import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
@@ -17,12 +11,12 @@ import 'package:car_service/blocs/manager/waitingPayment/waitingPayment_bloc.dar
 import 'package:car_service/blocs/manager/waitingPayment/waitingPayment_events.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/ManagerMain.dart';
-import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_formatter/money_formatter.dart';
-
+import 'package:car_service/utils/helpers/constants/ManagerConstants.dart'
+    as manaConstants;
 class WaitingPaymentDetailUi extends StatefulWidget {
   final String orderId;
 
@@ -64,7 +58,7 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Thanh toán'),
+        title: Text(manaConstants.PAYMENT_TITLE),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -100,7 +94,7 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
                           child: Column(
                             children: <Widget>[
                               Text(
-                                'Thông tin khách hàng',
+                                manaConstants.INFO_CUSTOMER,
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold),
                               ),
@@ -115,7 +109,7 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
                                     width:
                                         MediaQuery.of(context).size.width * 0.2,
                                     child: Text(
-                                      'Họ tên:',
+                                      manaConstants.FULLNAME_LABLE,
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                   ),
@@ -136,7 +130,7 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
                                     width:
                                         MediaQuery.of(context).size.width * 0.2,
                                     child: Text(
-                                      'Email:',
+                                      manaConstants.EMAIL_LABLE,
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                   ),
@@ -157,7 +151,7 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
                                     width: MediaQuery.of(context).size.width *
                                         0.36,
                                     child: Text(
-                                      'Thời gian xác nhận:',
+                                      manaConstants.TIME_CONFIRM_LABLE,
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                   ),
@@ -179,7 +173,7 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
                                     width: MediaQuery.of(context).size.width *
                                         0.36,
                                     child: Text(
-                                      'Trạng thái:',
+                                      manaConstants.STATUS_LABLE,
                                       style: TextStyle(fontSize: 16.0),
                                     ),
                                   ),
@@ -237,7 +231,7 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
                                 Column(
                                   children: [
                                     Text(
-                                      'Thông tin hóa đơn',
+                                      manaConstants.INFO_BILL_LABLE,
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
@@ -297,8 +291,7 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
                                                                             .accessoryId)
                                                                 .imageUrl),
                                                       )
-                                                    : Text(
-                                                        'Hiện tại không có phụ tùng'),
+                                                    : Text(manaConstants.NOT_FOUND_ACCESSORY_LABLE),
                                               ],
                                             );
                                           }
@@ -314,7 +307,7 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
                                     ),
                                     ListTile(
                                         title: Text(
-                                          'Tổng cộng: ',
+                                          manaConstants.TOTAL_LABLE,
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w900),
@@ -349,7 +342,7 @@ class _WaitingPaymentDetailUiState extends State<WaitingPaymentDetailUi> {
                                         child: ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                               primary: AppTheme.colors.blue),
-                                          child: Text('Hoàn thành',
+                                          child: Text(manaConstants.COMPLETE_LABLE,
                                               style: TextStyle(
                                                   color: Colors.white)),
                                           onPressed: () {

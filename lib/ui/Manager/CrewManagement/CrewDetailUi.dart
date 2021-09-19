@@ -1,18 +1,15 @@
 import 'package:car_service/blocs/manager/CrewManagement/crew_bloc.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_event.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_state.dart';
-import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
-import 'package:car_service/blocs/manager/staff/staff_events.dart';
-import 'package:car_service/blocs/manager/staff/staff_state.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
-import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.dart';
-import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/CrewManagement/EditCrewManagement/EditCrewUi.dart';
 import 'package:car_service/utils/model/CrewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_formatter/money_formatter.dart';
+import 'package:car_service/utils/helpers/constants/ManagerConstants.dart'
+    as manaConstants;
 
 class CrewDetailUi extends StatefulWidget {
   final String id;
@@ -29,28 +26,28 @@ class _CrewDetailUiState extends State<CrewDetailUi> {
   @override
   void initState() {
     super.initState();
-    // updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     BlocProvider.of<CrewBloc>(context).add(DoCrewDetailEvent(id: widget.id));
     print(widget.id);
   }
 
   @override
   Widget build(BuildContext context) {
-    // final String absentStatus = 'absent';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Quản lý tổ đội'),
+        title: Text(manaConstants.MANAGE_CREW_TITLE),
         actions: <Widget>[
           Padding(
             padding: EdgeInsets.only(right: 5, top: 10, bottom: 10),
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
                 onPressed: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (_) => EditCrewUi(id: widget.id,)));
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => EditCrewUi(
+                            id: widget.id,
+                          )));
                 },
-                child: Text('Chỉnh sửa')),
+                child: Text(manaConstants.EDIT_BUTTON)),
           )
         ],
       ),
@@ -65,7 +62,6 @@ class _CrewDetailUiState extends State<CrewDetailUi> {
               return CircularProgressIndicator();
             } else if (state.statusDetail == DoCrewDetailStatus.success) {
               if (state.crewDetails != null && state.crewDetails.isNotEmpty)
-              
                 return SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
@@ -80,7 +76,7 @@ class _CrewDetailUiState extends State<CrewDetailUi> {
                           child: Column(
                             children: <Widget>[
                               Text(
-                                'Thông tin nhân viên',
+                                manaConstants.INFO_STAFF,
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.w600),
                               ),
@@ -110,7 +106,7 @@ class _CrewDetailUiState extends State<CrewDetailUi> {
                                         leading: CircleAvatar(
                                           backgroundColor: Colors.white,
                                           backgroundImage: AssetImage(
-                                              'lib/images/mechanic.png'),
+                                              manaConstants.IMAGE_MECHANIC),
                                         ),
                                         title: Text(
                                           state.crewDetails[0].members[index]
@@ -123,8 +119,8 @@ class _CrewDetailUiState extends State<CrewDetailUi> {
                                           state.crewDetails[0].members[index]
                                                       .isLeader ==
                                                   true
-                                              ? 'Tổ trưởng'
-                                              : 'Nhân viên',
+                                              ? manaConstants.LEDER_LABLE
+                                              : manaConstants.STAFF_LABLE,
                                           //  +
                                           // " - " +
                                           // state
@@ -180,7 +176,7 @@ class _CrewDetailUiState extends State<CrewDetailUi> {
                                       child: Column(
                                         children: <Widget>[
                                           Text(
-                                            'Đơn hàng phụ trách',
+                                            manaConstants.ORDER_RESPONSIBLE,
                                             style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w600),
@@ -200,7 +196,7 @@ class _CrewDetailUiState extends State<CrewDetailUi> {
                                                         .width *
                                                     0.2,
                                                 child: Text(
-                                                  'Biển số xe:',
+                                                  manaConstants.LICENSE_PLATES,
                                                   style:
                                                       TextStyle(fontSize: 16.0),
                                                 ),
@@ -232,7 +228,7 @@ class _CrewDetailUiState extends State<CrewDetailUi> {
                                                         .width *
                                                     0.2,
                                                 child: Text(
-                                                  'Hãng xe:',
+                                                  manaConstants.MANU_LABLE,
                                                   style:
                                                       TextStyle(fontSize: 16.0),
                                                 ),
@@ -264,7 +260,7 @@ class _CrewDetailUiState extends State<CrewDetailUi> {
                                                         .width *
                                                     0.2,
                                                 child: Text(
-                                                  'Dòng xe:',
+                                                  manaConstants.MODEL_LABLE,
                                                   style:
                                                       TextStyle(fontSize: 16.0),
                                                 ),
@@ -293,7 +289,7 @@ class _CrewDetailUiState extends State<CrewDetailUi> {
                                                         .width *
                                                     0.2,
                                                 child: Text(
-                                                  'Trạng thái:',
+                                                  manaConstants.STATUS_LABLE,
                                                   style:
                                                       TextStyle(fontSize: 16.0),
                                                 ),
@@ -325,7 +321,7 @@ class _CrewDetailUiState extends State<CrewDetailUi> {
                                             child: Column(
                                               children: [
                                                 Text(
-                                                  'Thông tin dịch vụ',
+                                                  manaConstants.INFO_SERVICE,
                                                   style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight:
@@ -340,7 +336,6 @@ class _CrewDetailUiState extends State<CrewDetailUi> {
                                                         .order[0]
                                                         .orderDetails
                                                         .map((e) {
-                                                  // return Text(e.orderDetails);
                                                   return ListTile(
                                                     title: Text(e.name),
                                                   );

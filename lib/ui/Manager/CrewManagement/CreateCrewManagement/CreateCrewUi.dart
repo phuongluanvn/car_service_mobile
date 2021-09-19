@@ -23,6 +23,8 @@ import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:car_service/utils/model/createCrewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:car_service/utils/helpers/constants/ManagerConstants.dart'
+    as manaConstants;
 
 class CreateCrewUi extends StatefulWidget {
   @override
@@ -59,7 +61,7 @@ class _CreateCrewUiState extends State<CreateCrewUi> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Thêm mới tổ đội'),
+        title: Text(manaConstants.CREATE_CREW_TITLE),
       ),
       backgroundColor: AppTheme.colors.lightblue,
       body: SingleChildScrollView(
@@ -103,7 +105,7 @@ class _CreateCrewUiState extends State<CreateCrewUi> {
                                           height: 10,
                                         ),
                                         Text(
-                                          'Chọn nhân viên',
+                                          manaConstants.SELECT_STAFF_LABLE,
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w600),
@@ -145,7 +147,7 @@ class _CreateCrewUiState extends State<CreateCrewUi> {
                                                     backgroundColor:
                                                         Colors.white,
                                                     backgroundImage: AssetImage(
-                                                        'lib/images/mechanic.png'),
+                                                        manaConstants.IMAGE_MECHANIC),
                                                   ),
                                                   title: Text(
                                                     state.avaiList[index]
@@ -254,7 +256,7 @@ class _CreateCrewUiState extends State<CreateCrewUi> {
                                                                 _listStaff,
                                                           )));
                                             },
-                                            child: Text('Xác nhận')),
+                                            child: Text(manaConstants.CONFIRM_BUTTON)),
                                         // BlocListener<CreateOrderBloc,
                                         //     CreateOrderState>(
                                         //   listener: (context, state) {
@@ -356,9 +358,9 @@ class _CreateCrewUiState extends State<CreateCrewUi> {
                                     ),
                                   );
                                 } else //nếu không có xe nào
-                                  return Text('Không có thông tin nhân viên');
+                                  return Text(manaConstants.NOT_FOUND_STAFF_INFO);
                               } else if (state.status == StaffStatus.error) {
-                                return Text('Không tìm thấy xe');
+                                return Text(manaConstants.NOT_FOUND_STAFF);
                               }
                             },
                           ),
@@ -369,21 +371,6 @@ class _CreateCrewUiState extends State<CreateCrewUi> {
                 ),
               ],
             ),
-
-            // },
-            // return SingleChildScrollView(
-            //   child: Center(
-            //     child: Column(
-            //       children: <Widget>[
-            //         SizedBox(
-            //           height: 20,
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // );
-
-            // );
           ],
         ),
       ),

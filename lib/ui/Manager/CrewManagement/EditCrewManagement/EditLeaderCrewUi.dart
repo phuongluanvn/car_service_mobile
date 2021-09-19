@@ -1,30 +1,13 @@
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
-import 'package:car_service/blocs/customer/customerCar/CustomerCar_event.dart';
-import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
-import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_bloc.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_event.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_state.dart';
-// import 'package:car_service/blocs/customer/customerOrder/CreateBooking_bloc.dart';
-// import 'package:car_service/blocs/customer/customerOrder/CreateBooking_event.dart';
-// import 'package:car_service/blocs/customer/customerOrder/CreateBooking_state.dart';
-import 'package:car_service/blocs/manager/createOrder/createOrder_bloc.dart';
-import 'package:car_service/blocs/manager/createOrder/createOrder_state.dart';
-import 'package:car_service/blocs/manager/createOrder/createOrder_event.dart';
-import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
-import 'package:car_service/blocs/manager/staff/staff_events.dart';
-import 'package:car_service/blocs/manager/staff/staff_state.dart';
-import 'package:car_service/blocs/packageService/PackageService_bloc.dart';
-import 'package:car_service/blocs/packageService/PackageService_event.dart';
-import 'package:car_service/blocs/packageService/PackageService_state.dart';
 import 'package:car_service/theme/app_theme.dart';
-import 'package:car_service/ui/Manager/ManagerMain.dart';
-import 'package:car_service/utils/model/CustomerModel.dart';
-import 'package:car_service/utils/model/OrderDetailModel.dart';
-import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:car_service/utils/model/createCrewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:car_service/utils/helpers/constants/ManagerConstants.dart'
+    as manaConstants;
 
 class EditLeaderCrewUi extends StatefulWidget {
   final List<CreateCrewModel> choosingCrew;
@@ -37,10 +20,7 @@ class EditLeaderCrewUi extends StatefulWidget {
 class _EditLeaderCrewUiState extends State<EditLeaderCrewUi> {
   TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
-  // CreateOrderBloc _createOrderBloc;
   CustomerCarBloc customerCarBloc;
-
-  // List<String> _listStaff = [];
 
   String selectItem;
 
@@ -48,23 +28,19 @@ class _EditLeaderCrewUiState extends State<EditLeaderCrewUi> {
   final Color unselectedColor = Colors.black;
   CrewBloc crewBloc;
   int _crewId = 0;
+
   @override
   void initState() {
     crewBloc = BlocProvider.of<CrewBloc>(context);
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // final logo = Center(
-    //   child: Icon(Icons.supervised_user_circle, size: 150),
-    // );
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Thêm mới tổ đội'),
+        title: Text(manaConstants.CREATE_CREW_TITLE),
       ),
       backgroundColor: AppTheme.colors.lightblue,
       body: SingleChildScrollView(
@@ -87,7 +63,7 @@ class _EditLeaderCrewUiState extends State<EditLeaderCrewUi> {
                             builder: (BuildContext ctx) {
                               return AlertDialog(
                                 title: Text(
-                                  'Thông báo!',
+                                  manaConstants.NOTI_TITLE,
                                   style: TextStyle(color: Colors.greenAccent),
                                 ),
                                 content: Text(state.message),
@@ -100,7 +76,7 @@ class _EditLeaderCrewUiState extends State<EditLeaderCrewUi> {
                                         // BlocProvider.of<CrewBloc>(context)
                                         //     .add(DoListCrew());
                                       },
-                                      child: Text('Đồng ý'))
+                                      child: Text(manaConstants.OK_BUTTON))
                                 ],
                               );
                             });
@@ -115,7 +91,7 @@ class _EditLeaderCrewUiState extends State<EditLeaderCrewUi> {
                             child: Column(
                               children: [
                                 Text(
-                                  'Chọn tổ trưởng của đội',
+                                  manaConstants.SELECT_LEADER_CREW_LABLE,
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600),
@@ -165,7 +141,7 @@ class _EditLeaderCrewUiState extends State<EditLeaderCrewUi> {
                                   id: widget.id,
                                   listUsername: widget.choosingCrew));
                             },
-                            child: Text('Tạo tổ đội'))
+                            child: Text(manaConstants.CREATE_CREW_LABLE))
                       ],
                     ),
                   ),

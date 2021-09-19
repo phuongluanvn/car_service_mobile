@@ -7,28 +7,16 @@ import 'package:car_service/blocs/manager/CrewManagement/crew_event.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_state.dart';
 import 'package:car_service/blocs/manager/EditCrewManagement%20copy/editCrew_cubit.dart';
 import 'package:car_service/blocs/manager/EditCrewManagement%20copy/editCrew_state.dart';
-// import 'package:car_service/blocs/customer/customerOrder/CreateBooking_bloc.dart';
-// import 'package:car_service/blocs/customer/customerOrder/CreateBooking_event.dart';
-// import 'package:car_service/blocs/customer/customerOrder/CreateBooking_state.dart';
-import 'package:car_service/blocs/manager/createOrder/createOrder_bloc.dart';
-import 'package:car_service/blocs/manager/createOrder/createOrder_state.dart';
-import 'package:car_service/blocs/manager/createOrder/createOrder_event.dart';
 import 'package:car_service/blocs/manager/staff/staff_bloc.dart';
 import 'package:car_service/blocs/manager/staff/staff_events.dart';
 import 'package:car_service/blocs/manager/staff/staff_state.dart';
-import 'package:car_service/blocs/packageService/PackageService_bloc.dart';
-import 'package:car_service/blocs/packageService/PackageService_event.dart';
-import 'package:car_service/blocs/packageService/PackageService_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/CrewManagement/EditCrewManagement/EditLeaderCrewUi.dart';
-import 'package:car_service/ui/Manager/ManagerMain.dart';
-import 'package:car_service/utils/model/CalendarModel.dart';
-import 'package:car_service/utils/model/CustomerModel.dart';
-import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:car_service/utils/model/createCrewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:car_service/utils/helpers/constants/ManagerConstants.dart'
+    as manaConstants;
 class EditCrewUi extends StatefulWidget {
   final String id;
   EditCrewUi({@required this.id});
@@ -39,12 +27,10 @@ class EditCrewUi extends StatefulWidget {
 class _EditCrewUiState extends State<EditCrewUi> {
   TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
-  // CreateOrderBloc _createOrderBloc;
   CustomerCarBloc customerCarBloc;
 
   List<CreateCrewModel> _listStaff = [];
   String selectItem;
-  // List<CustomerModel> listload;
   final Color selectedColor = AppTheme.colors.lightblue;
   final Color unselectedColor = Colors.black;
   CrewBloc crewBloc;
@@ -54,7 +40,6 @@ class _EditCrewUiState extends State<EditCrewUi> {
   void initState() {
     BlocProvider.of<ManageStaffBloc>(context)
         .add(DoListStaffWithAvaiStatusEvent());
-
     crewBloc = BlocProvider.of<CrewBloc>(context);
     crewBloc.add(DoReloadStatus());
     super.initState();
@@ -65,7 +50,7 @@ class _EditCrewUiState extends State<EditCrewUi> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Chỉnh sửa tổ đội'),
+        title: Text(manaConstants.UPDATE_CREW_TITLE),
       ),
       backgroundColor: AppTheme.colors.lightblue,
       body: BlocProvider(
@@ -117,7 +102,7 @@ class _EditCrewUiState extends State<EditCrewUi> {
                                 height: 10,
                               ),
                               Text(
-                                'Chọn nhân viên',
+                                manaConstants.SELECT_STAFF_LABLE,
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.w600),
                               ),
@@ -134,7 +119,7 @@ class _EditCrewUiState extends State<EditCrewUi> {
                                         height: 10,
                                       ),
                                       Text(
-                                        'Nhân viên được chọn',
+                                        manaConstants.STAFF_IS_SELECTED_LABLE,
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w600),
@@ -165,7 +150,7 @@ class _EditCrewUiState extends State<EditCrewUi> {
                                                 leading: CircleAvatar(
                                                   backgroundColor: Colors.white,
                                                   backgroundImage: AssetImage(
-                                                      'lib/images/mechanic.png'),
+                                                      manaConstants.IMAGE_MECHANIC),
                                                 ),
                                                 title: Text(
                                                   estate.selectedList[index]
@@ -206,7 +191,7 @@ class _EditCrewUiState extends State<EditCrewUi> {
                                         height: 10,
                                       ),
                                       Text(
-                                        'Nhân viên đang hoạt động',
+                                        manaConstants.STAFF_IS_AVALABLE_LABLE,
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w600),
@@ -247,7 +232,7 @@ class _EditCrewUiState extends State<EditCrewUi> {
                                                 leading: CircleAvatar(
                                                   backgroundColor: Colors.white,
                                                   backgroundImage: AssetImage(
-                                                      'lib/images/mechanic.png'),
+                                                      manaConstants.IMAGE_MECHANIC),
                                                 ),
                                                 title: Text(
                                                   estate.unselectedList[index]
@@ -313,7 +298,7 @@ class _EditCrewUiState extends State<EditCrewUi> {
                                                               .selectedList,id: widget.id,
                                                         )));
                                           },
-                                          child: Text('Xác nhận')),
+                                          child: Text(manaConstants.CONFIRM_BUTTON)),
                                     ],
                                   ),
                                 ),

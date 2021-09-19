@@ -194,7 +194,7 @@ class _WaitingConfirmOrderDetailUiState
       child: Column(
         children: [
           Text(
-            cusConstants.SERVICE_INFO_CARD_TITLE,
+            cusConstants.ORDER_INFO_CARD_TITLE,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,

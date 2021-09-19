@@ -11,7 +11,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:car_service/utils/helpers/constants/StaffConstants.dart' as staffConstants;
+import 'package:car_service/utils/helpers/constants/StaffConstants.dart'
+    as staffConstants;
+
 class AbsencesWorkUI extends StatefulWidget {
   @override
   _AbsencesWorkUIState createState() => _AbsencesWorkUIState();
@@ -61,7 +63,7 @@ class _AbsencesWorkUIState extends State<AbsencesWorkUI> {
 
   @override
   void initState() {
-    _dateTimeFormat();
+    // _dateTimeFormat();
     _getStringFromSharedPref();
     super.initState();
     _absencesWorkBloc = BlocProvider.of<AbsencesWorkBloc>(context);
@@ -106,6 +108,8 @@ class _AbsencesWorkUIState extends State<AbsencesWorkUI> {
                 if (state.status == AbsencesWorkStatus.absencesWorkSuccess) {
                   _showSelectedAbsencesWorkDialog();
                   // Navigator.of(context).pop();
+                } else if (state.status == AbsencesWorkStatus.error) {
+                  _showErrorAbsencesWorkDialog(state.message);
                 }
               },
               child: Column(
@@ -216,8 +220,8 @@ class _AbsencesWorkUIState extends State<AbsencesWorkUI> {
                         });
                       },
                       maxLines: 3,
-                      decoration:
-                          InputDecoration.collapsed(hintText: staffConstants.REASON_REGISTER),
+                      decoration: InputDecoration.collapsed(
+                          hintText: staffConstants.REASON_REGISTER),
                     ),
                   ),
                   ElevatedButton(
@@ -225,23 +229,32 @@ class _AbsencesWorkUIState extends State<AbsencesWorkUI> {
                         ElevatedButton.styleFrom(primary: AppTheme.colors.blue),
                     child: Text(staffConstants.CONFIRM_BUTTON),
                     onPressed: () {
-                      _listAbsences = [];
-                      _selectedDayList
-                          .map((e) => {
-                                _absences.empUsername = _username,
-                                _absences.noteEmp = _empNote,
-                                _absences.timeStart = _startDate(
-                                    e.toIso8601String().split(staffConstants.T_SPLIT)[0]),
-                                _absences.timeEnd =
-                                    _endDate(e.toIso8601String().split(staffConstants.T_SPLIT)[0]),
-                                _listAbsences.add(_absences),
-                              })
-                          .toList();
-                      _absencesWorkBloc.add(AbsencesWorkButtonPressed(
-                        username: _username,
-                        absences: _listAbsences,
-                      ));
-                      // print(test);
+                      if (_empNote == null) {
+                        _showErrorAbsencesWorkDialog(
+                            staffConstants.NOTI_INPUT_REASON);
+                      } else if (_valueSelected == 0) {
+                        _showErrorAbsencesWorkDialog(
+                            staffConstants.NOTI_SELECTED_DAY);
+                      } else {
+                        _listAbsences = [];
+                        _selectedDayList
+                            .map((e) => {
+                                  _absences.empUsername = _username,
+                                  _absences.noteEmp = _empNote,
+                                  _absences.timeStart = _startDate(e
+                                      .toIso8601String()
+                                      .split(staffConstants.T_SPLIT)[0]),
+                                  _absences.timeEnd = _endDate(e
+                                      .toIso8601String()
+                                      .split(staffConstants.T_SPLIT)[0]),
+                                  _listAbsences.add(_absences),
+                                })
+                            .toList();
+                        _absencesWorkBloc.add(AbsencesWorkButtonPressed(
+                          username: _username,
+                          absences: _listAbsences,
+                        ));
+                      }
                     },
                   ),
                 ],
@@ -254,11 +267,11 @@ class _AbsencesWorkUIState extends State<AbsencesWorkUI> {
     );
   }
 
-  _dateTimeFormat() {
-    Intl.defaultLocale = 'es';
-    print(DateFormat('hh:mm a').format(
-        DateTime.parse(_endDate(selectedDay.toIso8601String().split("T")[0]))));
-  }
+  // _dateTimeFormat() {
+  //   Intl.defaultLocale = 'es';
+  //   print(DateFormat('hh:mm a').format(
+  //       DateTime.parse(_endDate(selectedDay.toIso8601String().split("T")[0]))));
+  // }
 
   Future pickDate(BuildContext context) async {
     final initialDate = DateTime.now();
@@ -299,10 +312,10 @@ class _AbsencesWorkUIState extends State<AbsencesWorkUI> {
         builder: (BuildContext ctx) {
           return AlertDialog(
             title: Text(
-              'Thông báo!',
+              staffConstants.NOTI_TITLE,
               style: TextStyle(color: Colors.greenAccent),
             ),
-            content: Text('Đăng ký thành công. Xin đợi duyệt!'),
+            content: Text(staffConstants.NOTI_SUCCESS_REGISTER),
             actions: [
               TextButton(
                   onPressed: () {
@@ -310,7 +323,30 @@ class _AbsencesWorkUIState extends State<AbsencesWorkUI> {
                     Navigator.pop(context);
                     Navigator.of(context).pop();
                   },
-                  child: Text('Đồng ý'))
+                  child: Text(staffConstants.OK_BUTTON))
+            ],
+          );
+        });
+  }
+
+  _showErrorAbsencesWorkDialog(String mess) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text(
+              staffConstants.NOTI_TITLE,
+              style: TextStyle(color: Colors.greenAccent),
+            ),
+            content: Text(mess),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.pop(context);
+                    // Navigator.of(context).pop();
+                  },
+                  child: Text(staffConstants.OK_BUTTON))
             ],
           );
         });

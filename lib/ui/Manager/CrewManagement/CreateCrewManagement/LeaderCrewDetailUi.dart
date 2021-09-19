@@ -2,13 +2,12 @@ import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_bloc.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_event.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_state.dart';
-
 import 'package:car_service/theme/app_theme.dart';
-
 import 'package:car_service/utils/model/createCrewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:car_service/utils/helpers/constants/ManagerConstants.dart'
+    as manaConstants;
 class LeaderCrewDetailUi extends StatefulWidget {
   final List<CreateCrewModel> choosingCrew;
   
@@ -48,7 +47,7 @@ class _LeaderCrewDetailUiState extends State<LeaderCrewDetailUi> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Thêm mới tổ đội'),
+        title: Text(manaConstants.CREATE_CREW_TITLE),
       ),
       backgroundColor: AppTheme.colors.lightblue,
       body: SingleChildScrollView(
@@ -71,7 +70,7 @@ class _LeaderCrewDetailUiState extends State<LeaderCrewDetailUi> {
                             builder: (BuildContext ctx) {
                               return AlertDialog(
                                 title: Text(
-                                  'Thông báo!',
+                                  manaConstants.NOTI_TITLE,
                                   style: TextStyle(color: Colors.greenAccent),
                                 ),
                                 content: Text(state.message),
@@ -84,7 +83,7 @@ class _LeaderCrewDetailUiState extends State<LeaderCrewDetailUi> {
                                         // BlocProvider.of<CrewBloc>(context)
                                         //     .add(DoListCrew());
                                       },
-                                      child: Text('Đồng ý'))
+                                      child: Text(manaConstants.OK_BUTTON))
                                 ],
                               );
                             });
@@ -99,7 +98,7 @@ class _LeaderCrewDetailUiState extends State<LeaderCrewDetailUi> {
                             child: Column(
                               children: [
                                 Text(
-                                  'Chọn tổ trưởng của đội',
+                                  manaConstants.SELECT_LEADER_CREW_LABLE,
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600),
@@ -148,7 +147,7 @@ class _LeaderCrewDetailUiState extends State<LeaderCrewDetailUi> {
                               crewBloc.add(CreateCrewEvent(
                                   listUsername: widget.choosingCrew));
                             },
-                            child: Text('Tạo tổ đội'))
+                            child: Text(manaConstants.CREATE_CREW_LABLE))
                       ],
                     ),
                   ),

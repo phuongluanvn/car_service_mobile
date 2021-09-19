@@ -1,17 +1,13 @@
-import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
-import 'package:car_service/blocs/manager/assignOrder/assignOrder_events.dart';
-import 'package:car_service/blocs/manager/assignOrder/assignOrder_state.dart';
 import 'package:car_service/blocs/manager/waitingPayment/waitingPayment_bloc.dart';
 import 'package:car_service/blocs/manager/waitingPayment/waitingPayment_events.dart';
 import 'package:car_service/blocs/manager/waitingPayment/waitingPayment_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/ManageWaitingPayment/WaitingPaymentDetailUi.dart';
-import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderDetailUi.dart';
-import 'package:car_service/ui/Manager/OrderManagement/ProcessOrderManagement/ProcessOrderDetailUi.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:car_service/utils/helpers/constants/ManagerConstants.dart'
+    as manaConstants;
 class WaitingPaymentUi extends StatefulWidget {
   @override
   _WaitingPaymentUiState createState() => _WaitingPaymentUiState();
@@ -77,7 +73,7 @@ class _WaitingPaymentUiState extends State<WaitingPaymentUi> {
                                 ),
                                 Text(state.waitingPaymentList[index].status),
                               ]),
-                          leading: Image.asset('lib/images/order_small.png'),
+                          leading: Image.asset(manaConstants.IMAGE_LOGO_SMALL),
                           title: Text(state
                               .waitingPaymentList[index].vehicle.licensePlate),
                           subtitle: Text(_convertDate(
@@ -115,7 +111,7 @@ class _WaitingPaymentUiState extends State<WaitingPaymentUi> {
                               padding: EdgeInsets.only(
                                   top: MediaQuery.of(context).size.height *
                                       0.35),
-                              child: Text('Hiện tại không có đơn')),
+                              child: Text(manaConstants.NOT_FOUND_ORDER_LABLE)),
                         ],
                       ),
                     ),
