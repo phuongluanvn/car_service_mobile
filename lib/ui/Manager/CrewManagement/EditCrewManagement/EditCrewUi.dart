@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:car_service/utils/helpers/constants/ManagerConstants.dart'
     as manaConstants;
+
 class EditCrewUi extends StatefulWidget {
   final String id;
   EditCrewUi({@required this.id});
@@ -63,7 +64,8 @@ class _EditCrewUiState extends State<EditCrewUi> {
               listener: (context, crstate) {
                 print(crstate.statusDetail);
                 if (crstate.statusDetail == DoCrewDetailStatus.success) {
-                  print(crstate.crewDetails[0].members);
+                  print(crstate.crewDetails[0].members[1].username);
+                  print(crstate.crewDetails[0].members[1].isLeader);
                   editCrewCubit
                       .prepareSelectedList(crstate.crewDetails[0].members);
                 }
@@ -82,7 +84,8 @@ class _EditCrewUiState extends State<EditCrewUi> {
           ],
           child: BlocBuilder<EditCrewCubit, EditCrewState>(
             builder: (context, estate) {
-              print("check: ${estate.status}");
+              // print("check: ${estate.status}");
+
               if (estate.status == EditCrewStatus.success &&
                   estate.status != null) {
                 return SingleChildScrollView(
@@ -150,7 +153,8 @@ class _EditCrewUiState extends State<EditCrewUi> {
                                                 leading: CircleAvatar(
                                                   backgroundColor: Colors.white,
                                                   backgroundImage: AssetImage(
-                                                      manaConstants.IMAGE_MECHANIC),
+                                                      manaConstants
+                                                          .IMAGE_MECHANIC),
                                                 ),
                                                 title: Text(
                                                   estate.selectedList[index]
@@ -232,7 +236,8 @@ class _EditCrewUiState extends State<EditCrewUi> {
                                                 leading: CircleAvatar(
                                                   backgroundColor: Colors.white,
                                                   backgroundImage: AssetImage(
-                                                      manaConstants.IMAGE_MECHANIC),
+                                                      manaConstants
+                                                          .IMAGE_MECHANIC),
                                                 ),
                                                 title: Text(
                                                   estate.unselectedList[index]
@@ -295,10 +300,12 @@ class _EditCrewUiState extends State<EditCrewUi> {
                                                     builder: (_) =>
                                                         EditLeaderCrewUi(
                                                           choosingCrew: estate
-                                                              .selectedList,id: widget.id,
+                                                              .selectedList,
+                                                          id: widget.id,
                                                         )));
                                           },
-                                          child: Text(manaConstants.CONFIRM_BUTTON)),
+                                          child: Text(
+                                              manaConstants.CONFIRM_BUTTON)),
                                     ],
                                   ),
                                 ),

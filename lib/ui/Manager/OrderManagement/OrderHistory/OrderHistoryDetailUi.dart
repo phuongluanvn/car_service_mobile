@@ -72,7 +72,7 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
                             Container(
                               width: MediaQuery.of(context).size.width * 0.2,
                               child: Text(
-                                'Fullname:',
+                                'Họ tên:',
                                 style: TextStyle(fontSize: 16.0),
                               ),
                             ),
@@ -110,9 +110,9 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
                           textBaseline: TextBaseline.alphabetic,
                           children: [
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.2,
+                              width: MediaQuery.of(context).size.width * 0.4,
                               child: Text(
-                                'Booking time:',
+                                'Thời gian hoàn thành:',
                                 style: TextStyle(fontSize: 16.0),
                               ),
                             ),
@@ -132,7 +132,7 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
                             Container(
                               width: MediaQuery.of(context).size.width * 0.2,
                               child: Text(
-                                'Status:',
+                                'Trạng thái:',
                                 style: TextStyle(fontSize: 16.0),
                               ),
                             ),

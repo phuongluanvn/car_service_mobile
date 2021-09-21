@@ -44,3 +44,24 @@ const String NOT_FOUND_ACCESSORY_LABLE = 'Hiện tại không có phụ tùng';
 const String TOTAL_LABLE = 'Tổng cộng: ';
 const String COMPLETE_LABLE = 'Hoàn thành';
 const String NOT_FOUND_ORDER_LABLE = 'Hiện tại không có đơn';
+
+//ACCOUNT
+const String INFO_ACCOUNT_TITLE = 'Thông tin người dùng';
+const String INFO_ACCOUNT = 'Thông tin cá nhân';
+const String ACCOUNT = 'Tài khoản';
+const String FULL_NAME = 'Họ tên';
+const String PHONE_NUMBER = 'Điện thoại';
+const String EMAIL = 'Email';
+const String ADDRESS = 'Địa chỉ';
+const String FULL_NAME_LABLE = 'Họ tên:';
+const String BUTTON_SAVE_UPDATE = 'Lưu';
+const String PHONE_NUMBER_LABLE = 'Điện thoại:';
+const String ADDRESS_LABLE = 'Địa chỉ:';
+const String POINT_LABLE = 'Điểm:';
+const String NOT_FOUND_INFO_ACCOUNT = 'Không có thông tin người dùng';
+const String HISTORY_ORDER = 'Lịch sử đơn hàng';
+const String LOG_OUT_LABLE = 'Đăng xuất';
+const String LOG_OUT_QUESTION = 'Bạn xác nhận muốn thoát ứng dụng?';
+const String BUTTON_YES = 'Có';
+const String BUTTON_NO = 'Không';
+

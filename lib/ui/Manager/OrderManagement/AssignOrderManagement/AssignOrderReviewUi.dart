@@ -79,7 +79,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
         .add(DoVerifyBookingDetailEvent(email: widget.userId));
     BlocProvider.of<OrderHistoryBloc>(context)
         .add(DoOrderHistoryDetailEvent(id: widget.userId));
-    BlocProvider.of<ManageStaffBloc>(context).add(DoListStaffEvent());
+    crewBloc.add(DoListAvailCrew());
   }
 
   @override
@@ -734,18 +734,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                           child: Column(
                             children: <Widget>[
                               Container(
-                                child: BlocBuilder<CrewBloc, CrewState>(
-                                    // ignore: missing_return
-                                    builder: (builder, staffState) {
-                                  if (staffState.status ==
-                                      ListCrewStatus.init) {
-                                    return CircularProgressIndicator();
-                                  } else if (staffState.status ==
-                                      ListCrewStatus.loading) {
-                                    return CircularProgressIndicator();
-                                  } else if (staffState.status ==
-                                      ListCrewStatus.success) {
-                                    return Column(
+                                child: Column(
                                       children: [
                                         // Container(
                                         //   height: MediaQuery.of(context)
@@ -812,8 +801,6 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                   onPressed: () => setState(() {
                                                         showInformationDialog(
                                                                 context,
-                                                                staffState
-                                                                    .crewList,
                                                                 widget.userId)
                                                             .then((value) {
                                                           setState(() {
@@ -901,14 +888,8 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                         //   child: Text('$holder'),
                                         // ),
                                       ],
-                                    );
-                                  } else if (staffState.status ==
-                                      ListCrewStatus.error) {
-                                    return ErrorWidget(
-                                        state.message.toString());
-                                  }
-                                  ;
-                                }),
+                                    ),
+                                
                               ),
                             ],
                           ),
@@ -929,7 +910,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   }
 
   Future showInformationDialog(
-      BuildContext context, List<CrewModel> crewlist, String orderId) async {
+      BuildContext context, String orderId) async {
     return showDialog(
         context: context,
         builder: (context) {
@@ -962,23 +943,23 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                     ListCrewStatus.loading) {
                                   return CircularProgressIndicator();
                                 } else if (stateOfPackage.status ==
-                                    ListCrewStatus.success) {
-                                  if (stateOfPackage.crewList != null &&
-                                      stateOfPackage.crewList.isNotEmpty)
+                                    ListCrewStatus.availSuccess) {
+                                  if (stateOfPackage.crewAvailList != null &&
+                                      stateOfPackage.crewAvailList.isNotEmpty)
                                     return ListView.builder(
-                                      itemCount: stateOfPackage.crewList.length,
+                                      itemCount: stateOfPackage.crewAvailList.length,
                                       shrinkWrap: true,
                                       // ignore: missing_return
                                       itemBuilder: (context, index) {
                                         return Card(
                                           child: ListTile(
                                             title: Text(
-                                              stateOfPackage.crewList[index]
+                                              stateOfPackage.crewAvailList[index]
                                                   .leaderFullname,
                                               style: TextStyle(
                                                   color: (_crewId ==
                                                               stateOfPackage
-                                                                  .crewList[
+                                                                  .crewAvailList[
                                                                       index]
                                                                   .id ||
                                                           _crewId != '')
@@ -986,12 +967,12 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                       : Colors.grey),
                                             ),
                                             subtitle: Text(stateOfPackage
-                                                .crewList[index]
+                                                .crewAvailList[index]
                                                 .leaderFullname),
                                             onTap: () {
                                               setState(() {
                                                 _crewId = stateOfPackage
-                                                    .crewList[index].id;
+                                                    .crewAvailList[index].id;
                                                 print(_crewId);
                                               });
                                             },
@@ -1028,6 +1009,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                     //     selectCrew: selectCrew,
                     //     orderId: orderId));
                     // Do something like updating SharedPreferences or User Settings etc.
+                    print(_crewId);
                     crewBloc.add(UpdateCrewToListEvent(
                         id: widget.userId, crewId: _crewId));
                     Navigator.pop(context);

@@ -18,6 +18,8 @@ import 'package:car_service/blocs/login/auth_bloc.dart';
 import 'package:car_service/blocs/login/auth_state.dart';
 import 'package:car_service/blocs/manager/Accessories/accessory_bloc.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_bloc.dart';
+import 'package:car_service/blocs/manager/ManageProfile/ManagerEditProfile_bloc.dart';
+import 'package:car_service/blocs/manager/ManageProfile/ManagerProfile_bloc.dart';
 import 'package:car_service/blocs/manager/assignOrder/assignOrder_bloc.dart';
 import 'package:car_service/blocs/manager/booking/booking_bloc.dart';
 import 'package:car_service/blocs/manager/createOrder/createOrder_bloc.dart';
@@ -215,6 +217,10 @@ class _AuthState extends State<Auth> {
             create: (context) => TableCalendarBloc(repo: ManagerRepository())),
         BlocProvider(
             create: (context) => AbsencesWorkBloc(repo: StaffRepository())),
+            BlocProvider(
+            create: (context) => ManagerProfileBloc(repo: ManagerRepository())),
+        BlocProvider(
+            create: (context) => ManagerEditProfileBloc(repo: ManagerRepository())),
         // BlocProvider(
         //     create: (context) =>
         //         BookingCubit(VerifyBookingInitState(), ManagerRepository())),

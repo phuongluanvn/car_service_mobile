@@ -33,6 +33,15 @@ class _EditLeaderCrewUiState extends State<EditLeaderCrewUi> {
   void initState() {
     crewBloc = BlocProvider.of<CrewBloc>(context);
     super.initState();
+    for (int i = 0; i < widget.choosingCrew.length; i++) {
+      if (widget.choosingCrew.isNotEmpty) {
+        setState(() {
+          // widget.choosingCrew[i].isLeader = false;
+          print(widget.choosingCrew[i].username);
+          print(widget.choosingCrew[i].isLeader);
+        });
+      }
+    }
   }
 
   @override
@@ -71,6 +80,7 @@ class _EditLeaderCrewUiState extends State<EditLeaderCrewUi> {
                                   TextButton(
                                       onPressed: () {
                                         Navigator.of(context).pop();
+                                        Navigator.pop(context);
                                         Navigator.pop(context);
                                         Navigator.pop(context);
                                         // BlocProvider.of<CrewBloc>(context)
@@ -136,12 +146,14 @@ class _EditLeaderCrewUiState extends State<EditLeaderCrewUi> {
                             style: ElevatedButton.styleFrom(
                                 primary: AppTheme.colors.blue),
                             onPressed: () {
-                              widget.choosingCrew[_crewId].isLeader = true;
-                              crewBloc.add(EditCrewEvent(
-                                  id: widget.id,
-                                  listUsername: widget.choosingCrew));
+                              setState(() {
+                                widget.choosingCrew[_crewId].isLeader = true;
+                                crewBloc.add(EditCrewEvent(
+                                    id: widget.id,
+                                    listUsername: widget.choosingCrew));
+                              });
                             },
-                            child: Text(manaConstants.CREATE_CREW_LABLE))
+                            child: Text('Hoàn tất'))
                       ],
                     ),
                   ),
