@@ -4,6 +4,7 @@ import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dar
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CreateOrderManagement/CreateBookingOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderDetailUI.dart';
+import 'package:car_service/ui/Customer/OrderManagement/WaitingPaymentOrderManagement/PaymentOrderDetailUI.dart';
 import 'package:car_service/utils/model/OrderModel.dart';
 import 'package:date_format/date_format.dart';
 // import 'package:date_time_picker/date_time_picker.dart';
@@ -145,10 +146,12 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                                       case cusConstants.CANCEL_BOOKING_STATUS:
                                         color = Colors.red[400];
                                         break;
-                                      case cusConstants.WAITING_PAYMENT_ORDER_STATUS:
+                                      case cusConstants
+                                          .WAITING_PAYMENT_ORDER_STATUS:
                                         color = Colors.orange[400];
                                         break;
-                                      case cusConstants.COMPLETED_PAYMENT_ORDER_STATUS:
+                                      case cusConstants
+                                          .COMPLETED_PAYMENT_ORDER_STATUS:
                                         color = Colors.green[600];
                                         break;
                                       default:
@@ -169,8 +172,8 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                                                 style: TextStyle(color: color),
                                               ),
                                             ]),
-                                        leading: Image.asset(
-                                            cusConstants.IMAGE_URL_ORDER_LOGO_SMALL),
+                                        leading: Image.asset(cusConstants
+                                            .IMAGE_URL_ORDER_LOGO_SMALL),
                                         title: Text(
                                             _textEditingController
                                                     .text.isNotEmpty
@@ -191,13 +194,26 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                                         ),
                                         onTap: () {
                                           print(state.orderLists[index].id);
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      CustomerOrderDetailUi(
-                                                          orderId: state
-                                                              .orderLists[index]
-                                                              .id)));
+                                          if (state.orderLists[index].status ==
+                                              'Đợi thanh toán') {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        PaymentOrderDetailUi(
+                                                            orderId: state
+                                                                .orderLists[
+                                                                    index]
+                                                                .id)));
+                                          } else {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        CustomerOrderDetailUi(
+                                                            orderId: state
+                                                                .orderLists[
+                                                                    index]
+                                                                .id)));
+                                          }
                                         },
                                       ),
                                     ]));

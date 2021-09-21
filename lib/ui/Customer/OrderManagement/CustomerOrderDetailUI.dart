@@ -1,15 +1,22 @@
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_event.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dart';
+import 'package:car_service/blocs/customer/customerOrder/FeedbackOrder_bloc.dart';
+import 'package:car_service/blocs/customer/customerOrder/FeedbackOrder_event.dart';
 import 'package:car_service/blocs/manager/Accessories/accessory_bloc.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_event.dart';
 import 'package:car_service/blocs/manager/Accessories/accessory_state.dart';
+import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
+import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
 import 'package:car_service/theme/app_theme.dart';
+import 'package:car_service/ui/Customer/CustomerMainUI.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
     as cusConstants;
+import 'package:rating_dialog/rating_dialog.dart';
 
 class CustomerOrderDetailUi extends StatefulWidget {
   final String orderId;
@@ -22,12 +29,16 @@ class CustomerOrderDetailUi extends StatefulWidget {
 class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
   Color color;
   int total = cusConstants.TOTAL_PRICE;
+  bool _isShowButtonFB = true;
+  FeedbackOrderBloc _buttonFeedback;
 
   @override
   void initState() {
     super.initState();
     BlocProvider.of<CustomerOrderBloc>(context)
         .add(DoOrderDetailEvent(id: widget.orderId));
+    _buttonFeedback = BlocProvider.of<FeedbackOrderBloc>(context);
+    BlocProvider.of<AccessoryBloc>(context).add(DoListAccessories());
   }
 
   _changeColorStt(status) {
@@ -128,18 +139,121 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                           state.orderDetail[0].vehicle.manufacturer,
                           state.orderDetail[0].vehicle.model,
                           state.orderDetail[0].vehicle.licensePlate),
-                      cardInforCrew(state.orderDetail[0].crew.leaderFullname,
-                          state.orderDetail[0].crew.members)
+                      state.orderDetail[0].crew != null
+                          ? cardInforCrew(
+                              state.orderDetail[0].crew.leaderFullname,
+                              state.orderDetail[0].crew.members)
+                          : SizedBox(),
+                      (state.orderDetail[0].feedbacks.isNotEmpty &&
+                              state.orderDetail[0].status !=
+                                  cusConstants.CANCEL_ORDER_STATUS)
+                          ? _showFeedback(
+                              state.orderDetail[0].feedbacks.first.rating,
+                              state.orderDetail[0].feedbacks.first.description)
+                          : BlocListener<UpdateStatusOrderBloc,
+                              UpdateStatusOrderState>(
+                              listener: (builder, statusState) {
+                                if (statusState.status ==
+                                    UpdateStatus
+                                        .updateStatusConfirmAcceptedSuccess) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CustomerHome()),
+                                  );
+                                }
+                              },
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.45,
+                                child: ElevatedButton(
+                                    style: _isShowButtonFB
+                                        ? ElevatedButton.styleFrom(
+                                            primary: AppTheme.colors.blue)
+                                        : ElevatedButton.styleFrom(
+                                            primary: Colors.grey),
+                                    child: Text(
+                                        cusConstants.BUTTON_FEEDBACK_LABLE,
+                                        style: TextStyle(color: Colors.white)),
+                                    onPressed: () {
+                                      if (_isShowButtonFB) {
+                                        _showFBDialog();
+                                      }
+                                    }),
+                              ),
+                            )
                     ],
                   ),
                 );
               else
-                return Center(child: Text('Không có thông tin đơn đặt lịch'));
+                return Center(
+                    child: Text(cusConstants.NOT_FOUND_ORDER_DETAIL_LABLE));
             } else if (state.detailStatus == CustomerOrderDetailStatus.error) {
               return ErrorWidget(state.message.toString());
             }
           },
         ),
+      ),
+    );
+  }
+
+  _showFBDialog() {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return RatingDialog(
+              commentHint: cusConstants.FEEDBACK_COMMENT_HINT,
+              title: cusConstants.BUTTON_FEEDBACK_LABLE,
+              message: cusConstants.FEEDBACK_MESSAGE,
+              image: Icon(
+                Icons.star,
+                size: 100,
+                color: Colors.yellow,
+              ),
+              submitButton: cusConstants.SEND,
+              onSubmitted: (res) {
+                setState(() {
+                  _isShowButtonFB = false;
+                });
+                _buttonFeedback.add(DoFeedbackButtonPressed(
+                    ordeId: widget.orderId,
+                    rating: res.rating,
+                    description: res.comment));
+              });
+        });
+  }
+
+  Widget _showFeedback(int rating, String dess) {
+    return Card(
+      child: Column(
+        children: [
+          Text(
+            cusConstants.FEEDBACK_CARD_TITLE,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+            textAlign: TextAlign.start,
+          ),
+          ListTile(
+            title: Text(cusConstants.STAR_LABLE),
+            trailing: IconTheme(
+              data: IconThemeData(color: Colors.yellow, size: 30),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(5, (index) {
+                  return index < rating
+                      ? Icon(Icons.star)
+                      : Icon(Icons.star_border);
+                }),
+              ),
+            ),
+          ),
+          ListTile(
+            title: Text(cusConstants.DESCRIPTION_LABLE),
+            trailing: Text(dess),
+          ),
+        ],
       ),
     );
   }
@@ -155,7 +269,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
         child: Column(
           children: [
-            Text('Thông tin tổ đội',
+            Text(cusConstants.INFO_CREW_LABLE,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -165,7 +279,9 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                 children: members.map((e) {
               return ListTile(
                 title: Text(e.fullname),
-                // trailing: Text(_convertMoney(service.price.toDouble())),
+                trailing: leaderName == e.fullname
+                    ? Text(cusConstants.LERDER_LABLE)
+                    : Text(cusConstants.STAFF_LABLE),
               );
             }).toList()),
           ],
@@ -267,7 +383,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
       bool serviceType,
       String note,
       int totalPrice) {
-    int countPrice = 0;
+    int countPrice = cusConstants.TOTAL_PRICE;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       child: Container(
@@ -329,8 +445,10 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                             orderDetails.isEmpty
                                 ? SizedBox()
                                 : ExpansionTile(
-                                    title: Text('Dịch vụ bổ sung: '),
+                                    title:
+                                        Text(cusConstants.ADDED_SERVICE_LABLE),
                                     children: orderDetails.map((service) {
+                                      countPrice += service.price;
                                       return ExpansionTile(
                                         title: Text(service.name),
                                         trailing: Text(_convertMoney(
@@ -374,17 +492,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                     title: Text(cusConstants.SERVICE_INFO_CARD_PRICE_TOTAL),
                     trailing: Text(
                       _convertMoney(countPrice.toDouble()),
-                      // style: TextStyle(decoration: TextDecoration.lineThrough),
                     ),
-                    // Column(
-                    //   children: [
-                    //     Text(
-                    //       _convertMoney(countPrice.toDouble()),
-                    //       style: TextStyle(decoration: TextDecoration.lineThrough),
-                    //     ),
-                    //     // Text(_convertMoney(totalPrice.toDouble())),
-                    //   ],
-                    // )
                   ),
                 ],
               );

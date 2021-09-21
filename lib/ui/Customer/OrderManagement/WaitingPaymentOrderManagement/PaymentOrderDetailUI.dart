@@ -1,6 +1,8 @@
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_event.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_bloc.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_state.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
@@ -11,6 +13,8 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_braintree/flutter_braintree.dart';
+import 'package:material_dialogs/material_dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
@@ -25,20 +29,31 @@ class PaymentOrderDetailUi extends StatefulWidget {
 }
 
 class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
+  
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visibleByDenied = false;
   bool textButton = true;
   String reasonReject;
-  // String paymentCompleted = 'Đã thanh toán';
-  int total = 0;
+  int total = cusConstants.TOTAL_PRICE;
+  num _totalPriceAll = cusConstants.TOTAL_PRICE;
+  String _username;
 
   @override
   void initState() {
     super.initState();
-
+    _getStringFromSharedPref();
     BlocProvider.of<CustomerOrderBloc>(context)
         .add(DoOrderDetailEvent(id: widget.orderId));
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
+  }
+
+  _getStringFromSharedPref() async {
+    final prefs = await SharedPreferences.getInstance();
+    String username = prefs.getString('Username');
+
+    setState(() {
+      _username = username;
+    });
   }
 
   @override
@@ -90,7 +105,10 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                           state.orderDetail[0].vehicle.model,
                           state.orderDetail[0].vehicle.model,
                           state.orderDetail[0].vehicle.licensePlate,
-                          state.orderDetail[0].orderDetails,
+                          state.orderDetail[0].packageLists,
+                          state.orderDetail[0].orderDetails == []
+                              ? state.orderDetail[0].orderDetails == []
+                              : state.orderDetail[0].orderDetails,
                           state.orderDetail[0].note == null ? false : true,
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].note
@@ -98,50 +116,50 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                           total = state.orderDetail[0].orderDetails
                               .fold(0, (sum, element) => sum + element.price),
                           state.orderDetail[0].id),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Visibility(
-                          visible: _visibleByDenied,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: TextField(
-                              onChanged: (noteValue) {
-                                setState(() {
-                                  reasonReject = noteValue;
-                                });
-                              },
-                              maxLines: 3,
-                              decoration: InputDecoration.collapsed(
-                                  hintText: cusConstants.REASON_REJECTED_LABLE),
-                            ),
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                          onPressed: () async {
-                            var request = BraintreeDropInRequest(
-                              tokenizationKey:
-                                  'sandbox_rzktbfv9_qgn7c8w395dwxz6h',
-                              collectDeviceData: true,
-                              paypalRequest: BraintreePayPalRequest(
-                                amount: '10.00',
-                                displayName: 'TestPay',
-                              ),
-                              cardEnabled: true,
-                            );
-                            BraintreeDropInResult result =
-                                await BraintreeDropIn.start(request);
-                            if (result != null) {
-                              print(result.paymentMethodNonce.description);
-                              print(result.paymentMethodNonce.nonce);
-                            }
-                          },
-                          child: Text(cusConstants.BUTTON_PAYMENT_TITLE)),
+                      // Padding(
+                      //   padding: const EdgeInsets.all(8.0),
+                      //   child: Visibility(
+                      //     visible: _visibleByDenied,
+                      //     child: Container(
+                      //       padding: EdgeInsets.symmetric(
+                      //           horizontal: 10, vertical: 10),
+                      //       decoration: BoxDecoration(
+                      //           color: Colors.white,
+                      //           border: Border.all(),
+                      //           borderRadius: BorderRadius.circular(10)),
+                      //       child: TextField(
+                      //         onChanged: (noteValue) {
+                      //           setState(() {
+                      //             reasonReject = noteValue;
+                      //           });
+                      //         },
+                      //         maxLines: 3,
+                      //         decoration: InputDecoration.collapsed(
+                      //             hintText: cusConstants.REASON_REJECTED_LABLE),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // ElevatedButton(
+                      //     onPressed: () async {
+                      //       var request = BraintreeDropInRequest(
+                      //         tokenizationKey:
+                      //             'sandbox_rzktbfv9_qgn7c8w395dwxz6h',
+                      //         collectDeviceData: true,
+                      //         paypalRequest: BraintreePayPalRequest(
+                      //           amount: _totalPriceAll.toString(),
+                      //           displayName: _username,
+                      //         ),
+                      //         cardEnabled: true,
+                      //       );
+                      //       BraintreeDropInResult result =
+                      //           await BraintreeDropIn.start(request);
+                      //       if (result != null) {
+                      //         print(result.paymentMethodNonce.description);
+                      //         print(result.paymentMethodNonce.nonce);
+                      //       }
+                      //     },
+                      //     child: Text(cusConstants.BUTTON_PAYMENT_TITLE)),
                       BlocListener<UpdateStatusOrderBloc,
                           UpdateStatusOrderState>(
                         listener: (builder, statusState) {
@@ -180,16 +198,82 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                               style: ElevatedButton.styleFrom(
                                   primary: AppTheme.colors.blue),
                               child: Text(
-                                  cusConstants.COMPLETED_PAYMENT_ORDER_STATUS,
+                                  cusConstants.COMPLETED_PAYMENT_ORDER_LABLE,
                                   style: TextStyle(color: Colors.white)),
                               onPressed: () {
-                                setState(() {
-                                  updateStatusBloc.add(
-                                      UpdateStatusConfirmAcceptedButtonPressed(
-                                          id: state.orderDetail[0].id,
-                                          status: cusConstants
-                                              .COMPLETED_PAYMENT_ORDER_STATUS));
-                                });
+                                Dialogs.bottomMaterialDialog(
+                                    msg:
+                                        cusConstants.SELECT_PAYMENT_ORDER_LABLE,
+                                    title: cusConstants.PAYMENT_LABLE,
+                                    context: context,
+                                    actions: [
+                                      IconsButton(
+                                        onPressed: () async {
+                                          var request = BraintreeDropInRequest(
+                                            tokenizationKey:
+                                                'sandbox_rzktbfv9_qgn7c8w395dwxz6h',
+                                            collectDeviceData: true,
+                                            paypalRequest:
+                                                BraintreePayPalRequest(
+                                              amount: _totalPriceAll.toString(),
+                                              displayName: _username,
+                                            ),
+                                            cardEnabled: true,
+                                          );
+                                          BraintreeDropInResult result =
+                                              await BraintreeDropIn.start(
+                                                  request);
+                                          if (result != null) {
+                                            print(result.paymentMethodNonce
+                                                .description);
+                                            print(result
+                                                .paymentMethodNonce.nonce);
+                                          }
+                                        },
+                                        text: cusConstants.ONLINE_LABLE,
+                                        iconData: Icons.payment,
+                                        color: Colors.blue[600],
+                                        textStyle:
+                                            TextStyle(color: Colors.white),
+                                        iconColor: Colors.white,
+                                      ),
+                                      IconsButton(
+                                        onPressed: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext ctx) {
+                                                return AlertDialog(
+                                                  title: Text(
+                                                    cusConstants.DIALOG_NOTI_LABLE,
+                                                    style: TextStyle(
+                                                        color:
+                                                            Colors.greenAccent),
+                                                  ),
+                                                  content: Text(cusConstants.PAYMENT_CONTENT_DIALOG_LABLE),
+                                                  actions: [
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Text(cusConstants
+                                                            .BUTTON_OK_TITLE))
+                                                  ],
+                                                );
+                                              });
+                                        },
+                                        text: cusConstants.CASH_LABLE,
+                                        iconData: Icons.account_balance_wallet,
+                                        color: Colors.green[600],
+                                        textStyle:
+                                            TextStyle(color: Colors.white),
+                                        iconColor: Colors.white,
+                                      ),
+                                    ]);
                               }),
                         ),
                       )
@@ -272,11 +356,13 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
       String servicePackageName,
       String serviceName,
       String price,
-      List services,
+      List packages,
+      List orderDetails,
       bool serviceType,
       String note,
       int totalPrice,
       String orderDetailId) {
+    int countPrice = cusConstants.TOTAL_PRICE;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       child: Container(
@@ -285,47 +371,101 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
             border: Border.all(color: Colors.black26),
             borderRadius: BorderRadius.circular(5)),
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-        child: Column(
-          children: [
-            Text(
-               cusConstants.SERVICE_INFO_CARD_TITLE,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-              textAlign: TextAlign.start,
-            ),
-            ListTile(
-              title: Text(cusConstants.SERVICE_INFO_CARD_TYPE_LABLE),
-              trailing: serviceType ? Text(cusConstants.SERVICE_INFO_CARD_TYPE_REPAIR) : Text(cusConstants.SERVICE_INFO_CARD_TYPE_MANTAIN),
-            ),
-            serviceType
-                ? ListTile(
-                    title: Text(cusConstants.SERVICE_INFO_CARD_CUS_NOTE),
-                    subtitle: Text(
-                      note,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                    ))
-                : Column(
-                    children: services.map((service) {
-                      return ListTile(
-                        title: Text(service.name),
-                        trailing: Text(_convertMoney(service.price.toDouble())),
-                      );
-                    }).toList(),
+        child: BlocBuilder<AccessoryBloc, AccessoryState>(
+          builder: (context, accState) {
+            return Column(
+              children: [
+                Text(
+                  cusConstants.SERVICE_INFO_CARD_TITLE,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                   ),
-            Divider(
-              color: Colors.black,
-              thickness: 2,
-              indent: 20,
-              endIndent: 20,
-            ),
-            ListTile(
-              title: Text(cusConstants.SERVICE_INFO_CARD_PRICE_TOTAL),
-              trailing: Text(_convertMoney(totalPrice.toDouble())),
-            ),
-          ],
+                  textAlign: TextAlign.start,
+                ),
+                ListTile(
+                  title: Text(cusConstants.SERVICE_INFO_CARD_TYPE_LABLE),
+                  trailing: serviceType
+                      ? Text(cusConstants.SERVICE_INFO_CARD_TYPE_REPAIR)
+                      : Text(cusConstants.SERVICE_INFO_CARD_TYPE_MANTAIN),
+                ),
+                serviceType
+                    ? ListTile(
+                        title: Text(cusConstants.SERVICE_INFO_CARD_CUS_NOTE),
+                        subtitle: Text(
+                          note,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.black),
+                        ))
+                    : Column(
+                        children: [
+                          Column(
+                              children: packages.map((e) {
+                            // return Text(e.orderDetails);
+                            return ExpansionTile(
+                              title: Text(e.name),
+                              children: e.orderDetails.map<Widget>((service) {
+                                countPrice += service.price;
+                                return ListTile(
+                                  title: Text(service.name),
+                                  trailing: Text(
+                                      _convertMoney(service.price.toDouble())),
+                                );
+                              }).toList(),
+                            );
+                          }).toList()),
+                          orderDetails.isEmpty
+                              ? SizedBox()
+                              : ExpansionTile(
+                                  title: Text(cusConstants.ADDED_SERVICE_LABLE),
+                                  children: orderDetails.map((service) {
+                                    countPrice += service.price;
+                                    _totalPriceAll = countPrice;
+                                    return ExpansionTile(
+                                      title: Text(service.name),
+                                      trailing: Text(_convertMoney(
+                                          service.price.toDouble())),
+                                      children: [
+                                        accState.accessoryList.indexWhere(
+                                                    (element) =>
+                                                        element.id ==
+                                                        service.accessoryId) >=
+                                                0
+                                            ? ListTile(
+                                                title: Text(accState
+                                                    .accessoryList
+                                                    .firstWhere((element) =>
+                                                        element.id ==
+                                                        service.accessoryId)
+                                                    .name),
+                                                trailing: Image.network(accState
+                                                    .accessoryList
+                                                    .firstWhere((element) =>
+                                                        element.id ==
+                                                        service.accessoryId)
+                                                    .imageUrl),
+                                              )
+                                            : Text(cusConstants
+                                                .NOT_FOUND_ACCESSORY_IN_SERVICE),
+                                      ],
+                                    );
+                                  }).toList(),
+                                ),
+                        ],
+                      ),
+                Divider(
+                  color: Colors.black,
+                  thickness: 2,
+                  indent: 20,
+                  endIndent: 20,
+                ),
+                ListTile(
+                  title: Text(cusConstants.SERVICE_INFO_CARD_PRICE_TOTAL),
+                  trailing: Text(_convertMoney(_totalPriceAll.toDouble())),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

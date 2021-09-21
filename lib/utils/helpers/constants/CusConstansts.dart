@@ -66,6 +66,7 @@ const String CANCEL_ORDER_STATUS = 'Hủy đơn';
 const String CANCEL_BOOKING_STATUS = 'Hủy đặt lịch';
 const String WAITING_PAYMENT_ORDER_STATUS = 'Đợi thanh toán';
 const String COMPLETED_PAYMENT_ORDER_STATUS = 'Đã thanh toán';
+const String COMPLETED_PAYMENT_ORDER_LABLE = 'Thanh toán';
 
 const String CHECKIN_NOT_YET_STATUS = 'Chưa nhận xe';
 
@@ -144,10 +145,21 @@ const String TABAR_TITLE = 'Đơn hàng';
 const String ALL_ORDER = 'Tất cả đơn hàng';
 
 //NAVBAR
-const String ORDER_LABLE='Đơn hàng'; 
-const String MY_VEHICLE_LABLE='Xe của tôi';
-const String ACCOUNT_INFO_LABLE='Thông tin';
-const String NOTI_LABLE='Thông báo';
+const String ORDER_LABLE = 'Đơn hàng';
+const String MY_VEHICLE_LABLE = 'Xe của tôi';
+const String ACCOUNT_INFO_LABLE = 'Thông tin';
+const String NOTI_LABLE = 'Thông báo';
+const String NOT_FOUND_NOTI = 'Không có thông báo';
 
-const String NOT_FOUND_NOTI ='Không có thông báo';
-
+//CUSTOMER ORDER DETAIL UI
+const String INFO_CREW_LABLE = 'Thông tin tổ đội';
+const String LERDER_LABLE = 'Tổ trưởng';
+const String STAFF_LABLE = 'Tổ viên';
+const String NOT_FOUND_ORDER_DETAIL_LABLE = 'Không có thông tin đơn!';
+const String ADDED_SERVICE_LABLE = 'Dịch vụ bổ sung: ';
+const String SELECT_PAYMENT_ORDER_LABLE = 'Hãy chọn phương thức thanh toán';
+const String PAYMENT_LABLE = 'Phương thức thanh toán';
+const String ONLINE_LABLE = 'Online';
+const String CASH_LABLE = 'Tiền mặt';
+const String PAYMENT_CONTENT_DIALOG_LABLE = 'Mời bạn đến bàn thu ngân tiến hành thanh toán!';
+const String DIALOG_NOTI_LABLE = 'Thanh toán tiền mặt';

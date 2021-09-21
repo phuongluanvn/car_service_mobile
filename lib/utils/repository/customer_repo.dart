@@ -217,12 +217,13 @@ class CustomerRepository {
   getOrderDetail(String id) async {
     List<OrderDetailModel> orderDetails = [];
     List convertData = [];
-    print(id);
     var res = await http.get(
       Uri.parse(BASE_URL + 'orders/' + id),
       headers: headers,
     );
     if (res.statusCode == 200) {
+    print(res.body);
+
       var data = json.decode(res.body);
       convertData.add(data);
       try {
@@ -231,13 +232,13 @@ class CustomerRepository {
               .map((orderDetail) =>
                   orderDetails.add(OrderDetailModel.fromJson(orderDetail)))
               .toList();
-
+print(orderDetails);
           return orderDetails;
         } else {
           res.body;
         }
       } catch (e) {
-        res.body;
+        e.toString();
       }
     } else {
       res.body;

@@ -58,6 +58,7 @@ dependencies:
   syncfusion_flutter_calendar: ^19.2.57
   syncfusion_flutter_datepicker: ^19.2.59
   timelines: ^0.1.0
+  material_dialogs:
   
 dev_dependencies:
   intl:

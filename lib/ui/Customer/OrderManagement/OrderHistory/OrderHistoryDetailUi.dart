@@ -121,8 +121,14 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
                             state.orderDetail[0].vehicle.manufacturer,
                             state.orderDetail[0].vehicle.model,
                             state.orderDetail[0].vehicle.licensePlate),
+                        state.orderDetail[0].crew != null
+                            ? cardInforCrew(
+                                state.orderDetail[0].crew.leaderFullname,
+                                state.orderDetail[0].crew.members)
+                            : SizedBox(),
                         (state.orderDetail[0].feedbacks.isNotEmpty &&
-                                state.orderDetail[0].status != cusConstants.CANCEL_ORDER_STATUS)
+                                state.orderDetail[0].status !=
+                                    cusConstants.CANCEL_ORDER_STATUS)
                             ? _showFeedback(
                                 state.orderDetail[0].feedbacks.first.rating,
                                 state
@@ -160,6 +166,7 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
                                       }),
                                 ),
                               )
+                     
                       ],
                     ),
                   );
@@ -235,6 +242,38 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
             trailing: Text(modelName),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget cardInforCrew(String leaderName, List members) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.black26),
+            borderRadius: BorderRadius.circular(5)),
+        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+        child: Column(
+          children: [
+            Text(cusConstants.INFO_CREW_LABLE,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+                textAlign: TextAlign.start),
+            Column(
+                children: members.map((e) {
+              return ListTile(
+                title: Text(e.fullname),
+                trailing: leaderName == e.fullname
+                    ? Text(cusConstants.LERDER_LABLE)
+                    : Text(cusConstants.STAFF_LABLE),
+              );
+            }).toList()),
+          ],
+        ),
       ),
     );
   }

@@ -91,7 +91,7 @@ class CustomerOrderBloc extends Bloc<CustomerOrderEvent, CustomerOrderState> {
         } else {
           yield state.copyWith(
             detailStatus: CustomerOrderDetailStatus.error,
-            message: data,
+            message: data.toString(),
           );
         }
       } catch (e) {
