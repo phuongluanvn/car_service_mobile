@@ -3,6 +3,8 @@ import 'package:car_service/utils/model/BookingModel.dart';
 import 'package:car_service/utils/model/CalendarModel.dart';
 import 'package:car_service/utils/model/CrewModel.dart';
 import 'package:car_service/utils/model/CustomerModel.dart';
+import 'package:car_service/utils/model/CustomerProfileModel.dart';
+import 'package:car_service/utils/model/EmployeeProfileModel.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/ServiceModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
@@ -366,6 +368,73 @@ class ManagerRepository {
     }
   }
 
+  Future<List<CrewModel>> getAvailCrewList() async {
+    List<CrewModel> crewLists = [];
+    var res = await http.get(
+      Uri.parse(BASE_URL + "crews?isAvailable=true"),
+      headers: headers,
+    );
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      if (data != null) {
+        data.map((order) => crewLists.add(CrewModel.fromJson(order))).toList();
+        return crewLists;
+      } else {
+        print('No crew data');
+      }
+    } else {
+      return null;
+    }
+  }
+
+  getEmpProfile(String username) async {
+    String message;
+    List convertData = [];
+    List<EmployeeProfileModel> cusProfile = [];
+    var res = await http.get(Uri.parse(BASE_URL + "employees/" + username),
+        headers: headers);
+    final data = json.decode(res.body);
+    convertData.add(data);
+
+    if (res.statusCode == 200) {
+      if (data != null) {
+        convertData
+            .map((e) => cusProfile.add(EmployeeProfileModel.fromJson(e)))
+            .toList();
+        return cusProfile;
+      } else {
+        return 'Không tìm thấy thông tin người dùng';
+      }
+    } else if (res.statusCode == 404) {
+      message =
+          'Không tìm thấy thông tin người dùng ' + res.statusCode.toString();
+      return message;
+    } else {
+      return res.body;
+    }
+  }
+
+  editProfile(String username, String fullname, String phoneNumber,
+      String email, String address) async {
+    print(username);
+    final body = jsonEncode({
+      "username": username,
+      "email": email,
+      "fullname": fullname,
+      "phoneNumber": phoneNumber,
+      "address": address
+    });
+
+    var res = await http.put(Uri.parse(BASE_URL + "customers"),
+        headers: headers, body: body);
+    final data = (res.body);
+    if (data != null) {
+      return data;
+    } else {
+      return res.body;
+    }
+  }
+
   Future<List<AccessoryModel>> getAccessoryByName(String name) async {
     List<AccessoryModel> listdata = [];
     List convertData = [];
@@ -421,9 +490,6 @@ class ManagerRepository {
   }
 
   updateCrewByName(String id, String crewId) async {
-    print('lololo');
-    // print(selectName);
-
     var body = {
       "id": '$id',
       "crewId": '$crewId',
@@ -480,7 +546,7 @@ class ManagerRepository {
       headers: headers,
       body: json.encode(body),
     );
-    print(res.statusCode);
+    print(body);
     if (res.statusCode != null) {
       if (res.statusCode == 200) {
         return res.body;

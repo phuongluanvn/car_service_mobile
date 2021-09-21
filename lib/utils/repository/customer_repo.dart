@@ -428,6 +428,8 @@ class CustomerRepository {
     }
   }
 
+  
+
   getCoupon() async {
     String message;
     List<CouponModel> couponsList = [];

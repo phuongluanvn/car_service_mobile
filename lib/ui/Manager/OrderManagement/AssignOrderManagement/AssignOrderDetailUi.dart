@@ -57,9 +57,10 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     BlocProvider.of<AssignOrderBloc>(context)
         .add(DoAssignOrderDetailEvent(id: widget.orderId));
-    BlocProvider.of<ManageStaffBloc>(context).add(DoListStaffEvent());
+    // BlocProvider.of<ManageStaffBloc>(context).add(DoListStaffEvent());
     BlocProvider.of<OrderHistoryBloc>(context)
         .add(DoOrderHistoryDetailEvent(id: widget.orderId));
+    crewBloc.add(DoListAvailCrew());
   }
 
   void getDropDownItem() {
@@ -467,152 +468,132 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                 child: Column(
                                   children: <Widget>[
                                     Container(
-                                      child: BlocBuilder<CrewBloc, CrewState>(
-                                          // ignore: missing_return
-                                          builder: (builder, staffState) {
-                                        if (staffState.status ==
-                                            ListCrewStatus.init) {
-                                          return CircularProgressIndicator();
-                                        } else if (staffState.status ==
-                                            ListCrewStatus.loading) {
-                                          return CircularProgressIndicator();
-                                        } else if (staffState.status ==
-                                            ListCrewStatus.success) {
-                                          return Column(
-                                            children: [
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.black26),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5)),
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 5,
-                                                    vertical: 10),
-                                                child: Column(
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.black26),
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 5, vertical: 10),
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  'Tổ đội phụ trách',
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                                SizedBox(
+                                                  height: 20,
+                                                ),
+                                                Column(
                                                   children: [
-                                                    Text(
-                                                      'Tổ đội phụ trách',
-                                                      style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.w600),
+                                                    // Text(_crewId),
+                                                    // for (int i = 0;
+                                                    //     i < selectCrew.length;
+                                                    //     i++)
+                                                    Card(
+                                                      child: Column(children: [
+                                                        state.assignDetail[0]
+                                                                        .crew !=
+                                                                    null &&
+                                                                state
+                                                                        .assignDetail[
+                                                                            0]
+                                                                        .crew
+                                                                        .id !=
+                                                                    null &&
+                                                                state
+                                                                    .assignDetail[
+                                                                        0]
+                                                                    .crew
+                                                                    .id
+                                                                    .isNotEmpty
+                                                            // _crewId ==
+                                                            //         state
+                                                            //             .assignDetail[0]
+                                                            //             .crew
+                                                            //             .id
+                                                            ? ListTile(
+                                                                leading:
+                                                                    Image.asset(
+                                                                        'lib/images/logo_blue.png'),
+                                                                title: Text(state
+                                                                    .assignDetail[
+                                                                        0]
+                                                                    .crew
+                                                                    .leaderFullname),
+                                                              )
+                                                            : SizedBox(),
+                                                      ]),
                                                     ),
-                                                    SizedBox(
-                                                      height: 20,
-                                                    ),
-                                                    Column(
-                                                      children: [
-                                                        // Text(_crewId),
-                                                        // for (int i = 0;
-                                                        //     i < selectCrew.length;
-                                                        //     i++)
-                                                        Card(
-                                                          child: Column(
-                                                              children: [
-                                                                state.assignDetail[0].crew != null &&
-                                                                        state.assignDetail[0].crew.id !=
-                                                                            null &&
-                                                                        state
-                                                                            .assignDetail[0]
-                                                                            .crew
-                                                                            .id
-                                                                            .isNotEmpty
-                                                                    // _crewId ==
-                                                                    //         state
-                                                                    //             .assignDetail[0]
-                                                                    //             .crew
-                                                                    //             .id
-                                                                    ? ListTile(
-                                                                        leading:
-                                                                            Image.asset('lib/images/logo_blue.png'),
-                                                                        title: Text(state
-                                                                            .assignDetail[0]
-                                                                            .crew
-                                                                            .leaderFullname),
-                                                                      )
-                                                                    : SizedBox(),
-                                                              ]),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    ElevatedButton(
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                                primary:
-                                                                    AppTheme
-                                                                        .colors
-                                                                        .blue),
-                                                        child:
-                                                            Text('Chọn tổ đội'),
-                                                        onPressed: () =>
-                                                            setState(() {
-                                                              showInformationDialog(
-                                                                      context,
-                                                                      staffState
-                                                                          .crewList,
-                                                                      widget
-                                                                          .orderId)
-                                                                  .then(
-                                                                      (value) {
-                                                                setState(() {
-                                                                  selectData =
-                                                                      value;
-                                                                });
-                                                              });
-                                                            })),
-                                                    Container(height: 10),
                                                   ],
                                                 ),
-                                              ),
-
-                                              SizedBox(
-                                                height: 15,
-                                              ),
-                                              SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.6,
-                                                child: ElevatedButton(
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                          primary: AppTheme
-                                                              .colors.blue),
-                                                  child: Text('Kiểm tra xe',
-                                                      style: TextStyle(
-                                                          color: Colors.white)),
-                                                  onPressed: () {
-                                                    updateStatusBloc.add(
-                                                        UpdateStatusCheckingButtonPressed(
-                                                            id: state
-                                                                .assignDetail[0]
-                                                                .id,
-                                                            status:
-                                                                checkingStatus));
-
-                                                    Navigator.pushNamed(
-                                                        context, '/manager');
-                                                  },
+                                                SizedBox(
+                                                  height: 10,
                                                 ),
-                                              ),
+                                                ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            primary: AppTheme
+                                                                .colors.blue),
+                                                    child: Text('Chọn tổ đội'),
+                                                    onPressed: () =>
+                                                        setState(() {
+                                                          showInformationDialog(
+                                                                  context,
+                                                                  widget
+                                                                      .orderId)
+                                                              .then((value) {
+                                                            setState(() {
+                                                              selectData =
+                                                                  value;
+                                                            });
+                                                          });
+                                                        })),
+                                                Container(height: 10),
+                                              ],
+                                            ),
+                                          ),
 
-                                              // Container(
-                                              //   child: Text(''),
-                                              // ),
-                                            ],
-                                          );
-                                        } else if (staffState.status ==
-                                            ListCrewStatus.error) {
-                                          return ErrorWidget(
-                                              state.message.toString());
-                                        }
-                                        ;
-                                      }),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.6,
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  primary:
+                                                      AppTheme.colors.blue),
+                                              child: Text('Kiểm tra xe',
+                                                  style: TextStyle(
+                                                      color: Colors.white)),
+                                              onPressed: () {
+                                                updateStatusBloc.add(
+                                                    UpdateStatusCheckingButtonPressed(
+                                                        id: state
+                                                            .assignDetail[0].id,
+                                                        status:
+                                                            checkingStatus));
+
+                                                Navigator.pushNamed(
+                                                    context, '/manager');
+                                              },
+                                            ),
+                                          ),
+
+                                          // Container(
+                                          //   child: Text(''),
+                                          // ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -637,8 +618,7 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
 
   // ======================
 
-  Future showInformationDialog(
-      BuildContext context, List<CrewModel> crewlist, String orderId) async {
+  Future showInformationDialog(BuildContext context, String orderId) async {
     return showDialog(
         context: context,
         builder: (context) {
@@ -671,34 +651,37 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                     ListCrewStatus.loading) {
                                   return CircularProgressIndicator();
                                 } else if (stateOfPackage.status ==
-                                    ListCrewStatus.success) {
-                                  if (stateOfPackage.crewList != null &&
-                                      stateOfPackage.crewList.isNotEmpty)
+                                    ListCrewStatus.availSuccess) {
+                                  if (stateOfPackage.crewAvailList != null &&
+                                      stateOfPackage.crewAvailList.isNotEmpty)
                                     return ListView.builder(
-                                      itemCount: stateOfPackage.crewList.length,
+                                      itemCount:
+                                          stateOfPackage.crewAvailList.length,
                                       shrinkWrap: true,
                                       // ignore: missing_return
                                       itemBuilder: (context, index) {
                                         return Card(
                                           child: ListTile(
                                             title: Text(
-                                              stateOfPackage.crewList[index]
+                                              stateOfPackage
+                                                  .crewAvailList[index]
                                                   .leaderFullname,
                                               style: TextStyle(
                                                   color: (_crewId ==
                                                           stateOfPackage
-                                                              .crewList[index]
+                                                              .crewAvailList[
+                                                                  index]
                                                               .id)
                                                       ? AppTheme.colors.deepBlue
                                                       : Colors.grey),
                                             ),
                                             subtitle: Text(stateOfPackage
-                                                .crewList[index]
+                                                .crewAvailList[index]
                                                 .leaderFullname),
                                             onTap: () {
                                               setState(() {
                                                 _crewId = stateOfPackage
-                                                    .crewList[index].id;
+                                                    .crewAvailList[index].id;
                                                 print(_crewId);
                                               });
                                             },

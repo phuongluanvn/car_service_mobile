@@ -9,6 +9,7 @@ enum ListCrewStatus {
   init,
   loading,
   success,
+  availSuccess,
   error,
 }
 
@@ -47,6 +48,7 @@ class CrewState extends Equatable {
   final UpdateCrewStatus updateCrewStatus;
   final DoUpdateStatus updateStatus;
   final List<CrewModel> crewList;
+  final List<CrewModel> crewAvailList;
   final List<CrewModel> crewDetails;
   final List<CreateCrewModel> createCrewList;
   final List<CreateCrewModel> editCrewList;
@@ -58,6 +60,7 @@ class CrewState extends Equatable {
       this.createStatus: CreateCrewStatus.init,
       this.updateStatus: DoUpdateStatus.init,
       this.crewList: const [],
+      this.crewAvailList: const [],
       this.createCrewList: const [],
       this.editCrewList: const [],
       this.crewDetails: const [],
@@ -70,6 +73,7 @@ class CrewState extends Equatable {
     DoUpdateStatus updateStatus,
     CreateCrewStatus createStatus,
     List<CrewModel> crewList,
+    List<CrewModel> crewAvailList,
     List<CreateCrewModel> createCrewList,
     List<CreateCrewModel> editCrewList,
     List<CrewModel> crewDetails,
@@ -82,6 +86,7 @@ class CrewState extends Equatable {
         createStatus: createStatus ?? this.createStatus,
         updateStatus: updateStatus ?? this.updateStatus,
         crewList: crewList ?? this.crewList,
+        crewAvailList: crewAvailList ?? this.crewAvailList,
         editCrewList: editCrewList ?? this.editCrewList,
         createCrewList: createCrewList ?? this.createCrewList,
         crewDetails: crewDetails ?? this.crewDetails,
@@ -94,6 +99,7 @@ class CrewState extends Equatable {
         updateCrewStatus,
         createStatus,
         crewList,
+        crewAvailList,
         createCrewList,
         crewDetails,
         message,

@@ -70,9 +70,9 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
         .add(DoTaskrDetailEvent(id: widget.orderId));
     BlocProvider.of<ProcessOrderBloc>(context)
         .add(DoProcessOrderDetailEvent(email: widget.orderId));
-    BlocProvider.of<ManageStaffBloc>(context).add(DoListStaffEvent());
     BlocProvider.of<AssignOrderBloc>(context)
         .add(DoAssignOrderDetailEvent(id: widget.orderId));
+    crewBloc.add(DoListAvailCrew());
   }
 
   void getDropDownItem() {
@@ -527,113 +527,90 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                           child: Column(
                             children: <Widget>[
                               Container(
-                                child: BlocBuilder<CrewBloc, CrewState>(
-                                    // ignore: missing_return
-                                    builder: (builder, staffState) {
-                                  if (staffState.status ==
-                                      ListCrewStatus.init) {
-                                    return CircularProgressIndicator();
-                                  } else if (staffState.status ==
-                                      ListCrewStatus.loading) {
-                                    return CircularProgressIndicator();
-                                  } else if (staffState.status ==
-                                      ListCrewStatus.success) {
-                                    return Column(
-                                      children: [
-                                        // Container(
-                                        //   height: MediaQuery.of(context)
-                                        //           .size
-                                        //           .height *
-                                        //       0.3,
-                                        //   width: MediaQuery.of(context)
-                                        //           .size
-                                        //           .width *
-                                        //       0.7,
-                                        //   child:
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.black26),
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 5, vertical: 10),
-                                          child: Column(
+                                child: Column(
+                                  children: [
+                                    // Container(
+                                    //   height: MediaQuery.of(context)
+                                    //           .size
+                                    //           .height *
+                                    //       0.3,
+                                    //   width: MediaQuery.of(context)
+                                    //           .size
+                                    //           .width *
+                                    //       0.7,
+                                    //   child:
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          border:
+                                              Border.all(color: Colors.black26),
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 5, vertical: 10),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            'Tổ đội phụ trách',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Column(
                                             children: [
-                                              Text(
-                                                'Tổ đội phụ trách',
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              ),
-                                              SizedBox(
-                                                height: 20,
-                                              ),
-                                              Column(
-                                                children: [
-                                                  // Text(_crewId),
-                                                  // for (int i = 0;
-                                                  //     i < selectCrew.length;
-                                                  //     i++)
-                                                  Card(
-                                                    child: Column(children: [
-                                                      ListTile(
-                                                        leading: Image.asset(
-                                                            'lib/images/logo_blue.png'),
-                                                        title: Text(state
-                                                            .processDetail[0]
-                                                            .crew
-                                                            .leaderFullname),
-                                                      ),
-                                                    ]),
+                                              // Text(_crewId),
+                                              // for (int i = 0;
+                                              //     i < selectCrew.length;
+                                              //     i++)
+                                              Card(
+                                                child: Column(children: [
+                                                  ListTile(
+                                                    leading: Image.asset(
+                                                        'lib/images/logo_blue.png'),
+                                                    title: Text(state
+                                                        .processDetail[0]
+                                                        .crew
+                                                        .leaderFullname),
                                                   ),
-                                                ],
+                                                ]),
                                               ),
-                                              // ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              ElevatedButton(
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    primary:
-                                                        AppTheme.colors.blue,
-                                                  ),
-                                                  child: Text('Chọn tổ đội'),
-                                                  onPressed: () => setState(() {
-                                                        showInformationDialog(
-                                                                context,
-                                                                staffState
-                                                                    .crewList,
-                                                                widget.orderId)
-                                                            .then((value) {
-                                                          setState(() {
-                                                            selectData = value;
-                                                          });
-                                                        });
-                                                      })),
-                                              Container(height: 10),
                                             ],
                                           ),
-                                        ),
+                                          // ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                primary: AppTheme.colors.blue,
+                                              ),
+                                              child: Text('Chọn tổ đội'),
+                                              onPressed: () => setState(() {
+                                                    showInformationDialog(
+                                                            context,
+                                                            widget.orderId)
+                                                        .then((value) {
+                                                      setState(() {
+                                                        selectData = value;
+                                                      });
+                                                    });
+                                                  })),
+                                          Container(height: 10),
+                                        ],
+                                      ),
+                                    ),
 
-                                        SizedBox(
-                                          height: 15,
-                                        ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
 
-                                        // Container(
-                                        //   child: Text('$holder'),
-                                        // ),
-                                      ],
-                                    );
-                                  } else if (staffState.status ==
-                                      StaffStatus.error) {
-                                    return ErrorWidget(
-                                        state.message.toString());
-                                  }
-                                  ;
-                                }),
+                                    // Container(
+                                    //   child: Text('$holder'),
+                                    // ),
+                                  ],
+                                ),
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -684,8 +661,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
         [dd, '/', mm, '/', yyyy, ' - ', hh, ':', nn, ' ', am]);
   }
 
-  Future showInformationDialog(
-      BuildContext context, List<CrewModel> crewlist, String orderId) async {
+  Future showInformationDialog(BuildContext context, String orderId) async {
     return showDialog(
         context: context,
         builder: (context) {
@@ -718,23 +694,25 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                     ListCrewStatus.loading) {
                                   return CircularProgressIndicator();
                                 } else if (stateOfPackage.status ==
-                                    ListCrewStatus.success) {
-                                  if (stateOfPackage.crewList != null &&
-                                      stateOfPackage.crewList.isNotEmpty)
+                                    ListCrewStatus.availSuccess) {
+                                  if (stateOfPackage.crewAvailList != null &&
+                                      stateOfPackage.crewAvailList.isNotEmpty)
                                     return ListView.builder(
-                                      itemCount: stateOfPackage.crewList.length,
+                                      itemCount:
+                                          stateOfPackage.crewAvailList.length,
                                       shrinkWrap: true,
                                       // ignore: missing_return
                                       itemBuilder: (context, index) {
                                         return Card(
                                           child: ListTile(
                                             title: Text(
-                                              stateOfPackage.crewList[index]
+                                              stateOfPackage
+                                                  .crewAvailList[index]
                                                   .leaderFullname,
                                               style: TextStyle(
                                                   color: (_crewId ==
                                                               stateOfPackage
-                                                                  .crewList[
+                                                                  .crewAvailList[
                                                                       index]
                                                                   .id ||
                                                           _crewId != '')
@@ -742,12 +720,12 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                                       : Colors.grey),
                                             ),
                                             subtitle: Text(stateOfPackage
-                                                .crewList[index]
+                                                .crewAvailList[index]
                                                 .leaderFullname),
                                             onTap: () {
                                               setState(() {
                                                 _crewId = stateOfPackage
-                                                    .crewList[index].id;
+                                                    .crewAvailList[index].id;
                                                 print(_crewId);
                                               });
                                             },

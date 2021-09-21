@@ -127,5 +127,28 @@ class CrewBloc extends Bloc<CrewEvent, CrewState> {
         );
       }
     }
+    if (event is DoListAvailCrew) {
+      yield state.copyWith(status: ListCrewStatus.loading);
+      try {
+        List<CrewModel> bookingList = await _repo.getAvailCrewList();
+        if (bookingList != null) {
+          // print('hasdata');
+          yield state.copyWith(
+              crewAvailList: bookingList, status: ListCrewStatus.availSuccess);
+        } else {
+          yield state.copyWith(
+            status: ListCrewStatus.error,
+            message: 'Error',
+          );
+          print('no data');
+        }
+      } catch (e) {
+        yield state.copyWith(
+          status: ListCrewStatus.error,
+          message: e.toString(),
+        );
+        ;
+      }
+    }
   }
 }

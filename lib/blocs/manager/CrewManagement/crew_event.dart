@@ -10,6 +10,7 @@ abstract class CrewEvent extends Equatable {
 }
 
 class DoListCrew extends CrewEvent {}
+class DoListAvailCrew extends CrewEvent {}
 
 class DoCrewDetailEvent extends CrewEvent {
   final String id;
