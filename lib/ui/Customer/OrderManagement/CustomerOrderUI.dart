@@ -2,8 +2,11 @@ import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_event.dart';
 import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dart';
 import 'package:car_service/theme/app_theme.dart';
+import 'package:car_service/ui/Customer/OrderManagement/ConfirmOrderManagement/ConfirmOrderDetailUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CreateOrderManagement/CreateBookingOrderUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/CustomerOrderDetailUI.dart';
+import 'package:car_service/ui/Customer/OrderManagement/OrderHistory/OrderHistoryDetailUi.dart';
+import 'package:car_service/ui/Customer/OrderManagement/WaitingConfirmOrderManagement/WaitingConfirmOrderDetailUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/WaitingPaymentOrderManagement/PaymentOrderDetailUI.dart';
 import 'package:car_service/utils/model/OrderModel.dart';
 import 'package:date_format/date_format.dart';
@@ -97,7 +100,8 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                           child: _textEditingController.text.isNotEmpty &&
                                   vehicleListsOnSearch.isEmpty
                               ? Center(
-                                  child: Text('Không tìm thấy xe'),
+                                  child: Text(
+                                      cusConstants.NOT_FOUND_VEHICLE_LABLE),
                                 )
                               : ListView.builder(
                                   itemCount:
@@ -196,6 +200,60 @@ class _CustomerOrderUiState extends State<CustomerOrderUi> {
                                           print(state.orderLists[index].id);
                                           if (state.orderLists[index].status ==
                                               'Đợi thanh toán') {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        PaymentOrderDetailUi(
+                                                            orderId: state
+                                                                .orderLists[
+                                                                    index]
+                                                                .id)));
+                                          } else if (state
+                                                  .orderLists[index].status ==
+                                              cusConstants
+                                                  .CONFIRM_ORDER_STATUS) {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        ConfirmOrderDetailUi(
+                                                            orderId: state
+                                                                .orderLists[
+                                                                    index]
+                                                                .id)));
+                                          } else if (state.orderLists[index]
+                                                      .status ==
+                                                  cusConstants
+                                                      .COMPLETED_ORDER_STATUS ||
+                                              state.orderLists[index].status ==
+                                                  cusConstants
+                                                      .CANCEL_ORDER_STATUS ||
+                                              state.orderLists[index].status ==
+                                                  cusConstants
+                                                      .CANCEL_BOOKING_STATUS) {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        OrderHistoryDetailUi(
+                                                            orderId: state
+                                                                .orderLists[
+                                                                    index]
+                                                                .id)));
+                                          } else if (state
+                                                  .orderLists[index].status ==
+                                              cusConstants
+                                                  .WAITING_CONFIRM_ORDER_STATUS) {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        WaitingConfirmOrderDetailUi(
+                                                            orderId: state
+                                                                .orderLists[
+                                                                    index]
+                                                                .id)));
+                                          } else if (state
+                                                  .orderLists[index].status ==
+                                              cusConstants
+                                                  .WAITING_PAYMENT_ORDER_STATUS) {
                                             Navigator.of(context).push(
                                                 MaterialPageRoute(
                                                     builder: (_) =>

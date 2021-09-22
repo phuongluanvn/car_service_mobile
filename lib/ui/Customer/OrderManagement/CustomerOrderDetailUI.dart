@@ -43,40 +43,40 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
 
   _changeColorStt(status) {
     switch (status) {
-      case 'Đợi xác nhận':
+      case cusConstants.WAITING_CONFIRM_ORDER_STATUS: //'Đợi xác nhận':
         color = Colors.orange[600];
         break;
-      case 'Đã xác nhận':
+      case cusConstants.ACCEPTED_ORDER_STATUS: // 'Đã xác nhận':
         color = Colors.green[200];
         break;
-      case 'Đã nhận xe':
+      case cusConstants.CHECKIN_ORDER_STATUS: // 'Đã nhận xe':
         color = Colors.blue[400];
         break;
-      case 'Kiểm tra':
+      case cusConstants.CHECKING_ORDER_STATUS: // 'Kiểm tra':
         color = Colors.blue[700];
         break;
-      case 'Đợi phản hồi':
+      case cusConstants.CONFIRM_ORDER_STATUS: // 'Đợi phản hồi':
         color = Colors.orange;
         break;
-      case 'Đã phản hồi':
+      case cusConstants.CONFIRMED_ORDER_STATUS: // 'Đã phản hồi':
         color = Colors.teal[300];
         break;
-      case 'Từ chối':
+      case cusConstants.DENY_ORDER_STATUS: // 'Từ chối':
         color = Colors.red[600];
         break;
-      case 'Đang tiến hành':
+      case cusConstants.IN_PROCESS_ORDER_STATUS: // 'Đang tiến hành':
         color = Colors.green[300];
         break;
-      case 'Hoàn thành':
+      case cusConstants.COMPLETED_ORDER_STATUS: // 'Hoàn thành':
         color = Colors.green[600];
         break;
-      case 'Hủy đơn':
+      case cusConstants.CANCEL_ORDER_STATUS: // 'Hủy đơn':
         color = Colors.red;
         break;
-      case 'Hủy đặt lịch':
+      case cusConstants.CANCEL_BOOKING_STATUS: // 'Hủy đặt lịch':
         color = Colors.red[400];
         break;
-//con nhieu case nua lam sau
+//con nhieu case cusConstants. nua lam sau
       default:
         color = Colors.greenAccent[400];
     }
@@ -89,7 +89,7 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
       backgroundColor: Colors.blue[100],
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text('Chi tiết đơn hàng'),
+        title: Text(cusConstants.ORDER_DETAIL_TITLE),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -106,8 +106,6 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
               return CircularProgressIndicator();
             } else if (state.detailStatus ==
                 CustomerOrderDetailStatus.success) {
-              print('????');
-              print(state.orderDetail[0].orderDetails);
               if (state.orderDetail != null && state.orderDetail.isNotEmpty)
                 return SingleChildScrollView(
                   child: Column(
@@ -144,43 +142,6 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                               state.orderDetail[0].crew.leaderFullname,
                               state.orderDetail[0].crew.members)
                           : SizedBox(),
-                      (state.orderDetail[0].feedbacks.isNotEmpty &&
-                              state.orderDetail[0].status !=
-                                  cusConstants.CANCEL_ORDER_STATUS)
-                          ? _showFeedback(
-                              state.orderDetail[0].feedbacks.first.rating,
-                              state.orderDetail[0].feedbacks.first.description)
-                          : BlocListener<UpdateStatusOrderBloc,
-                              UpdateStatusOrderState>(
-                              listener: (builder, statusState) {
-                                if (statusState.status ==
-                                    UpdateStatus
-                                        .updateStatusConfirmAcceptedSuccess) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => CustomerHome()),
-                                  );
-                                }
-                              },
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.45,
-                                child: ElevatedButton(
-                                    style: _isShowButtonFB
-                                        ? ElevatedButton.styleFrom(
-                                            primary: AppTheme.colors.blue)
-                                        : ElevatedButton.styleFrom(
-                                            primary: Colors.grey),
-                                    child: Text(
-                                        cusConstants.BUTTON_FEEDBACK_LABLE,
-                                        style: TextStyle(color: Colors.white)),
-                                    onPressed: () {
-                                      if (_isShowButtonFB) {
-                                        _showFBDialog();
-                                      }
-                                    }),
-                              ),
-                            )
                     ],
                   ),
                 );
@@ -519,7 +480,6 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
           fractionDigits: 0,
           // compactFormatType: CompactFormatType.sort
         ));
-    print(fmf.output.symbolOnRight);
     return fmf.output.symbolOnRight.toString();
   }
 }

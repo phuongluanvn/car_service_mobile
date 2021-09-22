@@ -163,3 +163,4 @@ const String ONLINE_LABLE = 'Online';
 const String CASH_LABLE = 'Tiền mặt';
 const String PAYMENT_CONTENT_DIALOG_LABLE = 'Mời bạn đến bàn thu ngân tiến hành thanh toán!';
 const String DIALOG_NOTI_LABLE = 'Thanh toán tiền mặt';
+const String NOT_FOUND_VEHICLE_LABLE = 'Không tìm thấy xe';

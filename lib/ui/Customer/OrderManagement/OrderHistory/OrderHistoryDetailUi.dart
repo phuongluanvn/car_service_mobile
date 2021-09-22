@@ -4,6 +4,8 @@ import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dar
 import 'package:car_service/blocs/customer/customerOrder/FeedbackOrder_bloc.dart';
 import 'package:car_service/blocs/customer/customerOrder/FeedbackOrder_event.dart';
 import 'package:car_service/blocs/customer/customerOrder/FeedbackOrder_state.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_bloc.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_state.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.dart';
@@ -32,6 +34,7 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
   bool textButton = true;
   String reasonReject;
   bool _isShowButtonFB = true;
+  int total = cusConstants.TOTAL_PRICE;
 
   @override
   void initState() {
@@ -109,14 +112,16 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
                             state.orderDetail[0].vehicle.model,
                             state.orderDetail[0].vehicle.model,
                             state.orderDetail[0].vehicle.licensePlate,
-                            state.orderDetail[0].orderDetails,
+                            state.orderDetail[0].packageLists,
+                            state.orderDetail[0].orderDetails == []
+                                ? state.orderDetail[0].orderDetails == []
+                                : state.orderDetail[0].orderDetails,
                             state.orderDetail[0].note == null ? false : true,
                             state.orderDetail[0].note != null
                                 ? state.orderDetail[0].note
                                 : cusConstants.NOT_FOUND_NOTE,
-                            state.orderDetail[0].note == null
-                                ? state.orderDetail[0].packageLists
-                                : 0),
+                            total = state.orderDetail[0].orderDetails.fold(
+                                0, (sum, element) => sum + element.price)),
                         cardInforCar(
                             state.orderDetail[0].vehicle.manufacturer,
                             state.orderDetail[0].vehicle.model,
@@ -166,7 +171,6 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
                                       }),
                                 ),
                               )
-                     
                       ],
                     ),
                   );
@@ -316,10 +320,12 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
       String servicePackageName,
       String serviceName,
       String price,
-      List services,
+      List packages,
+      List orderDetails,
       bool serviceType,
       String note,
       int totalPrice) {
+    int countPrice = cusConstants.TOTAL_PRICE;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       child: Container(
@@ -328,50 +334,110 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
             border: Border.all(color: Colors.black26),
             borderRadius: BorderRadius.circular(5)),
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-        child: Column(
-          children: [
-            Text(
-              cusConstants.SERVICE_INFO_CARD_TITLE,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-              textAlign: TextAlign.start,
-            ),
-            ListTile(
-              title: Text(cusConstants.SERVICE_INFO_CARD_TYPE_LABLE),
-              trailing: serviceType
-                  ? Text(cusConstants.SERVICE_INFO_CARD_TYPE_REPAIR)
-                  : Text(cusConstants.SERVICE_INFO_CARD_TYPE_MANTAIN),
-            ),
-            serviceType
-                ? ListTile(
-                    title: Text(cusConstants.SERVICE_INFO_CARD_CUS_NOTE),
-                    subtitle: Text(
-                      note,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                    ))
-                : ExpansionTile(
-                    title: Text('Chi tiết:'),
-                    children: services.map((service) {
-                      return ListTile(
-                        title: Text(service.name),
-                        trailing: Text(_convertMoney(service.price.toDouble())),
-                      );
-                    }).toList(),
+        child: BlocBuilder<AccessoryBloc, AccessoryState>(
+          // ignore: missing_return
+          builder: (context, accState) {
+            if (accState.status == ListAccessoryStatus.init) {
+              return CircularProgressIndicator();
+            } else if (accState.status == ListAccessoryStatus.loading) {
+              return CircularProgressIndicator();
+            } else if (accState.status == ListAccessoryStatus.success) {
+              return Column(
+                children: [
+                  Text(
+                    cusConstants.SERVICE_INFO_CARD_TITLE,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.start,
                   ),
-            Divider(
-              color: Colors.black,
-              thickness: 2,
-              indent: 20,
-              endIndent: 20,
-            ),
-            ListTile(
-              title: Text(cusConstants.SERVICE_INFO_CARD_PRICE_TOTAL),
-              trailing: Text(_convertMoney(totalPrice.toDouble())),
-            ),
-          ],
+                  ListTile(
+                    title: Text(cusConstants.SERVICE_INFO_CARD_TYPE_LABLE),
+                    trailing: serviceType
+                        ? Text(cusConstants.SERVICE_INFO_CARD_TYPE_REPAIR)
+                        : Text(cusConstants.SERVICE_INFO_CARD_TYPE_MANTAIN),
+                  ),
+                  serviceType
+                      ? ListTile(
+                          title: Text(cusConstants.SERVICE_INFO_CARD_CUS_NOTE),
+                          subtitle: Text(
+                            note,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ))
+                      : Column(
+                          children: [
+                            Column(
+                                children: packages.map((e) {
+                              // return Text(e.orderDetails);
+                              return ExpansionTile(
+                                title: Text(e.name),
+                                children: e.orderDetails.map<Widget>((service) {
+                                  countPrice += service.price;
+                                  return ListTile(
+                                    title: Text(service.name),
+                                    trailing: Text(_convertMoney(
+                                        service.price.toDouble())),
+                                  );
+                                }).toList(),
+                              );
+                            }).toList()),
+                            orderDetails.isEmpty
+                                ? SizedBox()
+                                : ExpansionTile(
+                                    title:
+                                        Text(cusConstants.ADDED_SERVICE_LABLE),
+                                    children: orderDetails.map((service) {
+                                      countPrice += service.price;
+                                      return ExpansionTile(
+                                        title: Text(service.name),
+                                        trailing: Text(_convertMoney(
+                                            service.price.toDouble())),
+                                        children: [
+                                          accState.accessoryList.indexWhere(
+                                                      (element) =>
+                                                          element.id ==
+                                                          service
+                                                              .accessoryId) >=
+                                                  0
+                                              ? ListTile(
+                                                  title: Text(accState
+                                                      .accessoryList
+                                                      .firstWhere((element) =>
+                                                          element.id ==
+                                                          service.accessoryId)
+                                                      .name),
+                                                  trailing: Image.network(accState
+                                                      .accessoryList
+                                                      .firstWhere((element) =>
+                                                          element.id ==
+                                                          service.accessoryId)
+                                                      .imageUrl),
+                                                )
+                                              : Text(cusConstants
+                                                  .NOT_FOUND_ACCESSORY_IN_SERVICE),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ),
+                          ],
+                        ),
+                  Divider(
+                    color: Colors.black,
+                    thickness: 2,
+                    indent: 20,
+                    endIndent: 20,
+                  ),
+                  ListTile(
+                    title: Text(cusConstants.SERVICE_INFO_CARD_PRICE_TOTAL),
+                    trailing: Text(_convertMoney(countPrice.toDouble())),
+                  ),
+                ],
+              );
+            }
+          },
         ),
       ),
     );
