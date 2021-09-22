@@ -101,6 +101,30 @@ class ManagerRepository {
     }
   }
 
+  paypalRequest(String nonce, num amount) async {
+    var body = {
+      "amount": amount,
+      "nonce": nonce,
+    };
+    var res = await http.post(
+      Uri.parse(BASE_URL + "braintree"),
+      headers: headers,
+      body: json.encode(body),
+    );
+    print(res.statusCode);
+    if (res.statusCode != null) {
+      if (res.statusCode == 200) {
+        return 'Success';
+      } else if (res.statusCode == 404) {
+        return res;
+      } else {
+        return res;
+      }
+    } else {
+      return null;
+    }
+  }
+
   Future<List<StaffModel>> getStaffDetail(String username) async {
     List<StaffModel> listdata = [];
     List convertData = [];

@@ -9,6 +9,7 @@ import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Customer/CustomerMainUI.dart';
 import 'package:car_service/ui/Customer/OrderManagement/WaitingPaymentOrderManagement/CouponUI.dart';
+import 'package:car_service/utils/repository/manager_repo.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,7 +30,6 @@ class PaymentOrderDetailUi extends StatefulWidget {
 }
 
 class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
-  
   UpdateStatusOrderBloc updateStatusBloc;
   bool _visibleByDenied = false;
   bool textButton = true;
@@ -37,6 +37,7 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
   int total = cusConstants.TOTAL_PRICE;
   num _totalPriceAll = cusConstants.TOTAL_PRICE;
   String _username;
+  ManagerRepository _repo = ManagerRepository();
 
   @override
   void initState() {
@@ -224,10 +225,48 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                                               await BraintreeDropIn.start(
                                                   request);
                                           if (result != null) {
-                                            print(result.paymentMethodNonce
-                                                .description);
+                                            print('lolo2');
                                             print(result
                                                 .paymentMethodNonce.nonce);
+                                            showDialog(
+                                                context: context,
+                                                builder: (BuildContext ctx) {
+                                                  return AlertDialog(
+                                                    title: Text(
+                                                      cusConstants
+                                                          .DIALOG_NOTI_LABLE,
+                                                      style: TextStyle(
+                                                          color: Colors
+                                                              .greenAccent),
+                                                    ),
+                                                    content: Text(
+                                                        "Thanh toán thành công"),
+                                                    actions: [
+                                                      TextButton(
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Text(cusConstants
+                                                              .BUTTON_OK_TITLE))
+                                                    ],
+                                                  );
+                                                });
+
+                                            // var result2 = _repo.paypalRequest(
+                                            //     result.paymentMethodNonce.nonce,
+                                            //     _totalPriceAll);
+                                            // if (result2 == 'Success') {
+                                            //   print('payment done');
+                                            // } else {
+                                            //   print('pay fail');
+                                            // }
                                           }
                                         },
                                         text: cusConstants.ONLINE_LABLE,
@@ -244,12 +283,14 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                                               builder: (BuildContext ctx) {
                                                 return AlertDialog(
                                                   title: Text(
-                                                    cusConstants.DIALOG_NOTI_LABLE,
+                                                    cusConstants
+                                                        .DIALOG_NOTI_LABLE,
                                                     style: TextStyle(
                                                         color:
                                                             Colors.greenAccent),
                                                   ),
-                                                  content: Text(cusConstants.PAYMENT_CONTENT_DIALOG_LABLE),
+                                                  content: Text(cusConstants
+                                                      .PAYMENT_CONTENT_DIALOG_LABLE),
                                                   actions: [
                                                     TextButton(
                                                         onPressed: () {
