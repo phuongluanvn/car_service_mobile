@@ -101,8 +101,7 @@ class ManagerRepository {
     }
   }
 
-  paypalRequest(
-      String nonce, num amount, String deviceData) async {
+  paypalRequest(String nonce, num amount, String deviceData) async {
     var body = {
       "amount": amount,
       "deviceData": deviceData,
@@ -807,6 +806,33 @@ class ManagerRepository {
           return listdata;
         } else {
           print('No calendar data');
+        }
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+  }
+
+  Future<List<Absences>> getAbsencesList(String username) async {
+    List<Absences> listdata = [];
+    // List convertData = [];
+
+    var res = await http.get(
+      Uri.parse('https://carservicesystem.azurewebsites.net/api/employees/' +
+          username),
+      headers: headers,
+    );
+
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      // convertData.add(data); //thêm [] để dùng .map bêndưới
+
+      try {
+        if (data != null) {
+          data['absences'].map((order) => listdata.add(Absences.fromJson(order))).toList();
+          return listdata;
+        } else {
+          print('No abcen data');
         }
       } catch (e) {
         print(e.toString());

@@ -30,15 +30,6 @@ class AuthRepository {
     print(res.statusCode);
     if (res.statusCode != null) {
       if (res.statusCode == 200) {
-        var data = json.decode(res.body);
-        var enc = json.encode(data);
-        var dec = json.decode(enc);
-        if (dec['role'] == 'staff') {
-          data
-              .map((absence) => absList.add(AbsencesModel.fromJson(absence)))
-              .toList();
-          return absList;
-        }
         return res.body;
       } else if (res.statusCode == 404) {
         return res.body;

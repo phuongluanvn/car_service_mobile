@@ -79,6 +79,8 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
     // });
     BlocProvider.of<TableCalendarBloc>(context)
         .add(DoListTableCalendarEvent(username: prefs.getString('Username')));
+    // BlocProvider.of<TableCalendarBloc>(context)
+    //     .add(DoListAbsencesEvent(username: prefs.getString('Username')));
   }
 
   @override
@@ -155,7 +157,7 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
                       TableCalendarStatus.tableCalendarSuccess) {
                     if (state.processList != null &&
                         state.processList.isNotEmpty) {
-                      print(state);
+                      print(state.absList.length);
                       return Column(
                         children:
                             List.generate(state.processList.length, (index) {

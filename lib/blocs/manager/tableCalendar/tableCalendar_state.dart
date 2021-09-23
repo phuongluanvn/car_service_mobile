@@ -1,7 +1,7 @@
-import 'package:car_service/utils/model/AbsencesModel.dart';
 import 'package:car_service/utils/model/CalendarModel.dart';
 import 'package:car_service/utils/model/CrewModel.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
+import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:equatable/equatable.dart';
 
 enum TableCalendarStatus {

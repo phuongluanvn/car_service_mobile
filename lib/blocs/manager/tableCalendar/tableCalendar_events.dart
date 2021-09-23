@@ -13,6 +13,13 @@ class DoListTableCalendarEvent extends TableCalendarEvent {
   List<Object> get props => [username];
 }
 
+class DoListAbsencesEvent extends TableCalendarEvent {
+   final String username;
+  DoListAbsencesEvent({this.username});
+  @override
+  List<Object> get props => [username];
+}
+
 class DoTableCalendarDetailEvent extends TableCalendarEvent {
   final String id;
   DoTableCalendarDetailEvent({this.id});

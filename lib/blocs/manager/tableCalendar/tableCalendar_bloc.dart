@@ -23,6 +23,9 @@ class TableCalendarBloc extends Bloc<TableCalendarEvent, TableCalendarState> {
       List<CrewModel> processList = [];
       yield state.copyWith(status: TableCalendarStatus.loading);
       try {
+        List<Absences> absenceList =
+            await _repo.getAbsencesList(event.username);
+            print(absenceList);
         List<CrewModel> historyList =
             await _repo.getCalendarList(event.username);
         // print(historyList);
@@ -47,6 +50,7 @@ class TableCalendarBloc extends Bloc<TableCalendarEvent, TableCalendarState> {
               tableCalendarList: historyList,
               finishList: finishList,
               processList: processList,
+              absList: absenceList,
               status: TableCalendarStatus.tableCalendarSuccess);
         } else {
           yield state.copyWith(

@@ -44,7 +44,7 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
             pref.setString("Status", dec['Status']);
             pref.setString("Username", data['username']);
             yield state.copyWith(status: LoginStatus.managerSuccess,
-            staff: data);
+            );
           } else if (data['role'] == 'staff') {
             var dataProfile = data['profile'];
             var enc = json.encode(dataProfile);
