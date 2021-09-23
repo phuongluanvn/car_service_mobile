@@ -152,6 +152,25 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                               width: MediaQuery.of(context).size.width * 0.45,
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
+                                    primary: Colors.red),
+                                child: _visibleByDenied == false
+                                    ? Text(cusConstants.BUTTON_DENY_TITLE,
+                                        style: TextStyle(color: Colors.white))
+                                    : Text(cusConstants.BUTTON_CANCEL_TITLE,
+                                        style: TextStyle(color: Colors.white)),
+                                onPressed: () {
+                                  setState(() {
+                                    _visibleByDenied = !_visibleByDenied;
+                                    textButton = !textButton;
+                                  });
+                                  print(reasonReject);
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.45,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
                                     primary: AppTheme.colors.blue),
                                 child: Text(
                                     textButton
@@ -173,25 +192,6 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                                             isAccept: true,
                                             customerNote: null));
                                   }
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.45,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    primary: Colors.red),
-                                child: _visibleByDenied == false
-                                    ? Text(cusConstants.BUTTON_DENY_TITLE,
-                                        style: TextStyle(color: Colors.white))
-                                    : Text(cusConstants.BUTTON_CANCEL_TITLE,
-                                        style: TextStyle(color: Colors.white)),
-                                onPressed: () {
-                                  setState(() {
-                                    _visibleByDenied = !_visibleByDenied;
-                                    textButton = !textButton;
-                                  });
-                                  print(reasonReject);
                                 },
                               ),
                             ),
@@ -310,12 +310,14 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                     ),
                     ListTile(
                       title: Text(cusConstants.SERVICE_INFO_CARD_TYPE_LABLE),
-                      trailing:
-                          serviceType ? Text(cusConstants.SERVICE_INFO_CARD_TYPE_REPAIR) : Text(cusConstants.SERVICE_INFO_CARD_TYPE_MANTAIN),
+                      trailing: serviceType
+                          ? Text(cusConstants.SERVICE_INFO_CARD_TYPE_REPAIR)
+                          : Text(cusConstants.SERVICE_INFO_CARD_TYPE_MANTAIN),
                     ),
                     serviceType
                         ? ListTile(
-                            title: Text(cusConstants.SERVICE_INFO_CARD_CUS_NOTE),
+                            title:
+                                Text(cusConstants.SERVICE_INFO_CARD_CUS_NOTE),
                             subtitle: Text(
                               note,
                               style: TextStyle(
@@ -347,12 +349,12 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                                                   service.accessoryId)
                                               .imageUrl),
                                         )
-                                      : Text(cusConstants.NOT_FOUND_ACCESSORY_IN_SERVICE),
+                                      : Text(cusConstants
+                                          .NOT_FOUND_ACCESSORY_IN_SERVICE),
                                 ],
                               );
                             }).toList(),
                           ),
-                   
                     Divider(
                       color: Colors.black,
                       thickness: 2,

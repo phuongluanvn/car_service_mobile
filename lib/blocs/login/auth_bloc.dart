@@ -31,13 +31,8 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
       yield state.copyWith(status: LoginStatus.loading);
       try {
         res = await _repo.login(event.email, event.password);
-        // print('res là:');
-        // print(res.body);
         var data = json.decode(res);
-        // print(data);
-
         if (data != null && data['jwt'] != null) {
-          print('đaa');
           if (data['role'] == 'manager') {
             var dataProfile = data['profile'];
             var enc = json.encode(dataProfile);
@@ -48,8 +43,8 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
             pref.setString("DateOfBirth", dec['DateOfBirth']);
             pref.setString("Status", dec['Status']);
             pref.setString("Username", data['username']);
-
-            yield state.copyWith(status: LoginStatus.managerSuccess);
+            yield state.copyWith(status: LoginStatus.managerSuccess,
+            staff: data);
           } else if (data['role'] == 'staff') {
             var dataProfile = data['profile'];
             var enc = json.encode(dataProfile);
@@ -60,7 +55,8 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
             pref.setString("DateOfBirth", dec['DateOfBirth']);
             pref.setString("Status", dec['Status']);
             pref.setString("Username", data['username']);
-            print(data['username']);
+
+
             yield state.copyWith(status: LoginStatus.staffSuccess);
           } else if (data['role'] == 'customer') {
             var dataProfile = data['profile'];
