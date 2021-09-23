@@ -63,6 +63,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
   int kmRecord = 0;
   int kmCheck = 0;
   String _crewId = '';
+  String _selectCrewName = '';
   @override
   void initState() {
     super.initState();
@@ -79,7 +80,6 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
         .add(DoVerifyBookingDetailEvent(email: widget.userId));
     BlocProvider.of<OrderHistoryBloc>(context)
         .add(DoOrderHistoryDetailEvent(id: widget.userId));
-    crewBloc.add(DoListAvailCrew());
   }
 
   @override
@@ -735,127 +735,130 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                             children: <Widget>[
                               Container(
                                 child: Column(
-                                      children: [
-                                        // Container(
-                                        //   height: MediaQuery.of(context)
-                                        //           .size
-                                        //           .height *
-                                        //       0.3,
-                                        //   width: MediaQuery.of(context)
-                                        //           .size
-                                        //           .width *
-                                        //       0.7,
-                                        //   child:
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.black26),
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 5, vertical: 10),
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                'Tổ đội phụ trách',
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              ),
-                                              SizedBox(
-                                                height: 20,
-                                              ),
+                                  children: [
+                                    // Container(
+                                    //   height: MediaQuery.of(context)
+                                    //           .size
+                                    //           .height *
+                                    //       0.3,
+                                    //   width: MediaQuery.of(context)
+                                    //           .size
+                                    //           .width *
+                                    //       0.7,
+                                    //   child:
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          border:
+                                              Border.all(color: Colors.black26),
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 5, vertical: 10),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            'Tổ đội phụ trách',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
 
-                                              Column(
+                                          Column(
+                                            children: [
+                                              // Text(_crewId),
+                                              // for (int i = 0;
+                                              //     i < selectCrew.length;
+                                              //     i++)
+                                              Card(
+                                                child: Column(children: [
+                                                  _selectCrewName != ''
+                                                      ? ListTile(
+                                                          leading: Image.asset(
+                                                              'lib/images/logo_blue.png'),
+                                                          title: Text(
+                                                              _selectCrewName),
+                                                        )
+                                                      : ListTile(
+                                                          leading: Image.asset(
+                                                              'lib/images/logo_blue.png'),
+                                                          title: Text(state
+                                                              .assignDetail[0]
+                                                              .crew
+                                                              .leaderFullname),
+                                                        ),
+                                                ]),
+                                              ),
+                                            ],
+                                          ),
+                                          // ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                primary: AppTheme.colors.blue,
+                                              ),
+                                              child: Text('Chọn tổ đội'),
+                                              onPressed: () => setState(() {
+                                                    crewBloc
+                                                        .add(DoListAvailCrew());
+                                                    showInformationDialog(
+                                                            context,
+                                                            widget.userId)
+                                                        .then((value) {
+                                                      setState(() {
+                                                        selectData = value;
+                                                      });
+                                                    });
+                                                  })),
+                                          Container(height: 10),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.45,
+                                            child: BlocListener<
+                                                UpdateStatusOrderBloc,
+                                                UpdateStatusOrderState>(
+                                              // ignore: missing_return
+                                              listener: (builder, statusState) {
+                                                if (statusState.status ==
+                                                    UpdateStatus
+                                                        .updateStatusStartSuccess) {}
+                                              },
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
                                                 children: [
-                                                  // Text(_crewId),
-                                                  // for (int i = 0;
-                                                  //     i < selectCrew.length;
-                                                  //     i++)
-                                                  Card(
-                                                    child: Column(children: [
-                                                      ListTile(
-                                                        leading: Image.asset(
-                                                            'lib/images/logo_blue.png'),
-                                                        title: Text(state
-                                                            .assignDetail[0]
-                                                            .crew
-                                                            .leaderFullname),
-                                                      ),
-                                                    ]),
-                                                  ),
-                                                ],
-                                              ),
-                                              // ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              ElevatedButton(
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    primary:
-                                                        AppTheme.colors.blue,
-                                                  ),
-                                                  child: Text('Chọn tổ đội'),
-                                                  onPressed: () => setState(() {
-                                                        showInformationDialog(
-                                                                context,
-                                                                widget.userId)
-                                                            .then((value) {
-                                                          setState(() {
-                                                            selectData = value;
-                                                          });
-                                                        });
-                                                      })),
-                                              Container(height: 10),
-                                              SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.45,
-                                                child: BlocListener<
-                                                    UpdateStatusOrderBloc,
-                                                    UpdateStatusOrderState>(
-                                                  // ignore: missing_return
-                                                  listener:
-                                                      (builder, statusState) {
-                                                    if (statusState.status ==
-                                                        UpdateStatus
-                                                            .updateStatusStartSuccess) {}
-                                                  },
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      SizedBox(
-                                                        width: MediaQuery.of(
-                                                                    context)
+                                                  SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
                                                                 .size
                                                                 .width *
                                                             0.45,
-                                                        child: ElevatedButton(
-                                                          style: ElevatedButton
-                                                              .styleFrom(
-                                                                  primary:
-                                                                      AppTheme
-                                                                          .colors
-                                                                          .blue),
-                                                          child: Text('Bắt đầu',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white)),
-                                                          onPressed: () {
-                                                            print(state
-                                                                .assignDetail[0]
-                                                                .id);
-                                                            // crewBloc.add(UpdateCrewToListEvent(
-                                                            //     id: widget
-                                                            //         .userId,
-                                                            //     listName:
-                                                            //         widget.selectCrewName));
-                                                            updateStatusBloc.add(UpdateStatusStartAndWorkingButtonPressed(
+                                                    child: ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              primary: AppTheme
+                                                                  .colors.blue),
+                                                      child: Text('Bắt đầu',
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .white)),
+                                                      onPressed: () {
+                                                        print(state
+                                                            .assignDetail[0]
+                                                            .id);
+                                                        // crewBloc.add(UpdateCrewToListEvent(
+                                                        //     id: widget
+                                                        //         .userId,
+                                                        //     listName:
+                                                        //         widget.selectCrewName));
+                                                        updateStatusBloc.add(
+                                                            UpdateStatusStartAndWorkingButtonPressed(
                                                                 id: state
                                                                     .assignDetail[
                                                                         0]
@@ -870,26 +873,25 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                                 workingStatus:
                                                                     workingStatus));
 
-                                                            Navigator.pushNamed(
-                                                                context,
-                                                                '/manager');
-                                                          },
-                                                        ),
-                                                      ),
-                                                    ],
+                                                        Navigator.pushNamed(
+                                                            context,
+                                                            '/manager');
+                                                      },
+                                                    ),
                                                   ),
-                                                ),
+                                                ],
                                               ),
-                                            ],
+                                            ),
                                           ),
-                                        ),
-
-                                        // Container(
-                                        //   child: Text('$holder'),
-                                        // ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                
+
+                                    // Container(
+                                    //   child: Text('$holder'),
+                                    // ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -909,8 +911,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
     );
   }
 
-  Future showInformationDialog(
-      BuildContext context, String orderId) async {
+  Future showInformationDialog(BuildContext context, String orderId) async {
     return showDialog(
         context: context,
         builder: (context) {
@@ -947,22 +948,23 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                   if (stateOfPackage.crewAvailList != null &&
                                       stateOfPackage.crewAvailList.isNotEmpty)
                                     return ListView.builder(
-                                      itemCount: stateOfPackage.crewAvailList.length,
+                                      itemCount:
+                                          stateOfPackage.crewAvailList.length,
                                       shrinkWrap: true,
                                       // ignore: missing_return
                                       itemBuilder: (context, index) {
                                         return Card(
                                           child: ListTile(
                                             title: Text(
-                                              stateOfPackage.crewAvailList[index]
+                                              stateOfPackage
+                                                  .crewAvailList[index]
                                                   .leaderFullname,
                                               style: TextStyle(
                                                   color: (_crewId ==
-                                                              stateOfPackage
-                                                                  .crewAvailList[
-                                                                      index]
-                                                                  .id ||
-                                                          _crewId != '')
+                                                          stateOfPackage
+                                                              .crewAvailList[
+                                                                  index]
+                                                              .id)
                                                       ? AppTheme.colors.deepBlue
                                                       : Colors.grey),
                                             ),
@@ -974,6 +976,9 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                                 _crewId = stateOfPackage
                                                     .crewAvailList[index].id;
                                                 print(_crewId);
+                                                _selectCrewName = stateOfPackage
+                                                    .crewAvailList[index]
+                                                    .leaderFullname;
                                               });
                                             },
                                           ),
@@ -1009,10 +1014,12 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                     //     selectCrew: selectCrew,
                     //     orderId: orderId));
                     // Do something like updating SharedPreferences or User Settings etc.
-                    print(_crewId);
+
                     crewBloc.add(UpdateCrewToListEvent(
                         id: widget.userId, crewId: _crewId));
                     Navigator.pop(context);
+                    BlocProvider.of<AssignOrderBloc>(context)
+                        .add(DoAssignOrderDetailEvent(id: widget.userId));
                   },
                 ),
               ],

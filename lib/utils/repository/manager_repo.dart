@@ -101,9 +101,11 @@ class ManagerRepository {
     }
   }
 
-  paypalRequest(String nonce, num amount) async {
+  paypalRequest(
+      String nonce, num amount, String deviceData) async {
     var body = {
       "amount": amount,
+      "deviceData": deviceData,
       "nonce": nonce,
     };
     var res = await http.post(
@@ -111,14 +113,14 @@ class ManagerRepository {
       headers: headers,
       body: json.encode(body),
     );
-    print(res.statusCode);
+    // print(res.statusCode);
     if (res.statusCode != null) {
       if (res.statusCode == 200) {
         return 'Success';
       } else if (res.statusCode == 404) {
-        return res;
+        return 'Not found';
       } else {
-        return res;
+        return 'failed';
       }
     } else {
       return null;

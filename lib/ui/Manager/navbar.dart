@@ -12,7 +12,7 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 2;
   List<Widget> _widgetOptions = <Widget>[
     StaffUi(),
     CrewUi(),
