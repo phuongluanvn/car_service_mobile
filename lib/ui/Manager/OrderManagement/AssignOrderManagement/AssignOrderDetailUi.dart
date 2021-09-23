@@ -487,8 +487,14 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                                                 Text(_crewName),
                                                           )
                                                         : ListTile(
-                                                            leading: Image.asset(
-                                                                'lib/images/logo_blue.png'),
+                                                            leading: state
+                                                                        .assignDetail[
+                                                                            0]
+                                                                        .crew !=
+                                                                    null
+                                                                ? Image.asset(
+                                                                    'lib/images/logo_blue.png')
+                                                                : SizedBox(),
                                                             title: Text(state
                                                                         .assignDetail[
                                                                             0]
@@ -529,7 +535,6 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                           ],
                                         ),
                                       ),
-
                                       SizedBox(
                                         height: 15,
                                       ),
@@ -555,8 +560,6 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                                           },
                                         ),
                                       ),
-
-                                     
                                     ],
                                   ),
                                 ),
@@ -590,7 +593,6 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
               content: SingleChildScrollView(
                 child: Form(
                   child: Container(
-                   
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
@@ -608,10 +610,18 @@ class _AssignOrderDetailUiState extends State<AssignOrderDetailUi> {
                               builder: (context, stateOfPackage) {
                                 if (stateOfPackage.status ==
                                     ListCrewStatus.init) {
-                                  return CircularProgressIndicator();
+                                  return Container(
+                                      alignment: Alignment.center,
+                                      width: 50,
+                                      height: 50,
+                                      child: CircularProgressIndicator());
                                 } else if (stateOfPackage.status ==
                                     ListCrewStatus.loading) {
-                                  return CircularProgressIndicator();
+                                  return Container(
+                                      alignment: Alignment.center,
+                                      width: 50,
+                                      height: 50,
+                                      child: CircularProgressIndicator());
                                 } else if (stateOfPackage.status ==
                                     ListCrewStatus.availSuccess) {
                                   if (stateOfPackage.crewAvailList != null &&

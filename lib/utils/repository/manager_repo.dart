@@ -126,6 +126,27 @@ class ManagerRepository {
     }
   }
 
+  Future<double> getCurrency() async {
+    var res = await http.get(
+      Uri.parse(
+          "https://free.currconv.com/api/v7/convert?q=VND_USD&compact=ultra&apiKey=f6a017811629e179812d"),
+      headers: headers,
+    );
+    if (res.statusCode == 200) {
+      Map<String, dynamic> map = json.decode(res.body);
+      double result = map['VND_USD'];
+      if (result != null) {
+        print(result);
+        return result;
+      } else {
+        return 0;
+      }
+    } else {
+      print('No test money data');
+      return 0;
+    }
+  }
+
   Future<List<StaffModel>> getStaffDetail(String username) async {
     List<StaffModel> listdata = [];
     List convertData = [];
