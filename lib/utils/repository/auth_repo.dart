@@ -1,3 +1,5 @@
+import 'package:car_service/utils/model/AbsencesModel.dart';
+import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -14,6 +16,7 @@ class AuthRepository {
   login(String username, String password) async {
     FirebaseMessaging _message = FirebaseMessaging.instance;
     String token = await _message.getToken();
+    List<AbsencesModel> absList = [];
     final body = jsonEncode({
       "username": '${username}',
       "password": '${password}',
@@ -27,6 +30,15 @@ class AuthRepository {
     print(res.statusCode);
     if (res.statusCode != null) {
       if (res.statusCode == 200) {
+        var data = json.decode(res.body);
+        var enc = json.encode(data);
+        var dec = json.decode(enc);
+        if (dec['role'] == 'staff') {
+          data
+              .map((absence) => absList.add(AbsencesModel.fromJson(absence)))
+              .toList();
+          return absList;
+        }
         return res.body;
       } else if (res.statusCode == 404) {
         return res.body;

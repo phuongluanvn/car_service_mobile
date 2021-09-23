@@ -5,6 +5,7 @@ import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Staff/ScheduleManagement/AbsencesWorkUI.dart';
 import 'package:car_service/ui/Staff/ScheduleManagement/ScheduleDetailUi.dart';
 import 'package:car_service/ui/Staff/ScheduleManagement/event.dart';
+import 'package:car_service/utils/model/AbsencesModel.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,7 +23,7 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
   CalendarFormat formatT = CalendarFormat.week;
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
-  Map<DateTime, List<Event>> selectedEvents;
+  Map<DateTime, List<Absences>> selectedEvents;
   TextEditingController _eventController = TextEditingController();
   List _selectedEvents;
   int _counter = 0;
@@ -34,7 +35,7 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
 
   AnimationController _animationController;
 
-  List<Event> _getEventsfromDay(DateTime date) {
+  List<Absences> _getEventsfromDay(DateTime date) {
     return selectedEvents[date] ?? [];
   }
 

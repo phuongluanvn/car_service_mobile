@@ -1,3 +1,4 @@
+import 'package:car_service/utils/model/AbsencesModel.dart';
 import 'package:car_service/utils/model/CalendarModel.dart';
 import 'package:car_service/utils/model/CrewModel.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
@@ -19,6 +20,7 @@ enum TableCalendarDetailStatus {
 }
 
 class TableCalendarState extends Equatable {
+  final List<Absences> absList;
   final TableCalendarStatus status;
   final TableCalendarDetailStatus detailStatus;
   final List<CrewModel> tableCalendarList;
@@ -35,6 +37,7 @@ class TableCalendarState extends Equatable {
     this.taskLists: const [],
     this.processList: const [],
     this.finishList: const [],
+    this.absList: const[],
     this.message: '',
   });
 
@@ -46,6 +49,7 @@ class TableCalendarState extends Equatable {
     List<OrderDetailModel> tableCalendarDetail,
     List<CrewModel> processList,
     List<CrewModel> finishList,
+    List<Absences> absList,
     String message,
   }) =>
       TableCalendarState(
@@ -57,6 +61,8 @@ class TableCalendarState extends Equatable {
         message: message ?? this.message,
         processList: processList ?? this.processList,
         finishList: finishList ?? this.finishList,
+        absList: absList ?? this.absList,
+
       );
   @override
   List<Object> get props => [
@@ -68,5 +74,6 @@ class TableCalendarState extends Equatable {
         processList,
         finishList,
         message,
+        absList
       ];
 }

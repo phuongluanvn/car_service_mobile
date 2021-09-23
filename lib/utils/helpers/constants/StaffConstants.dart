@@ -10,6 +10,8 @@ const String OK_BUTTON = 'Đồng ý';
 
 const String T_SPLIT = 'T';
 const String SELECT_DAY = 'Chọn ngày';
+const String TO_DAY = 'Đến ngày';
+const String FROM_DAY = 'Từ ngày';
 
 const String TIME_STATR = 'T08:00:00';
 const String TIME_END = 'T17:00:00';

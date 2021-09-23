@@ -1,6 +1,5 @@
+import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:equatable/equatable.dart';
-
-
 
 enum LoginStatus {
   init,
@@ -14,21 +13,23 @@ enum LoginStatus {
 class AuthState extends Equatable {
   final LoginStatus status;
   final String message;
+  final List<StaffModel> staffProfile;
+
   AuthState(
       {this.status: LoginStatus.init,
+      this.staffProfile: const [],
       this.message: ''});
-  AuthState copyWith({
-    LoginStatus status,
-    
-    String message,
-  }) =>
+      
+  AuthState copyWith(
+          {LoginStatus status, String message, List<StaffModel> staff}) =>
       AuthState(
         status: status ?? this.status,
+        staffProfile: staffProfile ?? this.staffProfile,
         message: message ?? this.message,
       );
 
   @override
-  List<Object> get props => [status, message];
+  List<Object> get props => [status, message, staffProfile];
 }
 
 

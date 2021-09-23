@@ -236,13 +236,51 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                                             print('lolo3');
                                             print(result.deviceData);
 
-                                            var result2 = _repo.paypalRequest(
-                                                result.paymentMethodNonce.nonce,
-                                                _usd,
-                                                result.deviceData);
+                                            var result2 =
+                                                await _repo.paypalRequest(
+                                                    result.paymentMethodNonce
+                                                        .nonce,
+                                                    _usd,
+                                                    result.deviceData);
+
                                             print("lolo4");
                                             print(result2);
-
+                                            setState(() {
+                                              if (result2 == "Success") {
+                                                showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext ctx) {
+                                                      return AlertDialog(
+                                                        title: Text(
+                                                          cusConstants
+                                                              .DIALOG_NOTI_LABLE,
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .greenAccent),
+                                                        ),
+                                                        content: Text(
+                                                            "Thanh toán thành công"),
+                                                        actions: [
+                                                          TextButton(
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child: Text(
+                                                                  cusConstants
+                                                                      .BUTTON_OK_TITLE))
+                                                        ],
+                                                      );
+                                                    });
+                                              }
+                                            });
                                             // if (result2 == "Success") {
                                             //   showDialog(
                                             //       context: context,
@@ -274,7 +312,8 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                                             //           ],
                                             //         );
                                             //       });
-                                            // } else if (result2 == "Not found") {
+                                            // }
+                                            // else if (result2 == "Not found") {
                                             //   showDialog(
                                             //       context: context,
                                             //       builder: (BuildContext ctx) {
