@@ -150,5 +150,29 @@ class CrewBloc extends Bloc<CrewEvent, CrewState> {
         ;
       }
     }
+    if (event is UpdateCrewAgainEvent) {
+      yield state.copyWith(updateStatus: DoUpdateStatus.loading);
+      try {
+        // print(event.listName);
+        var data = await _repo.updateCrewByName(event.id, event.crewId);
+        if (data != null) {
+          print(data);
+          yield state.copyWith(
+              crewList: data, updateStatus: DoUpdateStatus.againsuccess);
+          print('Assign Crew success');
+        } else {
+          yield state.copyWith(
+            updateStatus: DoUpdateStatus.error,
+            message: 'Assin Error',
+          );
+          print('no data');
+        }
+      } catch (e) {
+        yield state.copyWith(
+          updateStatus: DoUpdateStatus.error,
+          message: e.toString(),
+        );
+      }
+    }
   }
 }

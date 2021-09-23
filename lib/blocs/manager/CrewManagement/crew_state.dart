@@ -24,6 +24,7 @@ enum DoUpdateStatus {
   init,
   loading,
   success,
+  againsuccess,
   error,
 }
 

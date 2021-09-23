@@ -12,7 +12,8 @@ import 'package:car_service/utils/helpers/constants/ManagerConstants.dart'
 class EditLeaderCrewUi extends StatefulWidget {
   final List<CreateCrewModel> choosingCrew;
   final String id;
-  EditLeaderCrewUi({@required this.choosingCrew, this.id});
+  final String orderId;
+  EditLeaderCrewUi({@required this.choosingCrew, this.id, this.orderId});
   @override
   _EditLeaderCrewUiState createState() => _EditLeaderCrewUiState();
 }
@@ -31,6 +32,7 @@ class _EditLeaderCrewUiState extends State<EditLeaderCrewUi> {
 
   @override
   void initState() {
+    print('orderId2: ' + widget.orderId);
     crewBloc = BlocProvider.of<CrewBloc>(context);
     super.initState();
     for (int i = 0; i < widget.choosingCrew.length; i++) {
@@ -146,11 +148,16 @@ class _EditLeaderCrewUiState extends State<EditLeaderCrewUi> {
                             style: ElevatedButton.styleFrom(
                                 primary: AppTheme.colors.blue),
                             onPressed: () {
+                              if (widget.orderId != null) {
+                                crewBloc.add(UpdateCrewAgainEvent(
+                                    id: widget.orderId, crewId: widget.id));
+                              }
                               setState(() {
                                 widget.choosingCrew[_crewId].isLeader = true;
                                 crewBloc.add(EditCrewEvent(
-                                    id: widget.id,
-                                    listUsername: widget.choosingCrew));
+                                  id: widget.id,
+                                  listUsername: widget.choosingCrew,
+                                ));
                               });
                             },
                             child: Text('Hoàn tất'))

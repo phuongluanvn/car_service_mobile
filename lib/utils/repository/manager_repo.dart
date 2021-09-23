@@ -551,7 +551,7 @@ class ManagerRepository {
         return res.body;
       }
     } else {
-      return null;
+      return res.body;
     }
   }
 

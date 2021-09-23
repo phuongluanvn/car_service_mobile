@@ -59,6 +59,7 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
 
   @override
   Widget build(BuildContext context) {
+    final String finishStatus = 'Hoàn thành';
     return Scaffold(
       backgroundColor: AppTheme.colors.lightblue,
       appBar: AppBar(
@@ -247,6 +248,11 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                                             print(result2);
                                             setState(() {
                                               if (result2 == "Success") {
+                                                updateStatusBloc.add(
+                                                    UpdateStatusFinishButtonPressed(
+                                                        id: state
+                                                            .orderDetail[0].id,
+                                                        status: finishStatus));
                                                 showDialog(
                                                     context: context,
                                                     builder:

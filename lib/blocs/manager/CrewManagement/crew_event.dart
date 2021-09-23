@@ -43,3 +43,10 @@ class UpdateCrewToListEvent extends CrewEvent {
   @override
   List<Object> get props => [id, crewId];
 }
+class UpdateCrewAgainEvent extends CrewEvent {
+  final String id;
+  final String crewId;
+  UpdateCrewAgainEvent({this.id, this.crewId});
+  @override
+  List<Object> get props => [id, crewId];
+}

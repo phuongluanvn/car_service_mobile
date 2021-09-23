@@ -22,6 +22,7 @@ class CrewDetailUi extends StatefulWidget {
 class _CrewDetailUiState extends State<CrewDetailUi> {
   UpdateStatusOrderBloc updateStatusBloc;
   List<CrewModel> _choosingCrew;
+  String oId = '';
 
   @override
   void initState() {
@@ -45,6 +46,7 @@ class _CrewDetailUiState extends State<CrewDetailUi> {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (_) => EditCrewUi(
                             id: widget.id,
+                            orderId: oId,
                           )));
                 },
                 child: Text(manaConstants.EDIT_BUTTON)),
@@ -61,6 +63,11 @@ class _CrewDetailUiState extends State<CrewDetailUi> {
             } else if (state.statusDetail == DoCrewDetailStatus.loading) {
               return CircularProgressIndicator();
             } else if (state.statusDetail == DoCrewDetailStatus.success) {
+              if (state.crewDetails[0].order != null &&
+                  state.crewDetails[0].order.isNotEmpty) {
+                oId = state.crewDetails[0].order[0].id;
+                print('checkorderId ' + oId);
+              }
               if (state.crewDetails != null && state.crewDetails.isNotEmpty)
                 return SingleChildScrollView(
                   child: Padding(

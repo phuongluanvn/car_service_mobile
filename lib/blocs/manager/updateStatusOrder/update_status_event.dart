@@ -43,6 +43,13 @@ class UpdateStatusCheckingButtonPressed extends UpdateStatusOrderEvent {
   UpdateStatusCheckingButtonPressed({this.id, this.status});
 }
 
+class UpdateStatusFinishButtonPressed extends UpdateStatusOrderEvent {
+  final String id;
+  final String status;
+
+  UpdateStatusFinishButtonPressed({this.id, this.status});
+}
+
 class UpdateAbsentStatusButtonPressed extends UpdateStatusOrderEvent {
   final String username;
   final String status;

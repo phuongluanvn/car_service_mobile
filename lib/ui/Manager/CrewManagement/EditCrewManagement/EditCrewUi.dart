@@ -20,7 +20,8 @@ import 'package:car_service/utils/helpers/constants/ManagerConstants.dart'
 
 class EditCrewUi extends StatefulWidget {
   final String id;
-  EditCrewUi({@required this.id});
+  final String orderId;
+  EditCrewUi({@required this.id, this.orderId});
   @override
   _EditCrewUiState createState() => _EditCrewUiState();
 }
@@ -44,6 +45,7 @@ class _EditCrewUiState extends State<EditCrewUi> {
     crewBloc = BlocProvider.of<CrewBloc>(context);
     crewBloc.add(DoReloadStatus());
     super.initState();
+    print('orderId' + widget.orderId);
   }
 
   @override
@@ -302,6 +304,7 @@ class _EditCrewUiState extends State<EditCrewUi> {
                                                           choosingCrew: estate
                                                               .selectedList,
                                                           id: widget.id,
+                                                          orderId: widget.orderId,
                                                         )));
                                           },
                                           child: Text(

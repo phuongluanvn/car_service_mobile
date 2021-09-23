@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_event.dart';
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_state.dart';
@@ -18,6 +20,10 @@ import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/utils/model/CustomerModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'dart:convert';
+import 'package:image/image.dart' as ImageProcess;
 
 class CreateOrderUI extends StatefulWidget {
   @override
@@ -46,7 +52,11 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
   bool _isSearchButton = false;
   String _valueSearch;
   List _packageIdList = [];
-
+  final ImagePicker _picker = ImagePicker();
+  // List<File> _imageFileList;
+  File _image;
+  List<Asset> images = List<Asset>();
+  String imgUrl = '';
   final Color selectedColor = AppTheme.colors.lightblue;
   final Color unselectedColor = Colors.black;
   CreateOrderBloc _createBookingBloc;
@@ -66,6 +76,67 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
     // final logo = Center(
     //   child: Icon(Icons.supervised_user_circle, size: 150),
     // );
+
+//Select pic from gallery
+    _imageFromGallery() async {
+      PickedFile image = await ImagePicker()
+          .getImage(source: ImageSource.gallery, imageQuality: 50);
+
+      if (image != null) {
+        setState(() {
+          _image = File(image.path);
+        });
+      }
+    }
+
+    //Select pic from camera
+    _imageFromCamera() async {
+      PickedFile image = await ImagePicker()
+          .getImage(source: ImageSource.camera, imageQuality: 50);
+
+      if (image != null) {
+        setState(() {
+          _image = File(image.path);
+        });
+      }
+    }
+
+    _convertImagetoString(File images) {
+      if (images != null) {
+        final _imageFile = ImageProcess.decodeImage(images.readAsBytesSync());
+        String base64image = base64Encode(ImageProcess.encodePng(_imageFile));
+        return base64image;
+      }
+    }
+
+    //show picker select pac form camera or gallery
+    _showPicker(context) {
+      showModalBottomSheet(
+          context: context,
+          builder: (BuildContext bc) {
+            return SafeArea(
+                child: Wrap(
+              children: [
+                ListTile(
+                  leading: Icon(Icons.photo_library),
+                  title: Text('Gallery'),
+                  onTap: () {
+                    _imageFromGallery();
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.camera_alt),
+                  title: Text('Camera'),
+                  onTap: () {
+                    _imageFromCamera();
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ));
+          });
+    }
 
     final name = TextFormField(
       // controller: username,
@@ -676,25 +747,28 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                                                     'Tình trạng xe'),
                                                       ),
                                                     ),
-                                                    // Container(
-                                                    //   child: GestureDetector(
-                                                    //     child: Container(
-                                                    //       color: Colors.white24,
-                                                    //       height: 100,
-                                                    //       width: 100,
-                                                    //       child: _image != null
-                                                    //           ? Image.file(
-                                                    //               _image,
-                                                    //               fit: BoxFit.fill,
-                                                    //             )
-                                                    //           : Icon(Icons.add_a_photo),
-                                                    //       alignment: Alignment.center,
-                                                    //     ),
-                                                    //     onTap: () {
-                                                    //       _showPicker(context);
-                                                    //     },
-                                                    //   ),
-                                                    // )
+                                                    Container(
+                                                      child: GestureDetector(
+                                                        child: Container(
+                                                          color: Colors.white24,
+                                                          height: 100,
+                                                          width: 100,
+                                                          child: _image != null
+                                                              ? Image.file(
+                                                                  _image,
+                                                                  fit: BoxFit
+                                                                      .fill,
+                                                                )
+                                                              : Icon(Icons
+                                                                  .add_a_photo),
+                                                          alignment:
+                                                              Alignment.center,
+                                                        ),
+                                                        onTap: () {
+                                                          _showPicker(context);
+                                                        },
+                                                      ),
+                                                    )
                                                   ],
                                                 ),
                                               ),
@@ -756,6 +830,8 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                     onPrimary: Colors.white, // foreground
                                   ),
                                   onPressed: () {
+                                    imgUrl = _convertImagetoString(_image);
+                                    print(imgUrl);
                                     if (_carId == null) {
                                       showDialog(
                                           context: context,
@@ -790,6 +866,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                             imageUrl: null),
                                       );
                                     } else if (_packageId == null) {
+
                                       _createBookingBloc.add(
                                           CreateOrderButtonPressed(
                                               cusId: _carId,
@@ -797,7 +874,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                               note: _note,
                                               timeBooking:
                                                   _focusedDay.toIso8601String(),
-                                              imageUrl: null));
+                                              imageUrl: imgUrl));
                                     }
                                   },
                                   child: Text('Xác nhận'),
