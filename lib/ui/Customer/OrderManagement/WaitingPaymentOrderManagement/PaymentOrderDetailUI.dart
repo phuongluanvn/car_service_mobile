@@ -201,7 +201,9 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                               child: Text(
                                   cusConstants.COMPLETED_PAYMENT_ORDER_LABLE,
                                   style: TextStyle(color: Colors.white)),
-                              onPressed: () {
+                              onPressed: () async {
+                                double _usd = await _convertCurrency(
+                                    _totalPriceAll.toDouble());
                                 Dialogs.bottomMaterialDialog(
                                     msg:
                                         cusConstants.SELECT_PAYMENT_ORDER_LABLE,
@@ -216,7 +218,7 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                                             collectDeviceData: true,
                                             paypalRequest:
                                                 BraintreePayPalRequest(
-                                              amount: _totalPriceAll.toString(),
+                                              amount: _usd.toString(),
                                               displayName: _username,
                                             ),
                                             cardEnabled: true,
@@ -236,7 +238,7 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
 
                                             var result2 = _repo.paypalRequest(
                                                 result.paymentMethodNonce.nonce,
-                                                _totalPriceAll,
+                                                _usd,
                                                 result.deviceData);
                                             print("lolo4");
                                             print(result2);
@@ -534,6 +536,7 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                                   children: orderDetails.map((service) {
                                     countPrice += service.price;
                                     _totalPriceAll = countPrice;
+
                                     return ExpansionTile(
                                       title: Text(service.name),
                                       trailing: Text(_convertMoney(
@@ -602,5 +605,14 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
         ));
     print(fmf.output.symbolOnRight);
     return fmf.output.symbolOnRight.toString();
+  }
+
+  _convertCurrency(double vnd) async {
+    double currency = await _repo.getCurrency();
+    double usd = 0.0;
+    if (vnd != null) {
+      usd = vnd * currency;
+    }
+    return usd;
   }
 }

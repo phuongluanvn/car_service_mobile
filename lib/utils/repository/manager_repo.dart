@@ -101,8 +101,7 @@ class ManagerRepository {
     }
   }
 
-  paypalRequest(
-      String nonce, num amount, String deviceData) async {
+  paypalRequest(String nonce, num amount, String deviceData) async {
     var body = {
       "amount": amount,
       "deviceData": deviceData,
@@ -124,6 +123,27 @@ class ManagerRepository {
       }
     } else {
       return null;
+    }
+  }
+
+  Future<double> getCurrency() async {
+    var res = await http.get(
+      Uri.parse(
+          "https://free.currconv.com/api/v7/convert?q=VND_USD&compact=ultra&apiKey=f6a017811629e179812d"),
+      headers: headers,
+    );
+    if (res.statusCode == 200) {
+      Map<String, dynamic> map = json.decode(res.body);
+      double result = map['VND_USD'];
+      if (result != null) {
+        print(result);
+        return result;
+      } else {
+        return 0;
+      }
+    } else {
+      print('No test money data');
+      return 0;
     }
   }
 
