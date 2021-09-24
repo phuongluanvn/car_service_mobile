@@ -389,19 +389,19 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                                     //   print(result3);
                                     // });
                                   });
+                                  updateStatusBloc.add(
+                                      UpdateStatusFinishAndAvailableButtonPressed(
+                                          id: state.processDetail[0].id,
+                                          listData: state
+                                              .processDetail[0].crew.members,
+                                          status: waitingStatus,
+                                          availableStatus: availStatus));
                                   // updateStatusBloc.add(
-                                  //     UpdateStatusFinishAndAvailableButtonPressed(
+                                  //     UpdateStatusButtonPressed(
                                   //         id: state.processDetail[0].id,
-                                  //         listData: state
-                                  //             .processDetail[0].crew.members,
-                                  //         status: waitingStatus,
-                                  //         availableStatus: availStatus));
-                                  // // updateStatusBloc.add(
-                                  // //     UpdateStatusButtonPressed(
-                                  // //         id: state.processDetail[0].id,
-                                  // //         status: processingStatus));
-                                  // Navigator.of(context).push(MaterialPageRoute(
-                                  //     builder: (_) => ManagerMain()));
+                                  //         status: processingStatus));
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) => ManagerMain()));
                                 },
                               ),
                             ),

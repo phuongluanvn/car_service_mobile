@@ -335,33 +335,87 @@ class _ScheduleDetailUiState extends State<ScheduleDetailUi> {
                                         SizedBox(
                                           height: 30,
                                         ),
-                                        state.historyDetail[0].orderDetails
-                                                    .length ==
-                                                0
-                                            ? ''
-                                            : Column(
+                                        state.historyDetail[0].packageLists !=
+                                                    null &&
+                                                state.historyDetail[0]
+                                                    .packageLists.isNotEmpty
+                                            ? Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
                                                 children: [
                                                   Text(
-                                                    'Thông tin gói dịch vụ',
+                                                    'Dịch vụ bảo dưỡng',
                                                     style: TextStyle(
                                                         fontSize: 16,
                                                         fontWeight:
                                                             FontWeight.w600),
                                                   ),
-                                                  ListView(
-                                                    shrinkWrap: true,
-                                                    children: state
-                                                        .historyDetail[0]
-                                                        .orderDetails
-                                                        .map((service) {
-                                                      return ListTile(
-                                                        title:
-                                                            Text(service.name),
-                                                      );
-                                                    }).toList(),
+                                                ],
+                                              )
+                                            : SizedBox(),
+                                        for (int j = 0;
+                                            j <
+                                                state.historyDetail[0]
+                                                    .packageLists.length;
+                                            j++)
+                                          ExpansionTile(
+                                            title: Text(state.historyDetail[0]
+                                                .packageLists[j].name),
+                                            children: [
+                                              for (int k = 0;
+                                                  k <
+                                                      state
+                                                          .historyDetail[0]
+                                                          .packageLists[j]
+                                                          .orderDetails
+                                                          .length;
+                                                  k++)
+                                                ListTile(
+                                                  title: Text(state
+                                                      .historyDetail[0]
+                                                      .packageLists[j]
+                                                      .orderDetails[k]
+                                                      .name),
+                                                ),
+                                            ],
+                                          ),
+                                        state.historyDetail[0].orderDetails !=
+                                                    null &&
+                                                state.historyDetail[0]
+                                                    .orderDetails.isNotEmpty
+                                            ? Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    'Dịch vụ bổ sung',
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w600),
                                                   ),
                                                 ],
-                                              ),
+                                              )
+                                            : SizedBox(),
+                                        for (int i = 0;
+                                            i <
+                                                state.historyDetail[0]
+                                                    .orderDetails.length;
+                                            i++)
+                                          // countPrice += service.price;
+
+                                          state.historyDetail[0].orderDetails !=
+                                                      null &&
+                                                  state.historyDetail[0]
+                                                      .orderDetails.isNotEmpty
+                                              ? ListTile(
+                                                  title: Text(state
+                                                      .historyDetail[0]
+                                                      .orderDetails[i]
+                                                      .name),
+                                                )
+                                              : Text(
+                                                  'Không có dịch vụ bổ sung nào'),
                                       ],
                                     )),
                               ),
