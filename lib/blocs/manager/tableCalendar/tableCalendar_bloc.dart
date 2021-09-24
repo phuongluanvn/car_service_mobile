@@ -5,6 +5,7 @@ import 'package:car_service/utils/model/CalendarModel.dart';
 import 'package:car_service/utils/model/CrewModel.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
+import 'package:car_service/utils/model/TaskModel.dart';
 import 'package:car_service/utils/repository/manager_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,32 +20,15 @@ class TableCalendarBloc extends Bloc<TableCalendarEvent, TableCalendarState> {
   @override
   Stream<TableCalendarState> mapEventToState(TableCalendarEvent event) async* {
     if (event is DoListTableCalendarEvent) {
-      List<CrewModel> finishList = [];
-      List<CrewModel> processList = [];
+      List<TaskModel> finishList = [];
+      List<TaskModel> processList = [];
       yield state.copyWith(status: TableCalendarStatus.loading);
       try {
         List<Absences> absenceList =
             await _repo.getAbsencesList(event.username);
             print(absenceList);
-        List<CrewModel> historyList =
+        List<TaskModel> historyList =
             await _repo.getCalendarList(event.username);
-        // print(historyList);
-        historyList
-            .map((orderT) => {
-                  // if (orderT.order.status == 'Đang tiến hành' ||
-                  //     orderT.order.status == 'Kiểm tra')
-                  //   {
-                  //     processList.add(orderT),
-                  //     print(orderT.order.status),
-                  //   }
-                  // else if (orderT.order.status == 'Hoàn thành')
-                  //   {
-                  //     finishList.add(orderT),
-                  //     print(finishList),
-                  //   }
-                })
-            .toList();
-
         if (historyList != null) {
           yield state.copyWith(
               tableCalendarList: historyList,

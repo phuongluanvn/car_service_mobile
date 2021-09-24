@@ -1,3 +1,4 @@
+import 'package:car_service/utils/model/AbsencesWorkModel.dart';
 import 'package:car_service/utils/model/CalendarModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:http/http.dart' as http;
@@ -35,7 +36,7 @@ class StaffRepository {
     }
   }
 
-  absentWork(String username, List<Absences> abs) async {
+  absentWork(String username, List<AbsencesWork> abs) async {
     var body = {
       "username": username,
       "absences": List.generate(abs.length, (index) => abs[index].toJson())

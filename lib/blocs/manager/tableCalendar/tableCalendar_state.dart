@@ -2,6 +2,7 @@ import 'package:car_service/utils/model/CalendarModel.dart';
 import 'package:car_service/utils/model/CrewModel.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
+import 'package:car_service/utils/model/TaskModel.dart';
 import 'package:equatable/equatable.dart';
 
 enum TableCalendarStatus {
@@ -23,10 +24,10 @@ class TableCalendarState extends Equatable {
   final List<Absences> absList;
   final TableCalendarStatus status;
   final TableCalendarDetailStatus detailStatus;
-  final List<CrewModel> tableCalendarList;
+  final List<TaskModel> tableCalendarList;
   final List<CalendarModel> taskLists;
-  final List<CrewModel> processList;
-  final List<CrewModel> finishList;
+  final List<TaskModel> processList;
+  final List<TaskModel> finishList;
   final List<OrderDetailModel> tableCalendarDetail;
   final String message;
   const TableCalendarState({
@@ -44,11 +45,11 @@ class TableCalendarState extends Equatable {
   TableCalendarState copyWith({
     TableCalendarStatus status,
     TableCalendarDetailStatus detailStatus,
-    List<CrewModel> tableCalendarList,
+    List<TaskModel> tableCalendarList,
     List<CalendarModel> taskLists,
     List<OrderDetailModel> tableCalendarDetail,
-    List<CrewModel> processList,
-    List<CrewModel> finishList,
+    List<TaskModel> processList,
+    List<TaskModel> finishList,
     List<Absences> absList,
     String message,
   }) =>
