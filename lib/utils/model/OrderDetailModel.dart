@@ -122,7 +122,7 @@ class Customer extends Equatable {
   String fullname;
   String phoneNumber;
   String address;
-  int accumulatedPoint;
+  num accumulatedPoint;
   bool isBanned;
   String vehicles;
 
@@ -172,7 +172,7 @@ class Vehicle extends Equatable {
   String licensePlate;
   String imageUrl;
   String dateOfLastMaintenance;
-  int millageCount;
+  num millageCount;
 
   Vehicle(
       {this.id,

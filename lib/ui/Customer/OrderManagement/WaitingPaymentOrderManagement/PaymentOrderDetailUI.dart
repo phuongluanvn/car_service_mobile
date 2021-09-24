@@ -34,7 +34,7 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
   bool _visibleByDenied = false;
   bool textButton = true;
   String reasonReject;
-  int total = cusConstants.TOTAL_PRICE;
+  num total = cusConstants.TOTAL_PRICE;
   num _totalPriceAll = cusConstants.TOTAL_PRICE;
   String _username;
   ManagerRepository _repo = ManagerRepository();
@@ -556,9 +556,9 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
       List orderDetails,
       bool serviceType,
       String note,
-      int totalPrice,
+      num totalPrice,
       String orderDetailId) {
-    int countPrice = cusConstants.TOTAL_PRICE;
+    num countPrice = cusConstants.TOTAL_PRICE;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       child: Container(

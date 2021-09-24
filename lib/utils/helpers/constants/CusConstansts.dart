@@ -43,7 +43,7 @@ const String MANAGE_VEHICLE_WIDGET_TITLE = 'Danh sách xe';
 const String IMAGE_URL_LOGO_BLUE = 'lib/images/logo_blue.png';
 
 //Manage order
-const int TOTAL_PRICE = 0;
+const num TOTAL_PRICE = 0.0;
 const String ORDER_DETAIL_TITLE = 'Chi tiết đơn hàng';
 const String IMAGE_URL_ORDER_LOGO_SMALL = 'lib/images/order_small.png';
 const String NOT_FOUND_ORDER = 'Hiện tại không có đơn!';
@@ -161,7 +161,8 @@ const String SELECT_PAYMENT_ORDER_LABLE = 'Hãy chọn phương thức thanh to�
 const String PAYMENT_LABLE = 'Phương thức thanh toán';
 const String ONLINE_LABLE = 'Online';
 const String CASH_LABLE = 'Tiền mặt';
-const String PAYMENT_CONTENT_DIALOG_LABLE = 'Mời bạn đến bàn thu ngân tiến hành thanh toán!';
+const String PAYMENT_CONTENT_DIALOG_LABLE =
+    'Mời bạn đến bàn thu ngân tiến hành thanh toán!';
 const String DIALOG_NOTI_LABLE = 'Thanh toán tiền mặt';
 const String DIALOG_NOTI_SUCCESS_LABLE = 'Thông báo';
 const String NOT_FOUND_VEHICLE_LABLE = 'Không tìm thấy xe';
