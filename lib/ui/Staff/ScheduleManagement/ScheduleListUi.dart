@@ -113,6 +113,7 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
                     formatT = _format;
                   });
                 },
+                
                 eventLoader: _getEventsfromDay,
                 calendarStyle: CalendarStyle(
                   isTodayHighlighted: true,
