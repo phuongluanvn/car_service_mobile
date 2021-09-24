@@ -1,4 +1,4 @@
-import 'package:car_service/utils/model/AbsencesModel.dart';
+import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class AbsencesWorkEvent extends Equatable {
