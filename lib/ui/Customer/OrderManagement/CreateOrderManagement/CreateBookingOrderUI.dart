@@ -13,6 +13,7 @@ import 'package:car_service/blocs/packageService/PackageService_state.dart';
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/ExpansionList.dart';
 import 'package:date_format/date_format.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 // import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56,6 +57,28 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
   bool _isOpen = false;
   bool _isSelectedStaff = false;
   Map<String, bool> checkboxListValues = {};
+  String imageUrl;
+  File _imageFile;
+
+  uploadImage() async {
+    final _firebaseStorage = FirebaseStorage.instance;
+    var file = File(_image.path);
+
+    if (_image != null) {
+      //Upload to Firebase
+      var snapshot = await _firebaseStorage
+          .ref()
+          .child('mobile_customer/${file.path}')
+          .putFile(file);
+      var downloadUrl = await snapshot.ref.getDownloadURL();
+      setState(() {
+        imageUrl = downloadUrl;
+        print(downloadUrl);
+      });
+    } else {
+      print('No Image Path Received');
+    }
+  }
 
 //multi select - nhuwng ddang bug
   Widget buildGridView() {
@@ -189,6 +212,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
     if (image != null) {
       setState(() {
         _image = File(image.path);
+        print(_image);
       });
     }
   }
@@ -322,7 +346,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                               fontSize: 15,
                                               color: (_carId ==
                                                       state.vehicleLists[index]
-                                                          .id )
+                                                          .id)
                                                   ? AppTheme.colors.white
                                                   : AppTheme.colors.deepBlue),
                                         ),
@@ -340,11 +364,12 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                                     : AppTheme
                                                         .colors.deepBlue)),
                                         onTap: () {
-                                          if(_carId == state.vehicleLists[index].id) {
-                                              setState(() {
-                                                print(null);
-                                              });
-                                                }
+                                          if (_carId ==
+                                              state.vehicleLists[index].id) {
+                                            setState(() {
+                                              print(null);
+                                            });
+                                          }
                                           setState(() {
                                             _carId =
                                                 state.vehicleLists[index].id;
@@ -750,12 +775,12 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                     primary: AppTheme.colors.blue, // background
                     onPrimary: Colors.white, // foreground
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    String url = await uploadImage();
                     _timeSelected =
                         _convertDate(_selectedDay.toString()).toString() +
                             'T' +
                             _selectedTimeButton;
-                    print(_timeSelected);
                     if (_carId == null) {
                       showDialog(
                           context: context,
@@ -791,13 +816,12 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                           packageLists: null,
                           note: _note,
                           timeBooking: _timeSelected,
-                          imageUrl: null));
+                          imageUrl: url));
                     }
                   },
                   child: Text('Xác nhận'),
                 ),
               )
-            
             ],
           ),
         ),

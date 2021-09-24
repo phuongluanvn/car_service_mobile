@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 class StaffModel {
   String username;
   String role;
@@ -91,12 +93,12 @@ class Notifications {
   }
 }
 
-class Absences {
+class Absences extends Equatable{
   String id;
   String timeStart;
   String timeEnd;
   String noteEmp;
-  Null noteAdmin;
+  String noteAdmin;
   bool isApproved;
 
   Absences(
@@ -126,4 +128,8 @@ class Absences {
     data['isApproved'] = this.isApproved;
     return data;
   }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
 }

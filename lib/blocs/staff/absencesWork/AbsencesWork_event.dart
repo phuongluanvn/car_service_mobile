@@ -1,3 +1,4 @@
+import 'package:car_service/utils/model/AbsencesWorkModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
 import 'package:equatable/equatable.dart';
 
@@ -8,7 +9,7 @@ abstract class AbsencesWorkEvent extends Equatable {
 
 class AbsencesWorkButtonPressed extends AbsencesWorkEvent {
   final String username;
-  final List<Absences> absences;
+  final List<AbsencesWork> absences;
 
   AbsencesWorkButtonPressed({this.username, this.absences});
   @override

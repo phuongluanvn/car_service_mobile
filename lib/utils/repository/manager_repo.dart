@@ -8,6 +8,7 @@ import 'package:car_service/utils/model/EmployeeProfileModel.dart';
 import 'package:car_service/utils/model/OrderDetailModel.dart';
 import 'package:car_service/utils/model/ServiceModel.dart';
 import 'package:car_service/utils/model/StaffModel.dart';
+import 'package:car_service/utils/model/TaskModel.dart';
 import 'package:car_service/utils/model/TestOrderModel.dart';
 import 'package:car_service/utils/model/accessory_model.dart';
 import 'package:car_service/utils/model/createCrewModel.dart';
@@ -806,8 +807,9 @@ class ManagerRepository {
     }
   }
 
-  Future<List<CrewModel>> getCalendarList(String username) async {
-    List<CrewModel> listdata = [];
+  Future<List<TaskModel>> getCalendarList(String username) async {
+    print(username);
+    List<TaskModel> listdata = [];
     // List convertData = [];
 
     var res = await http.get(
@@ -816,6 +818,7 @@ class ManagerRepository {
           '/tasks'),
       headers: headers,
     );
+      print(res.statusCode);
 
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
@@ -823,7 +826,7 @@ class ManagerRepository {
 
       try {
         if (data != null) {
-          data.map((order) => listdata.add(CrewModel.fromJson(order))).toList();
+          data.map((order) => listdata.add(TaskModel.fromJson(order))).toList();
           return listdata;
         } else {
           print('No calendar data');

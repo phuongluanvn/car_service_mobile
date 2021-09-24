@@ -378,14 +378,57 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                         : Text(cusConstants.SERVICE_INFO_CARD_TYPE_MANTAIN),
                   ),
                   serviceType
-                      ? ListTile(
-                          title: Text(cusConstants.SERVICE_INFO_CARD_CUS_NOTE),
-                          subtitle: Text(
-                            note,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ))
+                      ? Column(
+                          children: [
+                            ListTile(
+                                title: Text(
+                                    cusConstants.SERVICE_INFO_CARD_CUS_NOTE),
+                                subtitle: Text(
+                                  note,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                )),
+                            orderDetails.isEmpty
+                                ? SizedBox()
+                                : ExpansionTile(
+                                    title:
+                                        Text(cusConstants.ADDED_SERVICE_LABLE),
+                                    children: orderDetails.map((service) {
+                                      countPrice += service.price;
+                                      return ExpansionTile(
+                                        title: Text(service.name),
+                                        trailing: Text(_convertMoney(
+                                            service.price.toDouble())),
+                                        children: [
+                                          accState.accessoryList.indexWhere(
+                                                      (element) =>
+                                                          element.id ==
+                                                          service
+                                                              .accessoryId) >=
+                                                  0
+                                              ? ListTile(
+                                                  title: Text(accState
+                                                      .accessoryList
+                                                      .firstWhere((element) =>
+                                                          element.id ==
+                                                          service.accessoryId)
+                                                      .name),
+                                                  trailing: Image.network(accState
+                                                      .accessoryList
+                                                      .firstWhere((element) =>
+                                                          element.id ==
+                                                          service.accessoryId)
+                                                      .imageUrl),
+                                                )
+                                              : Text(cusConstants
+                                                  .NOT_FOUND_ACCESSORY_IN_SERVICE),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ),
+                          ],
+                        )
                       : Column(
                           children: [
                             Column(

@@ -61,14 +61,6 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
     super.initState();
     _getStringFromSharedPref();
     selectedEvents = {};
-    // setState(() {
-    //   _username = username;
-    // });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      getTask1().then((value) => setState(() {
-            _events = value;
-          }));
-    });
   }
 
   _getStringFromSharedPref() async {
@@ -86,188 +78,158 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
     super.dispose();
   }
 
-  Future<Map<DateTime, List>> getTask1() async {
-    Map<DateTime, List> mapFetch = {};
-    List<AbsencesModel> event = await getAllEvent();
-    for (int i = 0; i < event.length; i++) {
-      var createTime = DateTime.parse(event[i].timeStart);
-      var original = mapFetch[createTime];
-      if (original == null) {
-        print("null");
-        mapFetch[createTime] = [event[i].noteAdmin];
-      } else {
-        print(event[i].noteAdmin);
-        mapFetch[createTime] = List.from(original)
-          ..addAll([event[i].noteAdmin]);
-      }
-    }
-
-    return mapFetch;
-  }
-
-  Future<List<AbsencesModel>> getAllEvent() async {
-    try {
-      print(_username);
-      final response = await http.get(Uri.parse(
-          'https://carservicesystem.azurewebsites.net/api/employees/luanpt%40css.com'));
-      var responseJson = json.decode(response.body);
-      print(json.decode(response.body));
-      if (responseJson["absences"] != null) {
-        print(responseJson["absences"]);
-        List eventList = responseJson['absences'];
-        final result = eventList
-            .map<AbsencesModel>((json) => AbsencesModel.fromJson(json))
-            .toList();
-        print(result);
-        return result;
-      } else {
-        // throw CustomError(responseJson['message']);
-      }
-    } catch (e) {
-      return Future.error(e.toString());
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     initializeDateFormatting('vi_VN', null);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppTheme.colors.deepBlue,
-        automaticallyImplyLeading: false,
-        title: Text('Quản lý công việc'),
-      ),
-      backgroundColor: AppTheme.colors.lightblue,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            TableCalendar(
-              locale: 'vi_VN',
-              focusedDay: focusedDay,
-              firstDay: DateTime(1990),
-              lastDay: DateTime(2050),
-              calendarFormat: formatT,
-              onFormatChanged: (CalendarFormat _format) {
-                setState(() {
-                  formatT = _format;
-                });
-              },
-              eventLoader: _getEventsfromDay,
-              calendarStyle: CalendarStyle(
-                isTodayHighlighted: true,
-                selectedDecoration: BoxDecoration(
-                  color: AppTheme.colors.blue,
-                  shape: BoxShape.circle,
-                ),
-                selectedTextStyle: TextStyle(color: AppTheme.colors.white),
-                defaultDecoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-              ),
-              startingDayOfWeek: StartingDayOfWeek.monday,
-              daysOfWeekVisible: true,
-              onDaySelected: (DateTime selectDay, DateTime focusDay) {
-                setState(() {
-                  selectedDay = selectDay;
-                  focusedDay = focusDay;
-                });
-              },
-              selectedDayPredicate: (DateTime date) {
-                return isSameDay(selectedDay, date);
-              },
-              headerStyle: HeaderStyle(
-                formatButtonVisible: false,
-                titleCentered: true,
-                leftChevronVisible: false,
-                rightChevronVisible: false,
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            // BlocBuilder<TableCalendarBloc, TableCalendarState>(
-            //   // ignore: missing_return
-            //   builder: (context, state) {
-            //     if (state.status == TableCalendarStatus.init) {
-            //       return CircularProgressIndicator();
-            //     } else if (state.status == TableCalendarStatus.loading) {
-            //       return CircularProgressIndicator();
-            //     } else if (state.status ==
-            //         TableCalendarStatus.tableCalendarSuccess) {
-            //       if (state.processList != null &&
-            //           state.processList.isNotEmpty) {
-            //         print(state.absList.length);
-            //         return Column(
-            //           children:
-            //               List.generate(state.processList.length, (index) {
-            //             DateTime bookingTime =
-            //                 DateFormat('yyyy-MM-ddTHH:mm:ss').parse(state
-            //                     .processList[index].order[index].bookingTime);
-
-            //             if (isSameDay(selectedDay, bookingTime)) {
-            //               return Card(
-            //                   // child: (state.assignList[0].status == 'Checkin')
-            //                   //     ?
-            //                   child: Column(children: [
-            //                 ListTile(
-            //                   trailing: Column(
-            //                       mainAxisSize: MainAxisSize.min,
-            //                       children: <Widget>[
-            //                         Icon(
-            //                           Icons.circle,
-            //                           color: Colors.yellow,
-            //                         ),
-            //                         // Text(state.processList[index].order.status),
-            //                       ]),
-            //                   leading:
-            //                       Image.asset('lib/images/order_small.png'),
-            //                   title: Text(state.processList[index]
-            //                       .order[index].vehicle.licensePlate),
-            //                   subtitle: Text(
-            //                     _convertDate(state.processList[index]
-            //                         .order[index].bookingTime),
-            //                   ),
-            //                   onTap: () {
-            //                     print(
-            //                         state.processList[index].order[index].id);
-            //                     Navigator.of(context).push(MaterialPageRoute(
-            //                         builder: (_) => ScheduleDetailUi(
-            //                             orderId: state.processList[index]
-            //                                 .order[index].id)));
-            //                   },
-            //                 ),
-            //               ])
-            //                   // : SizedBox(),
-            //                   );
-            //             } else
-            //               return SizedBox();
-            //           }),
-            //         );
-            //       } else
-            //         return Center(
-            //           child: Text('Hiện tại không có đơn'),
-            //         );
-            //     } else if (state.status == TableCalendarStatus.error) {
-            //       return ErrorWidget(state.message.toString());
-            //     }
-            //   },
-            // ),
-          ],
+        appBar: AppBar(
+          backgroundColor: AppTheme.colors.deepBlue,
+          automaticallyImplyLeading: false,
+          title: Text('Quản lý công việc'),
         ),
-      ),
-      // floatingActionButton: ElevatedButton(
-      //   child: Text('Xin nghỉ'),
-      //   onPressed: () {
-      //     Navigator.of(context)
-      //         .push(MaterialPageRoute(builder: (_) => AbsencesWorkUI()));
-      //   },
-      // )
-      // : ElevatedButton(
-      //     style: ElevatedButton.styleFrom(primary: Colors.grey),
-      //     child: Text('Xin nghỉ'),
-      //     onPressed: () {},
-      //   ),
-    );
+        backgroundColor: AppTheme.colors.lightblue,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              TableCalendar(
+                locale: 'vi_VN',
+                focusedDay: focusedDay,
+                firstDay: DateTime(1990),
+                lastDay: DateTime(2050),
+                calendarFormat: formatT,
+                onFormatChanged: (CalendarFormat _format) {
+                  setState(() {
+                    formatT = _format;
+                  });
+                },
+                
+                eventLoader: _getEventsfromDay,
+                calendarStyle: CalendarStyle(
+                  isTodayHighlighted: true,
+                  selectedDecoration: BoxDecoration(
+                    color: AppTheme.colors.blue,
+                    shape: BoxShape.circle,
+                  ),
+                  selectedTextStyle: TextStyle(color: AppTheme.colors.white),
+                  defaultDecoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                startingDayOfWeek: StartingDayOfWeek.monday,
+                daysOfWeekVisible: true,
+                onDaySelected: (DateTime selectDay, DateTime focusDay) {
+                  setState(() {
+                    selectedDay = selectDay;
+                    focusedDay = focusDay;
+                  });
+                },
+                selectedDayPredicate: (DateTime date) {
+                  return isSameDay(selectedDay, date);
+                },
+                headerStyle: HeaderStyle(
+                  formatButtonVisible: false,
+                  titleCentered: true,
+                  leftChevronVisible: false,
+                  rightChevronVisible: false,
+                ),
+                calendarBuilders: CalendarBuilders(
+                  disabledBuilder: (context, day, focusedDay) {
+                    
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              BlocBuilder<TableCalendarBloc, TableCalendarState>(
+                // ignore: missing_return
+                builder: (context, state) {
+                  if (state.status == TableCalendarStatus.init) {
+                    return CircularProgressIndicator();
+                  } else if (state.status == TableCalendarStatus.loading) {
+                    return CircularProgressIndicator();
+                  } else if (state.status ==
+                      TableCalendarStatus.tableCalendarSuccess) {
+                    if (state.tableCalendarList != null &&
+                        state.tableCalendarList.isNotEmpty) {
+                      // print(state.absList[0].noteAdmin);
+                      return Column(
+                        children: List.generate(state.tableCalendarList.length,
+                            (index) {
+                          DateTime bookingTime =
+                              DateFormat('yyyy-MM-ddTHH:mm:ss').parse(state
+                                  .tableCalendarList[index].order.bookingTime);
+                          DateTime absenceTime =
+                              DateFormat('yyyy-MM-ddTHH:mm:ss')
+                                  .parse(state.absList[index].timeStart);
+                          if (isSameDay(selectedDay, bookingTime)) {
+                            return Card(
+                                // child: (state.assignList[0].status == 'Checkin')
+                                //     ?
+                                child: Column(children: [
+                              ListTile(
+                                trailing: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.circle,
+                                        color: Colors.yellow,
+                                      ),
+                                      // Text(state.processList[index].order.status),
+                                    ]),
+                                leading:
+                                    Image.asset('lib/images/order_small.png'),
+                                title: Text(state.tableCalendarList[index].order
+                                    .vehicle.licensePlate),
+                                subtitle: Text(
+                                  _convertDate(state.tableCalendarList[index]
+                                      .order.bookingTime),
+                                ),
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) => ScheduleDetailUi(
+                                          orderId: state
+                                              .tableCalendarList[index]
+                                              .order
+                                              .id)));
+                                },
+                              ),
+                            ])
+                                // : SizedBox(),
+                                );
+                          } else
+                            return Text('Hiện tại không có công việc!');
+                        }),
+                      );
+                    } else {
+                      String mess;
+                      // ignore: missing_return
+                      
+                      return Center(
+                        child: Text('Hiện tại không có công việc!'),
+                      );
+                    }
+                  } else if (state.status == TableCalendarStatus.error) {
+                    return ErrorWidget(state.message.toString());
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+        floatingActionButton: ElevatedButton(
+          child: Text('Xin nghỉ'),
+          onPressed: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => AbsencesWorkUI()));
+          },
+        )
+        // : ElevatedButton(
+        //     style: ElevatedButton.styleFrom(primary: Colors.grey),
+        //     child: Text('Xin nghỉ'),
+        //     onPressed: () {},
+        //   ),
+        );
   }
 
   // _convertDate(dateInput) {
