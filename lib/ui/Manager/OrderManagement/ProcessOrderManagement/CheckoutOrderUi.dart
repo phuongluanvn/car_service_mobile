@@ -18,6 +18,7 @@ import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
 import 'package:car_service/utils/repository/manager_repo.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_formatter/money_formatter.dart';
@@ -51,6 +52,7 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
   List<Asset> images = List<Asset>();
   String imgUrl = '';
   ManagerRepository _repo = ManagerRepository();
+
   @override
   void initState() {
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
@@ -79,6 +81,26 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
     }
   }
 
+  uploadImage() async {
+    final _firebaseStorage = FirebaseStorage.instance;
+    var file = File(_image.path);
+
+    if (_image != null) {
+      //Upload to Firebase
+      var snapshot = await _firebaseStorage
+          .ref()
+          .child('mobile_customer/${file.path}')
+          .putFile(file);
+      var downloadUrl = await snapshot.ref.getDownloadURL();
+      setState(() {
+        imgUrl = downloadUrl;
+        print(downloadUrl);
+      });
+    } else {
+      print('No Image Path Received');
+    }
+  }
+
   //Select pic from camera
   _imageFromCamera() async {
     PickedFile image = await ImagePicker()
@@ -91,13 +113,13 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
     }
   }
 
-  _convertImagetoString(File images) {
-    if (images != null) {
-      final _imageFile = ImageProcess.decodeImage(images.readAsBytesSync());
-      String base64image = base64Encode(ImageProcess.encodePng(_imageFile));
-      return base64image;
-    }
-  }
+  // _convertImagetoString(File images) {
+  //   if (images != null) {
+  //     final _imageFile = ImageProcess.decodeImage(images.readAsBytesSync());
+  //     String base64image = base64Encode(ImageProcess.encodePng(_imageFile));
+  //     return base64image;
+  //   }
+  // }
 
   //show picker select pac form camera or gallery
   _showPicker(context) {
@@ -305,31 +327,31 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                             _convertMoney(
                                 total3.toDouble() != 0 ? total3.toDouble() : 0),
                           )),
-                      // Divider(
-                      //   color: Colors.black,
-                      //   thickness: 2,
-                      //   indent: 20,
-                      //   endIndent: 20,
-                      // ),
-                      // Container(
-                      //   child: GestureDetector(
-                      //     child: Container(
-                      //       color: Colors.white24,
-                      //       height: 100,
-                      //       width: 100,
-                      //       child: _image != null
-                      //           ? Image.file(
-                      //               _image,
-                      //               fit: BoxFit.fill,
-                      //             )
-                      //           : Icon(Icons.add_a_photo),
-                      //       alignment: Alignment.center,
-                      //     ),
-                      //     onTap: () {
-                      //       _showPicker(context);
-                      //     },
-                      //   ),
-                      // ),
+                      Divider(
+                        color: Colors.black,
+                        thickness: 2,
+                        indent: 20,
+                        endIndent: 20,
+                      ),
+                      Container(
+                        child: GestureDetector(
+                          child: Container(
+                            color: Colors.white24,
+                            height: 100,
+                            width: 100,
+                            child: _image != null
+                                ? Image.file(
+                                    _image,
+                                    fit: BoxFit.fill,
+                                  )
+                                : Icon(Icons.add_a_photo),
+                            alignment: Alignment.center,
+                          ),
+                          onTap: () {
+                            _showPicker(context);
+                          },
+                        ),
+                      ),
                       BlocListener<UpdateStatusOrderBloc,
                           UpdateStatusOrderState>(
                         // ignore: missing_return
@@ -349,19 +371,23 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                                     primary: AppTheme.colors.blue),
                                 child: Text('Hoàn tất dịch vụ',
                                     style: TextStyle(color: Colors.white)),
-                                onPressed: () {
-                                  // imgUrl = _convertImagetoString(_image);
+                                onPressed: () async {
+                                  String url = await uploadImage();
+
+                                  print(url);
                                   print(state.processDetail[0].id);
-                                  // var result3 = await _repo.addImage(
-                                  //     state.processDetail[0].id, imgUrl);
-                                  // setState(() {
-                                  //   if (result3 == "Success") {
-                                  //     print('add Image success');
-                                  //   } else {
-                                  //     print('add failed');
-                                  //   }
-                                  //   print(result3);
-                                  // });
+                                  setState(() {
+                                    var result3 = _repo.addImage(
+                                        state.processDetail[0].id, url);
+                                    setState(() {
+                                      if (result3 == "Success") {
+                                        print('add Image success');
+                                      } else {
+                                        print('add failed');
+                                      }
+                                      print(result3);
+                                    });
+                                  });
                                   // updateStatusBloc.add(
                                   //     UpdateStatusFinishAndAvailableButtonPressed(
                                   //         id: state.processDetail[0].id,

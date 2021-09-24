@@ -131,8 +131,7 @@ class ManagerRepository {
     var body = {
       "id": id,
       "images": [
-        {"imageUrl": imgUrl,
-         "isRequest": false}
+        {"imageUrl": imgUrl, "isRequest": false}
       ]
     };
     var res = await http.put(
@@ -140,7 +139,7 @@ class ManagerRepository {
       headers: headers,
       body: json.encode(body),
     );
-    print(res.statusCode);
+    print(json.encode(body));
     if (res.statusCode != null) {
       if (res.statusCode == 200) {
         return 'Success';
@@ -845,7 +844,7 @@ class ManagerRepository {
           '/tasks'),
       headers: headers,
     );
-      print(res.statusCode);
+    print(res.statusCode);
 
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
