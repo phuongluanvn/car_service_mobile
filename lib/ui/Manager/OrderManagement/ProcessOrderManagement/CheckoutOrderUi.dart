@@ -18,6 +18,7 @@ import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
 import 'package:car_service/utils/repository/manager_repo.dart';
+import 'package:car_service/utils/theme.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -378,15 +379,15 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                                   print(state.processDetail[0].id);
                                   setState(() {
                                     var result3 = _repo.addImage(
-                                        state.processDetail[0].id, url);
-                                    setState(() {
-                                      if (result3 == "Success") {
-                                        print('add Image success');
-                                      } else {
-                                        print('add failed');
-                                      }
-                                      print(result3);
-                                    });
+                                        state.processDetail[0].id, imgUrl);
+                                    // setState(() {
+                                    //   if (result3 == "Success") {
+                                    //     print('add Image success');
+                                    //   } else {
+                                    //     print('add failed');
+                                    //   }
+                                    //   print(result3);
+                                    // });
                                   });
                                   // updateStatusBloc.add(
                                   //     UpdateStatusFinishAndAvailableButtonPressed(

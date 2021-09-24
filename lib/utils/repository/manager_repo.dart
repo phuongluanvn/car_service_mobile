@@ -139,6 +139,7 @@ class ManagerRepository {
       headers: headers,
       body: json.encode(body),
     );
+    print(res.statusCode);
     print(json.encode(body));
     if (res.statusCode != null) {
       if (res.statusCode == 200) {

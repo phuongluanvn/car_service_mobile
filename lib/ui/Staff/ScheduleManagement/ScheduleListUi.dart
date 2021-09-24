@@ -134,7 +134,7 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
                 ),
                 calendarBuilders: CalendarBuilders(
                   disabledBuilder: (context, day, focusedDay) {
-                    
+
                   },
                 ),
               ),
@@ -162,6 +162,7 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
                           DateTime absenceTime =
                               DateFormat('yyyy-MM-ddTHH:mm:ss')
                                   .parse(state.absList[index].timeStart);
+                                  print(isSameDay(absenceTime, selectedDay));
                           if (isSameDay(selectedDay, bookingTime)) {
                             return Card(
                                 // child: (state.assignList[0].status == 'Checkin')
