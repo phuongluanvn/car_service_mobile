@@ -213,179 +213,215 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                                     actions: [
                                       IconsButton(
                                         onPressed: () async {
-                                          var request = BraintreeDropInRequest(
-                                            tokenizationKey:
-                                                'sandbox_rzktbfv9_qgn7c8w395dwxz6h',
-                                            collectDeviceData: true,
-                                            paypalRequest:
-                                                BraintreePayPalRequest(
-                                              amount: _usd.toString(),
-                                              displayName: _username,
-                                            ),
-                                            cardEnabled: true,
-                                          );
-                                          BraintreeDropInResult result =
-                                              await BraintreeDropIn.start(
-                                                  request);
-                                          if (result != null) {
-                                            print('lolo1');
-                                            print(result
-                                                .paymentMethodNonce.nonce);
-                                            print('lolo2');
-                                            print(result.paymentMethodNonce
-                                                .description);
-                                            print('lolo3');
-                                            print(result.deviceData);
+                                          if (_usd != 0 || _usd != null) {
+                                            var request =
+                                                BraintreeDropInRequest(
+                                              tokenizationKey:
+                                                  'sandbox_rzktbfv9_qgn7c8w395dwxz6h',
+                                              collectDeviceData: true,
+                                              paypalRequest:
+                                                  BraintreePayPalRequest(
+                                                amount: _usd.toString(),
+                                                displayName: _username,
+                                              ),
+                                              cardEnabled: true,
+                                            );
+                                            BraintreeDropInResult result =
+                                                await BraintreeDropIn.start(
+                                                    request);
+                                            if (result != null) {
+                                              print('lolo1');
+                                              print(result
+                                                  .paymentMethodNonce.nonce);
+                                              print('lolo2');
+                                              print(result.paymentMethodNonce
+                                                  .description);
+                                              print('lolo3');
+                                              print(result.deviceData);
 
-                                            var result2 =
-                                                await _repo.paypalRequest(
-                                                    result.paymentMethodNonce
-                                                        .nonce,
-                                                    _usd,
-                                                    result.deviceData);
+                                              var result2 =
+                                                  await _repo.paypalRequest(
+                                                      result.paymentMethodNonce
+                                                          .nonce,
+                                                      _usd,
+                                                      result.deviceData);
 
-                                            print("lolo4");
-                                            print(result2);
-                                            setState(() {
-                                              if (result2 == "Success") {
-                                                updateStatusBloc.add(
-                                                    UpdateStatusFinishButtonPressed(
-                                                        id: state
-                                                            .orderDetail[0].id,
-                                                        status: finishStatus));
-                                                showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext ctx) {
-                                                      return AlertDialog(
-                                                        title: Text(
-                                                          cusConstants
-                                                              .DIALOG_NOTI_LABLE,
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .greenAccent),
-                                                        ),
-                                                        content: Text(
-                                                            "Thanh toán thành công"),
-                                                        actions: [
-                                                          TextButton(
-                                                              onPressed: () {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
-                                                              child: Text(
-                                                                  cusConstants
-                                                                      .BUTTON_OK_TITLE))
-                                                        ],
-                                                      );
-                                                    });
-                                              }
-                                            });
-                                            // if (result2 == "Success") {
-                                            //   showDialog(
-                                            //       context: context,
-                                            //       builder: (BuildContext ctx) {
-                                            //         return AlertDialog(
-                                            //           title: Text(
-                                            //             cusConstants
-                                            //                 .DIALOG_NOTI_LABLE,
-                                            //             style: TextStyle(
-                                            //                 color: Colors
-                                            //                     .greenAccent),
-                                            //           ),
-                                            //           content: Text(
-                                            //               "Thanh toán thành công"),
-                                            //           actions: [
-                                            //             TextButton(
-                                            //                 onPressed: () {
-                                            //                   Navigator.of(
-                                            //                           context)
-                                            //                       .pop();
-                                            //                   Navigator.of(
-                                            //                           context)
-                                            //                       .pop();
-                                            //                   Navigator.pop(
-                                            //                       context);
-                                            //                 },
-                                            //                 child: Text(cusConstants
-                                            //                     .BUTTON_OK_TITLE))
-                                            //           ],
-                                            //         );
-                                            //       });
-                                            // }
-                                            // else if (result2 == "Not found") {
-                                            //   showDialog(
-                                            //       context: context,
-                                            //       builder: (BuildContext ctx) {
-                                            //         return AlertDialog(
-                                            //           title: Text(
-                                            //             cusConstants
-                                            //                 .DIALOG_NOTI_LABLE,
-                                            //             style: TextStyle(
-                                            //                 color: Colors
-                                            //                     .greenAccent),
-                                            //           ),
-                                            //           content: Text(
-                                            //               "KHông tìm thấy tài khoản"),
-                                            //           actions: [
-                                            //             TextButton(
-                                            //                 onPressed: () {
-                                            //                   Navigator.of(
-                                            //                           context)
-                                            //                       .pop();
-                                            //                   Navigator.of(
-                                            //                           context)
-                                            //                       .pop();
-                                            //                   Navigator.pop(
-                                            //                       context);
-                                            //                 },
-                                            //                 child: Text(cusConstants
-                                            //                     .BUTTON_OK_TITLE))
-                                            //           ],
-                                            //         );
-                                            //       });
-                                            // } else {
-                                            //   {
-                                            //     showDialog(
-                                            //         context: context,
-                                            //         builder:
-                                            //             (BuildContext ctx) {
-                                            //           return AlertDialog(
-                                            //             title: Text(
-                                            //               cusConstants
-                                            //                   .DIALOG_NOTI_LABLE,
-                                            //               style: TextStyle(
-                                            //                   color: Colors
-                                            //                       .greenAccent),
-                                            //             ),
-                                            //             content: Text(
-                                            //                 "Thanh toán thất bại"),
-                                            //             actions: [
-                                            //               TextButton(
-                                            //                   onPressed: () {
-                                            //                     Navigator.of(
-                                            //                             context)
-                                            //                         .pop();
-                                            //                     Navigator.of(
-                                            //                             context)
-                                            //                         .pop();
-                                            //                     Navigator.pop(
-                                            //                         context);
-                                            //                   },
-                                            //                   child: Text(
-                                            //                       cusConstants
-                                            //                           .BUTTON_OK_TITLE))
-                                            //             ],
-                                            //           );
-                                            //         });
-                                            //   }
-                                            // }
+                                              print("lolo4");
+                                              print(result2);
+                                              setState(() {
+                                                if (result2 == "Success") {
+                                                  updateStatusBloc.add(
+                                                      UpdateStatusFinishButtonPressed(
+                                                          id: state
+                                                              .orderDetail[0]
+                                                              .id,
+                                                          status:
+                                                              finishStatus));
+                                                  showDialog(
+                                                      context: context,
+                                                      builder:
+                                                          (BuildContext ctx) {
+                                                        return AlertDialog(
+                                                          title: Text(
+                                                            cusConstants
+                                                                .DIALOG_NOTI_SUCCESS_LABLE,
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .greenAccent),
+                                                          ),
+                                                          content: Text(
+                                                              "Thanh toán thành công"),
+                                                          actions: [
+                                                            TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                                child: Text(
+                                                                    cusConstants
+                                                                        .BUTTON_OK_TITLE))
+                                                          ],
+                                                        );
+                                                      });
+                                                }
+                                              });
+                                              // if (result2 == "Success") {
+                                              //   showDialog(
+                                              //       context: context,
+                                              //       builder: (BuildContext ctx) {
+                                              //         return AlertDialog(
+                                              //           title: Text(
+                                              //             cusConstants
+                                              //                 .DIALOG_NOTI_LABLE,
+                                              //             style: TextStyle(
+                                              //                 color: Colors
+                                              //                     .greenAccent),
+                                              //           ),
+                                              //           content: Text(
+                                              //               "Thanh toán thành công"),
+                                              //           actions: [
+                                              //             TextButton(
+                                              //                 onPressed: () {
+                                              //                   Navigator.of(
+                                              //                           context)
+                                              //                       .pop();
+                                              //                   Navigator.of(
+                                              //                           context)
+                                              //                       .pop();
+                                              //                   Navigator.pop(
+                                              //                       context);
+                                              //                 },
+                                              //                 child: Text(cusConstants
+                                              //                     .BUTTON_OK_TITLE))
+                                              //           ],
+                                              //         );
+                                              //       });
+                                              // }
+                                              // else if (result2 == "Not found") {
+                                              //   showDialog(
+                                              //       context: context,
+                                              //       builder: (BuildContext ctx) {
+                                              //         return AlertDialog(
+                                              //           title: Text(
+                                              //             cusConstants
+                                              //                 .DIALOG_NOTI_LABLE,
+                                              //             style: TextStyle(
+                                              //                 color: Colors
+                                              //                     .greenAccent),
+                                              //           ),
+                                              //           content: Text(
+                                              //               "KHông tìm thấy tài khoản"),
+                                              //           actions: [
+                                              //             TextButton(
+                                              //                 onPressed: () {
+                                              //                   Navigator.of(
+                                              //                           context)
+                                              //                       .pop();
+                                              //                   Navigator.of(
+                                              //                           context)
+                                              //                       .pop();
+                                              //                   Navigator.pop(
+                                              //                       context);
+                                              //                 },
+                                              //                 child: Text(cusConstants
+                                              //                     .BUTTON_OK_TITLE))
+                                              //           ],
+                                              //         );
+                                              //       });
+                                              // } else {
+                                              //   {
+                                              //     showDialog(
+                                              //         context: context,
+                                              //         builder:
+                                              //             (BuildContext ctx) {
+                                              //           return AlertDialog(
+                                              //             title: Text(
+                                              //               cusConstants
+                                              //                   .DIALOG_NOTI_LABLE,
+                                              //               style: TextStyle(
+                                              //                   color: Colors
+                                              //                       .greenAccent),
+                                              //             ),
+                                              //             content: Text(
+                                              //                 "Thanh toán thất bại"),
+                                              //             actions: [
+                                              //               TextButton(
+                                              //                   onPressed: () {
+                                              //                     Navigator.of(
+                                              //                             context)
+                                              //                         .pop();
+                                              //                     Navigator.of(
+                                              //                             context)
+                                              //                         .pop();
+                                              //                     Navigator.pop(
+                                              //                         context);
+                                              //                   },
+                                              //                   child: Text(
+                                              //                       cusConstants
+                                              //                           .BUTTON_OK_TITLE))
+                                              //             ],
+                                              //           );
+                                              //         });
+                                              //   }
+                                              // }
+                                            } else {
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (BuildContext ctx) {
+                                                    return AlertDialog(
+                                                      title: Text(
+                                                        cusConstants
+                                                            .DIALOG_NOTI_LABLE,
+                                                        style: TextStyle(
+                                                            color: Colors
+                                                                .greenAccent),
+                                                      ),
+                                                      content: Text(cusConstants
+                                                          .PAYMENT_CONTENT_DIALOG_LABLE),
+                                                      actions: [
+                                                        TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            child: Text(cusConstants
+                                                                .BUTTON_OK_TITLE))
+                                                      ],
+                                                    );
+                                                  });
+                                            }
                                           }
                                         },
                                         text: cusConstants.ONLINE_LABLE,

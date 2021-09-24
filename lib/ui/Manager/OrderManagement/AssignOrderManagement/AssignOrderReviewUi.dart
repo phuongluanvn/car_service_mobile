@@ -518,7 +518,7 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                                     Container(
                                       child: Flexible(
                                         child: Text(
-                                          state.assignDetail[0].noteCustomer ??
+                                          state.assignDetail[0].note ??
                                               'Không có ghi chú',
                                           style: TextStyle(fontSize: 15.0),
                                         ),
@@ -939,10 +939,18 @@ class _AssignOrderReviewUiState extends State<AssignOrderReviewUi> {
                               builder: (context, stateOfPackage) {
                                 if (stateOfPackage.status ==
                                     ListCrewStatus.init) {
-                                  return CircularProgressIndicator();
+                                  return Container(
+                                      alignment: Alignment.center,
+                                      width: 50,
+                                      height: 50,
+                                      child: CircularProgressIndicator());
                                 } else if (stateOfPackage.status ==
                                     ListCrewStatus.loading) {
-                                  return CircularProgressIndicator();
+                                  return Container(
+                                      alignment: Alignment.center,
+                                      width: 50,
+                                      height: 50,
+                                      child: CircularProgressIndicator());
                                 } else if (stateOfPackage.status ==
                                     ListCrewStatus.availSuccess) {
                                   if (stateOfPackage.crewAvailList != null &&

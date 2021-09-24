@@ -57,6 +57,7 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
   AssignorderCubit assignCubit = AssignorderCubit();
   String _crewId = '';
   CrewBloc crewBloc;
+  String _selectCrewName = '';
   @override
   void initState() {
     super.initState();
@@ -560,20 +561,23 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                           ),
                                           Column(
                                             children: [
-                                              // Text(_crewId),
-                                              // for (int i = 0;
-                                              //     i < selectCrew.length;
-                                              //     i++)
                                               Card(
                                                 child: Column(children: [
-                                                  ListTile(
-                                                    leading: Image.asset(
-                                                        'lib/images/logo_blue.png'),
-                                                    title: Text(state
-                                                        .processDetail[0]
-                                                        .crew
-                                                        .leaderFullname),
-                                                  ),
+                                                  _selectCrewName != ''
+                                                      ? ListTile(
+                                                          leading: Image.asset(
+                                                              'lib/images/logo_blue.png'),
+                                                          title: Text(
+                                                              _selectCrewName),
+                                                        )
+                                                      : ListTile(
+                                                          leading: Image.asset(
+                                                              'lib/images/logo_blue.png'),
+                                                          title: Text(state
+                                                              .processDetail[0]
+                                                              .crew
+                                                              .leaderFullname),
+                                                        ),
                                                 ]),
                                               ),
                                             ],
@@ -711,11 +715,10 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                                   .leaderFullname,
                                               style: TextStyle(
                                                   color: (_crewId ==
-                                                              stateOfPackage
-                                                                  .crewAvailList[
-                                                                      index]
-                                                                  .id ||
-                                                          _crewId != '')
+                                                          stateOfPackage
+                                                              .crewAvailList[
+                                                                  index]
+                                                              .id)
                                                       ? AppTheme.colors.deepBlue
                                                       : Colors.grey),
                                             ),
@@ -727,6 +730,9 @@ class _ProcessOrderDetailUiState extends State<ProcessOrderDetailUi> {
                                                 _crewId = stateOfPackage
                                                     .crewAvailList[index].id;
                                                 print(_crewId);
+                                                _selectCrewName = stateOfPackage
+                                                    .crewAvailList[index]
+                                                    .leaderFullname;
                                               });
                                             },
                                           ),

@@ -1,4 +1,6 @@
 import 'package:car_service/blocs/customer/customerCar/CustomerCar_bloc.dart';
+import 'package:car_service/blocs/manager/AssignCrewManagement/assignCrew_bloc.dart';
+import 'package:car_service/blocs/manager/AssignCrewManagement/assignCrew_event.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_bloc.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_event.dart';
 import 'package:car_service/blocs/manager/CrewManagement/crew_state.dart';
@@ -28,12 +30,14 @@ class _EditLeaderCrewUiState extends State<EditLeaderCrewUi> {
   final Color selectedColor = AppTheme.colors.lightblue;
   final Color unselectedColor = Colors.black;
   CrewBloc crewBloc;
+  AssignCrewBloc assignCrewBloc;
   int _crewId = 0;
 
   @override
   void initState() {
     print('orderId2: ' + widget.orderId);
     crewBloc = BlocProvider.of<CrewBloc>(context);
+    assignCrewBloc = BlocProvider.of<AssignCrewBloc>(context);
     super.initState();
     for (int i = 0; i < widget.choosingCrew.length; i++) {
       if (widget.choosingCrew.isNotEmpty) {
@@ -81,6 +85,12 @@ class _EditLeaderCrewUiState extends State<EditLeaderCrewUi> {
                                 actions: [
                                   TextButton(
                                       onPressed: () {
+                                        if (widget.orderId != null) {
+                                          assignCrewBloc.add(
+                                              UpdateCrewAgainEvent(
+                                                  id: widget.orderId,
+                                                  crewId: widget.id));
+                                        }
                                         Navigator.of(context).pop();
                                         Navigator.pop(context);
                                         Navigator.pop(context);
@@ -148,10 +158,6 @@ class _EditLeaderCrewUiState extends State<EditLeaderCrewUi> {
                             style: ElevatedButton.styleFrom(
                                 primary: AppTheme.colors.blue),
                             onPressed: () {
-                              if (widget.orderId != null) {
-                                crewBloc.add(UpdateCrewAgainEvent(
-                                    id: widget.orderId, crewId: widget.id));
-                              }
                               setState(() {
                                 widget.choosingCrew[_crewId].isLeader = true;
                                 crewBloc.add(EditCrewEvent(
