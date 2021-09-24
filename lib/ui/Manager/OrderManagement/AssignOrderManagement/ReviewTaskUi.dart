@@ -154,47 +154,59 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                         ],
                                       ),
                                       Center(
-                                        child: Column(
-                                          children: state
-                                              .processDetail[0].packageLists
-                                              .map((package) {
-                                            return ExpansionTile(
-                                              title: Text(package.name),
-                                              trailing: Text(_convertMoney(
-                                                  package.price.toDouble())),
-                                              children: state.processDetail[0]
-                                                  .packageLists[0].orderDetails
-                                                  .map((service) {
-                                                return ExpansionTile(
-                                                  title: Text(service.name),
-                                                  trailing: Text(_convertMoney(
-                                                      service.price
-                                                          .toDouble())),
+                                        child: Column(children: [
+                                          state.processDetail[0].packageLists !=
+                                                      null &&
+                                                  state.processDetail[0]
+                                                      .packageLists.isNotEmpty
+                                              ? Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
                                                   children: [
-                                                    ListTile(
-                                                      title: Text(state
-                                                              .processDetail[0]
-                                                              .packageLists[0]
-                                                              .orderDetails[0]
-                                                              .accessoryId ??
-                                                          ''),
-                                                      // trailing: Image.network(accState
-                                                      //     .accessoryList
-                                                      //     .firstWhere((element) =>
-                                                      //         element.id ==
-                                                      //         service.accessoryId)
-                                                      //     .imageUrl),
+                                                    Text(
+                                                      'Dịch vụ bảo dưỡng: ',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
                                                     ),
                                                   ],
-                                                );
-                                              }).toList(),
-                                            );
-                                          }).toList(),
-                                        ),
+                                                )
+                                              : SizedBox(),
+                                          for (int j = 0;
+                                              j <
+                                                  state.processDetail[0]
+                                                      .packageLists.length;
+                                              j++)
+                                            ExpansionTile(
+                                              title: Text(state.processDetail[0]
+                                                  .packageLists[j].name),
+                                              trailing: Text(_convertMoney(state
+                                                  .processDetail[0]
+                                                  .packageLists[j]
+                                                  .price
+                                                  .toDouble())),
+                                              children: [
+                                                for (int k = 0;
+                                                    k <
+                                                        state
+                                                            .processDetail[0]
+                                                            .packageLists[j]
+                                                            .orderDetails
+                                                            .length;
+                                                    k++)
+                                                  ListTile(
+                                                    title: Text(state
+                                                        .processDetail[0]
+                                                        .packageLists[j]
+                                                        .orderDetails[k]
+                                                        .name),
+                                                  ),
+                                              ],
+                                            ),
+                                        ]),
                                       ),
                                     ],
                                   ),
-                                
                                 ),
                               ),
                             ],
@@ -218,7 +230,7 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                   child: Column(
                                     children: [
                                       Text(
-                                        'Cập nhật dịch vụ',
+                                        'Bổ sung dịch vụ',
                                         style: TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.w800),

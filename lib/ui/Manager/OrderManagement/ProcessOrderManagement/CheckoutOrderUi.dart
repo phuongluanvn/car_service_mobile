@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:car_service/blocs/manager/Accessories/accessory_bloc.dart';
 import 'package:car_service/blocs/manager/Accessories/accessory_event.dart';
 import 'package:car_service/blocs/manager/Accessories/accessory_state.dart';
@@ -16,9 +17,14 @@ import 'package:car_service/blocs/manager/updateStatusOrder/update_status_state.
 import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
+import 'package:car_service/utils/repository/manager_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:money_formatter/money_formatter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'dart:convert';
+import 'package:image/image.dart' as ImageProcess;
 
 class CheckoutOrderUi extends StatefulWidget {
   final String orderId;
@@ -41,6 +47,10 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
   int total = 0;
   int toal2 = 0;
   int total3 = 0;
+  File _image;
+  List<Asset> images = List<Asset>();
+  String imgUrl = '';
+  ManagerRepository _repo = ManagerRepository();
   @override
   void initState() {
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
@@ -55,6 +65,67 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
     setState(() {
       holder = selectItem;
     });
+  }
+
+  //Select pic from gallery
+  _imageFromGallery() async {
+    PickedFile image = await ImagePicker()
+        .getImage(source: ImageSource.gallery, imageQuality: 50);
+
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+      });
+    }
+  }
+
+  //Select pic from camera
+  _imageFromCamera() async {
+    PickedFile image = await ImagePicker()
+        .getImage(source: ImageSource.camera, imageQuality: 50);
+
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+      });
+    }
+  }
+
+  _convertImagetoString(File images) {
+    if (images != null) {
+      final _imageFile = ImageProcess.decodeImage(images.readAsBytesSync());
+      String base64image = base64Encode(ImageProcess.encodePng(_imageFile));
+      return base64image;
+    }
+  }
+
+  //show picker select pac form camera or gallery
+  _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+              child: Wrap(
+            children: [
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Gallery'),
+                onTap: () {
+                  _imageFromGallery();
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.camera_alt),
+                title: Text('Camera'),
+                onTap: () {
+                  _imageFromCamera();
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ));
+        });
   }
 
   @override
@@ -234,6 +305,31 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                             _convertMoney(
                                 total3.toDouble() != 0 ? total3.toDouble() : 0),
                           )),
+                      // Divider(
+                      //   color: Colors.black,
+                      //   thickness: 2,
+                      //   indent: 20,
+                      //   endIndent: 20,
+                      // ),
+                      // Container(
+                      //   child: GestureDetector(
+                      //     child: Container(
+                      //       color: Colors.white24,
+                      //       height: 100,
+                      //       width: 100,
+                      //       child: _image != null
+                      //           ? Image.file(
+                      //               _image,
+                      //               fit: BoxFit.fill,
+                      //             )
+                      //           : Icon(Icons.add_a_photo),
+                      //       alignment: Alignment.center,
+                      //     ),
+                      //     onTap: () {
+                      //       _showPicker(context);
+                      //     },
+                      //   ),
+                      // ),
                       BlocListener<UpdateStatusOrderBloc,
                           UpdateStatusOrderState>(
                         // ignore: missing_return
@@ -254,19 +350,31 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                                 child: Text('Hoàn tất dịch vụ',
                                     style: TextStyle(color: Colors.white)),
                                 onPressed: () {
-                                  updateStatusBloc.add(
-                                      UpdateStatusFinishAndAvailableButtonPressed(
-                                          id: state.processDetail[0].id,
-                                          listData: state
-                                              .processDetail[0].crew.members,
-                                          status: waitingStatus,
-                                          availableStatus: availStatus));
+                                  // imgUrl = _convertImagetoString(_image);
+                                  print(state.processDetail[0].id);
+                                  // var result3 = await _repo.addImage(
+                                  //     state.processDetail[0].id, imgUrl);
+                                  // setState(() {
+                                  //   if (result3 == "Success") {
+                                  //     print('add Image success');
+                                  //   } else {
+                                  //     print('add failed');
+                                  //   }
+                                  //   print(result3);
+                                  // });
                                   // updateStatusBloc.add(
-                                  //     UpdateStatusButtonPressed(
+                                  //     UpdateStatusFinishAndAvailableButtonPressed(
                                   //         id: state.processDetail[0].id,
-                                  //         status: processingStatus));
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => ManagerMain()));
+                                  //         listData: state
+                                  //             .processDetail[0].crew.members,
+                                  //         status: waitingStatus,
+                                  //         availableStatus: availStatus));
+                                  // // updateStatusBloc.add(
+                                  // //     UpdateStatusButtonPressed(
+                                  // //         id: state.processDetail[0].id,
+                                  // //         status: processingStatus));
+                                  // Navigator.of(context).push(MaterialPageRoute(
+                                  //     builder: (_) => ManagerMain()));
                                 },
                               ),
                             ),

@@ -126,6 +126,33 @@ class ManagerRepository {
     }
   }
 
+  addImage(String id, String imgUrl) async {
+    var body = {
+      "id": id,
+      "images": [
+        {"imageUrl": imgUrl,
+         "isRequest": false}
+      ]
+    };
+    var res = await http.put(
+      Uri.parse(BASE_URL + "orders/image"),
+      headers: headers,
+      body: json.encode(body),
+    );
+    print(res.statusCode);
+    if (res.statusCode != null) {
+      if (res.statusCode == 200) {
+        return 'Success';
+      } else if (res.statusCode == 404) {
+        return 'Not found';
+      } else {
+        return 'failed';
+      }
+    } else {
+      return null;
+    }
+  }
+
   Future<double> getCurrency() async {
     var res = await http.get(
       Uri.parse(
@@ -850,7 +877,9 @@ class ManagerRepository {
 
       try {
         if (data != null) {
-          data['absences'].map((order) => listdata.add(Absences.fromJson(order))).toList();
+          data['absences']
+              .map((order) => listdata.add(Absences.fromJson(order)))
+              .toList();
           return listdata;
         } else {
           print('No abcen data');

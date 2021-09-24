@@ -747,28 +747,28 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                                                     'Tình trạng xe'),
                                                       ),
                                                     ),
-                                                    Container(
-                                                      child: GestureDetector(
-                                                        child: Container(
-                                                          color: Colors.white24,
-                                                          height: 100,
-                                                          width: 100,
-                                                          child: _image != null
-                                                              ? Image.file(
-                                                                  _image,
-                                                                  fit: BoxFit
-                                                                      .fill,
-                                                                )
-                                                              : Icon(Icons
-                                                                  .add_a_photo),
-                                                          alignment:
-                                                              Alignment.center,
-                                                        ),
-                                                        onTap: () {
-                                                          _showPicker(context);
-                                                        },
-                                                      ),
-                                                    )
+                                                    // Container(
+                                                    //   child: GestureDetector(
+                                                    //     child: Container(
+                                                    //       color: Colors.white24,
+                                                    //       height: 100,
+                                                    //       width: 100,
+                                                    //       child: _image != null
+                                                    //           ? Image.file(
+                                                    //               _image,
+                                                    //               fit: BoxFit
+                                                    //                   .fill,
+                                                    //             )
+                                                    //           : Icon(Icons
+                                                    //               .add_a_photo),
+                                                    //       alignment:
+                                                    //           Alignment.center,
+                                                    //     ),
+                                                    //     onTap: () {
+                                                    //       _showPicker(context);
+                                                    //     },
+                                                    //   ),
+                                                    // )
                                                   ],
                                                 ),
                                               ),
@@ -874,7 +874,7 @@ class _CreateOrderUIState extends State<CreateOrderUI> {
                                               note: _note,
                                               timeBooking:
                                                   _focusedDay.toIso8601String(),
-                                              imageUrl: imgUrl));
+                                              imageUrl: null));
                                     }
                                   },
                                   child: Text('Xác nhận'),

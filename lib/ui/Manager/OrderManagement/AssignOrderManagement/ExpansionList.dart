@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:number_inc_dec/number_inc_dec.dart';
 
 class ExpansionList extends StatefulWidget {
   ExpansionList({Key key, this.index, this.orderId}) : super(key: key);
@@ -28,17 +29,20 @@ class ExpansionList extends StatefulWidget {
 
 class _ExpansionListState extends State<ExpansionList> {
   final TextEditingController _typeAheadController = TextEditingController();
+  final TextEditingController _numberController = TextEditingController();
   bool isEditTextField = false;
   String _selectAccName;
   String _accId;
   ProcessOrderBloc processBloc;
   UpdateItemBloc updateItemBloc;
-  int quantity = 1;
-
+  int quantitychange = 0;
   int _priceAcc = 0;
+  int realPrice = 0;
+  bool isChangeQuantity = false;
 
   @override
   void initState() {
+    _numberController.text = "0";
     super.initState();
     updateItemBloc = BlocProvider.of<UpdateItemBloc>(context);
     processBloc = BlocProvider.of<ProcessOrderBloc>(context);
@@ -88,7 +92,7 @@ class _ExpansionListState extends State<ExpansionList> {
                                   .price !=
                               0
                           ? '${state.processDetail[0].orderDetails[widget.index].price}'
-                          : '   '),
+                          : ''),
                     ],
                   ),
                   children: [
@@ -160,43 +164,87 @@ class _ExpansionListState extends State<ExpansionList> {
                                       )
                                     : Column(
                                         children: [
-                                          TypeAheadFormField(
-                                            textFieldConfiguration:
-                                                TextFieldConfiguration(
-                                              decoration: InputDecoration(
-                                                labelText: 'Nhập tên phụ tùng',
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.6,
+                                                child: TypeAheadFormField(
+                                                  textFieldConfiguration:
+                                                      TextFieldConfiguration(
+                                                    decoration: InputDecoration(
+                                                      labelText:
+                                                          'Nhập tên phụ tùng',
+                                                    ),
+                                                    controller: this
+                                                        ._typeAheadController,
+                                                  ),
+                                                  suggestionsCallback:
+                                                      (pattern) => accstate
+                                                          .accessoryList
+                                                          .where((element) => element
+                                                              .name
+                                                              .toLowerCase()
+                                                              .contains(pattern
+                                                                  .toLowerCase())),
+                                                  hideSuggestionsOnKeyboardHide:
+                                                      false,
+                                                  itemBuilder: (context,
+                                                      AccessoryModel
+                                                          suggestion) {
+                                                    return ListTile(
+                                                      title:
+                                                          Text(suggestion.name),
+                                                    );
+                                                  },
+                                                  noItemsFoundBuilder:
+                                                      (context) => Center(
+                                                    child: Text(
+                                                        'Không tìm thấy phụ tùng'),
+                                                  ),
+                                                  onSuggestionSelected:
+                                                      (suggestion) {
+                                                    this
+                                                        ._typeAheadController
+                                                        .text = suggestion.name;
+                                                    _accId = suggestion.id;
+                                                    _priceAcc =
+                                                        suggestion.price;
+                                                  },
+                                                  onSaved: (value) => this
+                                                      ._selectAccName = value,
+                                                ),
                                               ),
-                                              controller:
-                                                  this._typeAheadController,
-                                            ),
-                                            suggestionsCallback: (pattern) =>
-                                                accstate.accessoryList.where(
-                                                    (element) => element.name
-                                                        .toLowerCase()
-                                                        .contains(pattern
-                                                            .toLowerCase())),
-                                            hideSuggestionsOnKeyboardHide:
-                                                false,
-                                            itemBuilder: (context,
-                                                AccessoryModel suggestion) {
-                                              return ListTile(
-                                                title: Text(suggestion.name),
-                                              );
-                                            },
-                                            noItemsFoundBuilder: (context) =>
-                                                Center(
-                                              child: Text(
-                                                  'Không tìm thấy phụ tùng'),
-                                            ),
-                                            onSuggestionSelected: (suggestion) {
-                                              this._typeAheadController.text =
-                                                  suggestion.name;
-                                              _accId = suggestion.id;
-                                              _priceAcc = suggestion.price;
-                                            },
-                                            onSaved: (value) =>
-                                                this._selectAccName = value,
+                                              Container(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.09,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.18,
+                                                child: NumberInputPrefabbed
+                                                    .roundedEdgeButtons(
+                                                  incDecBgColor:
+                                                      AppTheme.colors.blue,
+                                                  controller: _numberController,
+                                                  min: 1,
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      isChangeQuantity = true;
+                                                      quantitychange = value;
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                            ],
                                           ),
+
                                           BlocBuilder<CustomerServiceBloc,
                                               CustomerServiceState>(
                                             // ignore: missing_return
@@ -215,7 +263,6 @@ class _ExpansionListState extends State<ExpansionList> {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   children: [
-                                                  
                                                     ElevatedButton(
                                                         style: ElevatedButton
                                                             .styleFrom(
@@ -228,7 +275,7 @@ class _ExpansionListState extends State<ExpansionList> {
                                                             isEditTextField =
                                                                 false;
                                                           });
-                                                         
+
                                                           int _priceSrv = 0;
 
                                                           if (sstate.serviceLists.indexWhere((element) =>
@@ -283,9 +330,14 @@ class _ExpansionListState extends State<ExpansionList> {
                                                                         widget
                                                                             .index]
                                                                     .serviceId,
-                                                                quantity: 1,
-                                                                price: _priceAcc +
-                                                                    _priceSrv),
+                                                                quantity: int.parse(
+                                                                    _numberController
+                                                                        .text),
+                                                                price: (_priceAcc +
+                                                                        _priceSrv) *
+                                                                    int.parse(
+                                                                        _numberController
+                                                                            .text)),
                                                           );
                                                           print(_accId);
                                                         },
