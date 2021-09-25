@@ -1,3 +1,5 @@
+import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_bloc.dart';
+import 'package:car_service/blocs/customer/customerOrder/CustomerOrder_state.dart';
 import 'package:car_service/blocs/manager/orderHistory/orderHistory_bloc.dart';
 import 'package:car_service/blocs/manager/orderHistory/orderHistory_events.dart';
 import 'package:car_service/blocs/manager/orderHistory/orderHistory_state.dart';
@@ -41,21 +43,22 @@ class _OrderHistoryUiState extends State<OrderHistoryUi> {
       backgroundColor: AppTheme.colors.lightblue,
       body: 
       Center(
-        child: BlocBuilder<OrderHistoryBloc, OrderHistoryState>(
+        child: BlocBuilder<CustomerOrderBloc, CustomerOrderState>(
           // ignore: missing_return
           builder: (context, state) {
-            if (state.status == OrderHistoryStatus.init) {
+            if (state.status == CustomerOrderStatus.init) {
               return CircularProgressIndicator();
-            } else if (state.status == OrderHistoryStatus.loading) {
+            } else if (state.status == CustomerOrderStatus.loading) {
               return CircularProgressIndicator();
-            } else if (state.status == OrderHistoryStatus.historySuccess) {
-              if (state.historyList != null && state.historyList.isNotEmpty)
+            } else if (state.status == CustomerOrderStatus.loadedOrderSuccess) {
+              if (state.orderHistoryLists != null &&
+                  state.orderHistoryLists.isNotEmpty)
                 return ListView.builder(
-                  itemCount: state.historyList.length,
+                  itemCount: state.orderHistoryLists.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     Color color;
-                    var status = state.historyList[index].status;
+                    var status = state.orderHistoryLists[index].status;
                     switch (status) {
                       case cusConstants.COMPLETED_ORDER_STATUS:
                         color = Colors.green[600];
@@ -78,21 +81,21 @@ class _OrderHistoryUiState extends State<OrderHistoryUi> {
                                 color: color,
                               ),
                               Text(
-                                state.historyList[index].status,
+                                state.orderHistoryLists[index].status,
                                 style: TextStyle(color: color),
                               ),
                             ]),
                         leading: Image.asset(cusConstants.IMAGE_URL_ORDER_LOGO_SMALL),
                         title:
-                            Text(state.historyList[index].vehicle.licensePlate),
+                            Text(state.orderHistoryLists[index].vehicle.licensePlate),
                         subtitle: Text(
-                            _convertDate(state.historyList[index].bookingTime),
+                            _convertDate(state.orderHistoryLists[index].bookingTime),
                             style: TextStyle(fontWeight: FontWeight.bold,
                             color: Colors.black)),
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (_) => OrderHistoryDetailUi(
-                                  orderId: state.historyList[index].id)));
+                                  orderId: state.orderHistoryLists[index].id)));
                         },
                       ),
                     ]));

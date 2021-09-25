@@ -562,25 +562,25 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                                             hintText: 'Tình trạng xe'),
                                       ),
                                     ),
-                                    Container(
-                                      child: GestureDetector(
-                                        child: Container(
-                                          color: Colors.white24,
-                                          height: 100,
-                                          width: 100,
-                                          child: _image != null
-                                              ? Image.file(
-                                                  _image,
-                                                  fit: BoxFit.fill,
-                                                )
-                                              : Icon(Icons.add_a_photo),
-                                          alignment: Alignment.center,
-                                        ),
-                                        onTap: () {
-                                          _showPicker(context);
-                                        },
-                                      ),
-                                    )
+                                    // Container(
+                                    //   child: GestureDetector(
+                                    //     child: Container(
+                                    //       color: Colors.white24,
+                                    //       height: 100,
+                                    //       width: 100,
+                                    //       child: _image != null
+                                    //           ? Image.file(
+                                    //               _image,
+                                    //               fit: BoxFit.fill,
+                                    //             )
+                                    //           : Icon(Icons.add_a_photo),
+                                    //       alignment: Alignment.center,
+                                    //     ),
+                                    //     onTap: () {
+                                    //       _showPicker(context);
+                                    //     },
+                                    //   ),
+                                    // )
                                   ],
                                 ),
                               ),

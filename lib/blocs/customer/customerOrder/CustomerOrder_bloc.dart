@@ -36,7 +36,8 @@ class CustomerOrderBloc extends Bloc<CustomerOrderEvent, CustomerOrderState> {
                       {confirmOrderList.add(order)}
                     else if (order.status == 'Hoàn thành' ||
                         order.status == 'Hủy đơn' ||
-                        order.status == 'Từ chối')
+                        order.status == 'Từ chối đặt lịch' ||
+                        order.status == 'Hủy đặt lịch')
                       {historyOrderList.add(order)}
                     else if (order.status == 'Kiểm tra')
                       {checkingOrderList.add(order)}

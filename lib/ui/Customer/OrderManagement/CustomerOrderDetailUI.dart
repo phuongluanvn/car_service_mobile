@@ -116,9 +116,11 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
                           state.orderDetail[0].checkinTime != null
                               ? _convertDate(state.orderDetail[0].checkinTime)
                               : cusConstants.CHECKIN_NOT_YET_STATUS,
-                          state.orderDetail[0].note != null
-                              ? state.orderDetail[0].note
-                              : cusConstants.NOT_FOUND_NOTE),
+                          state.orderDetail[0].status == 'Đã từ chối'
+                              ? state.orderDetail[0].noteCustomer
+                              : state.orderDetail[0].note != null
+                                  ? state.orderDetail[0].note
+                                  : cusConstants.NOT_FOUND_NOTE),
                       cardInforService(
                           state.orderDetail[0].vehicle.model,
                           state.orderDetail[0].vehicle.model,

@@ -19,6 +19,7 @@ class OrderDetailModel extends Equatable {
   List<Packages> packageLists;
   List<OrderDetails> orderDetails;
   List<Feedbacks> feedbacks;
+  List<Images> images;
 
   OrderDetailModel(
       {this.id,
@@ -69,6 +70,12 @@ class OrderDetailModel extends Equatable {
         orderDetails.add(new OrderDetails.fromJson(v));
       });
     }
+    if (json['images'] != null) {
+      images = new List<Images>();
+      json['images'].forEach((v) {
+        images.add(new Images.fromJson(v));
+      });
+    }
     if (json['feedbacks'] != null) {
       feedbacks = new List<Feedbacks>();
       json['feedbacks'].forEach((v) {
@@ -104,6 +111,9 @@ class OrderDetailModel extends Equatable {
     }
     if (this.orderDetails != null) {
       data['orderDetails'] = this.orderDetails.map((v) => v.toJson()).toList();
+    }
+    if (this.images != null) {
+      data['images'] = this.images.map((v) => v.toJson()).toList();
     }
     if (this.feedbacks != null) {
       data['feedbacks'] = this.feedbacks.map((v) => v.toJson()).toList();
@@ -420,4 +430,26 @@ class Feedbacks extends Equatable {
   @override
   // TODO: implement props
   List<Object> get props => [];
+}
+
+class Images {
+  String id;
+  String imageUrl;
+  bool isRequest;
+
+  Images({this.id, this.imageUrl, this.isRequest});
+
+  Images.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    imageUrl = json['imageUrl'];
+    isRequest = json['isRequest'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['imageUrl'] = this.imageUrl;
+    data['isRequest'] = this.isRequest;
+    return data;
+  }
 }

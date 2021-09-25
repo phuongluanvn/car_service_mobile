@@ -95,6 +95,8 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
               return CircularProgressIndicator();
             } else if (state.detailStatus ==
                 CustomerOrderDetailStatus.success) {
+              print('object');
+              print(state.orderDetail[0].images.first.imageUrl.toString());
               if (state.orderDetail != null && state.orderDetail.isNotEmpty)
                 return SingleChildScrollView(
                   child: Column(
@@ -118,6 +120,11 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
                           total = state.orderDetail[0].orderDetails
                               .fold(0, (sum, element) => sum + element.price),
                           state.orderDetail[0].id),
+
+                      // Image.network(state.orderDetail[0].images[0].imageUrl),
+                      // state.orderDetail[0].images != []
+                      //     ? cardImage(state.orderDetail[0].images)
+                      //     : SizedBox(),
                       // Padding(
                       //   padding: const EdgeInsets.all(8.0),
                       //   child: Visibility(
@@ -509,6 +516,34 @@ class _PaymentOrderDetailUiState extends State<PaymentOrderDetailUi> {
             title: Text(cusConstants.MODEL_LABLE),
             trailing: Text(modelName),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget cardImage(List images) {
+    return Card(
+      child: Column(
+        children: [
+          Text('Hình ảnh từ cửa hàng',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.start),
+          images.length > 1
+              ?
+          // ListView(
+          //   children: images.map((e) {
+          //     print(e.imageUrl);
+          //     return  Image.network(e.imageUrl);
+          //   }).toList(),
+          // )
+          //     :
+          Image.network(
+            images.firstWhere((element) => element.imageUrl),
+            height: 300,
+          ) : []
         ],
       ),
     );
