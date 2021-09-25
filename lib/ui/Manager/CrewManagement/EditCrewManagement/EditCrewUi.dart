@@ -66,8 +66,7 @@ class _EditCrewUiState extends State<EditCrewUi> {
               listener: (context, crstate) {
                 print(crstate.statusDetail);
                 if (crstate.statusDetail == DoCrewDetailStatus.success) {
-                  print(crstate.crewDetails[0].members[1].username);
-                  print(crstate.crewDetails[0].members[1].isLeader);
+                  
                   editCrewCubit
                       .prepareSelectedList(crstate.crewDetails[0].members);
                 }
@@ -304,7 +303,8 @@ class _EditCrewUiState extends State<EditCrewUi> {
                                                           choosingCrew: estate
                                                               .selectedList,
                                                           id: widget.id,
-                                                          orderId: widget.orderId,
+                                                          orderId:
+                                                              widget.orderId,
                                                         )));
                                           },
                                           child: Text(

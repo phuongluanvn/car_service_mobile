@@ -18,7 +18,6 @@ import 'package:car_service/theme/app_theme.dart';
 import 'package:car_service/ui/Manager/ManagerMain.dart';
 import 'package:car_service/ui/Manager/OrderManagement/AssignOrderManagement/AssignOrderReviewUi.dart';
 import 'package:car_service/utils/repository/manager_repo.dart';
-import 'package:car_service/utils/theme.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,6 +26,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'dart:convert';
 import 'package:image/image.dart' as ImageProcess;
+import 'package:car_service/utils/helpers/constants/CusConstansts.dart'
+    as cusConstants;
 
 class CheckoutOrderUi extends StatefulWidget {
   final String orderId;
@@ -53,6 +54,7 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
   List<Asset> images = List<Asset>();
   String imgUrl = '';
   ManagerRepository _repo = ManagerRepository();
+  String imgString = '';
 
   @override
   void initState() {
@@ -373,35 +375,58 @@ class _CheckoutOrderUiState extends State<CheckoutOrderUi> {
                                 child: Text('Hoàn tất dịch vụ',
                                     style: TextStyle(color: Colors.white)),
                                 onPressed: () async {
-                                  String url = await uploadImage();
+                                  if (_image != null) {
+                                    imgString = await uploadImage();
 
-                                  print(url);
-                                  print(state.processDetail[0].id);
-                                  setState(() {
-                                    var result3 = _repo.addImage(
-                                        state.processDetail[0].id, imgUrl);
-                                    // setState(() {
-                                    //   if (result3 == "Success") {
-                                    //     print('add Image success');
-                                    //   } else {
-                                    //     print('add failed');
-                                    //   }
-                                    //   print(result3);
-                                    // });
-                                  });
-                                  updateStatusBloc.add(
-                                      UpdateStatusFinishAndAvailableButtonPressed(
-                                          id: state.processDetail[0].id,
-                                          listData: state
-                                              .processDetail[0].crew.members,
-                                          status: waitingStatus,
-                                          availableStatus: availStatus));
-                                  // updateStatusBloc.add(
-                                  //     UpdateStatusButtonPressed(
-                                  //         id: state.processDetail[0].id,
-                                  //         status: processingStatus));
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => ManagerMain()));
+                                    setState(() {
+                                      var result3 = _repo.addImage(
+                                          state.processDetail[0].id, imgString);
+                                      setState(() {
+                                        if (result3 == "Success") {
+                                          print('add Image success');
+                                        } else {
+                                          print('add failed');
+                                        }
+                                        print(result3);
+                                        updateStatusBloc.add(
+                                            UpdateStatusFinishAndAvailableButtonPressed(
+                                                id: state.processDetail[0].id,
+                                                listData: state.processDetail[0]
+                                                    .crew.members,
+                                                status: waitingStatus,
+                                                availableStatus: availStatus));
+                                        // updateStatusBloc.add(
+                                        //     UpdateStatusButtonPressed(
+                                        //         id: state.processDetail[0].id,
+                                        //         status: processingStatus));
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (_) => ManagerMain()));
+                                      });
+                                    });
+                                  } else {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext ctx) {
+                                          return AlertDialog(
+                                            title: Text(
+                                              cusConstants
+                                                  .DIALOG_NOTI_SUCCESS_LABLE,
+                                              style: TextStyle(
+                                                  color: Colors.greenAccent),
+                                            ),
+                                            content:
+                                                Text("Vui lòng chọn hình ảnh"),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text('Thử lại'))
+                                            ],
+                                          );
+                                        });
+                                  }
                                 },
                               ),
                             ),

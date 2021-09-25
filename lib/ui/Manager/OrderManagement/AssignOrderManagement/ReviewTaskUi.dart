@@ -155,23 +155,6 @@ class _ReviewTaskUiState extends State<ReviewTaskUi> {
                                       ),
                                       Center(
                                         child: Column(children: [
-                                          state.processDetail[0].packageLists !=
-                                                      null &&
-                                                  state.processDetail[0]
-                                                      .packageLists.isNotEmpty
-                                              ? Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      'Dịch vụ bảo dưỡng: ',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ],
-                                                )
-                                              : SizedBox(),
                                           for (int j = 0;
                                               j <
                                                   state.processDetail[0]
