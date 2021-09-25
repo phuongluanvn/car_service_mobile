@@ -5,6 +5,7 @@ import 'package:car_service/blocs/customer/customerOrder/FeedbackOrder_bloc.dart
 import 'package:car_service/blocs/customer/customerOrder/FeedbackOrder_event.dart';
 import 'package:car_service/blocs/customer/customerOrder/FeedbackOrder_state.dart';
 import 'package:car_service/blocs/manager/Accessories/accessory_bloc.dart';
+import 'package:car_service/blocs/manager/Accessories/accessory_event.dart';
 import 'package:car_service/blocs/manager/Accessories/accessory_state.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_bloc.dart';
 import 'package:car_service/blocs/manager/updateStatusOrder/update_status_event.dart';
@@ -34,7 +35,7 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
   bool textButton = true;
   String reasonReject;
   bool _isShowButtonFB = true;
-  int total = cusConstants.TOTAL_PRICE;
+  num total = cusConstants.TOTAL_PRICE;
 
   @override
   void initState() {
@@ -44,6 +45,7 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
         .add(DoOrderDetailEvent(id: widget.orderId));
     updateStatusBloc = BlocProvider.of<UpdateStatusOrderBloc>(context);
     _buttonFeedback = BlocProvider.of<FeedbackOrderBloc>(context);
+    BlocProvider.of<AccessoryBloc>(context).add(DoListAccessories());
   }
 
   @override
@@ -103,7 +105,7 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
                             state.orderDetail[0].status,
                             _convertDate(state.orderDetail[0].bookingTime),
                             state.orderDetail[0].checkinTime != null
-                                ? state.orderDetail[0].checkinTime
+                                ? _convertDate(state.orderDetail[0].checkinTime)
                                 : cusConstants.CHECKIN_NOT_YET_STATUS,
                             state.orderDetail[0].note != null
                                 ? state.orderDetail[0].note
@@ -324,8 +326,8 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
       List orderDetails,
       bool serviceType,
       String note,
-      int totalPrice) {
-    int countPrice = cusConstants.TOTAL_PRICE;
+      num totalPrice) {
+    num countPrice = cusConstants.TOTAL_PRICE;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       child: Container(
@@ -359,14 +361,57 @@ class _OrderHistoryDetailUiState extends State<OrderHistoryDetailUi> {
                         : Text(cusConstants.SERVICE_INFO_CARD_TYPE_MANTAIN),
                   ),
                   serviceType
-                      ? ListTile(
-                          title: Text(cusConstants.SERVICE_INFO_CARD_CUS_NOTE),
-                          subtitle: Text(
-                            note,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ))
+                      ? Column(
+                          children: [
+                            ListTile(
+                                title: Text(
+                                    cusConstants.SERVICE_INFO_CARD_CUS_NOTE),
+                                subtitle: Text(
+                                  note,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                )),
+                            orderDetails.isEmpty
+                                ? SizedBox()
+                                : ExpansionTile(
+                                    title:
+                                        Text(cusConstants.ADDED_SERVICE_LABLE),
+                                    children: orderDetails.map((service) {
+                                      countPrice += service.price;
+                                      return ExpansionTile(
+                                        title: Text(service.name),
+                                        trailing: Text(_convertMoney(
+                                            service.price.toDouble())),
+                                        children: [
+                                          accState.accessoryList.indexWhere(
+                                                      (element) =>
+                                                          element.id ==
+                                                          service
+                                                              .accessoryId) >=
+                                                  0
+                                              ? ListTile(
+                                                  title: Text(accState
+                                                      .accessoryList
+                                                      .firstWhere((element) =>
+                                                          element.id ==
+                                                          service.accessoryId)
+                                                      .name),
+                                                  trailing: Image.network(accState
+                                                      .accessoryList
+                                                      .firstWhere((element) =>
+                                                          element.id ==
+                                                          service.accessoryId)
+                                                      .imageUrl),
+                                                )
+                                              : Text(cusConstants
+                                                  .NOT_FOUND_ACCESSORY_IN_SERVICE),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ),
+                          ],
+                        )
                       : Column(
                           children: [
                             Column(

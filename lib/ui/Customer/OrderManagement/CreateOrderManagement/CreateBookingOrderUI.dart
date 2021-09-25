@@ -776,7 +776,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                     onPrimary: Colors.white, // foreground
                   ),
                   onPressed: () async {
-                    String url = await uploadImage();
+                    // String url = await uploadImage();
                     _timeSelected =
                         _convertDate(_selectedDay.toString()).toString() +
                             'T' +
@@ -816,7 +816,7 @@ class _CreateBookingOrderUIState extends State<CreateBookingOrderUI> {
                           packageLists: null,
                           note: _note,
                           timeBooking: _timeSelected,
-                          imageUrl: url));
+                          imageUrl: imageUrl));
                     }
                   },
                   child: Text('Xác nhận'),

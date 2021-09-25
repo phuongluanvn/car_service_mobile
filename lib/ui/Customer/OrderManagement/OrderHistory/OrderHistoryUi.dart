@@ -28,13 +28,19 @@ class _OrderHistoryUiState extends State<OrderHistoryUi> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return 
+    Scaffold(
       appBar: AppBar(
         backgroundColor: AppTheme.colors.deepBlue,
-        title: Text(cusConstants.ORDER_HISTORY_TITLE),
+        title: Text('Lịch sử đơn hàng'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       backgroundColor: AppTheme.colors.lightblue,
-      body: Center(
+      body: 
+      Center(
         child: BlocBuilder<OrderHistoryBloc, OrderHistoryState>(
           // ignore: missing_return
           builder: (context, state) {

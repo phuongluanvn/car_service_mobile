@@ -8,6 +8,7 @@ import 'package:car_service/utils/model/OrderModel.dart';
 import 'package:car_service/utils/model/PackageServiceDetailModel.dart';
 import 'package:car_service/utils/model/PackageServiceModel.dart';
 import 'package:car_service/utils/model/ServiceModel.dart';
+import 'package:car_service/utils/model/VehicleForCusModel.dart';
 import 'package:car_service/utils/model/VehicleModel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -121,6 +122,35 @@ class CustomerRepository {
         }
       } catch (e) {
         res.body;
+      }
+    } else {
+      res.body;
+    }
+  }
+
+  getVehicleWithOrder(String vehicleId) async {
+    List convertData = [];
+    List<VehicleForCusModel> orderOfVehicles = [];
+    var res = await http.get(
+      Uri.parse(BASE_URL + 'vehicles/' + vehicleId + '/historical'),
+      headers: headers,
+    );
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      convertData.add(data);
+      print(convertData);
+      try {
+        if (data != null) {
+          convertData
+              .map((orderOfvehicle) =>
+                  orderOfVehicles.add(VehicleForCusModel.fromJson(orderOfvehicle)))
+              .toList();
+          return orderOfVehicles;
+        } else {
+          res.body;
+        }
+      } catch (e) {
+        e.toString();
       }
     } else {
       res.body;

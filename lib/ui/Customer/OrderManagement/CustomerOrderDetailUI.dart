@@ -28,7 +28,7 @@ class CustomerOrderDetailUi extends StatefulWidget {
 
 class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
   Color color;
-  int total = cusConstants.TOTAL_PRICE;
+  num total = cusConstants.TOTAL_PRICE;
   bool _isShowButtonFB = true;
   FeedbackOrderBloc _buttonFeedback;
 
@@ -343,8 +343,8 @@ class _CustomerOrderDetailUiState extends State<CustomerOrderDetailUi> {
       List orderDetails,
       bool serviceType,
       String note,
-      int totalPrice) {
-    int countPrice = cusConstants.TOTAL_PRICE;
+      num totalPrice) {
+    num countPrice = cusConstants.TOTAL_PRICE;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       child: Container(

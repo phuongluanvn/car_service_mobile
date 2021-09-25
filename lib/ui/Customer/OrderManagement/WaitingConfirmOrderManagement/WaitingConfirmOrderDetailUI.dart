@@ -28,7 +28,7 @@ class _WaitingConfirmOrderDetailUiState
   bool _visibleByDenied = false;
   bool textButton = true;
   String reasonReject;
-  int total = cusConstants.TOTAL_PRICE;
+  num total = cusConstants.TOTAL_PRICE;
 
   @override
   void initState() {
@@ -69,7 +69,7 @@ class _WaitingConfirmOrderDetailUiState
                           state.orderDetail[0].status,
                           _convertDate(state.orderDetail[0].bookingTime),
                           state.orderDetail[0].checkinTime != null
-                              ? state.orderDetail[0].checkinTime
+                              ? _convertDate(state.orderDetail[0].checkinTime)
                               : cusConstants.CHECKIN_NOT_YET_STATUS,
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].note
@@ -229,7 +229,8 @@ class _WaitingConfirmOrderDetailUiState
       List packages,
       bool serviceType,
       String note,
-      int totalPrice) {
+      num totalPrice) {
+        num countPrice = cusConstants.TOTAL_PRICE;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       child: Container(
@@ -262,11 +263,10 @@ class _WaitingConfirmOrderDetailUiState
                     ))
                 : Column(
                     children: packages.map((e) {
-                    // return Text(e.orderDetails);
                     return ExpansionTile(
                       title: Text(e.name),
                       children: e.orderDetails.map<Widget>((service) {
-                        // countPrice += service.price;
+                        countPrice += service.price;
                         return ListTile(
                           title: Text(service.name),
                           trailing:
@@ -283,7 +283,7 @@ class _WaitingConfirmOrderDetailUiState
             ),
             ListTile(
               title: Text(cusConstants.SERVICE_INFO_CARD_PRICE_TOTAL),
-              trailing: Text(_convertMoney(totalPrice.toDouble())),
+              trailing: Text(_convertMoney(countPrice.toDouble())),
             ),
           ],
         ),

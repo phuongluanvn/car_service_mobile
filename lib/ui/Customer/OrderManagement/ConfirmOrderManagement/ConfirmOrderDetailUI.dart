@@ -30,7 +30,8 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
   bool _visibleByDenied = false;
   bool textButton = true;
   String reasonReject;
-  int total = cusConstants.TOTAL_PRICE;
+  num total = cusConstants.TOTAL_PRICE;
+  num _totalPriceAll = cusConstants.TOTAL_PRICE;
 
   @override
   void initState() {
@@ -72,7 +73,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                           state.orderDetail[0].status,
                           _convertDate(state.orderDetail[0].bookingTime),
                           state.orderDetail[0].checkinTime != null
-                              ? state.orderDetail[0].checkinTime
+                              ? _convertDate(state.orderDetail[0].checkinTime)
                               : cusConstants.CHECKIN_NOT_YET_STATUS,
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].checkinTime
@@ -81,7 +82,10 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                           state.orderDetail[0].vehicle.model,
                           state.orderDetail[0].vehicle.model,
                           state.orderDetail[0].vehicle.licensePlate,
-                          state.orderDetail[0].orderDetails,
+                          state.orderDetail[0].packageLists,
+                          state.orderDetail[0].orderDetails == []
+                              ? state.orderDetail[0].orderDetails == []
+                              : state.orderDetail[0].orderDetails,
                           state.orderDetail[0].note == null ? false : true,
                           state.orderDetail[0].note != null
                               ? state.orderDetail[0].note
@@ -240,7 +244,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
   }
 
   Widget cardInforOrder(
-      String stautus, String createTime, String checkinTime, String note) {
+      String stautus, String bookingTime, String checkinTime, String note) {
     return Card(
       child: Column(
         children: [
@@ -258,7 +262,7 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
           ),
           ListTile(
             title: Text(cusConstants.ORDER_INFO_CARD_TIME_CREATE),
-            trailing: Text(createTime),
+            trailing: Text(bookingTime),
           ),
           ListTile(
             title: Text(cusConstants.ORDER_INFO_CARD_TIME_CHECKIN),
@@ -277,11 +281,12 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
       String servicePackageName,
       String serviceName,
       String price,
-      List services,
-      // String accessoryId,
+      List packages,
+      List orderDetails,
       bool serviceType,
       String note,
-      int totalPrice) {
+      num totalPrice) {
+    num countPrice = cusConstants.TOTAL_PRICE;
     return Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
         child: Container(
@@ -315,45 +320,117 @@ class _ConfirmOrderDetailUiState extends State<ConfirmOrderDetailUi> {
                           : Text(cusConstants.SERVICE_INFO_CARD_TYPE_MANTAIN),
                     ),
                     serviceType
-                        ? ListTile(
-                            title:
-                                Text(cusConstants.SERVICE_INFO_CARD_CUS_NOTE),
-                            subtitle: Text(
-                              note,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
-                            ))
-                        : ExpansionTile(
-                            title: Text('Chi tiết:'),
-                            children: services.map((service) {
-                              return ExpansionTile(
-                                title: Text(service.name),
-                                trailing: Text(
-                                    _convertMoney(service.price.toDouble())),
-                                children: [
-                                  accState.accessoryList.indexWhere((element) =>
-                                              element.id ==
-                                              service.accessoryId) >=
-                                          0
-                                      ? ListTile(
-                                          title: Text(accState.accessoryList
-                                              .firstWhere((element) =>
-                                                  element.id ==
-                                                  service.accessoryId)
-                                              .name),
-                                          trailing: Image.network(accState
-                                              .accessoryList
-                                              .firstWhere((element) =>
-                                                  element.id ==
-                                                  service.accessoryId)
-                                              .imageUrl),
-                                        )
-                                      : Text(cusConstants
-                                          .NOT_FOUND_ACCESSORY_IN_SERVICE),
-                                ],
-                              );
-                            }).toList(),
+                        ? Column(
+                            children: [
+                              ListTile(
+                                  title: Text(
+                                      cusConstants.SERVICE_INFO_CARD_CUS_NOTE),
+                                  subtitle: Text(
+                                    note,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                  )),
+                              orderDetails.isEmpty
+                                  ? SizedBox()
+                                  : ExpansionTile(
+                                      title: Text(
+                                          cusConstants.ADDED_SERVICE_LABLE),
+                                      children: orderDetails.map((service) {
+                                        countPrice += service.price;
+                                        _totalPriceAll = countPrice;
+                                        return ExpansionTile(
+                                          title: Text(service.name),
+                                          trailing: Text(_convertMoney(
+                                              service.price.toDouble())),
+                                          children: [
+                                            accState.accessoryList.indexWhere(
+                                                        (element) =>
+                                                            element.id ==
+                                                            service
+                                                                .accessoryId) >=
+                                                    0
+                                                ? ListTile(
+                                                    title: Text(accState
+                                                        .accessoryList
+                                                        .firstWhere((element) =>
+                                                            element.id ==
+                                                            service.accessoryId)
+                                                        .name),
+                                                    trailing: Image.network(accState
+                                                        .accessoryList
+                                                        .firstWhere((element) =>
+                                                            element.id ==
+                                                            service.accessoryId)
+                                                        .imageUrl),
+                                                  )
+                                                : Text(cusConstants
+                                                    .NOT_FOUND_ACCESSORY_IN_SERVICE),
+                                          ],
+                                        );
+                                      }).toList(),
+                                    ),
+                            ],
+                          )
+                        : Column(
+                            children: [
+                              Column(
+                                  children: packages.map((e) {
+                                // return Text(e.orderDetails);
+                                return ExpansionTile(
+                                  title: Text(e.name),
+                                  children:
+                                      e.orderDetails.map<Widget>((service) {
+                                    countPrice += service.price;
+                                    return ListTile(
+                                      title: Text(service.name),
+                                      trailing: Text(_convertMoney(
+                                          service.price.toDouble())),
+                                    );
+                                  }).toList(),
+                                );
+                              }).toList()),
+                              orderDetails.isEmpty
+                                  ? SizedBox()
+                                  : ExpansionTile(
+                                      title: Text(
+                                          cusConstants.ADDED_SERVICE_LABLE),
+                                      children: orderDetails.map((service) {
+                                        countPrice += service.price;
+                                        _totalPriceAll = countPrice;
+
+                                        return ExpansionTile(
+                                          title: Text(service.name),
+                                          trailing: Text(_convertMoney(
+                                              service.price.toDouble())),
+                                          children: [
+                                            accState.accessoryList.indexWhere(
+                                                        (element) =>
+                                                            element.id ==
+                                                            service
+                                                                .accessoryId) >=
+                                                    0
+                                                ? ListTile(
+                                                    title: Text(accState
+                                                        .accessoryList
+                                                        .firstWhere((element) =>
+                                                            element.id ==
+                                                            service.accessoryId)
+                                                        .name),
+                                                    trailing: Image.network(accState
+                                                        .accessoryList
+                                                        .firstWhere((element) =>
+                                                            element.id ==
+                                                            service.accessoryId)
+                                                        .imageUrl),
+                                                  )
+                                                : Text(cusConstants
+                                                    .NOT_FOUND_ACCESSORY_IN_SERVICE),
+                                          ],
+                                        );
+                                      }).toList(),
+                                    ),
+                            ],
                           ),
                     Divider(
                       color: Colors.black,

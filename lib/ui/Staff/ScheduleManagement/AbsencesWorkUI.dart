@@ -285,7 +285,29 @@ class _AbsencesWorkUIState extends State<AbsencesWorkUI> {
     );
 
     if (newDate == null) return;
-
+    if (newDate.day - _toDay.day <= 0) {
+      showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              title: Text(
+                'Thông báo!',
+                style: TextStyle(color: Colors.greenAccent),
+              ),
+              content: Text('Ngày bạn chọn không hợp lệ! Vui lòng chọn lại'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      // Close the dialog
+                      Navigator.pop(context);
+                      pickDate(context);
+                      // Navigator.of(context).pop();
+                    },
+                    child: Text(staffConstants.OK_BUTTON))
+              ],
+            );
+          });
+    }
     setState(() => {
           date = newDate,
           if (_selectedDayList.isNotEmpty) //neu co ngay thi chuyen thanh rong
@@ -367,7 +389,29 @@ class _AbsencesWorkUIState extends State<AbsencesWorkUI> {
     );
 
     if (newDateRange == null) return;
-
+    if (newDateRange.start.day - _toDay.day <= 0) {
+      showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              title: Text(
+                'Thông báo!',
+                style: TextStyle(color: Colors.greenAccent),
+              ),
+              content: Text('Ngày bạn chọn không hợp lệ! Vui lòng chọn lại'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      // Close the dialog
+                      Navigator.pop(context);
+                      pickDateRange(context);
+                      // Navigator.of(context).pop();
+                    },
+                    child: Text(staffConstants.OK_BUTTON))
+              ],
+            );
+          });
+    }
     setState(() => {
           dateRange = newDateRange,
           if (_selectedDayList.isNotEmpty) //neu ngay co thi xoa ngay di

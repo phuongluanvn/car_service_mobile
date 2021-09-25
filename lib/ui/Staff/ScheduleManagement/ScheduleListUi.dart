@@ -35,6 +35,7 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
   Map<DateTime, List> _events;
   String _username = '';
   String username = '';
+  DateTime absenceTime;
   // final DateTime selectedDay = DateTime.now();
   // CalendarController _calendarController;
 
@@ -102,7 +103,6 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
                     formatT = _format;
                   });
                 },
-                
                 eventLoader: _getEventsfromDay,
                 calendarStyle: CalendarStyle(
                   isTodayHighlighted: true,
@@ -133,9 +133,7 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
                   rightChevronVisible: false,
                 ),
                 calendarBuilders: CalendarBuilders(
-                  disabledBuilder: (context, day, focusedDay) {
-
-                  },
+                  disabledBuilder: (context, day, focusedDay) {},
                 ),
               ),
               SizedBox(
@@ -159,10 +157,9 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
                           DateTime bookingTime =
                               DateFormat('yyyy-MM-ddTHH:mm:ss').parse(state
                                   .tableCalendarList[index].order.bookingTime);
-                          DateTime absenceTime =
-                              DateFormat('yyyy-MM-ddTHH:mm:ss')
-                                  .parse(state.absList[index].timeStart);
-                                  print(isSameDay(absenceTime, selectedDay));
+                          absenceTime = DateFormat('yyyy-MM-ddTHH:mm:ss')
+                              .parse(state.absList[index].timeStart);
+                          print(isSameDay(absenceTime, selectedDay));
                           if (isSameDay(selectedDay, bookingTime)) {
                             return Card(
                                 // child: (state.assignList[0].status == 'Checkin')
@@ -198,14 +195,23 @@ class _ScheduleListUiState extends State<ScheduleListUi> {
                             ])
                                 // : SizedBox(),
                                 );
-                          } else
+                          } else if (isSameDay(absenceTime, selectedDay)) {
+                            String mess;
+                            if (isSameDay(absenceTime, selectedDay) &&
+                                state.absList[index].isApproved == true) {
+                              mess = 'Ngày nghỉ!';
+                            } else {
+                              mess = 'Hiện tại không có công việc!';
+                            }
+                            return Center(
+                              child: Text(mess),
+                            );
+                          } else {
                             return Text('Hiện tại không có công việc!');
+                          }
                         }),
                       );
                     } else {
-                      String mess;
-                      // ignore: missing_return
-                      
                       return Center(
                         child: Text('Hiện tại không có công việc!'),
                       );
